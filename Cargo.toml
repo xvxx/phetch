@@ -1,0 +1,6 @@
+[package]
+name = "phetch"
+version = "0.1.0"
+authors = ["dvkt <c@dvkt.io>"]
+
+[dependencies]
