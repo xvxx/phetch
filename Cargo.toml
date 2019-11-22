@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["dvkt <c@dvkt.io>"]
 
 [dependencies]
+termion = "1.5.3"
