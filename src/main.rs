@@ -63,31 +63,65 @@ fn main() {
 }
 
 fn render(buf: &str) {
+    println!("{}", draw(buf));
+}
+
+fn draw(buf: &str) -> String {
     let mut start = true;
     let mut skip_to_end = false;
+    let mut links = 0;
+    let mut out = String::with_capacity(buf.len() * 2);
+    let mut prefix: &str;
+    let mut is_link = false;
     for c in buf.chars() {
         if start {
             match c {
-                'i' => print!("\x1B[93m"),
-                'h' => print!("\x1B[94m"),
-                '0' => print!("\x1B[95m"),
-                '1' => print!("\x1B[96m"),
-                _ => print!("\x1B[0m"),
+                'i' => {
+                    prefix = "\x1B[93m";
+                    is_link = false;
+                }
+                'h' => {
+                    prefix = "\x1B[94m";
+                    links += 1;
+                    is_link = true;
+                }
+                '0' => {
+                    prefix = "\x1B[95m";
+                    links += 1;
+                    is_link = true;
+                }
+                '1' => {
+                    prefix = "\x1B[96m";
+                    links += 1;
+                    is_link = true;
+                }
+                _ => prefix = "",
             }
+            out.push_str("  ");
+            if is_link {
+                out.push_str(&links.to_string());
+                out.push_str(". ");
+            } else {
+                out.push(' ');
+                out.push_str("\x1B[0m");
+                out.push_str("  ");
+            }
+            out.push_str(prefix);
             start = false
         } else if skip_to_end {
             if c == '\n' {
-                println!("\r");
+                out.push_str("\r\n");
                 start = true;
                 skip_to_end = false;
             }
         } else if c == '\t' {
             skip_to_end = true;
         } else {
-            print!("{}", c);
+            out.push(c);
             if c == '\n' {
                 start = true
             }
         }
     }
+    out
 }
