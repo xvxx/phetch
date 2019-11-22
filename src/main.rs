@@ -14,17 +14,24 @@ fn main() {
     let mut stdout = stdout().into_raw_mode().unwrap();
     TcpStream::connect("phkt.io:70")
         .and_then(|mut stream| {
-            stream.write("\r\n".as_ref()).unwrap();
+            stream.write("\r\n".as_ref());
+            Ok(stream)
+        })
+        .and_then(|mut stream| {
             let mut buf = String::new();
             stream.read_to_string(&mut buf);
             render(&buf);
 
+            let mut y = 1;
+            if let Ok((_col, row)) = termion::terminal_size() {
+                y = row + 1;
+            }
             for c in stdin.keys() {
                 // Clear the current line.
                 write!(
                     stdout,
                     "{}{}",
-                    termion::cursor::Goto(1, 1),
+                    termion::cursor::Goto(1, y),
                     termion::clear::CurrentLine
                 )
                 .unwrap();
@@ -33,17 +40,15 @@ fn main() {
                 match c.unwrap() {
                     // Exit.
                     Key::Char('q') => break,
-                    Key::Char(c) => println!("{}", c),
-                    Key::Alt(c) => println!("Alt-{}", c),
-                    Key::Ctrl('c') => {
-                        return Ok(());
-                    }
-                    Key::Ctrl(c) => println!("Ctrl-{}", c),
-                    Key::Left => println!("<left>"),
-                    Key::Right => println!("<right>"),
-                    Key::Up => println!("<up>"),
-                    Key::Down => println!("<down>"),
-                    _ => println!("Other"),
+                    Key::Char(c) => print!("{}", c),
+                    Key::Alt(c) => print!("Alt-{}", c),
+                    Key::Ctrl('c') => break,
+                    Key::Ctrl(c) => print!("Ctrl-{}", c),
+                    Key::Left => print!("<left>"),
+                    Key::Right => print!("<right>"),
+                    Key::Up => print!("<up>"),
+                    Key::Down => print!("<down>"),
+                    _ => print!("Other"),
                 }
 
                 // Flush again.
