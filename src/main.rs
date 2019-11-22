@@ -1,10 +1,18 @@
 #![allow(unused_must_use)]
 
-use std::io::{Read, Write};
+extern crate termion;
+
+use std::io::{stdin, stdout, Read, Write};
 use std::net::TcpStream;
 
+use termion::event::Key;
+use termion::input::TermRead;
+use termion::raw::IntoRawMode;
+
 fn main() {
-    TcpStream::connect("gopher.black:70")
+    let stdin = stdin();
+    let mut stdout = stdout().into_raw_mode().unwrap();
+    TcpStream::connect("phkt.io:70")
         .and_then(|mut stream| {
             stream.write("\r\n".as_ref()).unwrap();
             let mut buf = String::new();
@@ -23,7 +31,7 @@ fn main() {
                     start = false
                 } else if skip_to_end {
                     if c == '\n' {
-                        print!("{}", c);
+                        println!("");
                         start = true;
                         skip_to_end = false;
                     }
@@ -36,6 +44,38 @@ fn main() {
                     }
                 }
             }
+
+            for c in stdin.keys() {
+                // Clear the current line.
+                write!(
+                    stdout,
+                    "{}{}",
+                    termion::cursor::Goto(1, 1),
+                    termion::clear::CurrentLine
+                )
+                .unwrap();
+
+                // Print the key we type...
+                match c.unwrap() {
+                    // Exit.
+                    Key::Char('q') => break,
+                    Key::Char(c) => println!("{}", c),
+                    Key::Alt(c) => println!("Alt-{}", c),
+                    Key::Ctrl('c') => {
+                        return Ok(());
+                    }
+                    Key::Ctrl(c) => println!("Ctrl-{}", c),
+                    Key::Left => println!("<left>"),
+                    Key::Right => println!("<right>"),
+                    Key::Up => println!("<up>"),
+                    Key::Down => println!("<down>"),
+                    _ => println!("Other"),
+                }
+
+                // Flush again.
+                stdout.flush().unwrap();
+            }
+
             Ok(())
         })
         .map_err(|err| {
