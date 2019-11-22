@@ -10,11 +10,15 @@ use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
 fn main() {
+    phetch("phkt.io", 70, "/");
+}
+
+fn phetch(host: &str, port: i8, selector: &str) {
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
-    TcpStream::connect("phkt.io:70")
+    TcpStream::connect(format!("{}:{}", host, port))
         .and_then(|mut stream| {
-            stream.write("\r\n".as_ref());
+            stream.write(format!("{}\r\n", selector).as_ref());
             Ok(stream)
         })
         .and_then(|mut stream| {
@@ -63,7 +67,7 @@ fn main() {
 }
 
 fn render(buf: &str) {
-    println!("{}", draw(buf));
+    print!("{}", draw(buf));
 }
 
 fn draw(buf: &str) -> String {
