@@ -17,12 +17,39 @@ struct Link<'res> {
     selector: &'res str,
 }
 
+struct Cursor {
+    link: usize,
+}
+
+enum Action {
+    None,
+    Up,
+    Down,
+    Quit,
+}
+
 fn main() {
     let response = phetch("phkt.io", 70, "/links");
     let links = parse(&response);
     println!("{:?}", links);
-    render(&response);
-    user_input();
+    let mut cursor = Cursor { link: 0 };
+    loop {
+        render(&response, &cursor);
+        match user_input() {
+            Action::Up => {
+                if cursor.link > 0 {
+                    cursor.link -= 1;
+                }
+            }
+            Action::Down => {
+                if cursor.link < links.len() {
+                    cursor.link += 1;
+                }
+            }
+            Action::Quit => return,
+            _ => {}
+        }
+    }
 }
 
 fn parse<'res>(response: &'res str) -> Vec<Link> {
@@ -62,7 +89,7 @@ fn parse<'res>(response: &'res str) -> Vec<Link> {
     links
 }
 
-fn user_input() {
+fn user_input() -> Action {
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
     let mut y = 1;
@@ -87,18 +114,17 @@ fn user_input() {
         print!("\x1B[92;1m>> \x1B[0m");
 
         match c.unwrap() {
-            Key::Char('q') => break,
-            Key::Ctrl('c') => break,
+            Key::Ctrl('c') | Key::Char('q') => return Action::Quit,
             Key::Char('\n') => {
                 input.clear();
             }
             Key::Char(c) => input.push(c),
             Key::Alt(c) => print!("Alt-{}", c),
+            Key::Up | Key::Ctrl('p') => return Action::Up,
+            Key::Down | Key::Ctrl('n') => return Action::Down,
             Key::Ctrl(c) => print!("Ctrl-{}", c),
             Key::Left => print!("<left>"),
             Key::Right => print!("<right>"),
-            Key::Up => print!("<up>"),
-            Key::Down => print!("<down>"),
             Key::Backspace | Key::Delete => {
                 input.pop();
             }
@@ -108,6 +134,7 @@ fn user_input() {
         print!("{}", input);
         stdout.flush().unwrap();
     }
+    Action::None
 }
 
 fn phetch(host: &str, port: i8, selector: &str) -> String {
@@ -127,12 +154,13 @@ fn phetch(host: &str, port: i8, selector: &str) -> String {
     out
 }
 
-fn render(buf: &str) {
-    let clear = ""; //"\x1B[2J\x1B[H";
-    print!("{}{}", clear, draw(buf));
+fn render(buf: &str, cur: &Cursor) {
+    // let clear = "";
+    let clear = "\x1B[2J\x1B[H";
+    print!("{}{}", clear, draw(buf, cur));
 }
 
-fn draw(buf: &str) -> String {
+fn draw(buf: &str, cur: &Cursor) -> String {
     let mut start = true;
     let mut skip_to_end = false;
     let mut links = 0;
@@ -173,7 +201,12 @@ fn draw(buf: &str) -> String {
                 '\n' => continue,
                 _ => prefix = "",
             }
-            out.push_str("  ");
+            if is_link && cur.link > 0 && cur.link == links {
+                out.push('*');
+            } else {
+                out.push(' ');
+            }
+            out.push_str(" ");
             if is_link {
                 out.push_str("\x1B[95m");
                 if links < 10 {
@@ -190,7 +223,7 @@ fn draw(buf: &str) -> String {
             start = false
         } else if skip_to_end {
             if c == '\n' {
-                out.push_str("\r\n");
+                out.push_str("\r\n\x1B[0m");
                 start = true;
                 skip_to_end = false;
             }
