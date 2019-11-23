@@ -259,7 +259,7 @@ fn read_input() -> Action {
         panic!("can't determine terminal size.");
     }
 
-    print!("{}\x1B[92;1m>> \x1B[0m", termion::cursor::Goto(1, y));
+    print!("{}", termion::cursor::Hide);
     stdout.flush().unwrap();
 
     for c in stdin.keys() {
@@ -270,7 +270,6 @@ fn read_input() -> Action {
             termion::clear::CurrentLine
         )
         .unwrap();
-        print!("\x1B[92;1m>> \x1B[0m");
 
         match c.unwrap() {
             Key::Ctrl('c') | Key::Char('q') => return Action::Quit,
