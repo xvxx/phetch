@@ -19,11 +19,15 @@ fn user_input() {
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
     let mut y = 1;
+    let mut input = String::new();
     if let Ok((_col, row)) = termion::terminal_size() {
         y = row + 1;
     }
+
+    print!("{}\x1B[92;1m>> \x1B[0m", termion::cursor::Goto(1, y));
+    stdout.flush().unwrap();
+
     for c in stdin.keys() {
-        // Clear the current line.
         write!(
             stdout,
             "{}{}",
@@ -31,23 +35,28 @@ fn user_input() {
             termion::clear::CurrentLine
         )
         .unwrap();
+        print!("\x1B[92;1m>> \x1B[0m");
 
-        // Print the key we type...
         match c.unwrap() {
-            // Exit.
             Key::Char('q') => break,
-            Key::Char(c) => print!("{}", c),
-            Key::Alt(c) => print!("Alt-{}", c),
             Key::Ctrl('c') => break,
+            Key::Char('\n') => {
+                input.clear();
+            }
+            Key::Char(c) => input.push(c),
+            Key::Alt(c) => print!("Alt-{}", c),
             Key::Ctrl(c) => print!("Ctrl-{}", c),
             Key::Left => print!("<left>"),
             Key::Right => print!("<right>"),
             Key::Up => print!("<up>"),
             Key::Down => print!("<down>"),
+            Key::Backspace | Key::Delete => {
+                input.pop();
+            }
             _ => print!("Other"),
         }
 
-        // Flush again.
+        print!("{}", input);
         stdout.flush().unwrap();
     }
 }
@@ -70,7 +79,7 @@ fn phetch(host: &str, port: i8, selector: &str) -> String {
 }
 
 fn render(buf: &str) {
-    print!("{}", draw(buf));
+    print!("\x1B[2J\x1B[H{}", draw(buf));
 }
 
 fn draw(buf: &str) -> String {
