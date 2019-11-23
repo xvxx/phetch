@@ -9,6 +9,14 @@ use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
+#[derive(Debug)]
+struct Link<'res> {
+    name: &'res str,
+    host: &'res str,
+    port: &'res str,
+    selector: &'res str,
+}
+
 fn main() {
     let response = phetch("phkt.io", 70, "/links");
     let links = parse(&response);
@@ -17,15 +25,7 @@ fn main() {
     user_input();
 }
 
-#[derive(Debug)]
-struct Link<'a> {
-    name: &'a str,
-    host: &'a str,
-    port: &'a str,
-    selector: &'a str,
-}
-
-fn parse<'a>(response: &'a str) -> Vec<Link> {
+fn parse<'res>(response: &'res str) -> Vec<Link> {
     let mut links: Vec<Link> = Vec::new();
     let mut start = true;
     let mut is_link = false;
@@ -128,8 +128,7 @@ fn phetch(host: &str, port: i8, selector: &str) -> String {
 }
 
 fn render(buf: &str) {
-    let mut clear = "\x1B[2J\x1B[H";
-    clear = "";
+    let clear = ""; //"\x1B[2J\x1B[H";
     print!("{}{}", clear, draw(buf));
 }
 
