@@ -25,12 +25,17 @@ enum Action {
     None,
     Up,
     Down,
+    Open,
     Quit,
 }
 
 fn main() {
-    let response = phetch("phkt.io", 70, "/");
-    let links = parse(&response);
+    phetch_and_print("phkt.io", "70", "/");
+}
+
+fn phetch_and_print(host: &str, port: &str, selector: &str) {
+    let response = phetch(host, port, selector);
+    let links = parse_links(&response);
     println!("{:?}", links);
     let mut cursor = Cursor { link: 0 };
     loop {
@@ -46,13 +51,37 @@ fn main() {
                     cursor.link += 1;
                 }
             }
+            Action::Open => {
+                if cursor.link > 0 && cursor.link - 1 < links.len() {
+                    println!("OPEN: {:?}", links[cursor.link - 1]);
+                    let link = &links[cursor.link - 1];
+                    phetch_and_print(link.host, link.port, link.selector);
+                }
+            }
             Action::Quit => return,
             _ => {}
         }
     }
 }
 
-fn parse<'res>(response: &'res str) -> Vec<Link> {
+fn phetch(host: &str, port: &str, selector: &str) -> String {
+    let mut out = String::new();
+    TcpStream::connect(format!("{}:{}", host, port))
+        .and_then(|mut stream| {
+            stream.write(format!("{}\r\n", selector).as_ref());
+            Ok(stream)
+        })
+        .and_then(|mut stream| {
+            stream.read_to_string(&mut out);
+            Ok(())
+        })
+        .map_err(|err| {
+            eprintln!("err: {}", err);
+        });
+    out
+}
+
+fn parse_links<'res>(response: &'res str) -> Vec<Link> {
     let mut links: Vec<Link> = Vec::new();
     let mut start = true;
     let mut is_link = false;
@@ -115,9 +144,7 @@ fn user_input() -> Action {
 
         match c.unwrap() {
             Key::Ctrl('c') | Key::Char('q') => return Action::Quit,
-            Key::Char('\n') => {
-                input.clear();
-            }
+            Key::Char('\n') => return Action::Open,
             Key::Char(c) => input.push(c),
             Key::Alt(c) => print!("Alt-{}", c),
             Key::Up | Key::Ctrl('p') => return Action::Up,
@@ -135,23 +162,6 @@ fn user_input() -> Action {
         stdout.flush().unwrap();
     }
     Action::None
-}
-
-fn phetch(host: &str, port: i8, selector: &str) -> String {
-    let mut out = String::new();
-    TcpStream::connect(format!("{}:{}", host, port))
-        .and_then(|mut stream| {
-            stream.write(format!("{}\r\n", selector).as_ref());
-            Ok(stream)
-        })
-        .and_then(|mut stream| {
-            stream.read_to_string(&mut out);
-            Ok(())
-        })
-        .map_err(|err| {
-            eprintln!("err: {}", err);
-        });
-    out
 }
 
 fn render(buf: &str, cur: &Cursor) {
@@ -232,7 +242,7 @@ fn draw(buf: &str, cur: &Cursor) -> String {
         } else {
             out.push(c);
             if c == '\n' {
-                start = true
+                start = true;
             }
         }
     }
