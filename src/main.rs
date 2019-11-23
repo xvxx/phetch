@@ -1,5 +1,3 @@
-#![allow(unused_must_use)]
-
 extern crate termion;
 
 use std::collections::HashMap;
@@ -315,7 +313,7 @@ impl Page {
                     _ => prefix = "",
                 }
                 if is_link && self.link > 0 && self.link == links {
-                    out.push_str("\x1b[92;1m*\x1b[0m");
+                    out.push_str("\x1b[92;1m*\x1b[1m");
                 } else {
                     out.push(' ');
                 }
@@ -326,7 +324,7 @@ impl Page {
                         out.push(' ');
                     }
                     out.push_str(&links.to_string());
-                    out.push_str(". \x1B[0m");
+                    out.push_str(". ");
                 } else {
                     out.push(' ');
                     out.push_str("\x1B[0m");
