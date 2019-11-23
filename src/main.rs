@@ -14,6 +14,7 @@ use termion::raw::IntoRawMode;
 struct App {
     pages: HashMap<String, Page>,
     cursor: String,
+    history: Vec<String>,
 }
 
 #[derive(Debug)]
@@ -37,6 +38,7 @@ enum Action {
     None,
     Up,
     Down,
+    Back,
     Open,
     Quit,
 }
@@ -55,6 +57,14 @@ impl App {
         App {
             pages: HashMap::new(),
             cursor: String::new(),
+            history: Vec::new(),
+        }
+    }
+
+    fn back(&mut self) {
+        if self.history.len() > 1 {
+            self.history.pop();
+            self.cursor = self.history.last().unwrap().to_string();
         }
     }
 
@@ -62,6 +72,7 @@ impl App {
         let mut page = self.fetch(host, port, selector);
         page.parse_links();
         self.cursor = page.url.to_string();
+        self.history.push(self.cursor.to_string());
         self.pages.insert(page.url.to_string(), page);
     }
 
@@ -78,6 +89,7 @@ impl App {
             Some(page) => match read_input() {
                 Action::Up => page.cursor_up(),
                 Action::Down => page.cursor_down(),
+                Action::Back => self.back(),
                 Action::Open => {
                     if page.cursor > 0 && page.cursor - 1 < page.links.len() {
                         let link = &page.links[page.cursor - 1];
@@ -279,7 +291,7 @@ fn read_input() -> Action {
             Key::Up | Key::Ctrl('p') => return Action::Up,
             Key::Down | Key::Ctrl('n') => return Action::Down,
             Key::Ctrl(c) => print!("Ctrl-{}", c),
-            Key::Left => print!("<left>"),
+            Key::Left => return Action::Back,az
             Key::Right => print!("<right>"),
             Key::Backspace | Key::Delete => {
                 input.pop();
