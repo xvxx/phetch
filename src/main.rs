@@ -64,8 +64,6 @@ impl App {
     fn render(&self) {
         if let Some(page) = self.pages.get(&self.cursor) {
             print!("\x1B[2J\x1B[H{}", page.draw());
-        } else {
-            println!("{}", "<render error>");
         }
     }
 
@@ -92,6 +90,7 @@ impl App {
     }
 
     fn respond(&mut self) {
+        let mut addr = (String::new(), String::new(), String::new());
         match self.pages.get_mut(&self.cursor) {
             None => return,
             Some(page) => match read_input() {
@@ -99,13 +98,18 @@ impl App {
                 Action::Down => page.cursor_down(),
                 Action::Open => {
                     if page.cursor > 0 && page.cursor - 1 < page.links.len() {
-                        println!("OPEN: {:?}", page.links[page.cursor - 1]);
-                        std::process::exit(0);
+                        let link = &page.links[page.cursor - 1];
+                        addr.0 = link.host.to_string();
+                        addr.1 = link.port.to_string();
+                        addr.2 = link.selector.to_string();
                     }
                 }
-                Action::Quit => return,
+                Action::Quit => std::process::exit(0),
                 _ => {}
             },
+        }
+        if !addr.0.is_empty() {
+            self.load(&addr.0, &addr.1, &addr.2);
         }
     }
 }
