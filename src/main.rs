@@ -98,19 +98,13 @@ impl App {
     }
 
     fn render(&self) {
-        if let Some(url) = self.history.get(self.pos) {
-            if let Some(page) = self.pages.get(url) {
-                // clear
-                print!("\x1B[2J\x1B[H{}", page.draw());
-                print!("{}", termion::cursor::Hide);
-                println!(" \x1B[0;37m{}\x1B[0m", page.input);
-            // print!("{}", page.draw());
-            } else {
-                panic!("bad url: {}", url)
-            }
-        } else {
-            panic!("bad self.pos: {}", self.pos);
-        }
+        let url = self.history.get(self.pos).expect("bad self.pos");
+        let page = self.pages.get(url).expect("bad url");
+        // clear
+        print!("\x1B[2J\x1B[H{}", page.draw());
+        print!("{}", termion::cursor::Hide);
+        println!(" \x1B[0;37m{}\x1B[0m", page.input);
+        // print!("{}", page.draw());
     }
 
     fn respond(&mut self) {
@@ -143,7 +137,10 @@ impl App {
                     }
                     page.input.clear();
                 }
-                Action::Quit => std::process::exit(0),
+                Action::Quit => {
+                    println!("{}", termion::cursor::Show);
+                    std::process::exit(0);
+                }
                 _ => {}
             },
         }
