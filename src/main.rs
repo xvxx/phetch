@@ -63,7 +63,7 @@ impl App {
     }
 
     fn back(&mut self) {
-        if self.history.len() > 1 {
+        if self.history.len() > 1 && self.pos > 0 {
             self.pos -= 1;
         }
     }
@@ -309,7 +309,14 @@ fn read_input() -> Action {
             Key::Ctrl(c) => print!("Ctrl-{}", c),
             Key::Left => return Action::Back,
             Key::Right => return Action::Forward,
-            Key::Backspace | Key::Delete => {
+            Key::Backspace => {
+                if input.is_empty() {
+                    return Action::Back;
+                } else {
+                    input.pop();
+                }
+            }
+            Key::Delete => {
                 input.pop();
             }
             _ => print!("Other"),
