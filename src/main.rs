@@ -39,6 +39,7 @@ enum Action {
     Up,
     Down,
     Back,
+    Forward,
     Open,
     Quit,
 }
@@ -67,20 +68,29 @@ impl App {
         }
     }
 
+    fn forward(&mut self) {
+        if self.pos < self.history.len() - 1 {
+            self.pos += 1;
+        }
+    }
+
     fn load(&mut self, host: &str, port: &str, selector: &str) {
         let mut page = self.fetch(host, port, selector);
         page.parse_links();
         if self.history.len() > 0 {
-            self.pos = self.history.len() - 1;
+            self.pos += 1;
+            self.history.insert(self.pos, page.url.to_string());
+        } else {
+            self.history.push(page.url.to_string());
+            self.pos = 0;
         }
-        self.history.push(page.url.to_string());
         self.pages.insert(page.url.to_string(), page);
     }
 
     fn render(&self) {
         if let Some(url) = self.history.get(self.pos) {
             if let Some(page) = self.pages.get(url) {
-                print!("\x1B[2J\x1B[H{}", page.draw());
+                print!("\x1B[2J\x1B[H{}", page.draw()); // clear
             }
         }
     }
@@ -95,6 +105,7 @@ impl App {
                 Action::Up => page.cursor_up(),
                 Action::Down => page.cursor_down(),
                 Action::Back => self.back(),
+                Action::Forward => self.forward(),
                 Action::Open => {
                     if page.link > 0 && page.link - 1 < page.links.len() {
                         let link = &page.links[page.link - 1];
@@ -297,7 +308,7 @@ fn read_input() -> Action {
             Key::Down | Key::Ctrl('n') => return Action::Down,
             Key::Ctrl(c) => print!("Ctrl-{}", c),
             Key::Left => return Action::Back,
-            Key::Right => print!("<right>"),
+            Key::Right => return Action::Forward,
             Key::Backspace | Key::Delete => {
                 input.pop();
             }
