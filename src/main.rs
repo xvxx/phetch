@@ -318,7 +318,7 @@ impl Page {
                     _ => prefix = "",
                 }
                 if is_link && self.link > 0 && self.link == links {
-                    out.push_str("\x1b[92;1m*\x1b[1m");
+                    out.push_str("\x1b[90;1m*\x1b[1m");
                 } else {
                     out.push(' ');
                 }
