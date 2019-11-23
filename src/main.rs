@@ -202,7 +202,7 @@ fn draw(buf: &str, cur: &Cursor) -> String {
                 _ => prefix = "",
             }
             if is_link && cur.link > 0 && cur.link == links {
-                out.push('*');
+                out.push_str("\x1b[93;1m*\x1b[0m");
             } else {
                 out.push(' ');
             }
