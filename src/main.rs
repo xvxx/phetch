@@ -29,7 +29,7 @@ enum Action {
 }
 
 fn main() {
-    let response = phetch("phkt.io", 70, "/links");
+    let response = phetch("phkt.io", 70, "/");
     let links = parse(&response);
     println!("{:?}", links);
     let mut cursor = Cursor { link: 0 };
@@ -202,7 +202,7 @@ fn draw(buf: &str, cur: &Cursor) -> String {
                 _ => prefix = "",
             }
             if is_link && cur.link > 0 && cur.link == links {
-                out.push_str("\x1b[93;1m*\x1b[0m");
+                out.push_str("\x1b[92;1m*\x1b[0m");
             } else {
                 out.push(' ');
             }
