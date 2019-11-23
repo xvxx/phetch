@@ -57,8 +57,8 @@ impl App {
     fn load(&mut self, host: &str, port: &str, selector: &str) {
         let mut page = self.fetch(host, port, selector);
         page.parse_links();
+        self.cursor = page.url.to_string();
         self.pages.insert(page.url.to_string(), page);
-        self.cursor = format!("{}:{}{}", host, port, selector);
     }
 
     fn render(&self) {
