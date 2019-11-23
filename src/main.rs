@@ -13,15 +13,15 @@ use termion::raw::IntoRawMode;
 #[derive(Debug)]
 struct App {
     pages: HashMap<String, Page>,
-    cursor: String,
     history: Vec<String>,
+    pos: usize,
 }
 
 #[derive(Debug)]
 struct Page {
     body: String,
-    cursor: usize,
     url: String,
+    link: usize,
     links: Vec<Link>,
 }
 
@@ -56,43 +56,48 @@ impl App {
     fn new() -> App {
         App {
             pages: HashMap::new(),
-            cursor: String::new(),
+            pos: 0,
             history: Vec::new(),
         }
     }
 
     fn back(&mut self) {
         if self.history.len() > 1 {
-            self.history.pop();
-            self.cursor = self.history.last().unwrap().to_string();
+            self.pos -= 1;
         }
     }
 
     fn load(&mut self, host: &str, port: &str, selector: &str) {
         let mut page = self.fetch(host, port, selector);
         page.parse_links();
-        self.cursor = page.url.to_string();
-        self.history.push(self.cursor.to_string());
+        if self.history.len() > 0 {
+            self.pos = self.history.len() - 1;
+        }
+        self.history.push(page.url.to_string());
         self.pages.insert(page.url.to_string(), page);
     }
 
     fn render(&self) {
-        if let Some(page) = self.pages.get(&self.cursor) {
-            print!("\x1B[2J\x1B[H{}", page.draw());
+        if let Some(url) = self.history.get(self.pos) {
+            if let Some(page) = self.pages.get(url) {
+                print!("\x1B[2J\x1B[H{}", page.draw());
+            }
         }
     }
 
     fn respond(&mut self) {
         let mut addr = (String::new(), String::new(), String::new());
-        match self.pages.get_mut(&self.cursor) {
+        let url = self.history.get(self.pos).unwrap();
+        let page = self.pages.get_mut(url);
+        match page {
             None => return,
             Some(page) => match read_input() {
                 Action::Up => page.cursor_up(),
                 Action::Down => page.cursor_down(),
                 Action::Back => self.back(),
                 Action::Open => {
-                    if page.cursor > 0 && page.cursor - 1 < page.links.len() {
-                        let link = &page.links[page.cursor - 1];
+                    if page.link > 0 && page.link - 1 < page.links.len() {
+                        let link = &page.links[page.link - 1];
                         addr.0 = link.host.to_string();
                         addr.1 = link.port.to_string();
                         addr.2 = link.selector.to_string();
@@ -123,7 +128,7 @@ impl App {
             });
         Page {
             body: body,
-            cursor: 0,
+            link: 0,
             url: format!("{}:{}{}", host, port, selector),
             links: Vec::new(),
         }
@@ -132,13 +137,13 @@ impl App {
 
 impl Page {
     fn cursor_up(&mut self) {
-        if self.cursor > 0 {
-            self.cursor -= 1;
+        if self.link > 0 {
+            self.link -= 1;
         }
     }
     fn cursor_down(&mut self) {
-        if self.cursor < self.links.len() {
-            self.cursor += 1;
+        if self.link < self.links.len() {
+            self.link += 1;
         }
     }
 
@@ -221,7 +226,7 @@ impl Page {
                     '\n' => continue,
                     _ => prefix = "",
                 }
-                if is_link && self.cursor > 0 && self.cursor == links {
+                if is_link && self.link > 0 && self.link == links {
                     out.push_str("\x1b[92;1m*\x1b[0m");
                 } else {
                     out.push(' ');
@@ -291,7 +296,7 @@ fn read_input() -> Action {
             Key::Up | Key::Ctrl('p') => return Action::Up,
             Key::Down | Key::Ctrl('n') => return Action::Down,
             Key::Ctrl(c) => print!("Ctrl-{}", c),
-            Key::Left => return Action::Back,az
+            Key::Left => return Action::Back,
             Key::Right => print!("<right>"),
             Key::Backspace | Key::Delete => {
                 input.pop();
