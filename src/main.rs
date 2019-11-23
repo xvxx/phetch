@@ -103,7 +103,7 @@ impl App {
                 // clear
                 print!("\x1B[2J\x1B[H{}", page.draw());
                 print!("{}", termion::cursor::Hide);
-                println!(" \x1B[105;93m{}\x1B[0m", page.input);
+                println!(" \x1B[0;37m{}\x1B[0m", page.input);
             // print!("{}", page.draw());
             } else {
                 panic!("bad url: {}", url)
@@ -124,7 +124,7 @@ impl App {
                 Action::Down => page.cursor_down(),
                 Action::Back => self.back(),
                 Action::Forward => self.forward(),
-                Action::Select(n) => page.link = n,
+                Action::Select(n) => page.link = n + 1,
                 Action::Link(n) => {
                     if n < page.links.len() {
                         let link = &page.links[n];
@@ -195,7 +195,15 @@ impl Page {
 
         for c in stdin.keys() {
             match c.unwrap() {
-                Key::Ctrl('c') | Key::Ctrl('q') => return Action::Quit,
+                Key::Ctrl('q') => return Action::Quit,
+                Key::Ctrl('c') => {
+                    if self.input.len() > 0 {
+                        self.input.clear();
+                        return Action::None;
+                    } else {
+                        return Action::Quit;
+                    }
+                }
                 Key::Char('\n') => return Action::Open,
                 Key::Up | Key::Ctrl('p') => return Action::Up,
                 Key::Down | Key::Ctrl('n') => return Action::Down,
@@ -203,9 +211,11 @@ impl Page {
                 Key::Right => return Action::Forward,
                 Key::Char(c) => {
                     self.input.push(c);
-                    for (i, _link) in self.links.iter().enumerate() {
+                    for (i, link) in self.links.iter().enumerate() {
                         if self.input == (i + 1).to_string() {
                             return Action::Link(i);
+                        } else if link.name.starts_with(&self.input) {
+                            return Action::Select(i);
                         }
                     }
                     return Action::None;
@@ -250,9 +260,9 @@ impl Page {
                 start = true;
                 if is_link && i > link.0 {
                     link.1 = i;
-                    let mut line = Vec::new();
-                    for s in self.body[link.0..link.1].split('\t') {
-                        line.push(s);
+                    let mut line = [""; 4];
+                    for (j, s) in self.body[link.0..link.1].split('\t').enumerate() {
+                        line[j] = s;
                     }
                     self.links.push(Link {
                         name: line[0].to_string(),
