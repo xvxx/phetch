@@ -94,7 +94,7 @@ impl App {
     fn respond(&mut self) {
         match self.pages.get_mut(&self.cursor) {
             None => return,
-            Some(page) => match term_input() {
+            Some(page) => match read_input() {
                 Action::Up => page.cursor_up(),
                 Action::Down => page.cursor_down(),
                 Action::Open => {
@@ -240,7 +240,7 @@ impl Page {
     }
 }
 
-fn term_input() -> Action {
+fn read_input() -> Action {
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
     let mut y = 1;
