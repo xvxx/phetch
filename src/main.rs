@@ -96,12 +96,13 @@ impl App {
     }
 
     fn respond(&mut self) {
+        let input = self.read_input();
         let mut addr = (String::new(), String::new(), String::new());
         let url = self.history.get(self.pos).unwrap();
         let page = self.pages.get_mut(url);
         match page {
             None => return,
-            Some(page) => match read_input() {
+            Some(page) => match input {
                 Action::Up => page.cursor_up(),
                 Action::Down => page.cursor_down(),
                 Action::Back => self.back(),
@@ -143,6 +144,58 @@ impl App {
             url: format!("{}:{}{}", host, port, selector),
             links: Vec::new(),
         }
+    }
+
+    fn read_input(&self) -> Action {
+        let stdin = stdin();
+        let mut stdout = stdout().into_raw_mode().unwrap();
+        let mut y = 1;
+        let mut input = String::new();
+        if let Ok((_col, row)) = termion::terminal_size() {
+            y = row + 1;
+        } else {
+            panic!("can't determine terminal size.");
+        }
+
+        print!("{}", termion::cursor::Hide);
+        stdout.flush().unwrap();
+
+        for c in stdin.keys() {
+            write!(
+                stdout,
+                "{}{}",
+                termion::cursor::Goto(1, y),
+                termion::clear::CurrentLine
+            )
+            .unwrap();
+
+            match c.unwrap() {
+                Key::Ctrl('c') | Key::Char('q') => return Action::Quit,
+                Key::Char('\n') => return Action::Open,
+                Key::Char(c) => input.push(c),
+                Key::Alt(c) => print!("Alt-{}", c),
+                Key::Up | Key::Ctrl('p') => return Action::Up,
+                Key::Down | Key::Ctrl('n') => return Action::Down,
+                Key::Ctrl(c) => print!("Ctrl-{}", c),
+                Key::Left => return Action::Back,
+                Key::Right => return Action::Forward,
+                Key::Backspace => {
+                    if input.is_empty() {
+                        return Action::Back;
+                    } else {
+                        input.pop();
+                    }
+                }
+                Key::Delete => {
+                    input.pop();
+                }
+                _ => print!("Other"),
+            }
+
+            print!("{}", input);
+            stdout.flush().unwrap();
+        }
+        Action::None
     }
 }
 
@@ -268,62 +321,11 @@ impl Page {
             } else {
                 out.push(c);
                 if c == '\n' {
+                    out.push_str("\x1B[0m");
                     start = true;
                 }
             }
         }
         out
     }
-}
-
-fn read_input() -> Action {
-    let stdin = stdin();
-    let mut stdout = stdout().into_raw_mode().unwrap();
-    let mut y = 1;
-    let mut input = String::new();
-    if let Ok((_col, row)) = termion::terminal_size() {
-        y = row + 1;
-    } else {
-        panic!("can't determine terminal size.");
-    }
-
-    print!("{}", termion::cursor::Hide);
-    stdout.flush().unwrap();
-
-    for c in stdin.keys() {
-        write!(
-            stdout,
-            "{}{}",
-            termion::cursor::Goto(1, y),
-            termion::clear::CurrentLine
-        )
-        .unwrap();
-
-        match c.unwrap() {
-            Key::Ctrl('c') | Key::Char('q') => return Action::Quit,
-            Key::Char('\n') => return Action::Open,
-            Key::Char(c) => input.push(c),
-            Key::Alt(c) => print!("Alt-{}", c),
-            Key::Up | Key::Ctrl('p') => return Action::Up,
-            Key::Down | Key::Ctrl('n') => return Action::Down,
-            Key::Ctrl(c) => print!("Ctrl-{}", c),
-            Key::Left => return Action::Back,
-            Key::Right => return Action::Forward,
-            Key::Backspace => {
-                if input.is_empty() {
-                    return Action::Back;
-                } else {
-                    input.pop();
-                }
-            }
-            Key::Delete => {
-                input.pop();
-            }
-            _ => print!("Other"),
-        }
-
-        print!("{}", input);
-        stdout.flush().unwrap();
-    }
-    Action::None
 }
