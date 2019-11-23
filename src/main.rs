@@ -69,6 +69,8 @@ fn user_input() {
     let mut input = String::new();
     if let Ok((_col, row)) = termion::terminal_size() {
         y = row + 1;
+    } else {
+        panic!("can't determine terminal size.");
     }
 
     print!("{}\x1B[92;1m>> \x1B[0m", termion::cursor::Goto(1, y));
