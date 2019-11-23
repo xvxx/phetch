@@ -71,28 +71,6 @@ impl App {
         }
     }
 
-    fn fetch(&self, host: &str, port: &str, selector: &str) -> Page {
-        let mut body = String::new();
-        TcpStream::connect(format!("{}:{}", host, port))
-            .and_then(|mut stream| {
-                stream.write(format!("{}\r\n", selector).as_ref());
-                Ok(stream)
-            })
-            .and_then(|mut stream| {
-                stream.read_to_string(&mut body);
-                Ok(())
-            })
-            .map_err(|err| {
-                eprintln!("err: {}", err);
-            });
-        Page {
-            body: body,
-            cursor: 0,
-            url: format!("{}:{}{}", host, port, selector),
-            links: Vec::new(),
-        }
-    }
-
     fn respond(&mut self) {
         let mut addr = (String::new(), String::new(), String::new());
         match self.pages.get_mut(&self.cursor) {
@@ -114,6 +92,28 @@ impl App {
         }
         if !addr.0.is_empty() {
             self.load(&addr.0, &addr.1, &addr.2);
+        }
+    }
+
+    fn fetch(&self, host: &str, port: &str, selector: &str) -> Page {
+        let mut body = String::new();
+        TcpStream::connect(format!("{}:{}", host, port))
+            .and_then(|mut stream| {
+                stream.write(format!("{}\r\n", selector).as_ref());
+                Ok(stream)
+            })
+            .and_then(|mut stream| {
+                stream.read_to_string(&mut body);
+                Ok(())
+            })
+            .map_err(|err| {
+                eprintln!("err: {}", err);
+            });
+        Page {
+            body: body,
+            cursor: 0,
+            url: format!("{}:{}{}", host, port, selector),
+            links: Vec::new(),
         }
     }
 }
