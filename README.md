@@ -5,7 +5,7 @@ dirt simple terminal gopher client.
 ## features:
 
 - small, single file executable for linux and macos
-- retro technicolor design
+- technicolor design
 - no nonsense keyboard navigation
 
 ## development:
