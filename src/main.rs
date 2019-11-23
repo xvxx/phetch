@@ -15,6 +15,9 @@ struct App {
     pages: HashMap<String, Page>,
     history: Vec<String>,
     pos: usize,
+    status: String,
+    height: u16,
+    width: u16,
 }
 
 #[derive(Debug)]
@@ -23,6 +26,7 @@ struct Page {
     url: String,
     link: usize,
     links: Vec<Link>,
+    input: String,
 }
 
 #[derive(Debug)]
@@ -57,10 +61,14 @@ fn main() {
 
 impl App {
     fn new() -> App {
+        let (cols, rows) = termion::terminal_size().expect("can't get terminal size");
         App {
             pages: HashMap::new(),
             pos: 0,
             history: Vec::new(),
+            status: String::new(),
+            height: rows,
+            width: cols,
         }
     }
 
@@ -92,9 +100,16 @@ impl App {
     fn render(&self) {
         if let Some(url) = self.history.get(self.pos) {
             if let Some(page) = self.pages.get(url) {
-                // print!("\x1B[2J\x1B[H{}", page.draw()); // clear
-                print!("{}", page.draw()); // clear
+                // clear
+                print!("\x1B[2J\x1B[H{}", page.draw());
+                print!("{}", termion::cursor::Hide);
+                println!(" \x1B[105;93m{}\x1B[0m", page.input);
+            // print!("{}", page.draw());
+            } else {
+                panic!("bad url: {}", url)
             }
+        } else {
+            panic!("bad self.pos: {}", self.pos);
         }
     }
 
@@ -104,7 +119,7 @@ impl App {
         let page = self.pages.get_mut(url);
         match page {
             None => return,
-            Some(page) => match read_input(&page.links) {
+            Some(page) => match page.read_input() {
                 Action::Up => page.cursor_up(),
                 Action::Down => page.cursor_down(),
                 Action::Back => self.back(),
@@ -117,6 +132,7 @@ impl App {
                         addr.1 = link.port.to_string();
                         addr.2 = link.selector.to_string();
                     }
+                    page.input.clear();
                 }
                 Action::Open => {
                     if page.link > 0 && page.link - 1 < page.links.len() {
@@ -125,6 +141,7 @@ impl App {
                         addr.1 = link.port.to_string();
                         addr.2 = link.selector.to_string();
                     }
+                    page.input.clear();
                 }
                 Action::Quit => std::process::exit(0),
                 _ => {}
@@ -154,6 +171,7 @@ impl App {
             link: 0,
             url: format!("{}:{}{}", host, port, selector),
             links: Vec::new(),
+            input: String::new(),
         }
     }
 }
@@ -168,6 +186,46 @@ impl Page {
         if self.link < self.links.len() {
             self.link += 1;
         }
+    }
+
+    fn read_input(&mut self) -> Action {
+        let stdin = stdin();
+        let mut stdout = stdout().into_raw_mode().unwrap();
+        stdout.flush().unwrap();
+
+        for c in stdin.keys() {
+            match c.unwrap() {
+                Key::Ctrl('c') | Key::Ctrl('q') => return Action::Quit,
+                Key::Char('\n') => return Action::Open,
+                Key::Up | Key::Ctrl('p') => return Action::Up,
+                Key::Down | Key::Ctrl('n') => return Action::Down,
+                Key::Left => return Action::Back,
+                Key::Right => return Action::Forward,
+                Key::Char(c) => {
+                    self.input.push(c);
+                    for (i, _link) in self.links.iter().enumerate() {
+                        if self.input == (i + 1).to_string() {
+                            return Action::Link(i);
+                        }
+                    }
+                    return Action::None;
+                }
+                Key::Backspace => {
+                    if self.input.is_empty() {
+                        return Action::Back;
+                    } else {
+                        self.input.pop();
+                    }
+                    return Action::None;
+                }
+                Key::Delete => {
+                    self.input.pop();
+                    return Action::None;
+                }
+                _ => {}
+            }
+        }
+        Action::None
     }
 
     fn parse_links(&mut self) {
@@ -287,59 +345,4 @@ impl Page {
         }
         out
     }
-}
-
-fn read_input(links: &Vec<Link>) -> Action {
-    let stdin = stdin();
-    let mut stdout = stdout().into_raw_mode().unwrap();
-    let mut y = 1;
-    let mut input = String::new();
-    if let Ok((_col, row)) = termion::terminal_size() {
-        y = row + 1;
-    } else {
-        panic!("can't determine terminal size.");
-    }
-
-    print!("{}", termion::cursor::Hide);
-    stdout.flush().unwrap();
-
-    for c in stdin.keys() {
-        write!(
-            stdout,
-            "{}{}",
-            termion::cursor::Goto(1, y),
-            termion::clear::CurrentLine
-        )
-        .unwrap();
-
-        match c.unwrap() {
-            Key::Ctrl('c') | Key::Ctrl('q') => return Action::Quit,
-            Key::Char('\n') => return Action::Open,
-            Key::Up | Key::Ctrl('p') => return Action::Up,
-            Key::Down | Key::Ctrl('n') => return Action::Down,
-            Key::Left => return Action::Back,
-            Key::Right => return Action::Forward,
-            Key::Char(c) => {
-                input.push(c);
-                for (i, link) in links.iter().enumerate() {
-                    if input == (i + 1).to_string() {
-                        return Action::Link(i);
-                    } 
-                }
-            }
-            Key::Backspace => {
-                if input.is_empty() {
-                    return Action::Back;
-                } else {
-                    input.pop();
-                }
-            }
-            Key::Delete => {
-                input.pop();
-            }
-            _ => print!("Other"),
-        }
-        stdout.flush().unwrap();
-    }
-    Action::None
 }
