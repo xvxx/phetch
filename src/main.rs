@@ -41,6 +41,8 @@ enum Action {
     Back,
     Forward,
     Open,
+    Link(usize),
+    Select(usize),
     Quit,
 }
 
@@ -90,7 +92,8 @@ impl App {
     fn render(&self) {
         if let Some(url) = self.history.get(self.pos) {
             if let Some(page) = self.pages.get(url) {
-                print!("\x1B[2J\x1B[H{}", page.draw()); // clear
+                // print!("\x1B[2J\x1B[H{}", page.draw()); // clear
+                print!("{}", page.draw()); // clear
             }
         }
     }
@@ -106,6 +109,15 @@ impl App {
                 Action::Down => page.cursor_down(),
                 Action::Back => self.back(),
                 Action::Forward => self.forward(),
+                Action::Select(n) => page.link = n,
+                Action::Link(n) => {
+                    if n < page.links.len() {
+                        let link = &page.links[n];
+                        addr.0 = link.host.to_string();
+                        addr.1 = link.port.to_string();
+                        addr.2 = link.selector.to_string();
+                    }
+                }
                 Action::Open => {
                     if page.link > 0 && page.link - 1 < page.links.len() {
                         let link = &page.links[page.link - 1];
@@ -301,15 +313,20 @@ fn read_input(links: &Vec<Link>) -> Action {
         .unwrap();
 
         match c.unwrap() {
-            Key::Ctrl('c') | Key::Char('q') => return Action::Quit,
+            Key::Ctrl('c') | Key::Ctrl('q') => return Action::Quit,
             Key::Char('\n') => return Action::Open,
-            Key::Char(c) => input.push(c),
-            Key::Alt(c) => print!("Alt-{}", c),
             Key::Up | Key::Ctrl('p') => return Action::Up,
             Key::Down | Key::Ctrl('n') => return Action::Down,
-            Key::Ctrl(c) => print!("Ctrl-{}", c),
             Key::Left => return Action::Back,
             Key::Right => return Action::Forward,
+            Key::Char(c) => {
+                input.push(c);
+                for (i, link) in links.iter().enumerate() {
+                    if input == (i + 1).to_string() {
+                        return Action::Link(i);
+                    } 
+                }
+            }
             Key::Backspace => {
                 if input.is_empty() {
                     return Action::Back;
@@ -322,8 +339,6 @@ fn read_input(links: &Vec<Link>) -> Action {
             }
             _ => print!("Other"),
         }
-
-        print!("{}", input);
         stdout.flush().unwrap();
     }
     Action::None
