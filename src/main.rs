@@ -42,10 +42,7 @@ enum Action {
 }
 
 fn main() {
-    let mut app = App {
-        pages: HashMap::new(),
-        cursor: String::new(),
-    };
+    let mut app = App::new();
     app.load("phkt.io", "70", "/");
     loop {
         app.render();
@@ -54,6 +51,13 @@ fn main() {
 }
 
 impl App {
+    fn new() -> App {
+        App {
+            pages: HashMap::new(),
+            cursor: String::new(),
+        }
+    }
+
     fn load(&mut self, host: &str, port: &str, selector: &str) {
         let mut page = self.fetch(host, port, selector);
         page.parse_links();
