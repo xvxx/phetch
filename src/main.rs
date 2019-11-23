@@ -11,8 +11,55 @@ use termion::raw::IntoRawMode;
 
 fn main() {
     let response = phetch("phkt.io", 70, "/links");
+    let links = parse(&response);
+    println!("{:?}", links);
     render(&response);
     user_input();
+}
+
+#[derive(Debug)]
+struct Link<'a> {
+    name: &'a str,
+    host: &'a str,
+    port: &'a str,
+    selector: &'a str,
+}
+
+fn parse<'a>(response: &'a str) -> Vec<Link> {
+    let mut links: Vec<Link> = Vec::new();
+    let mut start = true;
+    let mut is_link = false;
+    let mut link = (0, 0);
+    for (i, c) in response.chars().enumerate() {
+        if start {
+            match c {
+                '0' | '1' => {
+                    is_link = true;
+                    link.0 = i + 1;
+                }
+                '\n' => continue,
+                _ => is_link = false,
+            }
+            start = false;
+        } else if c == '\n' {
+            start = true;
+            if is_link && i > link.0 {
+                link.1 = i;
+                let mut line = Vec::new();
+                for s in response[link.0..link.1].split('\t') {
+                    line.push(s);
+                }
+                links.push(Link {
+                    name: line[0],
+                    selector: line[1],
+                    host: line[2],
+                    port: line[3].trim_end_matches('\r'),
+                });
+                is_link = false;
+            }
+        }
+    }
+    links
 }
 
 fn user_input() {
@@ -79,7 +126,9 @@ fn phetch(host: &str, port: i8, selector: &str) -> String {
 }
 
 fn render(buf: &str) {
-    print!("\x1B[2J\x1B[H{}", draw(buf));
+    let mut clear = "\x1B[2J\x1B[H";
+    clear = "";
+    print!("{}{}", clear, draw(buf));
 }
 
 fn draw(buf: &str) -> String {
