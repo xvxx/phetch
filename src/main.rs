@@ -1,3 +1,5 @@
+#![allow(unused_must_use)]
+
 extern crate termion;
 
 use std::collections::HashMap;
@@ -173,7 +175,7 @@ impl App {
 
 impl Page {
     fn cursor_up(&mut self) {
-        if self.link > 0 {
+        if self.link > 1 {
             self.link -= 1;
         }
     }
@@ -268,6 +270,9 @@ impl Page {
                     is_link = false;
                 }
             }
+        }
+        if self.links.len() > 0 {
+            self.link = 1;
         }
     }
 
