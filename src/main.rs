@@ -204,7 +204,11 @@ impl Page {
                     for (i, link) in self.links.iter().enumerate() {
                         if self.input == (i + 1).to_string() {
                             return Action::Link(i);
-                        } else if link.name.starts_with(&self.input) {
+                        } else if link
+                            .name
+                            .to_ascii_lowercase()
+                            .starts_with(&self.input.to_ascii_lowercase())
+                        {
                             return Action::Select(i);
                         }
                     }
@@ -277,12 +281,13 @@ impl Page {
         let mut links = 0;
         let mut out = String::with_capacity(self.body.len() * 2);
         let mut prefix = "";
+        let mut text_mode = false;
         for (i, c) in self.body.chars().enumerate() {
-            if line >= rows as usize {
+            if line >= (rows - 2) as usize {
                 return out;
             }
             let mut is_link = false;
-            if start {
+            if start && !text_mode {
                 match c {
                     'i' => {
                         prefix = "\x1B[93m";
@@ -294,7 +299,7 @@ impl Page {
                         is_link = true;
                     }
                     '0' => {
-                        prefix = "\x1B[94m";
+                        prefix = "\x1B[92m";
                         links += 1;
                         is_link = true;
                     }
@@ -313,10 +318,15 @@ impl Page {
                     }
                     '\r' => continue,
                     '\n' => {
+                        out.push_str("\r\n");
                         line += 1;
                         continue;
                     }
-                    _ => prefix = "",
+                    x => {
+                        out.push(x);
+                        text_mode = true;
+                        continue;
+                    }
                 }
                 if is_link && self.link > 0 && self.link == links {
                     out.push_str("\x1b[90;1m*\x1b[1m");
@@ -336,8 +346,13 @@ impl Page {
                     out.push_str("\x1B[0m");
                     out.push_str("   ");
                 }
-                out.push_str(prefix);
+                out.push_str(&prefix);
                 start = false
+            } else if text_mode {
+                if c == '\n' {
+                    line += 1;
+                }
+                out.push(c);
             } else if skip_to_end {
                 if c == '\n' {
                     out.push_str("\r\n\x1B[0m");
@@ -348,11 +363,12 @@ impl Page {
             } else if c == '\t' {
                 skip_to_end = true;
             } else {
-                out.push(c);
                 if c == '\n' {
-                    out.push_str("\x1B[0m");
+                    out.push_str("\x1B[0m\r\n");
                     line += 1;
                     start = true;
+                } else {
+                    out.push(c);
                 }
             }
         }
