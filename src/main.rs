@@ -67,9 +67,11 @@ fn main() {
         usage();
         return;
     }
-    let host = match args.get(1).unwrap_or("phkt.io");
-    let port = match args.get(3).unwrap_or("70");
-    let selector = match args.get(2).unwrap_or("/");
+    let host = args.get(1).unwrap();
+    let port = String::from("70");
+    let selector = String::from("/");
+    let port = args.get(2).unwrap_or(&port);
+    let selector = args.get(3).unwrap_or(&selector);
     if host == "--help" || host == "-h" || host == "-help" {
         usage();
         return;
