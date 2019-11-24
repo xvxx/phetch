@@ -13,8 +13,8 @@ use termion::raw::IntoRawMode;
 #[derive(Debug)]
 struct App {
     pages: HashMap<String, Page>, // url -> Page
-    history: Vec<String>,         // ordered history
-    pos: usize,                   // pos in history vec
+    history: Vec<String>,         // ordered history of urls
+    pos: usize,                   // position in history vec
 }
 
 #[derive(Debug)]
@@ -23,7 +23,7 @@ struct Page {
     url: String,      // url of this page
     link: usize,      // selected link
     links: Vec<Link>, // links on page
-    input: String,    // keyboard input (search)
+    input: String,    // what the user has typed
     ptype: PageType,  // type of page
 }
 
@@ -53,6 +53,7 @@ enum Action {
     Open,
     Link(usize),
     Select(usize),
+    Fetch(String, String, String, PageType),
     Quit,
 }
 
@@ -118,31 +119,14 @@ impl App {
         let page = self.pages.get_mut(url);
         match page {
             None => return,
-            Some(page) => match page.read_input() {
-                Action::Up => page.cursor_up(),
-                Action::Down => page.cursor_down(),
+            Some(page) => match page.respond() {
                 Action::Back => self.back(),
                 Action::Forward => self.forward(),
-                Action::Select(n) => page.link = n + 1,
-                Action::Link(n) => {
-                    if n < page.links.len() {
-                        let link = &page.links[n];
-                        addr.0 = link.host.to_string();
-                        addr.1 = link.port.to_string();
-                        addr.2 = link.selector.to_string();
-                        addr.3 = link.ptype;
-                    }
-                    page.input.clear();
-                }
-                Action::Open => {
-                    if page.link > 0 && page.link - 1 < page.links.len() {
-                        let link = &page.links[page.link - 1];
-                        addr.0 = link.host.to_string();
-                        addr.1 = link.port.to_string();
-                        addr.2 = link.selector.to_string();
-                        addr.3 = link.ptype;
-                    }
-                    page.input.clear();
+                Action::Fetch(host, port, sel, ptype) => {
+                    addr.0 = host;
+                    addr.1 = port;
+                    addr.2 = sel;
+                    addr.3 = ptype;
                 }
                 Action::Quit => {
                     println!("{}", termion::cursor::Show);
@@ -191,6 +175,38 @@ impl Page {
         if self.link < self.links.len() {
             self.link += 1;
         }
+    }
+
+    fn respond(&mut self) -> Action {
+        match self.read_input() {
+            Action::Up => self.cursor_up(),
+            Action::Down => self.cursor_down(),
+            Action::Select(n) => self.link = n + 1,
+            Action::Link(n) => {
+                if n < self.links.len() {
+                    let link = &self.links[n];
+                    return Action::Fetch(
+                        link.host.to_string(),
+                        link.port.to_string(),
+                        link.selector.to_string(),
+                        link.ptype,
+                    );
+                }
+            }
+            Action::Open => {
+                if self.link > 0 && self.link - 1 < self.links.len() {
+                    let link = &self.links[self.link - 1];
+                    return Action::Fetch(
+                        link.host.to_string(),
+                        link.port.to_string(),
+                        link.selector.to_string(),
+                        link.ptype,
+                    );
+                }
+            }
+            other => return other,
+        }
+        Action::None
     }
 
     fn read_input(&mut self) -> Action {
@@ -248,9 +264,7 @@ impl Page {
     }
 
     fn parse_links(&mut self) {
-        if self.links.len() > 0 {
-            self.links.clear();
-        }
+        self.links.clear();
         let mut start = true;
         let mut is_link = false;
         let mut link = (0, 0, PageType::Dir);
@@ -295,21 +309,19 @@ impl Page {
                 }
             }
         }
-        if self.links.len() > 0 {
-            self.link = 1;
-        }
+        self.link = 1;
     }
 
     fn draw(&self) -> String {
+        let (cols, rows) = termion::terminal_size().expect("can't get terminal size");
         match self.ptype {
-            PageType::Text => self.draw_text(),
-            PageType::HTML => self.draw_text(),
-            PageType::Dir => self.draw_dir(),
+            PageType::Text => self.draw_text(cols, rows),
+            PageType::HTML => self.draw_text(cols, rows),
+            PageType::Dir => self.draw_dir(cols, rows),
         }
     }
 
-    fn draw_text(&self) -> String {
-        let (_cols, rows) = termion::terminal_size().expect("can't get terminal size");
+    fn draw_text(&self, _cols: u16, rows: u16) -> String {
         let mut line = 0;
         let mut out = String::with_capacity(self.body.len());
         for c in self.body.chars() {
@@ -327,8 +339,7 @@ impl Page {
         out
     }
 
-    fn draw_dir(&self) -> String {
-        let (_cols, rows) = termion::terminal_size().expect("can't get terminal size");
+    fn draw_dir(&self, _cols: u16, rows: u16) -> String {
         let mut line = 0;
         let mut start = true;
         let mut skip_to_end = false;
