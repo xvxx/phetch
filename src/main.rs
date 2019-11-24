@@ -49,6 +49,8 @@ enum Action {
     None,
     Up,
     Down,
+    PageUp,
+    PageDown,
     Back,
     Forward,
     Open,
@@ -189,6 +191,16 @@ impl Page {
         match self.read_input() {
             Action::Up => self.cursor_up(),
             Action::Down => self.cursor_down(),
+            Action::PageUp => {
+                for _ in 0..=30 {
+                    self.cursor_up()
+                }
+            }
+            Action::PageDown => {
+                for _ in 0..=30 {
+                    self.cursor_down()
+                }
+            }
             Action::Select(n) => self.link = n + 1,
             Action::Link(n) => {
                 if n < self.links.len() {
@@ -238,6 +250,16 @@ impl Page {
                 Key::Down | Key::Ctrl('n') => return Action::Down,
                 Key::Left => return Action::Back,
                 Key::Right => return Action::Forward,
+                Key::Char('-') => {
+                    if self.input.is_empty() {
+                        return Action::PageUp;
+                    }
+                }
+                Key::Char(' ') => {
+                    if self.input.is_empty() {
+                        return Action::PageDown;
+                    }
+                }
                 Key::Char(c) => {
                     self.input.push(c);
                     for (i, link) in self.links.iter().enumerate() {
