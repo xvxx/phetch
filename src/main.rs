@@ -108,9 +108,9 @@ impl App {
         let page = self.pages.get(url).expect("bad url");
         // clear
         print!("\x1B[2J\x1B[H{}", page.draw());
+        // print!("{}", page.draw());
         print!("{}", termion::cursor::Hide);
         println!(" \x1B[0;37m{}\x1B[0m", page.input);
-        // print!("{}", page.draw());
     }
 
     fn respond(&mut self) {
@@ -347,10 +347,10 @@ impl Page {
         let mut out = String::with_capacity(self.body.len() * 2);
         let mut prefix = "";
         for (i, c) in self.body.chars().enumerate() {
+            let mut is_link = false;
             if line >= (rows - 2) as usize {
                 return out;
             }
-            let mut is_link = false;
             if start {
                 match c {
                     'i' => {
@@ -387,6 +387,7 @@ impl Page {
                     }
                     _ => {
                         skip_to_end = true;
+                        start = false;
                         continue;
                     }
                 }
@@ -409,7 +410,7 @@ impl Page {
                     out.push_str("   ");
                 }
                 out.push_str(&prefix);
-                start = false
+                start = false;
             } else if skip_to_end {
                 if c == '\n' {
                     out.push_str("\r\n\x1B[0m");
