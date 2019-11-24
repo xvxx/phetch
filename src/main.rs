@@ -61,12 +61,40 @@ enum Action {
 }
 
 fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    println!("{}", args[0]);
+    if args.len() < 2 {
+        usage();
+        return;
+    }
+    let host = match args.get(1) {
+        None => "phkt.io",
+        Some(host) => host,
+    };
+    let port = match args.get(3) {
+        None => "70",
+        Some(port) => port,
+    };
+    let selector = match args.get(2) {
+        None => "/",
+        Some(selector) => selector,
+    };
+    if host == "--help" || host == "-h" || host == "-help" {
+        usage();
+        return;
+    }
+
     let mut app = App::new();
-    app.load("phkt.io", "70", "/", PageType::Dir);
+    app.load(host, port, selector, PageType::Dir);
     loop {
         app.render();
         app.respond();
     }
+}
+
+fn usage() {
+    println!("\x1B[93;1musage:\x1B[0m ");
+    println!("\t$ phetch host [port [selector]]");
 }
 
 impl App {
