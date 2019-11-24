@@ -213,14 +213,14 @@ impl Page {
             Action::Up => self.cursor_up(),
             Action::Down => self.cursor_down(),
             Action::PageUp => {
-                for _ in 0..=30 {
-                    self.cursor_up()
+                if self.offset < 30 {
+                    self.offset = 0;
+                } else {
+                    self.offset -= 30;
                 }
             }
             Action::PageDown => {
-                for _ in 0..=30 {
-                    self.cursor_down()
-                }
+                self.offset += 30;
             }
             Action::Select(n) => self.link = n + 1,
             Action::Link(n) => {
