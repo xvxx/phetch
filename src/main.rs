@@ -262,7 +262,7 @@ impl Page {
                             if link
                                 .name
                                 .to_ascii_lowercase()
-                                .starts_with(&self.input.to_ascii_lowercase())
+                                .contains(&self.input.to_ascii_lowercase())
                             {
                                 return Action::Select(i);
                             }
