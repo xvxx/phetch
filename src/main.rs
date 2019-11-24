@@ -12,21 +12,18 @@ use termion::raw::IntoRawMode;
 
 #[derive(Debug)]
 struct App {
-    pages: HashMap<String, Page>,
-    history: Vec<String>,
-    pos: usize,
-    status: String,
-    height: u16,
-    width: u16,
+    pages: HashMap<String, Page>, // url -> Page
+    history: Vec<String>,         // ordered history
+    pos: usize,                   // pos in history vec
 }
 
 #[derive(Debug)]
 struct Page {
-    body: String,
-    url: String,
-    link: usize,
-    links: Vec<Link>,
-    input: String,
+    body: String,     // response body
+    url: String,      // url of this page
+    link: usize,      // selected link
+    links: Vec<Link>, // links on page
+    input: String,    // keyboard input (search)
 }
 
 #[derive(Debug)]
