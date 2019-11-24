@@ -123,6 +123,7 @@ impl App {
                 Action::Back => self.back(),
                 Action::Forward => self.forward(),
                 Action::Fetch(host, port, sel, ptype) => {
+                    page.input.clear();
                     addr.0 = host;
                     addr.1 = port;
                     addr.2 = sel;
@@ -233,14 +234,38 @@ impl Page {
                 Key::Char(c) => {
                     self.input.push(c);
                     for (i, link) in self.links.iter().enumerate() {
-                        if self.input == (i + 1).to_string() {
+                        // jump to number
+                        let count = self.links.len();
+                        if count < 10 && c == '1' && i == 0 {
                             return Action::Link(i);
-                        } else if link
-                            .name
-                            .to_ascii_lowercase()
-                            .starts_with(&self.input.to_ascii_lowercase())
-                        {
+                        } else if count < 20 && c == '2' && i == 1 {
+                            return Action::Link(i);
+                        } else if count < 30 && c == '3' && i == 2 {
+                            return Action::Link(i);
+                        } else if count < 40 && c == '4' && i == 3 {
+                            return Action::Link(i);
+                        } else if count < 50 && c == '5' && i == 4 {
+                            return Action::Link(i);
+                        } else if count < 60 && c == '6' && i == 5 {
+                            return Action::Link(i);
+                        } else if count < 70 && c == '7' && i == 6 {
+                            return Action::Link(i);
+                        } else if count < 80 && c == '8' && i == 7 {
+                            return Action::Link(i);
+                        } else if count < 90 && c == '9' && i == 8 {
+                            return Action::Link(i);
+                        } else if self.input.len() > 1 && self.input == (i + 1).to_string() {
+                            return Action::Link(i);
+                        } else if self.input.len() == 1 && self.input == (i + 1).to_string() {
                             return Action::Select(i);
+                        } else {
+                            if link
+                                .name
+                                .to_ascii_lowercase()
+                                .starts_with(&self.input.to_ascii_lowercase())
+                            {
+                                return Action::Select(i);
+                            }
                         }
                     }
                     return Action::None;
