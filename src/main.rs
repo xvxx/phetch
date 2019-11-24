@@ -62,7 +62,6 @@ enum Action {
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    println!("{}", args[0]);
     if args.len() < 2 {
         usage();
         return;
