@@ -58,14 +58,10 @@ fn main() {
 
 impl App {
     fn new() -> App {
-        let (cols, rows) = termion::terminal_size().expect("can't get terminal size");
         App {
             pages: HashMap::new(),
             pos: 0,
             history: Vec::new(),
-            status: String::new(),
-            height: rows,
-            width: cols,
         }
     }
 
@@ -274,12 +270,17 @@ impl Page {
     }
 
     fn draw(&self) -> String {
+        let (_cols, rows) = termion::terminal_size().expect("can't get terminal size");
+        let mut line = 0;
         let mut start = true;
         let mut skip_to_end = false;
         let mut links = 0;
         let mut out = String::with_capacity(self.body.len() * 2);
         let mut prefix = "";
         for (i, c) in self.body.chars().enumerate() {
+            if line >= rows as usize {
+                return out;
+            }
             let mut is_link = false;
             if start {
                 match c {
@@ -311,7 +312,10 @@ impl Page {
                         }
                     }
                     '\r' => continue,
-                    '\n' => continue,
+                    '\n' => {
+                        line += 1;
+                        continue;
+                    }
                     _ => prefix = "",
                 }
                 if is_link && self.link > 0 && self.link == links {
@@ -338,6 +342,7 @@ impl Page {
                 if c == '\n' {
                     out.push_str("\r\n\x1B[0m");
                     start = true;
+                    line += 1;
                     skip_to_end = false;
                 }
             } else if c == '\t' {
@@ -346,6 +351,7 @@ impl Page {
                 out.push(c);
                 if c == '\n' {
                     out.push_str("\x1B[0m");
+                    line += 1;
                     start = true;
                 }
             }
