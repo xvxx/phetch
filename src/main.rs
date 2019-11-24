@@ -67,18 +67,9 @@ fn main() {
         usage();
         return;
     }
-    let host = match args.get(1) {
-        None => "phkt.io",
-        Some(host) => host,
-    };
-    let port = match args.get(3) {
-        None => "70",
-        Some(port) => port,
-    };
-    let selector = match args.get(2) {
-        None => "/",
-        Some(selector) => selector,
-    };
+    let host = match args.get(1).unwrap_or("phkt.io");
+    let port = match args.get(3).unwrap_or("70");
+    let selector = match args.get(2).unwrap_or("/");
     if host == "--help" || host == "-h" || host == "-help" {
         usage();
         return;
@@ -138,7 +129,7 @@ impl App {
         let url = self.history.get(self.pos).expect("bad self.pos");
         let page = self.pages.get(url).expect("bad url");
         // clear
-        print!("\x1B[2J\x1B[H{}", page.draw());
+        print!("\x1B[2J\x1B[H{}", page.render());
         // print!("{}", page.draw());
         print!("{}", termion::cursor::Hide);
         println!(" \x1B[0;37m{}\x1B[0m", page.input);
@@ -394,40 +385,12 @@ impl Page {
         self.link = 1;
     }
 
-    fn draw(&self) -> String {
+    fn render(&self) -> String {
         let (cols, rows) = termion::terminal_size().expect("can't get terminal size");
-        match self.ptype {
-            PageType::Text => self.draw_text(cols, rows),
-            PageType::HTML => self.draw_text(cols, rows),
-            PageType::Dir => self.draw_dir(cols, rows),
-        }
+        self.draw(cols, rows, self.ptype != PageType::Dir)
     }
 
-    fn draw_text(&self, _cols: u16, rows: u16) -> String {
-        let mut line = 0;
-        let mut out = String::with_capacity(self.body.len());
-        for c in self.body.chars() {
-            if line < self.offset {
-                if c == '\n' {
-                    line += 1;
-                }
-                continue;
-            }
-            if line >= (rows + self.offset - 2) {
-                return out;
-            }
-            match c {
-                '\n' => {
-                    out.push(c);
-                    line += 1;
-                }
-                _ => out.push(c),
-            }
-        }
-        out
-    }
-
-    fn draw_dir(&self, _cols: u16, rows: u16) -> String {
+    fn draw(&self, _cols: u16, rows: u16, text_mode: bool) -> String {
         let mut line = 0;
         let mut start = true;
         let mut skip_to_end = false;
@@ -444,6 +407,16 @@ impl Page {
             }
             if line >= (rows + self.offset - 2) {
                 return out;
+            }
+            if text_mode {
+                match c {
+                    '\n' => {
+                        out.push(c);
+                        line += 1;
+                    }
+                    _ => out.push(c),
+                }
+                continue;
             }
             if start {
                 match c {
