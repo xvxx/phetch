@@ -24,6 +24,14 @@ struct Page {
     link: usize,      // selected link
     links: Vec<Link>, // links on page
     input: String,    // keyboard input (search)
+    ptype: PageType,  // type of page
+}
+
+#[derive(Copy, Clone, PartialEq, Debug)]
+enum PageType {
+    Dir,
+    Text,
+    HTML,
 }
 
 #[derive(Debug)]
@@ -32,6 +40,7 @@ struct Link {
     host: String,
     port: String,
     selector: String,
+    ptype: PageType,
 }
 
 #[derive(Debug)]
@@ -49,7 +58,7 @@ enum Action {
 
 fn main() {
     let mut app = App::new();
-    app.load("phkt.io", "70", "/");
+    app.load("phkt.io", "70", "/", PageType::Dir);
     loop {
         app.render();
         app.respond();
@@ -77,9 +86,12 @@ impl App {
         }
     }
 
-    fn load(&mut self, host: &str, port: &str, selector: &str) {
+    fn load(&mut self, host: &str, port: &str, selector: &str, ptype: PageType) {
         let mut page = self.fetch(host, port, selector);
-        page.parse_links();
+        page.ptype = ptype;
+        if page.ptype == PageType::Dir {
+            page.parse_links();
+        }
         if self.history.len() > 0 {
             self.pos += 1;
             self.history.insert(self.pos, page.url.to_string());
@@ -101,7 +113,7 @@ impl App {
     }
 
     fn respond(&mut self) {
-        let mut addr = (String::new(), String::new(), String::new());
+        let mut addr = (String::new(), String::new(), String::new(), PageType::Dir);
         let url = self.history.get(self.pos).unwrap();
         let page = self.pages.get_mut(url);
         match page {
@@ -118,6 +130,7 @@ impl App {
                         addr.0 = link.host.to_string();
                         addr.1 = link.port.to_string();
                         addr.2 = link.selector.to_string();
+                        addr.3 = link.ptype;
                     }
                     page.input.clear();
                 }
@@ -127,6 +140,7 @@ impl App {
                         addr.0 = link.host.to_string();
                         addr.1 = link.port.to_string();
                         addr.2 = link.selector.to_string();
+                        addr.3 = link.ptype;
                     }
                     page.input.clear();
                 }
@@ -138,7 +152,7 @@ impl App {
             },
         }
         if !addr.0.is_empty() {
-            self.load(&addr.0, &addr.1, &addr.2);
+            self.load(&addr.0, &addr.1, &addr.2, addr.3);
         }
     }
 
@@ -162,6 +176,7 @@ impl App {
             url: format!("{}:{}{}", host, port, selector),
             links: Vec::new(),
             input: String::new(),
+            ptype: PageType::Dir,
         }
     }
 }
@@ -238,13 +253,24 @@ impl Page {
         }
         let mut start = true;
         let mut is_link = false;
-        let mut link = (0, 0);
+        let mut link = (0, 0, PageType::Dir);
         for (i, c) in self.body.chars().enumerate() {
             if start {
                 match c {
-                    '0' | '1' => {
+                    '0' => {
                         is_link = true;
                         link.0 = i + 1;
+                        link.2 = PageType::Text;
+                    }
+                    '1' => {
+                        is_link = true;
+                        link.0 = i + 1;
+                        link.2 = PageType::Dir;
+                    }
+                    'h' => {
+                        is_link = true;
+                        link.0 = i + 1;
+                        link.2 = PageType::HTML;
                     }
                     '\n' => continue,
                     _ => is_link = false,
@@ -263,6 +289,7 @@ impl Page {
                         selector: line[1].to_string(),
                         host: line[2].to_string(),
                         port: line[3].trim_end_matches('\r').to_string(),
+                        ptype: link.2,
                     });
                     is_link = false;
                 }
@@ -274,6 +301,33 @@ impl Page {
     }
 
     fn draw(&self) -> String {
+        match self.ptype {
+            PageType::Text => self.draw_text(),
+            PageType::HTML => self.draw_text(),
+            PageType::Dir => self.draw_dir(),
+        }
+    }
+
+    fn draw_text(&self) -> String {
+        let (_cols, rows) = termion::terminal_size().expect("can't get terminal size");
+        let mut line = 0;
+        let mut out = String::with_capacity(self.body.len());
+        for c in self.body.chars() {
+            if line >= (rows - 2) as usize {
+                return out;
+            }
+            match c {
+                '\n' => {
+                    out.push(c);
+                    line += 1;
+                }
+                _ => out.push(c),
+            }
+        }
+        out
+    }
+
+    fn draw_dir(&self) -> String {
         let (_cols, rows) = termion::terminal_size().expect("can't get terminal size");
         let mut line = 0;
         let mut start = true;
@@ -281,13 +335,12 @@ impl Page {
         let mut links = 0;
         let mut out = String::with_capacity(self.body.len() * 2);
         let mut prefix = "";
-        let mut text_mode = false;
         for (i, c) in self.body.chars().enumerate() {
             if line >= (rows - 2) as usize {
                 return out;
             }
             let mut is_link = false;
-            if start && !text_mode {
+            if start {
                 match c {
                     'i' => {
                         prefix = "\x1B[93m";
@@ -318,13 +371,11 @@ impl Page {
                     }
                     '\r' => continue,
                     '\n' => {
-                        out.push_str("\r\n");
                         line += 1;
                         continue;
                     }
-                    x => {
-                        out.push(x);
-                        text_mode = true;
+                    _ => {
+                        skip_to_end = true;
                         continue;
                     }
                 }
@@ -348,11 +399,6 @@ impl Page {
                 }
                 out.push_str(&prefix);
                 start = false
-            } else if text_mode {
-                if c == '\n' {
-                    line += 1;
-                }
-                out.push(c);
             } else if skip_to_end {
                 if c == '\n' {
                     out.push_str("\r\n\x1B[0m");
