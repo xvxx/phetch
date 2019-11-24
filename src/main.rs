@@ -402,6 +402,7 @@ impl Page {
                             && self.body[i..].chars().next().unwrap() == '\r'
                             && self.body[i + 1..].chars().next().unwrap() == '\n'
                         {
+                            line += 1;
                             continue;
                         }
                     }
