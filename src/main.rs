@@ -25,6 +25,7 @@ struct Page {
     links: Vec<Link>, // links on page
     input: String,    // what the user has typed
     ptype: PageType,  // type of page
+    offset: u16,      // scrolling offset
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -162,18 +163,24 @@ impl App {
             links: Vec::new(),
             input: String::new(),
             ptype: PageType::Dir,
+            offset: 0,
         }
     }
 }
 
 impl Page {
     fn cursor_up(&mut self) {
-        if self.link > 1 {
+        if self.links.len() == 0 && self.offset > 0 {
+            self.offset -= 1;
+        } else if self.link > 1 {
             self.link -= 1;
         }
     }
+
     fn cursor_down(&mut self) {
-        if self.link < self.links.len() {
+        if self.links.len() == 0 {
+            self.offset += 1;
+        } else if self.link < self.links.len() {
             self.link += 1;
         }
     }
@@ -350,7 +357,13 @@ impl Page {
         let mut line = 0;
         let mut out = String::with_capacity(self.body.len());
         for c in self.body.chars() {
-            if line >= (rows - 2) as usize {
+            if line < self.offset {
+                if c == '\n' {
+                    line += 1;
+                }
+                continue;
+            }
+            if line >= (rows + self.offset - 2) {
                 return out;
             }
             match c {
@@ -373,7 +386,13 @@ impl Page {
         let mut prefix = "";
         for (i, c) in self.body.chars().enumerate() {
             let mut is_link = false;
-            if line >= (rows - 2) as usize {
+            if line < self.offset {
+                if c == '\n' {
+                    line += 1;
+                }
+                continue;
+            }
+            if line >= (rows + self.offset - 2) {
                 return out;
             }
             if start {
