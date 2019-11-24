@@ -114,7 +114,7 @@ impl App {
 
     fn respond(&mut self) {
         let mut addr = (String::new(), String::new(), String::new(), PageType::Dir);
-        let url = self.history.get(self.pos).unwrap();
+        let url = self.history.get(self.pos).expect("bad self.pos");
         let page = self.pages.get_mut(url);
         match page {
             None => return,
