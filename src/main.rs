@@ -342,7 +342,7 @@ impl Page {
         let mut start = true;
         let mut is_link = false;
         let mut link = (0, 0, PageType::Dir);
-        for (i, c) in self.body.chars().enumerate() {
+        for (i, c) in self.body.char_indices() {
             if start {
                 match c {
                     '0' => {
@@ -370,7 +370,9 @@ impl Page {
                     link.1 = i;
                     let mut line = [""; 4];
                     for (j, s) in self.body[link.0..link.1].split('\t').enumerate() {
-                        line[j] = s;
+                        if j < line.len() {
+                            line[j] = s;
+                        }
                     }
                     self.links.push(Link {
                         name: line[0].to_string(),
@@ -398,7 +400,7 @@ impl Page {
         let mut links = 0;
         let mut out = String::with_capacity(self.body.len() * 2);
         let mut prefix = "";
-        for (i, c) in self.body.chars().enumerate() {
+        for (i, c) in self.body.char_indices() {
             let mut is_link = false;
             if line < self.offset {
                 if c == '\n' {
