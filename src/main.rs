@@ -257,6 +257,10 @@ impl Page {
         for c in stdin.keys() {
             match c.unwrap() {
                 Key::Ctrl('q') => return Action::Quit,
+                Key::Esc => {
+                    self.input.clear();
+                    return Action::None;
+                }
                 Key::Ctrl('c') => {
                     if self.input.len() > 0 {
                         self.input.clear();
@@ -278,6 +282,8 @@ impl Page {
                 Key::Char(' ') => {
                     if self.input.is_empty() {
                         return Action::PageDown;
+                    } else {
+                        self.input.push(' ');
                     }
                 }
                 Key::Char(c) => {
