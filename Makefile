@@ -1,10 +1,11 @@
 .PHONY: build release run
 
-run:
-	cargo run
+run: phetch
+	./phetch
 
-build:
+phetch: 
 	cargo build
+	cp target/debug/phetch .
 
 release:
 	cargo build --release
@@ -12,3 +13,4 @@ release:
 
 clean:
 	rm -rf target
+	fm -f phetch
