@@ -1,6 +1,8 @@
+#![allow(dead_code)]
+
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum Type {
-    TextFile,      // 0
+    Text,          // 0
     Menu,          // 1
     CSOEntity,     // 2
     Error,         // 3

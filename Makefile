@@ -3,7 +3,7 @@
 run: phetch
 	./phetch
 
-phetch: 
+phetch: src/*.rs
 	cargo build
 	cp target/debug/phetch .
 
