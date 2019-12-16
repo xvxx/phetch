@@ -31,6 +31,7 @@ dirt simple terminal gopher client.
 - [ ] parse gopher URL
 - [ ] fetch site by hostname: $ phetch sdf.org
 - [ ] fetch site by URL:      $ phetch gopher://hngopher.com/1/live/p1/
+- [ ] TLS
 - [ ] phetch -h
 - [ ] phetch -v
 ### UI
