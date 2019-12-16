@@ -14,9 +14,25 @@ impl UI {
         }
     }
 
+    pub fn run(&self) {
+        loop {
+            self.print();
+            self.respond_to_user();
+        }
+    }
+
+    pub fn print(&self) {
+        // print!("{}", self.render());
+        print!("{:#?}", self);
+    }
+
+    pub fn render(&self) -> String {
+        String::new()
+    }
+
     pub fn load(&mut self, host: &str, port: &str, selector: &str) {
         match Page::load(host, port, selector) {
-            Ok(page) => self.pages.push(page),
+            Ok(page) => self.add_page(page),
             Err(e) => {
                 eprintln!(
                     "\x1B[91merror loading \x1b[93m{}:{}{}: \x1B[0m{}",
@@ -27,18 +43,10 @@ impl UI {
         }
     }
 
-    pub fn print(&self) {
-        print!("{}", self.render());
-    }
-
-    pub fn render(&self) -> String {
-        String::new()
-    }
-
-    pub fn run(&self) {
-        loop {
-            self.print();
-            self.respond_to_user();
+    fn add_page(&mut self, page: Page) {
+        self.pages.push(page);
+        if self.pages.len() > 1 {
+            self.page += 1;
         }
     }
 
