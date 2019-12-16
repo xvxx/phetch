@@ -11,6 +11,8 @@ use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
+mod page;
+mod types;
 mod ui;
 use ui::*;
 
