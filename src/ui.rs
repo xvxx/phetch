@@ -1,16 +1,17 @@
-use page::{Page, PageView};
-
 use std::io;
 use std::io::{stdin, stdout, Write};
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
+use gopher;
+use gopher::Type;
+use menu::{Menu, MenuView};
+
 pub type Key = termion::event::Key;
 pub type Error = io::Error;
 
-#[derive(Debug)]
 pub struct UI {
-    pages: Vec<PageView>,
+    pages: Vec<Box<dyn View>>,
     page: usize,
 }
 
@@ -24,9 +25,9 @@ pub enum Action {
     Back,
     Forward,
     Open,
-    FollowLink(usize),
     Quit,
     Unknown,
+    FollowLink(usize),
 }
 
 pub trait View {
@@ -49,8 +50,8 @@ impl UI {
     }
 
     pub fn print(&self) {
-        // print!("{}", self.render());
-        print!("{:#?}", self);
+        print!("{}", self.render());
+        // print!("{:#?}", self);
     }
 
     pub fn render(&self) -> String {
@@ -58,32 +59,29 @@ impl UI {
         String::new()
     }
 
-    pub fn load(&mut self, host: &str, port: &str, selector: &str) {
-        match Page::load(host, port, selector) {
-            Ok(page) => self.add_page(PageView::from(page)),
-            Err(e) => {
+    pub fn load(&mut self, typ: Type, host: &str, port: &str, selector: &str) {
+        let response = gopher::fetch(host, port, selector)
+            .map_err(|e| {
                 eprintln!(
                     "\x1B[91merror loading \x1b[93m{}:{}{}: \x1B[0m{}",
                     host, port, selector, e
                 );
                 std::process::exit(1);
-            }
+            })
+            .unwrap();
+
+        let url = format!("{}:{}{}", host, port, selector); // TODO
+
+        match typ {
+            Type::Menu => self.add_view(MenuView::from(url, response)),
+            _ => panic!("unknown type"),
         }
     }
 
-    fn add_page(&mut self, page: PageView) {
-        self.pages.push(page);
+    fn add_view<T: View + 'static>(&mut self, view: T) {
+        self.pages.push(Box::from(view));
         if self.pages.len() > 1 {
             self.page += 1;
-        }
-    }
-
-    // Get a mutable reference to the currently loaded view.
-    fn mut_view(&mut self) -> Option<&mut PageView> {
-        if self.pages.len() > 0 && self.page < self.pages.len() {
-            Some(self.pages.get_mut(self.page).unwrap())
-        } else {
-            None
         }
     }
 
@@ -98,7 +96,7 @@ impl UI {
         let stdin = stdin();
         let mut stdout = stdout().into_raw_mode().unwrap();
         stdout.flush().unwrap();
-        let page = self.mut_view().expect("expected page to be loaded");
+        let page = self.pages.get_mut(self.page).expect("expected Page");
 
         for c in stdin.keys() {
             let key = c.expect("UI error on stdin.keys");

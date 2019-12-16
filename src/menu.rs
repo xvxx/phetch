@@ -1,21 +1,19 @@
+use gopher;
+use gopher::Type;
 use std::io;
-use std::io::{Read, Write};
-use std::net::TcpStream;
-use types::Type;
 use ui::{Action, Key, View};
 
 #[derive(Debug)]
-pub struct PageView {
+pub struct MenuView {
     pub input: String, // user's inputted value
-    pub page: Page,    // data
+    pub menu: Menu,    // data
     pub line: usize,   // selected line
     pub scroll: usize, // scrolling offset
 }
 
 #[derive(Debug)]
-pub struct Page {
+pub struct Menu {
     lines: Vec<Line>, // lines
-    typ: Type,        // entry type
     raw: String,      // raw gopher response
     url: String,      // gopher url
 }
@@ -30,7 +28,7 @@ pub struct Line {
     typ: Type,
 }
 
-impl View for PageView {
+impl View for MenuView {
     fn process_input(&mut self, key: Key) -> Action {
         match key {
             Key::Char('\n') => return Action::Open,
@@ -72,9 +70,9 @@ impl View for PageView {
             }
             Key::Char(c) => {
                 self.input.push(c);
-                for (i, link) in self.page.lines.iter().enumerate() {
+                for (i, link) in self.menu.lines.iter().enumerate() {
                     // jump to number
-                    let count = self.page.lines.len();
+                    let count = self.menu.lines.len();
                     if count < 10 && c == '1' && i == 0 {
                         return Action::FollowLink(i);
                     } else if count < 20 && c == '2' && i == 1 {
@@ -114,10 +112,10 @@ impl View for PageView {
     }
 }
 
-impl PageView {
-    pub fn from(page: Page) -> PageView {
-        PageView {
-            page,
+impl MenuView {
+    pub fn from(url: String, response: String) -> MenuView {
+        MenuView {
+            menu: Menu::from(url, response),
             input: String::new(),
             line: 0,
             scroll: 0,
@@ -125,41 +123,22 @@ impl PageView {
     }
 }
 
-impl Page {
-    pub fn from(url: String, gopher_response: String) -> Page {
-        Self::parse_menu(url, gopher_response)
+impl Menu {
+    pub fn from(url: String, gopher_response: String) -> Menu {
+        Self::parse(url, gopher_response)
     }
 
-    // Loads a Page given a URL.
-    pub fn load(host: &str, port: &str, selector: &str) -> io::Result<Page> {
+    // Loads a Menu given a URL.
+    pub fn load(host: &str, port: &str, selector: &str) -> io::Result<Menu> {
         let url = format!("{}:{}{}", host, port, selector);
-        match Self::fetch(host, port, selector) {
-            Ok(res) => Ok(Page::from(url, res)),
-            Err(e) => Err(e),
-        }
-    }
-
-    // Fetches a URL and returns a raw Gopher response.
-    fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
-        let mut body = String::new();
-        let stream = TcpStream::connect(format!("{}:{}", host, port))
-            .and_then(|mut stream| {
-                stream.write(format!("{}\r\n", selector).as_ref());
-                Ok(stream)
-            })
-            .and_then(|mut stream| {
-                stream.read_to_string(&mut body);
-                Ok(())
-            });
-
-        match stream {
-            Ok(_) => Ok(body),
+        match gopher::fetch(host, port, selector) {
+            Ok(res) => Ok(Menu::from(url, res)),
             Err(e) => Err(e),
         }
     }
 
     // Parses the lines in a raw Gopher menu response.
-    fn parse_menu(url: String, raw: String) -> Page {
+    fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
         let mut line = (0, 0, Type::Menu); // (name start pos, name end, type)
         let mut start = true; // are we at beginning of a line?
@@ -216,11 +195,6 @@ impl Page {
             }
         }
 
-        Page {
-            raw,
-            url,
-            lines,
-            typ: Type::Menu,
-        }
+        Menu { raw, url, lines }
     }
 }

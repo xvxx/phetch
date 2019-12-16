@@ -3,7 +3,8 @@
 extern crate termion;
 
 mod fetch;
-mod page;
+mod gopher;
+mod menu;
 mod types;
 mod ui;
 
@@ -24,7 +25,7 @@ fn main() {
     }
 
     let mut ui = ui::UI::new();
-    ui.load(host, port, selector);
+    ui.load(gopher::Type::Menu, host, port, selector);
     ui.run();
 }
 
