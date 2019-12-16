@@ -15,11 +15,12 @@ impl UI {
     }
 
     pub fn load(&mut self, host: &str, port: &str, selector: &str) {
-        if let Some(page) = Page::load(host, port, selector) {
-            self.pages.push(page);
-        } else {
-            eprintln!("error loading {}:{}{}", host, port, selector);
-            std::process::exit(1);
+        match Page::load(host, port, selector) {
+            Ok(page) => self.pages.push(page),
+            Err(e) => {
+                eprintln!("error loading {}:{}{}: {}", host, port, selector, e);
+                std::process::exit(1);
+            }
         }
     }
 
