@@ -88,14 +88,17 @@ impl UI {
     }
 
     fn respond_to_user(&mut self) {
-        self.process_input();
+        match self.process_input() {
+            Action::Quit => std::process::exit(1),
+            _ => {}
+        }
     }
 
     fn process_input(&mut self) -> Action {
         let stdin = stdin();
         let mut stdout = stdout().into_raw_mode().unwrap();
         stdout.flush().unwrap();
-        let mut page = self.mut_view().expect("expected page to be loaded");
+        let page = self.mut_view().expect("expected page to be loaded");
 
         for c in stdin.keys() {
             let key = c.expect("UI error on stdin.keys");

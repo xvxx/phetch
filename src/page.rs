@@ -46,18 +46,6 @@ impl View for PageView {
                 self.input.pop();
                 Action::None
             }
-            Key::Backspace => {
-                if self.input.is_empty() {
-                    Action::Back
-                } else {
-                    self.input.pop();
-                    Action::None
-                }
-            }
-            Key::Delete => {
-                self.input.pop();
-                Action::None
-            }
             Key::Ctrl('c') => {
                 if self.input.len() > 0 {
                     self.input.clear();
