@@ -26,7 +26,7 @@ pub struct Page {
 
 impl Page {
     pub fn from(url: String, gopher_response: String) -> Page {
-        Self::parse(url, gopher_response)
+        Self::parse_menu(url, gopher_response)
     }
 
     // Loads a Page given a URL.
@@ -58,7 +58,7 @@ impl Page {
     }
 
     // Parses the lines in a raw Gopher menu response.
-    fn parse(url: String, raw: String) -> Page {
+    fn parse_menu(url: String, raw: String) -> Page {
         let mut lines = vec![];
         let mut line = (0, 0, Type::Menu); // (name start pos, name end, type)
         let mut start = true; // are we at beginning of a line?
