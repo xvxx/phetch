@@ -1,18 +1,11 @@
 #![allow(unused_must_use)]
 
 extern crate termion;
-use std::collections::HashMap;
-use std::io::{stdin, stdout, Read, Write};
-
-use termion::event::Key;
-use termion::input::TermRead;
-use termion::raw::IntoRawMode;
 
 mod fetch;
 mod page;
 mod types;
 mod ui;
-use ui::*;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -30,7 +23,7 @@ fn main() {
         return;
     }
 
-    let mut ui = UI::new();
+    let mut ui = ui::UI::new();
     ui.load(host, port, selector);
     ui.run();
 }

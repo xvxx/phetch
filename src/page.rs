@@ -2,6 +2,23 @@ use std::io;
 use std::io::{Read, Write};
 use std::net::TcpStream;
 use types::Type;
+use ui::{Action, Key, View};
+
+#[derive(Debug)]
+pub struct PageView {
+    pub input: String, // user's inputted value
+    pub page: Page,    // data
+    pub line: usize,   // selected line
+    pub scroll: usize, // scrolling offset
+}
+
+#[derive(Debug)]
+pub struct Page {
+    lines: Vec<Line>, // lines
+    typ: Type,        // entry type
+    raw: String,      // raw gopher response
+    url: String,      // gopher url
+}
 
 #[derive(Debug)]
 pub struct Line {
@@ -13,15 +30,111 @@ pub struct Line {
     typ: Type,
 }
 
-#[derive(Debug)]
-pub struct Page {
-    typ: Type,        // entry type
-    raw: String,      // raw gopher response
-    url: String,      // gopher url
-    lines: Vec<Line>, // lines
-    line: usize,      // selected line
-    input: String,    // user's inputted value
-    offset: usize,    // scrolling position
+impl View for PageView {
+    fn process_input(&mut self, key: Key) -> Action {
+        match key {
+            Key::Char('\n') => return Action::Open,
+            Key::Backspace => {
+                if self.input.is_empty() {
+                    Action::Back
+                } else {
+                    self.input.pop();
+                    Action::None
+                }
+            }
+            Key::Delete => {
+                self.input.pop();
+                Action::None
+            }
+            Key::Backspace => {
+                if self.input.is_empty() {
+                    Action::Back
+                } else {
+                    self.input.pop();
+                    Action::None
+                }
+            }
+            Key::Delete => {
+                self.input.pop();
+                Action::None
+            }
+            Key::Ctrl('c') => {
+                if self.input.len() > 0 {
+                    self.input.clear();
+                    Action::None
+                } else {
+                    Action::Quit
+                }
+            }
+            Key::Char('-') => {
+                if self.input.is_empty() {
+                    Action::PageUp
+                } else {
+                    self.input.push('-');
+                    Action::None
+                }
+            }
+            Key::Char(' ') => {
+                if self.input.is_empty() {
+                    return Action::PageDown;
+                } else {
+                    self.input.push(' ');
+                    Action::None
+                }
+            }
+            Key::Char(c) => {
+                self.input.push(c);
+                for (i, link) in self.page.lines.iter().enumerate() {
+                    // jump to number
+                    let count = self.page.lines.len();
+                    if count < 10 && c == '1' && i == 0 {
+                        return Action::FollowLink(i);
+                    } else if count < 20 && c == '2' && i == 1 {
+                        return Action::FollowLink(i);
+                    } else if count < 30 && c == '3' && i == 2 {
+                        return Action::FollowLink(i);
+                    } else if count < 40 && c == '4' && i == 3 {
+                        return Action::FollowLink(i);
+                    } else if count < 50 && c == '5' && i == 4 {
+                        return Action::FollowLink(i);
+                    } else if count < 60 && c == '6' && i == 5 {
+                        return Action::FollowLink(i);
+                    } else if count < 70 && c == '7' && i == 6 {
+                        return Action::FollowLink(i);
+                    } else if count < 80 && c == '8' && i == 7 {
+                        return Action::FollowLink(i);
+                    } else if count < 90 && c == '9' && i == 8 {
+                        return Action::FollowLink(i);
+                    } else if self.input.len() > 1 && self.input == (i + 1).to_string() {
+                        return Action::FollowLink(i);
+                    } else if self.input.len() == 1 && self.input == (i + 1).to_string() {
+                        return Action::FollowLink(i);
+                    } else {
+                        if link
+                            .name
+                            .to_ascii_lowercase()
+                            .contains(&self.input.to_ascii_lowercase())
+                        {
+                            return Action::FollowLink(i);
+                        }
+                    }
+                }
+                Action::None
+            }
+            _ => Action::None,
+        }
+    }
+}
+
+impl PageView {
+    pub fn from(page: Page) -> PageView {
+        PageView {
+            page,
+            input: String::new(),
+            line: 0,
+            scroll: 0,
+        }
+    }
 }
 
 impl Page {
@@ -119,10 +232,7 @@ impl Page {
             raw,
             url,
             lines,
-            line: 0,
             typ: Type::Menu,
-            input: String::new(),
-            offset: 0,
         }
     }
 }
