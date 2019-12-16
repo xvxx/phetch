@@ -3,5 +3,10 @@ name = "phetch"
 version = "0.1.0"
 authors = ["dvkt <c@dvkt.io>"]
 
+[profile.release]
+lto = true
+codegen-units = 1
+panic = 'abort'
+
 [dependencies]
 termion = "1.5.3"
