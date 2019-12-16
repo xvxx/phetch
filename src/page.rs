@@ -4,8 +4,8 @@ use std::net::TcpStream;
 use types::Type;
 
 #[derive(Debug)]
-pub struct Link {
-    pos: usize, // which link in the page
+pub struct Line {
+    pos: usize, // which line in the page
     name: String,
     host: String,
     port: String,
@@ -15,11 +15,11 @@ pub struct Link {
 
 #[derive(Debug)]
 pub struct Page {
+    typ: Type,        // entry type
     raw: String,      // raw gopher response
     url: String,      // gopher url
-    links: Vec<Link>, // URL strings
-    link: usize,      // selected link
-    typ: Type,        // entry type
+    lines: Vec<Line>, // lines
+    line: usize,      // selected line
     input: String,    // user's inputted value
     offset: usize,    // scrolling position
 }
@@ -31,8 +31,9 @@ impl Page {
 
     // Loads a Page given a URL.
     pub fn load(host: &str, port: &str, selector: &str) -> io::Result<Page> {
+        let url = format!("{}:{}{}", host, port, selector);
         match Self::fetch(host, port, selector) {
-            Ok(res) => Ok(Page::from(format!("{}:{}{}", host, port, selector), res)),
+            Ok(res) => Ok(Page::from(url, res)),
             Err(e) => Err(e),
         }
     }
@@ -56,56 +57,60 @@ impl Page {
         }
     }
 
-    // Parses the links in a raw Gopher response;
+    // Parses the lines in a raw Gopher menu response.
     fn parse(url: String, raw: String) -> Page {
-        let mut links = vec![];
-        let mut start = true;
-        let mut is_link = false;
-        let mut link = (0, 0, Type::Menu);
-        let mut count = 0;
+        let mut lines = vec![];
+        let mut line = (0, 0, Type::Menu); // (name start pos, name end, type)
+        let mut start = true; // are we at beginning of a line?
+        let mut count = 0; // which line # are we
+        let mut skip_line = false;
 
         for (i, c) in raw.char_indices() {
             if start {
+                line.0 = i + 1;
                 match c {
                     '0' => {
-                        is_link = true;
-                        link.0 = i + 1;
-                        link.2 = Type::Text;
+                        line.2 = Type::Text;
                     }
                     '1' => {
-                        is_link = true;
-                        link.0 = i + 1;
-                        link.2 = Type::Menu;
+                        line.2 = Type::Menu;
                     }
                     'h' => {
-                        is_link = true;
-                        link.0 = i + 1;
-                        link.2 = Type::HTML;
+                        line.2 = Type::HTML;
+                    }
+                    'i' => {
+                        line.2 = Type::Info;
                     }
                     '\n' => continue,
-                    _ => is_link = false,
+                    _ => {
+                        eprintln!("unknown line type: {}", c);
+                        skip_line = true;
+                    }
                 }
                 start = false;
             } else if c == '\n' {
                 start = true;
-                if is_link && i > link.0 {
-                    link.1 = i;
-                    let mut line = [""; 4];
-                    for (j, s) in raw[link.0..link.1].split('\t').enumerate() {
-                        if j < line.len() {
-                            line[j] = s;
+                if skip_line {
+                    skip_line = false;
+                    continue;
+                }
+                if i > line.0 {
+                    line.1 = i;
+                    let mut parts = [""; 4];
+                    for (j, s) in raw[line.0..line.1].split('\t').enumerate() {
+                        if j < parts.len() {
+                            parts[j] = s;
                         }
                     }
-                    links.push(Link {
-                        name: line[0].to_string(),
-                        selector: line[1].to_string(),
-                        host: line[2].to_string(),
-                        port: line[3].trim_end_matches('\r').to_string(),
-                        typ: link.2,
+                    lines.push(Line {
+                        name: parts[0].to_string(),
+                        selector: parts[1].to_string(),
+                        host: parts[2].to_string(),
+                        port: parts[3].trim_end_matches('\r').to_string(),
+                        typ: line.2,
                         pos: count,
                     });
                     count += 1;
-                    is_link = false;
                 }
             }
         }
@@ -113,8 +118,8 @@ impl Page {
         Page {
             raw,
             url,
-            links,
-            link: 0,
+            lines,
+            line: 0,
             typ: Type::Menu,
             input: String::new(),
             offset: 0,
