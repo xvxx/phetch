@@ -1,4 +1,7 @@
-.PHONY: build release
+.PHONY: build release run
+
+run:
+	cargo run
 
 build:
 	cargo build
