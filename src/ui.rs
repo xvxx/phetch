@@ -90,6 +90,9 @@ impl UI {
     }
 
     fn add_page<T: View + 'static>(&mut self, view: T) {
+        if self.pages.len() > 0 && self.page < self.pages.len() - 1 {
+            self.pages.truncate(self.page + 1);
+        }
         self.pages.push(Box::from(view));
         if self.pages.len() > 1 {
             self.page += 1;
