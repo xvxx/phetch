@@ -26,6 +26,12 @@ pub enum Type {
 }
 
 // Fetches a URL and returns a raw Gopher response.
+pub fn fetch_url(url: &str) -> io::Result<String> {
+    let (_, host, port, sel) = parse_url(url);
+    fetch(host, port, sel)
+}
+
+// Fetches a URL by its component parts and returns a raw Gopher response.
 pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
     let mut body = String::new();
     let stream = TcpStream::connect(format!("{}:{}", host, port))

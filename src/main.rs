@@ -17,11 +17,21 @@ fn main() {
 
     let url = args.get(1).unwrap();
 
-    if url == "--version" || url == "-v" || url == "-version" {
+    if url == "-raw" || url == "-r" || url == "--raw" {
+        if args.len() > 2 {
+            let url = args.get(2).unwrap();
+            print_raw(url);
+        } else {
+            eprintln!("-raw needs gopher-url");
+        }
+        return;
+    }
+
+    if url == "-version" || url == "-v" || url == "--version" {
         print_version();
         return;
     }
-    if url == "--help" || url == "-h" || url == "-help" {
+    if url == "-help" || url == "-h" || url == "--help" {
         print_usage();
         return;
     }
@@ -43,4 +53,13 @@ fn print_usage() {
     phetch -help               # Show this screen.
     phetch -version            # Show phetch version."
     );
+}
+
+fn print_raw(url: &str) {
+    gopher::fetch_url(url)
+        .and_then(|x| {
+            println!("{}", x);
+            Ok(())
+        })
+        .map_err(|e| eprintln!("{}", e));
 }
