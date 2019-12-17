@@ -13,7 +13,6 @@ pub struct MenuView {
 pub struct Menu {
     url: String,      // gopher url
     lines: Vec<Line>, // lines
-    raw: String,      // raw gopher response
 }
 
 #[derive(Debug)]
@@ -332,7 +331,7 @@ impl Menu {
             }
         }
 
-        Menu { raw, url, lines }
+        Menu { url, lines }
     }
 }
 
