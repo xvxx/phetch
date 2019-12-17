@@ -27,7 +27,7 @@ pub enum Action {
 
 pub trait View {
     fn process_input(&mut self, c: Key) -> Action;
-    fn render(&self) -> String;
+    fn render(&self, width: u16, height: u16) -> String;
 }
 
 impl UI {
@@ -49,7 +49,7 @@ impl UI {
     pub fn draw(&mut self) {
         if self.dirty {
             let prefix = ""; // debug
-                             // let prefix = "\x1b[2J\x1b[H"; // clear the screen
+            let prefix = "\x1b[2J\x1b[H"; // clear the screen
             print!("{}{}", prefix, self.render());
             self.dirty = false;
         }
@@ -63,10 +63,10 @@ impl UI {
     }
 
     pub fn render(&self) -> String {
-        // let (cols, rows) = termion::terminal_size().expect("can't get terminal size");
+        let (cols, rows) = termion::terminal_size().expect("can't get terminal size"); // TODO
         if self.pages.len() > 0 && self.page < self.pages.len() {
             if let Some(page) = self.pages.get(self.page) {
-                return page.render();
+                return page.render(cols, rows);
             }
         }
         String::from("N/A")

@@ -22,8 +22,8 @@ pub struct Line {
 }
 
 impl View for MenuView {
-    fn render(&self) -> String {
-        self.render_lines()
+    fn render(&self, w: u16, h: u16) -> String {
+        self.render_lines(w, h)
     }
 
     fn process_input(&mut self, key: Key) -> Action {
@@ -52,7 +52,7 @@ impl MenuView {
         self.menu.links()
     }
 
-    fn render_lines(&self) -> String {
+    fn render_lines(&self, _cols: u16, rows: u16) -> String {
         let mut out = String::new();
 
         macro_rules! push {
@@ -66,7 +66,10 @@ impl MenuView {
         }
 
         let mut links = 0;
-        for line in self.lines() {
+        for (i, line) in self.lines().iter().enumerate() {
+            if i as u16 >= rows - 4 {
+                return out;
+            }
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
