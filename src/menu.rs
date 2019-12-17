@@ -20,7 +20,6 @@ pub struct Menu {
 
 #[derive(Debug)]
 pub struct Line {
-    pos: usize, // which line in the page
     name: String,
     host: String,
     port: String,
@@ -135,22 +134,15 @@ impl Menu {
         Self::parse(url, gopher_response)
     }
 
-    // Parses the lines in a raw Gopher menu response.
     fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
-        let mut line = (0, 0, Type::Menu); // (name start pos, name end, type)
-        let mut start = true; // are we at beginning of a line?
-        let mut count = 0; // which line # are we
-        let mut skip_line = false;
-
-        for (i, c) in raw.char_indices() {
-            if start {
-                line.0 = i + 1;
-                match c {
-                    '0' => line.2 = Type::Text,
-                    '1' => line.2 = Type::Menu,
+        for line in raw.split_terminator("\n") {
+            if let Some(c) = line.chars().nth(0) {
+                let typ = match c {
+                    '0' => Type::Text,
+                    '1' => Type::Menu,
                     '2' => panic!("CSOEntity not supported"), // TODO
-                    '3' => line.2 = Type::Error,
+                    '3' => Type::Error,
                     '4' => panic!("Binhex not supported"), // TODO
                     '5' => panic!("DOSFile not supported"), // TODO
                     '6' => panic!("UUEncoded not supported"), // TODO
@@ -160,41 +152,25 @@ impl Menu {
                     '+' => panic!("Mirrors not supported"), // TODO
                     'g' => panic!("GIF not supported"),    // TODO
                     'T' => panic!("Telnet3270 not supported"), // TODO
-                    'h' => line.2 = Type::HTML,
-                    'i' => line.2 = Type::Info,
+                    'h' => Type::HTML,
+                    'i' => Type::Info,
                     's' => panic!("Sound not supported"), // TODO
                     'd' => panic!("Document not supported"), // TODO
                     '\n' => continue,
                     _ => {
                         eprintln!("unknown line type: {}", c);
-                        skip_line = true;
+                        continue;
                     }
-                }
-                start = false;
-            } else if c == '\n' {
-                start = true;
-                if skip_line {
-                    skip_line = false;
-                    continue;
-                }
-                if i > line.0 {
-                    line.1 = i;
-                    let mut parts = [""; 4];
-                    for (j, s) in raw[line.0..line.1].split('\t').enumerate() {
-                        if j < parts.len() {
-                            parts[j] = s;
-                        }
-                    }
-                    lines.push(Line {
-                        name: parts[0].to_string(),
-                        selector: parts[1].to_string(),
-                        host: parts[2].to_string(),
-                        port: parts[3].trim_end_matches('\r').to_string(),
-                        typ: line.2,
-                        pos: count,
-                    });
-                    count += 1;
-                }
+                };
+
+                let parts: Vec<&str> = line.split_terminator("\t").collect();
+                lines.push(Line {
+                    name: parts[0][1..].to_string(),
+                    selector: parts[1].to_string(),
+                    host: parts[2].to_string(),
+                    port: parts[3].trim_end_matches('\r').to_string(),
+                    typ,
+                });
             }
         }
 
