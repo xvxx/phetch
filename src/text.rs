@@ -3,9 +3,11 @@ use ui::{Action, Key, View};
 pub struct TextView {
     url: String,
     raw: String,
-    scroll: usize, // offset
-    lines: usize,  // # of lines
+    scroll: isize, // offset
+    lines: isize,  // # of lines
 }
+
+const SCROLL_LINES: isize = 15;
 
 impl View for TextView {
     fn url(&self) -> String {
@@ -13,14 +15,13 @@ impl View for TextView {
     }
 
     fn process_input(&mut self, c: Key) -> Action {
-        let jump = 15;
         match c {
             Key::Char('t') | Key::Char('g') => {
                 self.scroll = 0;
                 Action::Redraw
             }
             Key::Char('b') | Key::Char('G') => {
-                self.scroll = self.lines - jump;
+                self.scroll = self.lines - SCROLL_LINES;
                 Action::Redraw
             }
             Key::Down => {
@@ -41,8 +42,8 @@ impl View for TextView {
             }
             Key::PageUp | Key::Char('-') => {
                 if self.scroll > 0 {
-                    self.scroll -= jump;
-                    if self.scroll <= 0 {
+                    self.scroll -= SCROLL_LINES;
+                    if self.scroll < 0 {
                         self.scroll = 0;
                     }
                     Action::Redraw
@@ -51,8 +52,8 @@ impl View for TextView {
                 }
             }
             Key::PageDown | Key::Char(' ') => {
-                if self.scroll < self.lines - 1 - jump {
-                    self.scroll += jump;
+                if self.scroll < self.lines - 1 - SCROLL_LINES {
+                    self.scroll += SCROLL_LINES;
                     if self.scroll >= self.lines {
                         self.scroll = self.lines - 1;
                     }
@@ -68,10 +69,10 @@ impl View for TextView {
     fn render(&self, width: u16, height: u16) -> String {
         let mut out = String::new();
         for (i, line) in self.raw.split_terminator('\n').enumerate() {
-            if i > (self.scroll + height as usize) - 2 {
+            if i as isize > (self.scroll + height as isize) - 2 {
                 break;
             }
-            if i < self.scroll {
+            if i < self.scroll as usize {
                 continue;
             }
             out.push_str(line);
@@ -83,7 +84,7 @@ impl View for TextView {
 
 impl TextView {
     pub fn from(url: String, response: String) -> TextView {
-        let lines = response.split_terminator('\n').count();
+        let lines = response.split_terminator('\n').count() as isize;
         TextView {
             url,
             raw: response,
