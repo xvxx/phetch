@@ -66,10 +66,10 @@ impl View for TextView {
         }
     }
 
-    fn render(&self, width: u16, height: u16) -> String {
+    fn render(&self, _cols: u16, rows: u16) -> String {
         let mut out = String::new();
         for (i, line) in self.raw.split_terminator('\n').enumerate() {
-            if i as isize > (self.scroll + height as isize) - 2 {
+            if i as isize > (self.scroll + rows as isize) - 2 {
                 break;
             }
             if i < self.scroll as usize {

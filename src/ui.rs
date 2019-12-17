@@ -184,5 +184,5 @@ fn spawn_os_clipboard() -> std::process::Child {
             .stdin(Stdio::piped())
             .spawn()
     }
-    .unwrap(); // TODO
+    .unwrap() // TODO
 }

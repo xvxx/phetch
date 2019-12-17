@@ -25,8 +25,8 @@ pub struct Line {
 }
 
 impl View for MenuView {
-    fn render(&self, w: u16, h: u16) -> String {
-        self.render_lines(w, h)
+    fn render(&self, cols: u16, rows: u16) -> String {
+        self.render_lines(cols, rows)
     }
 
     fn process_input(&mut self, key: Key) -> Action {
@@ -72,13 +72,13 @@ impl MenuView {
             }};
         }
 
-        for (i, line) in self.lines().iter().enumerate() {
-            if i as i16 >= (self.scroll + rows as i16) - 2 {
-                return out;
-            }
-            if (i as i16) < self.scroll {
-                continue;
-            }
+        let iter = self
+            .lines()
+            .iter()
+            .skip(self.scroll as usize)
+            .take(rows as usize - 2);
+
+        for line in iter {
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
@@ -100,7 +100,8 @@ impl MenuView {
                 Type::Menu => push!("94", &line.name),
                 Type::Info => push!("93", &line.name),
                 Type::HTML => push!("92", &line.name),
-                _ => {}
+                Type::Error => push!("91", &line.name),
+                _ => push!("0", &line.name),
             }
             out.push('\n');
         }
