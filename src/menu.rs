@@ -101,6 +101,7 @@ impl MenuView {
                 Type::Info => push!("93", &line.name),
                 Type::HTML => push!("92", &line.name),
                 Type::Error => push!("91", &line.name),
+                typ if typ.is_download() => push!("4;97", &line.name),
                 _ => push!("0", &line.name),
             }
             out.push('\n');
