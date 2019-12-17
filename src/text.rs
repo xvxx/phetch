@@ -3,8 +3,9 @@ use ui::{Action, Key, View};
 pub struct TextView {
     url: String,
     raw: String,
-    scroll: isize, // offset
-    lines: isize,  // # of lines
+    scroll: isize,  // offset
+    lines: isize,   // # of lines
+    longest: usize, // longest line
 }
 
 const SCROLL_LINES: isize = 15;
@@ -84,12 +85,21 @@ impl View for TextView {
 
 impl TextView {
     pub fn from(url: String, response: String) -> TextView {
-        let lines = response.split_terminator('\n').count() as isize;
+        let mut lines = 0;
+        let mut longest = 0;
+        for line in response.split_terminator('\n') {
+            lines += 1;
+            if line.len() > longest {
+                longest = line.len();
+            }
+        }
+
         TextView {
             url,
             raw: response,
             scroll: 0,
             lines,
+            longest,
         }
     }
 }
