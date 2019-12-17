@@ -142,6 +142,7 @@ impl UI {
                     Key::Ctrl('q') | Key::Ctrl('c') => return Action::Quit,
                     Key::Left | Key::Backspace => return Action::Back,
                     Key::Right => return Action::Forward,
+                    Key::Char('\n') => return Action::Redraw,
                     _ => {}
                 },
                 action => return action,
