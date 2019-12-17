@@ -78,7 +78,12 @@ impl MenuView {
         let indent = if self.menu.longest > cols as usize {
             String::from("")
         } else {
-            " ".repeat(((cols as usize - self.menu.longest) / 2) - 6)
+            let left = (cols as usize - self.menu.longest) / 2;
+            if left > 6 {
+                " ".repeat(left - 6)
+            } else {
+                String::from("")
+            }
         };
 
         for line in iter {
@@ -99,14 +104,20 @@ impl MenuView {
                 out.push_str(&line.link.to_string());
                 out.push_str(".\x1b[0m ");
             }
+            // truncate long lines, instead of wrapping
+            let name = if line.name.len() + 6 > cols as usize {
+                &line.name[0..cols as usize - 6]
+            } else {
+                &line.name
+            };
             match line.typ {
-                Type::Text => push!("96", &line.name),
-                Type::Menu => push!("94", &line.name),
-                Type::Info => push!("93", &line.name),
-                Type::HTML => push!("92", &line.name),
-                Type::Error => push!("91", &line.name),
-                typ if typ.is_download() => push!("4;97", &line.name),
-                _ => push!("0", &line.name),
+                Type::Text => push!("96", name),
+                Type::Menu => push!("94", name),
+                Type::Info => push!("93", name),
+                Type::HTML => push!("92", name),
+                Type::Error => push!("91", name),
+                typ if typ.is_download() => push!("4;97", name),
+                _ => push!("0", name),
             }
             out.push('\n');
         }

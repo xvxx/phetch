@@ -72,7 +72,12 @@ impl View for TextView {
         let indent = if self.longest > cols as usize {
             String::from("")
         } else {
-            " ".repeat((cols as usize - self.longest) / 2)
+            let left = (cols as usize - self.longest) / 2;
+            if left > 6 {
+                " ".repeat(left - 6)
+            } else {
+                String::from("")
+            }
         };
         let iter = self
             .raw
