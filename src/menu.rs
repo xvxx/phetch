@@ -7,7 +7,7 @@ pub struct MenuView {
     pub input: String, // user's inputted value
     pub menu: Menu,    // data
     pub link: usize,   // selected link
-    pub scroll: usize, // scrolling offset
+    pub scroll: i16,   // scrolling offset
 }
 
 pub struct Menu {
@@ -69,8 +69,11 @@ impl MenuView {
 
         let mut links = 0;
         for (i, line) in self.lines().iter().enumerate() {
-            if i as u16 >= rows - 4 {
+            if i as u16 >= rows - 2 {
                 return out;
+            }
+            if (i as i16) < self.scroll {
+                continue;
             }
             if line.typ == Type::Info {
                 out.push_str("      ");
@@ -108,8 +111,26 @@ impl MenuView {
         Action::None
     }
 
-    fn action_page_down(&self) {}
-    fn action_page_up(&self) {}
+    fn action_page_down(&mut self) -> Action {
+        if (self.scroll as usize) < self.lines().len() - 15 {
+            self.scroll += 15;
+            Action::Redraw
+        } else {
+            Action::None
+        }
+    }
+
+    fn action_page_up(&mut self) -> Action {
+        if self.scroll > 0 {
+            self.scroll -= 15;
+            if self.scroll < 0 {
+                self.scroll = 0;
+            }
+            Action::Redraw
+        } else {
+            Action::None
+        }
+    }
 
     fn action_up(&mut self) -> Action {
         if self.link > 0 {
@@ -182,8 +203,7 @@ impl MenuView {
             }
             Key::Char('-') => {
                 if self.input.is_empty() {
-                    self.action_page_up();
-                    Action::None
+                    self.action_page_up()
                 } else {
                     self.input.push('-');
                     self.redraw_input()
@@ -191,8 +211,7 @@ impl MenuView {
             }
             Key::Char(' ') => {
                 if self.input.is_empty() {
-                    self.action_page_down();
-                    Action::None
+                    self.action_page_down()
                 } else {
                     self.input.push(' ');
                     self.redraw_input()
