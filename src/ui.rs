@@ -1,4 +1,5 @@
 use std::io::{stdin, stdout, Write};
+use std::process::{Command, Stdio};
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
@@ -17,18 +18,20 @@ pub struct UI {
 
 #[derive(Debug)]
 pub enum Action {
-    None,         // do nothing
-    Back,         // back in history
-    Forward,      // also history
-    Open(String), // url
-    Redraw,       // redraw everything
-    Quit,         // yup
-    Unknown,      // handler doesn't know what to do
+    None,              // do nothing
+    Back,              // back in history
+    Forward,           // also history
+    Open(String),      // url
+    Redraw,            // redraw everything
+    Quit,              // yup
+    Clipboard(String), // copy to clipboard
+    Unknown,           // handler doesn't know what to do
 }
 
 pub trait View {
     fn process_input(&mut self, c: Key) -> Action;
     fn render(&self, width: u16, height: u16) -> String;
+    fn url(&self) -> String;
 }
 
 impl UI {
@@ -50,7 +53,7 @@ impl UI {
     pub fn draw(&mut self) {
         if self.dirty {
             let prefix = ""; // debug
-                             // let prefix = "\x1b[2J\x1b[H"; // clear the screen
+            let prefix = "\x1b[2J\x1b[H"; // clear the screen
             print!("{}{}", prefix, self.render());
             self.dirty = false;
         }
@@ -127,6 +130,10 @@ impl UI {
                 }
                 Action::None
             }
+            Action::Clipboard(url) => {
+                copy_to_clipboard(&url);
+                Action::None
+            }
             a => a,
         }
     }
@@ -143,6 +150,7 @@ impl UI {
                     Key::Left | Key::Backspace => return Action::Back,
                     Key::Right => return Action::Forward,
                     Key::Char('\n') => return Action::Redraw,
+                    Key::Ctrl('y') => return Action::Clipboard(page.url()),
                     _ => {}
                 },
                 action => return action,
@@ -150,4 +158,22 @@ impl UI {
         }
         Action::None
     }
+}
+
+fn copy_to_clipboard(data: &str) {
+    let mut child = spawn_os_clipboard();
+    let child_stdin = child.stdin.as_mut().unwrap();
+    child_stdin.write_all(data.as_bytes());
+}
+
+fn spawn_os_clipboard() -> std::process::Child {
+    if cfg!(target_os = "macos") {
+        Command::new("pbcopy").stdin(Stdio::piped()).spawn()
+    } else {
+        Command::new("xclip")
+            .args(&["-sel", "clip"])
+            .stdin(Stdio::piped())
+            .spawn()
+    }
+    .expect("failed to execute process")
 }

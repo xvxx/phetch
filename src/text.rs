@@ -8,6 +8,10 @@ pub struct TextView {
 }
 
 impl View for TextView {
+    fn url(&self) -> String {
+        self.url.to_string()
+    }
+
     fn process_input(&mut self, c: Key) -> Action {
         let jump = 15;
         match c {
