@@ -48,7 +48,9 @@ impl UI {
 
     pub fn draw(&mut self) {
         if self.dirty {
-            print!("\x1b[2J\x1b[H{}", self.render());
+            // let prefix = ""; // debug
+            let prefix = "\x1b[2J\x1b[H"; // clear the screen
+            print!("{}{}", prefix, self.render());
             self.dirty = false;
         }
     }

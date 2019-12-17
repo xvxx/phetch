@@ -76,13 +76,13 @@ pub fn parse_url<'a>(url: &'a str) -> (Type, &'a str, &'a str, &'a str) {
                     _ => continue,
                 }
                 host = &url[start..i];
-                start = i + 1;
+                start = if c == '/' { i } else { i + 1 };
             }
             Parsing::Port => {
                 if c == '/' {
                     state = Parsing::Selector;
                     port = &url[start..i];
-                    start = i + 1;
+                    start = i;
                 }
             }
             Parsing::Selector => {}
@@ -96,14 +96,22 @@ pub fn parse_url<'a>(url: &'a str) -> (Type, &'a str, &'a str, &'a str) {
     };
 
     let mut chars = sel.chars();
-    if let (Some(fst), Some('/')) = (chars.nth(0), chars.nth(0)) {
-        match fst {
-            '0' => typ = Type::Text,
-            '1' => typ = Type::Menu,
-            'h' => typ = Type::HTML,
-            _ => {}
+    if let (Some('/'), Some(t), Some('/')) = (chars.nth(0), chars.nth(0), chars.nth(0)) {
+        typ = match t {
+            '0' => {
+                sel = &sel[2..];
+                Type::Text
+            }
+            '1' => {
+                sel = &sel[2..];
+                Type::Menu
+            }
+            'h' => {
+                sel = &sel[2..];
+                Type::HTML
+            }
+            _ => typ,
         }
-        sel = &sel[2..];
     }
 
     (typ, host, port, sel)
