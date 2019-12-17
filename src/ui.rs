@@ -77,7 +77,7 @@ impl UI {
         match typ {
             Type::Menu => self.add_view(MenuView::from(url, response)),
             // Type::Text => self.add_view(TextView::from(url, response)),
-            _ => panic!("unknown type"),
+            _ => panic!("unknown type: {:?}", typ),
         }
     }
 

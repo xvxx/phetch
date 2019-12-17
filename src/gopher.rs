@@ -57,7 +57,7 @@ pub fn parse_url<'a>(url: &'a str) -> (Type, &'a str, &'a str, &'a str) {
     let mut host = "";
     let mut port = "70";
     let mut sel = "/";
-    let mut typ = Type::Text;
+    let mut typ = Type::Menu;
     let mut state = Parsing::Host;
     let mut start = 0;
 
