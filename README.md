@@ -17,8 +17,8 @@ dirt simple terminal gopher client.
 
 ## development
 
-    cargo run
-    
+    cargo run -- <gopher-url>
+
 ## resources
 
 - [rfc 1346](https://tools.ietf.org/html/rfc1436)
@@ -29,7 +29,7 @@ dirt simple terminal gopher client.
 - gopher.black
 - sdf.org
 - gopher.quux.org
-- hngopher.com 
+- hngopher.com
 - bitreich.org
 
 ## TODO
@@ -67,5 +67,5 @@ dirt simple terminal gopher client.
 - [ ] fuzzy find search links
     - https://github.com/stewart/rff
     - https://github.com/Schlechtwetterfront/fuzzy-rs
-- [ ] detect SIGWINCH 
+- [ ] detect SIGWINCH
     - https://github.com/BurntSushi/chan-signal

@@ -83,7 +83,7 @@ impl MenuView {
                 out.push_str("      ");
             } else {
                 if line.link - 1 == self.link {
-                    out.push('*');
+                    out.push_str("\x1b[97;1m*\x1b[0m")
                 } else {
                     out.push(' ');
                 }

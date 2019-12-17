@@ -1,15 +1,18 @@
-.PHONY: build release run
+.PHONY: build release run dev debug
 
-run: phetch
-	./phetch
+dev: debug
 
-phetch: src/*.rs
+debug: target/debug/phetch
+release: target/release/phetch
+
+target/debug/phetch: src/*.rs
 	cargo build
-	cp target/debug/phetch .
+	cp $@ phetch
 
-release:
+target/release/phetch: src/*.rs
 	cargo build --release
-	strip target/release/phetch
+	strip $@
+	cp $@ phetch
 
 clean:
 	rm -rf target
