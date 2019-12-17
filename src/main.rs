@@ -61,5 +61,8 @@ fn print_raw(url: &str) {
             println!("{}", x);
             Ok(())
         })
-        .map_err(|e| eprintln!("{}", e));
+        .map_err(|e| {
+            eprintln!("{}", e);
+            std::process::exit(1);
+        });
 }
