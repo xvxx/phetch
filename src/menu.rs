@@ -1,4 +1,6 @@
 use gopher::Type;
+use std::io::stdout;
+use std::io::Write;
 use ui::{Action, Key, View};
 
 pub struct MenuView {
@@ -73,12 +75,12 @@ impl MenuView {
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
-                links += 1;
                 if links == self.link {
                     out.push('*');
                 } else {
                     out.push(' ');
                 }
+                links += 1;
                 out.push(' ');
                 out.push_str("\x1b[95m");
                 if links < 10 {
@@ -96,18 +98,36 @@ impl MenuView {
             }
             out.push('\n');
         }
+        out.push_str(&self.input);
         out
     }
 
     fn redraw_input(&self) -> Action {
-        // code to redraw input...
+        print!("\r\x1b[K{}", self.input);
+        stdout().flush();
         Action::None
     }
 
     fn action_page_down(&self) {}
     fn action_page_up(&self) {}
-    fn action_up(&self) {}
-    fn action_down(&self) {}
+
+    fn action_up(&mut self) -> Action {
+        if self.link > 0 {
+            self.link -= 1;
+            Action::Redraw
+        } else {
+            Action::None
+        }
+    }
+
+    fn action_down(&mut self) -> Action {
+        if self.link < self.links().count() - 1 {
+            self.link += 1;
+            Action::Redraw
+        } else {
+            Action::None
+        }
+    }
 
     fn action_select_link(&mut self, line: usize) -> Action {
         if line < self.links().count() {
@@ -131,22 +151,16 @@ impl MenuView {
     fn process_key(&mut self, key: Key) -> Action {
         match key {
             Key::Char('\n') => {
-                if let Some(line) = self.lines().get(self.link) {
+                self.input.clear();
+                if let Some(line) = self.links().nth(self.link) {
                     let url = line.url.to_string();
-                    self.input.clear();
                     Action::Open(url)
                 } else {
                     Action::None
                 }
             }
-            Key::Up | Key::Ctrl('p') => {
-                self.action_up();
-                Action::None
-            }
-            Key::Down | Key::Ctrl('n') => {
-                self.action_down();
-                Action::None
-            }
+            Key::Up | Key::Ctrl('p') => self.action_up(),
+            Key::Down | Key::Ctrl('n') => self.action_down(),
             Key::Backspace => {
                 if self.input.is_empty() {
                     Action::Back
@@ -204,12 +218,13 @@ impl MenuView {
                         } else {
                             "".to_string()
                         };
+
                         if name.contains(&self.input.to_ascii_lowercase()) {
                             return self.action_select_link(i);
                         }
                     }
                 }
-                Action::None
+                self.action_select_link(0)
             }
             _ => Action::Unknown,
         }
