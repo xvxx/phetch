@@ -79,6 +79,8 @@ impl UI {
     }
 
     pub fn open(&mut self, url: &str) {
+        print!("\r\x1b[90mLoading...\x1b[0m\x1b[K");
+        stdout().flush();
         self.dirty = true;
         let (typ, host, port, sel) = gopher::parse_url(url);
         let response = gopher::fetch(host, port, sel)
