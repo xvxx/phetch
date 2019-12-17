@@ -14,6 +14,7 @@ pub struct UI {
     pages: Vec<Box<dyn View>>,
     page: usize,
     dirty: bool, // redraw?
+    running: bool,
 }
 
 #[derive(Debug)]
@@ -40,11 +41,12 @@ impl UI {
             pages: vec![],
             page: 0,
             dirty: true,
+            running: true,
         }
     }
 
     pub fn run(&mut self) {
-        loop {
+        while self.running {
             self.draw();
             self.update();
         }
@@ -52,8 +54,8 @@ impl UI {
 
     pub fn draw(&mut self) {
         if self.dirty {
-            let prefix = ""; // debug
-            let prefix = "\x1b[2J\x1b[H"; // clear the screen
+            // let prefix = ""; // debug
+            let prefix = "\x1b[2J\x1b[H\x1b[?25l"; // clear screen + hide cursor
             print!("{}{}", prefix, self.render());
             self.dirty = false;
         }
@@ -61,7 +63,7 @@ impl UI {
 
     pub fn update(&mut self) {
         match self.process_input() {
-            Action::Quit => std::process::exit(1),
+            Action::Quit => self.running = false,
             _ => {}
         }
     }
@@ -81,7 +83,7 @@ impl UI {
         let (typ, host, port, sel) = gopher::parse_url(url);
         let response = gopher::fetch(host, port, sel)
             .map_err(|e| {
-                eprintln!("\x1B[91merror loading \x1b[93m{}: \x1B[0m{}", url, e);
+                eprintln!("\x1B[91merror loading \x1b[93m{}: \x1B[0m{}[?25h", url, e); // TODO
                 std::process::exit(1);
             })
             .unwrap();
@@ -158,6 +160,12 @@ impl UI {
             }
         }
         Action::None
+    }
+}
+
+impl Drop for UI {
+    fn drop(&mut self) {
+        print!("\x1b[?25h"); // show cursor
     }
 }
 
