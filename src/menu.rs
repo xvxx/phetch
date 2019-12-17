@@ -96,6 +96,11 @@ impl MenuView {
         out
     }
 
+    fn redraw_input(&self) -> Action {
+        // code to redraw input...
+        Action::None
+    }
+
     fn action_page_down(&self) {}
     fn action_page_up(&self) {}
     fn action_up(&self) {}
@@ -110,9 +115,11 @@ impl MenuView {
         }
     }
 
-    fn action_follow_link(&self, line: usize) -> Action {
-        if let Some(line) = self.links().nth(line) {
-            Action::Open(line.url.to_string())
+    fn action_follow_link(&mut self, link: usize) -> Action {
+        self.input.clear();
+        if let Some(line) = self.links().nth(link) {
+            let url = line.url.to_string();
+            Action::Open(url)
         } else {
             Action::None
         }
@@ -122,7 +129,9 @@ impl MenuView {
         match key {
             Key::Char('\n') => {
                 if let Some(line) = self.lines().get(self.link) {
-                    Action::Open(line.url.to_string())
+                    let url = line.url.to_string();
+                    self.input.clear();
+                    Action::Open(url)
                 } else {
                     Action::None
                 }
@@ -140,17 +149,17 @@ impl MenuView {
                     Action::Back
                 } else {
                     self.input.pop();
-                    Action::Input
+                    self.redraw_input()
                 }
             }
             Key::Delete => {
                 self.input.pop();
-                Action::Input
+                self.redraw_input()
             }
             Key::Ctrl('c') => {
                 if self.input.len() > 0 {
                     self.input.clear();
-                    Action::Input
+                    self.redraw_input()
                 } else {
                     Action::Quit
                 }
@@ -161,7 +170,7 @@ impl MenuView {
                     Action::None
                 } else {
                     self.input.push('-');
-                    Action::Input
+                    self.redraw_input()
                 }
             }
             Key::Char(' ') => {
@@ -170,48 +179,34 @@ impl MenuView {
                     Action::None
                 } else {
                     self.input.push(' ');
-                    Action::Input
+                    self.redraw_input()
                 }
             }
             Key::Char(c) => {
                 self.input.push(c);
                 let count = self.links().count();
                 let input = &self.input;
-                for (i, link) in self.links().enumerate() {
+                for i in 0..count {
                     // jump to number
-                    if count < 10 && c == '1' && i == 0 {
-                        return self.action_follow_link(i);
-                    } else if count < 20 && c == '2' && i == 1 {
-                        return self.action_follow_link(i);
-                    } else if count < 30 && c == '3' && i == 2 {
-                        return self.action_follow_link(i);
-                    } else if count < 40 && c == '4' && i == 3 {
-                        return self.action_follow_link(i);
-                    } else if count < 50 && c == '5' && i == 4 {
-                        return self.action_follow_link(i);
-                    } else if count < 60 && c == '6' && i == 5 {
-                        return self.action_follow_link(i);
-                    } else if count < 70 && c == '7' && i == 6 {
-                        return self.action_follow_link(i);
-                    } else if count < 80 && c == '8' && i == 7 {
-                        return self.action_follow_link(i);
-                    } else if count < 90 && c == '9' && i == 8 {
-                        return self.action_follow_link(i);
-                    } else if input.len() > 1 && input == &(i + 1).to_string() {
-                        return self.action_select_link(i);
-                    } else if input.len() == 1 && input == &(i + 1).to_string() {
+                    for z in 1..9 {
+                        if count < (z * 10) && c == to_char(z as u32) && i == z - 1 {
+                            return self.action_follow_link(i);
+                        }
+                    }
+                    if input.len() > 1 && input == &(i + 1).to_string() {
                         return self.action_select_link(i);
                     } else {
-                        if link
-                            .name
-                            .to_ascii_lowercase()
-                            .contains(&self.input.to_ascii_lowercase())
-                        {
+                        let name = if let Some(link) = self.links().nth(i) {
+                            link.name.to_ascii_lowercase()
+                        } else {
+                            "".to_string()
+                        };
+                        if name.contains(&self.input.to_ascii_lowercase()) {
                             return self.action_select_link(i);
                         }
                     }
                 }
-                Action::Input
+                Action::None
             }
             _ => Action::Unknown,
         }
@@ -225,10 +220,6 @@ impl Menu {
 
     pub fn links(&self) -> impl Iterator<Item = &Line> {
         self.lines.iter().filter(|&line| line.link > 0)
-    }
-
-    pub fn links_mut(&self) -> impl Iterator<Item = &mut Line> {
-        self.lines.iter_mut().filter(|line| line.link > 0)
     }
 
     fn parse(url: String, raw: String) -> Menu {
@@ -285,5 +276,14 @@ impl Menu {
         }
 
         Menu { raw, url, lines }
+    }
+}
+
+// number -> char of that number
+fn to_char(c: u32) -> char {
+    if let Some(ch) = std::char::from_digit(c, 10) {
+        ch
+    } else {
+        '0'
     }
 }

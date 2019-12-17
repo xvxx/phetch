@@ -20,7 +20,6 @@ pub enum Action {
     Back,         // back in history
     Forward,      // also history
     Open(String), // url
-    Input,        // redraw the input bar
     Redraw,       // redraw everything
     Quit,         // yup
     Unknown,      // handler doesn't know what to do
