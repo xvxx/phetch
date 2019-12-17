@@ -4,15 +4,23 @@ pub struct TextView {
     url: String,
     raw: String,
     scroll: usize, // offset
-    count: usize,  // # of lines
+    lines: usize,  // # of lines
 }
 
 impl View for TextView {
     fn process_input(&mut self, c: Key) -> Action {
         let jump = 15;
         match c {
+            Key::Char('t') | Key::Char('g') => {
+                self.scroll = 0;
+                Action::Redraw
+            }
+            Key::Char('b') | Key::Char('G') => {
+                self.scroll = self.lines - jump;
+                Action::Redraw
+            }
             Key::Down => {
-                if self.scroll < self.count - 1 {
+                if self.scroll < self.lines - 1 {
                     self.scroll += 1;
                     Action::Redraw
                 } else {
@@ -39,10 +47,10 @@ impl View for TextView {
                 }
             }
             Key::PageDown | Key::Char(' ') => {
-                if self.scroll < self.count - 1 - jump {
+                if self.scroll < self.lines - 1 - jump {
                     self.scroll += jump;
-                    if self.scroll >= self.count {
-                        self.scroll = self.count - 1;
+                    if self.scroll >= self.lines {
+                        self.scroll = self.lines - 1;
                     }
                     Action::Redraw
                 } else {
@@ -71,12 +79,12 @@ impl View for TextView {
 
 impl TextView {
     pub fn from(url: String, response: String) -> TextView {
-        let count = response.split_terminator('\n').count();
+        let lines = response.split_terminator('\n').count();
         TextView {
             url,
             raw: response,
             scroll: 0,
-            count,
+            lines,
         }
     }
 }
