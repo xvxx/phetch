@@ -53,32 +53,41 @@ impl MenuView {
 
     fn render_lines(&self) -> String {
         let mut out = String::new();
-        for line in self.lines() {
-            self.render_line_into(line, &mut out);
-        }
-        out
-    }
 
-    fn render_line_into(&self, line: &Line, s: &mut String) {
         macro_rules! push {
             ($c:expr, $e:expr) => {{
-                s.push_str("\x1b[");
-                s.push_str($c);
-                s.push_str("m");
-                s.push_str($e);
-                s.push_str("\x1b[0m");
+                out.push_str("\x1b[");
+                out.push_str($c);
+                out.push_str("m");
+                out.push_str($e);
+                out.push_str("\x1b[0m");
             }};
         }
 
-        s.push('\t');
-        match line.typ {
-            Type::Text => push!("96", &line.name),
-            Type::Menu => push!("94", &line.name),
-            Type::Info => push!("93", &line.name),
-            Type::HTML => push!("92", &line.name),
-            _ => {}
+        let mut links = 0;
+        for line in self.lines() {
+            if line.typ == Type::Info {
+                out.push_str("     ");
+            } else {
+                links += 1;
+                out.push(' ');
+                out.push_str("\x1b[95m");
+                if links < 10 {
+                    out.push(' ');
+                }
+                out.push_str(&links.to_string());
+                out.push_str(".\x1b[0m ");
+            }
+            match line.typ {
+                Type::Text => push!("96", &line.name),
+                Type::Menu => push!("94", &line.name),
+                Type::Info => push!("93", &line.name),
+                Type::HTML => push!("92", &line.name),
+                _ => {}
+            }
+            out.push('\n');
         }
-        s.push('\n');
+        out
     }
 
     fn action_page_down(&self) {}
@@ -223,7 +232,7 @@ impl Menu {
                     '.' => continue,
                     '\n' => continue,
                     _ => {
-                        eprintln!("unknown line type: {}", c);
+                        // eprintln!("unknown line type: {}", c);
                         continue;
                     }
                 };

@@ -73,6 +73,7 @@ impl UI {
     }
 
     pub fn open(&mut self, url: &str) {
+        self.dirty = true;
         let (typ, host, port, sel) = gopher::parse_url(url);
         let response = gopher::fetch(host, port, sel)
             .map_err(|e| {
