@@ -224,27 +224,24 @@ impl Menu {
                 let typ = match c {
                     '0' => Type::Text,
                     '1' => Type::Menu,
-                    '2' => panic!("CSOEntity not supported"), // TODO
+                    '2' => Type::CSOEntity,
                     '3' => Type::Error,
-                    '4' => panic!("Binhex not supported"), // TODO
-                    '5' => panic!("DOSFile not supported"), // TODO
-                    '6' => panic!("UUEncoded not supported"), // TODO
-                    '7' => panic!("Search not supported"), // TODO
-                    '8' => panic!("Telnet not supported"), // TODO
-                    '9' => panic!("Binary not supported"), // TODO
-                    '+' => panic!("Mirrors not supported"), // TODO
-                    'g' => panic!("GIF not supported"),    // TODO
-                    'T' => panic!("Telnet3270 not supported"), // TODO
+                    '4' => Type::Binhex,
+                    '5' => Type::DOSFile,
+                    '6' => Type::UUEncoded,
+                    '7' => Type::Search,
+                    '8' => Type::Telnet,
+                    '9' => Type::Binary,
+                    '+' => Type::Mirror,
+                    'g' => Type::GIF,
+                    'T' => Type::Telnet3270,
                     'h' => Type::HTML,
                     'i' => Type::Info,
-                    's' => panic!("Sound not supported"), // TODO
-                    'd' => panic!("Document not supported"), // TODO
+                    's' => Type::Sound,
+                    'd' => Type::Document,
                     '.' => continue,
                     '\n' => continue,
-                    _ => {
-                        // eprintln!("unknown line type: {}", c);
-                        continue;
-                    }
+                    _ => continue,
                 };
 
                 let parts: Vec<&str> = line.split_terminator("\t").collect();
