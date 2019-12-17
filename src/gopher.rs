@@ -87,21 +87,6 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
     }
 }
 
-// Downloads a file to a local path.
-pub fn download(path: &str, host: &str, port: &str, selector: &str) -> io::Result<()> {
-    let mut file = std::fs::File::create(path)?;
-
-    TcpStream::connect(format!("{}:{}", host, port))
-        .and_then(|mut stream| {
-            stream.write(format!("{}\r\n", selector).as_ref());
-            Ok(stream)
-        })
-        .and_then(|mut stream| {
-            std::io::copy(&mut stream, &mut file);
-            Ok(())
-        })
-}
-
 enum Parsing {
     Host,
     Port,
