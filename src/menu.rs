@@ -13,6 +13,7 @@ pub struct MenuView {
 pub struct Menu {
     url: String,      // gopher url
     lines: Vec<Line>, // lines
+    longest: usize,   // size of the longest line
 }
 
 #[derive(Debug)]
@@ -265,6 +266,7 @@ impl Menu {
     fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
         let mut link = 0;
+        let mut longest = 0;
         for line in raw.split_terminator("\n") {
             if let Some(c) = line.chars().nth(0) {
                 let typ = match c {
@@ -322,6 +324,10 @@ impl Menu {
                 }
                 let link = if typ == Type::Info { 0 } else { link };
 
+                if line.len() > longest {
+                    longest = line.len();
+                }
+
                 lines.push(Line {
                     name,
                     url,
@@ -331,7 +337,11 @@ impl Menu {
             }
         }
 
-        Menu { url, lines }
+        Menu {
+            url,
+            lines,
+            longest,
+        }
     }
 }
 

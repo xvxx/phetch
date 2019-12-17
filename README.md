@@ -55,8 +55,6 @@ dirt simple terminal gopher client.
 - [ ] play sound file in background
 - [ ] render markdown-lite
 - [ ] display HTML-lite
-- [ ] stop DOWN at last page
-- [ ] stop PGNDOWN at last page
 - [ ] ? download to pwd
 - [ ] ? download to custom location
 - [ ] center content
