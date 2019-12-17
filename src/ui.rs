@@ -105,6 +105,20 @@ impl UI {
                 self.open(&url);
                 Action::None
             }
+            Action::Back => {
+                if self.page > 0 {
+                    self.dirty = true;
+                    self.page -= 1;
+                }
+                Action::None
+            }
+            Action::Forward => {
+                if self.page < self.pages.len() - 1 {
+                    self.dirty = true;
+                    self.page += 1;
+                }
+                Action::None
+            }
             a => a,
         }
     }
