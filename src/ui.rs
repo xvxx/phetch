@@ -89,6 +89,7 @@ impl UI {
         match typ {
             Type::Menu => self.add_page(MenuView::from(url.to_string(), response)),
             Type::Text => self.add_page(TextView::from(url.to_string(), response)),
+            Type::HTML => self.add_page(TextView::from(url.to_string(), response)),
             _ => panic!("unknown type: {:?}", typ),
         }
     }

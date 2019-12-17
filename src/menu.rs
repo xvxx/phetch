@@ -73,7 +73,7 @@ impl MenuView {
         }
 
         for (i, line) in self.lines().iter().enumerate() {
-            if i as u16 >= rows - 2 {
+            if i as i16 >= (self.scroll + rows as i16) - 2 {
                 return out;
             }
             if (i as i16) < self.scroll {
@@ -304,7 +304,7 @@ impl Menu {
                 }
 
                 if let Some(first_char) = parts[0].chars().nth(0) {
-                    if first_char == '0' || first_char == '1' {
+                    if first_char == '0' || first_char == '1' || first_char == 'h' {
                         url.push_str("/");
                         url.push(first_char);
                     }
