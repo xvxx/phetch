@@ -27,32 +27,34 @@ dirt simple terminal gopher client.
 ## TODO
 
 ### Basics
-- [ ] fetch gopher URL
-- [ ] parse gopher URL
-- [ ] fetch site by hostname: $ phetch sdf.org
-- [ ] fetch site by URL:      $ phetch gopher://hngopher.com/1/live/p1/
+- [x] fetch gopher URL
+- [x] parse gopher URL
+- [x] fetch site by hostname: $ phetch sdf.org
+- [x] fetch site by URL:      $ phetch gopher://hngopher.com/1/live/p1/
 - [ ] TLS
-- [ ] phetch -h
-- [ ] phetch -v
+- [x] phetch -h
+- [x] phetch -v
 ### UI
-- [ ] render MENU
-- [ ] render DOC
-- [ ] size content to terminal
+- [x] render MENU
+- [x] render TEXT
+- [x] size content to terminal
 - [ ] detect terminal resize 
 - [ ] status() helper
 - [ ] show all errors in status()
 ### MENU Links
-- [ ] up/down navigate links
+- [x] up/down navigate links
 - [ ] up/down scroll when next link out of view
 - [ ] page up/page down show next page, highlight first link
-- [ ] `ENTER` visits highlighted link
+- [x] `ENTER` visits highlighted link
 - [ ] open HTML link in browser
-### DOC Scrolling
-- [ ] up/down scroll by 1 line
-- [ ] page up/page down show next page
+### TEXT Scrolling
+- [x] up/down scroll by 1 line
+- [x] page up/page down show next page
+- [ ] stop DOWN at last page
+- [ ] stop PGNDOWN at last page
 ### Keyboard Shortcuts
-- [ ] backspace/left arrow goes back in history
-- [ ] right arrow goes forward in history, if any
+- [x] backspace/left arrow goes back in history
+- [x] right arrow goes forward in history, if any
 - [ ] `?` to show all keyboard shortcuts
 - [ ] `c` copies current URL to clipboard https://git.io/Je7YL
 - [ ] input field that... takes input
@@ -75,7 +77,7 @@ dirt simple terminal gopher client.
 - [ ] syntax highlight code
       $ phetch code.some-gopher-site.io/gw/main.go
 ### Overview
-- [ ] keyboard shortcuts:
+- [x] keyboard shortcuts:
         ← back in history
         → forward in history
         ↑ scroll up
