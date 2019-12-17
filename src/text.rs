@@ -3,12 +3,12 @@ use ui::{Action, Key, View};
 pub struct TextView {
     url: String,
     raw: String,
-    scroll: isize,  // offset
-    lines: isize,   // # of lines
+    scroll: usize,  // offset
+    lines: usize,   // # of lines
     longest: usize, // longest line
 }
 
-const SCROLL_LINES: isize = 15;
+const SCROLL_LINES: usize = 15;
 
 impl View for TextView {
     fn url(&self) -> String {
@@ -67,12 +67,12 @@ impl View for TextView {
         }
     }
 
-    fn render(&self, cols: u16, rows: u16) -> String {
+    fn render(&self, cols: usize, rows: usize) -> String {
         let mut out = String::new();
-        let indent = if self.longest > cols as usize {
+        let indent = if self.longest > cols {
             String::from("")
         } else {
-            let left = (cols as usize - self.longest) / 2;
+            let left = (cols - self.longest) / 2;
             if left > 6 {
                 " ".repeat(left - 6)
             } else {
@@ -82,8 +82,8 @@ impl View for TextView {
         let iter = self
             .raw
             .split_terminator('\n')
-            .skip(self.scroll as usize)
-            .take(rows as usize - 1);
+            .skip(self.scroll)
+            .take(rows - 1);
 
         for line in iter {
             out.push_str(&indent);

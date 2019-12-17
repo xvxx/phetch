@@ -7,7 +7,7 @@ pub struct MenuView {
     pub input: String, // user's inputted value
     pub menu: Menu,    // data
     pub link: usize,   // selected link
-    pub scroll: i16,   // scrolling offset
+    pub scroll: usize, // scrolling offset
 }
 
 pub struct Menu {
@@ -25,7 +25,7 @@ pub struct Line {
 }
 
 impl View for MenuView {
-    fn render(&self, cols: u16, rows: u16) -> String {
+    fn render(&self, cols: usize, rows: usize) -> String {
         self.render_lines(cols, rows)
     }
 
@@ -56,7 +56,7 @@ impl MenuView {
         self.menu.links()
     }
 
-    fn render_lines(&self, cols: u16, rows: u16) -> String {
+    fn render_lines(&self, cols: usize, rows: usize) -> String {
         let mut out = String::new();
 
         macro_rules! push {
@@ -69,16 +69,12 @@ impl MenuView {
             }};
         }
 
-        let iter = self
-            .lines()
-            .iter()
-            .skip(self.scroll as usize)
-            .take(rows as usize - 1);
+        let iter = self.lines().iter().skip(self.scroll).take(rows - 1);
 
-        let indent = if self.menu.longest > cols as usize {
+        let indent = if self.menu.longest > cols {
             String::from("")
         } else {
-            let left = (cols as usize - self.menu.longest) / 2;
+            let left = (cols - self.menu.longest) / 2;
             if left > 6 {
                 " ".repeat(left - 6)
             } else {
@@ -105,8 +101,8 @@ impl MenuView {
                 out.push_str(".\x1b[0m ");
             }
             // truncate long lines, instead of wrapping
-            let name = if line.name.len() + 6 > cols as usize {
-                &line.name[0..cols as usize - 6]
+            let name = if line.name.len() + 6 > cols {
+                &line.name[0..cols - 6]
             } else {
                 &line.name
             };
@@ -132,7 +128,7 @@ impl MenuView {
     }
 
     fn action_page_down(&mut self) -> Action {
-        if (self.scroll as usize) < self.lines().len() - 15 {
+        if self.scroll < self.lines().len() - 15 {
             self.scroll += 15;
             Action::Redraw
         } else {
@@ -162,7 +158,8 @@ impl MenuView {
     }
 
     fn action_down(&mut self) -> Action {
-        if self.link < self.links().count() - 1 {
+        let count = self.links().count();
+        if count > 0 && self.link < count - 1 {
             self.link += 1;
             Action::Redraw
         } else {
