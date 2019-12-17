@@ -57,7 +57,6 @@ dirt simple terminal gopher client.
 - [ ] display HTML-lite
 - [ ] ? download to pwd
 - [ ] ? download to custom location
-- [ ] center content
 - [ ] pipe input to render as gopher
       $ phetch gopher.antirez.com:70 | gg
 - [ ] syntax highlight code
