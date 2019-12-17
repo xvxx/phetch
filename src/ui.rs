@@ -74,6 +74,7 @@ impl UI {
 
         match typ {
             Type::Menu => self.add_view(MenuView::from(url, response)),
+            // Type::Text => self.add_view(TextView::from(url, response)),
             _ => panic!("unknown type"),
         }
     }
@@ -96,10 +97,10 @@ impl UI {
         let stdin = stdin();
         let mut stdout = stdout().into_raw_mode().unwrap();
         stdout.flush().unwrap();
-        let page = self.pages.get_mut(self.page).expect("expected Page");
+        let page = self.pages.get_mut(self.page).expect("expected Page"); // TODO
 
         for c in stdin.keys() {
-            let key = c.expect("UI error on stdin.keys");
+            let key = c.expect("UI error on stdin.keys"); // TODO
             match page.process_input(key) {
                 Action::Unknown => match key {
                     Key::Ctrl('q') => return Action::Quit,
