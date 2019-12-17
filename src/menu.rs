@@ -277,6 +277,14 @@ impl Menu {
                     url.push(':');
                     url.push_str(parts[3].trim_end_matches('\r')); // port
                 }
+
+                if let Some(first_char) = parts[0].chars().nth(0) {
+                    if first_char == '0' || first_char == '1' {
+                        url.push_str("/");
+                        url.push(first_char);
+                    }
+                }
+
                 if parts.len() > 1 {
                     url.push_str(parts[1]); // selector
                 }

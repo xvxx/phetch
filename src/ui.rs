@@ -5,6 +5,7 @@ use termion::raw::IntoRawMode;
 use gopher;
 use gopher::Type;
 use menu::MenuView;
+use text::TextView;
 
 pub type Key = termion::event::Key;
 
@@ -84,7 +85,7 @@ impl UI {
 
         match typ {
             Type::Menu => self.add_page(MenuView::from(url.to_string(), response)),
-            // Type::Text => self.add_page(TextView::from(url, response)),
+            Type::Text => self.add_page(TextView::from(url.to_string(), response)),
             _ => panic!("unknown type: {:?}", typ),
         }
     }
