@@ -43,3 +43,62 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
         Err(e) => Err(e),
     }
 }
+
+enum Parsing {
+    Host,
+    Port,
+    Selector,
+}
+
+// Parses gopher URL into parts.
+pub fn parse_url<'a>(url: &'a str) -> (Type, &'a str, &'a str, &'a str) {
+    let url = url.trim_start_matches("gopher://");
+
+    let mut host = "";
+    let mut port = "70";
+    let mut sel = "/";
+    let mut typ = Type::Text;
+    let mut state = Parsing::Host;
+    let mut start = 0;
+
+    for (i, c) in url.char_indices() {
+        match state {
+            Parsing::Host => {
+                match c {
+                    ':' => state = Parsing::Port,
+                    '/' => state = Parsing::Selector,
+                    _ => continue,
+                }
+                host = &url[start..i];
+                start = i + 1;
+            }
+            Parsing::Port => {
+                if c == '/' {
+                    state = Parsing::Selector;
+                    port = &url[start..i];
+                    start = i + 1;
+                }
+            }
+            Parsing::Selector => {}
+        }
+    }
+
+    match state {
+        Parsing::Selector => sel = &url[start..],
+        Parsing::Port => port = &url[start..],
+        Parsing::Host => host = &url[start..],
+    };
+
+    let mut chars = sel.chars();
+    if let (Some(fst), Some('/')) = (chars.nth(0), chars.nth(1)) {
+        match fst {
+            '0' => typ = Type::Text,
+            '1' => typ = Type::Menu,
+            'h' => typ = Type::HTML,
+            _ => {}
+        }
+        sel = &sel[2..];
+    }
+
+    (typ, host, port, sel)
+}

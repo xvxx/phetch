@@ -29,6 +29,13 @@ pub struct Line {
 }
 
 impl View for MenuView {
+    fn render(&self) -> String {
+        let mut out = self.menu.raw.to_string();
+        out.push('\n');
+        out.push_str(&format!("{:#?}", self));
+        out
+    }
+
     fn process_input(&mut self, key: Key) -> Action {
         match key {
             Key::Char('\n') => return Action::Open,
