@@ -204,7 +204,7 @@ impl MenuView {
                     Action::Quit
                 }
             }
-            Key::Char('-') => {
+            Key::PageUp | Key::Char('-') => {
                 if self.input.is_empty() {
                     self.action_page_up()
                 } else {
@@ -212,7 +212,7 @@ impl MenuView {
                     self.redraw_input()
                 }
             }
-            Key::Char(' ') => {
+            Key::PageDown | Key::Char(' ') => {
                 if self.input.is_empty() {
                     self.action_page_down()
                 } else {
