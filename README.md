@@ -8,6 +8,13 @@ dirt simple terminal gopher client.
 - technicolor design
 - no nonsense keyboard navigation
 
+## usage
+
+    phetch <gopher-url>        # Show GopherHole at URL
+    phetch -raw <gopher-url>   # Print raw Gopher response.
+    phetch -help               # Show this screen.
+    phetch -version            # Show phetch version.
+
 ## development
 
     cargo run
