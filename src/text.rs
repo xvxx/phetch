@@ -22,8 +22,12 @@ impl View for TextView {
                 Action::Redraw
             }
             Key::Char('b') | Key::Char('G') => {
-                self.scroll = self.lines - SCROLL_LINES;
-                Action::Redraw
+                if self.lines >= SCROLL_LINES {
+                    self.scroll = self.lines - SCROLL_LINES;
+                    Action::Redraw
+                } else {
+                    Action::None
+                }
             }
             Key::Down => {
                 if self.scroll < self.lines - 1 {
@@ -43,8 +47,9 @@ impl View for TextView {
             }
             Key::PageUp | Key::Char('-') => {
                 if self.scroll > 0 {
-                    self.scroll -= SCROLL_LINES;
-                    if self.scroll < 0 {
+                    if self.scroll >= SCROLL_LINES {
+                        self.scroll -= SCROLL_LINES;
+                    } else {
                         self.scroll = 0;
                     }
                     Action::Redraw
@@ -53,10 +58,13 @@ impl View for TextView {
                 }
             }
             Key::PageDown | Key::Char(' ') => {
-                if self.scroll < self.lines - 1 - SCROLL_LINES {
-                    self.scroll += SCROLL_LINES;
-                    if self.scroll >= self.lines {
-                        self.scroll = self.lines - 1;
+                let lines = self.lines - 1;
+                if lines > SCROLL_LINES {
+                    if self.scroll < lines - SCROLL_LINES {
+                        self.scroll += SCROLL_LINES;
+                        if self.scroll >= lines {
+                            self.scroll = lines;
+                        }
                     }
                     Action::Redraw
                 } else {

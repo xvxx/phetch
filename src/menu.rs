@@ -24,6 +24,8 @@ pub struct Line {
     link: usize, // link #, if any
 }
 
+const SCROLL_LINES: usize = 15;
+
 impl View for MenuView {
     fn render(&self, cols: usize, rows: usize) -> String {
         self.render_lines(cols, rows)
@@ -128,8 +130,9 @@ impl MenuView {
     }
 
     fn action_page_down(&mut self) -> Action {
-        if self.scroll < self.lines().len() - 15 {
-            self.scroll += 15;
+        let lines = self.lines().len();
+        if lines > SCROLL_LINES && self.scroll < lines - SCROLL_LINES {
+            self.scroll += SCROLL_LINES;
             Action::Redraw
         } else {
             Action::None
@@ -138,8 +141,9 @@ impl MenuView {
 
     fn action_page_up(&mut self) -> Action {
         if self.scroll > 0 {
-            self.scroll -= 15;
-            if self.scroll < 0 {
+            if self.scroll > SCROLL_LINES {
+                self.scroll -= SCROLL_LINES;
+            } else {
                 self.scroll = 0;
             }
             Action::Redraw
