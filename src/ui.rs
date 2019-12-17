@@ -12,9 +12,9 @@ pub type Key = termion::event::Key;
 
 pub struct UI {
     pages: Vec<Box<dyn View>>,
-    page: usize,
-    dirty: bool, // redraw?
-    running: bool,
+    page: usize,   // currently focused page
+    dirty: bool,   // redraw?
+    running: bool, // main ui loop running?
 }
 
 #[derive(Debug)]
@@ -184,5 +184,5 @@ fn spawn_os_clipboard() -> std::process::Child {
             .stdin(Stdio::piped())
             .spawn()
     }
-    .expect("failed to execute process")
+    .unwrap(); // TODO
 }
