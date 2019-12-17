@@ -1,3 +1,4 @@
+use gopher;
 use gopher::Type;
 use std::io::stdout;
 use std::io::Write;
@@ -282,27 +283,9 @@ impl Menu {
         let mut longest = 0;
         for line in raw.split_terminator("\n") {
             if let Some(c) = line.chars().nth(0) {
-                let typ = match c {
-                    '0' => Type::Text,
-                    '1' => Type::Menu,
-                    '2' => Type::CSOEntity,
-                    '3' => Type::Error,
-                    '4' => Type::Binhex,
-                    '5' => Type::DOSFile,
-                    '6' => Type::UUEncoded,
-                    '7' => Type::Search,
-                    '8' => Type::Telnet,
-                    '9' => Type::Binary,
-                    '+' => Type::Mirror,
-                    'g' => Type::GIF,
-                    'T' => Type::Telnet3270,
-                    'h' => Type::HTML,
-                    'i' => Type::Info,
-                    's' => Type::Sound,
-                    'd' => Type::Document,
-                    '.' => continue,
-                    '\n' => continue,
-                    _ => continue,
+                let typ = match gopher::type_for_char(c) {
+                    Some(t) => t,
+                    None => continue,
                 };
 
                 // build string URL
@@ -322,10 +305,8 @@ impl Menu {
 
                 // auto-prepend gopher type to selector
                 if let Some(first_char) = parts[0].chars().nth(0) {
-                    if first_char == '0' || first_char == '1' || first_char == 'h' {
-                        url.push_str("/");
-                        url.push(first_char);
-                    }
+                    url.push_str("/");
+                    url.push(first_char);
                 }
 
                 if parts.len() > 1 {

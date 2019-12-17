@@ -1,3 +1,4 @@
+use gopher;
 use std::io;
 use std::io::{Read, Write};
 use std::net::TcpStream;
@@ -38,6 +39,29 @@ impl Type {
     }
 }
 
+pub fn type_for_char(c: char) -> Option<Type> {
+    match c {
+        '0' => Some(Type::Text),
+        '1' => Some(Type::Menu),
+        '2' => Some(Type::CSOEntity),
+        '3' => Some(Type::Error),
+        '4' => Some(Type::Binhex),
+        '5' => Some(Type::DOSFile),
+        '6' => Some(Type::UUEncoded),
+        '7' => Some(Type::Search),
+        '8' => Some(Type::Telnet),
+        '9' => Some(Type::Binary),
+        '+' => Some(Type::Mirror),
+        'g' => Some(Type::GIF),
+        'T' => Some(Type::Telnet3270),
+        'h' => Some(Type::HTML),
+        'i' => Some(Type::Info),
+        's' => Some(Type::Sound),
+        'd' => Some(Type::Document),
+        _ => None,
+    }
+}
+
 // Fetches a URL and returns a raw Gopher response.
 pub fn fetch_url(url: &str) -> io::Result<String> {
     let (_, host, port, sel) = parse_url(url);
@@ -61,6 +85,21 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
         Ok(_) => Ok(body),
         Err(e) => Err(e),
     }
+}
+
+// Downloads a file to a local path.
+pub fn download(path: &str, host: &str, port: &str, selector: &str) -> io::Result<()> {
+    let mut file = std::fs::File::create(path)?;
+
+    TcpStream::connect(format!("{}:{}", host, port))
+        .and_then(|mut stream| {
+            stream.write(format!("{}\r\n", selector).as_ref());
+            Ok(stream)
+        })
+        .and_then(|mut stream| {
+            std::io::copy(&mut stream, &mut file);
+            Ok(())
+        })
 }
 
 enum Parsing {
@@ -109,21 +148,10 @@ pub fn parse_url<'a>(url: &'a str) -> (Type, &'a str, &'a str, &'a str) {
     };
 
     let mut chars = sel.chars();
-    if let (Some('/'), Some(t), Some('/')) = (chars.nth(0), chars.nth(0), chars.nth(0)) {
-        typ = match t {
-            '0' => {
-                sel = &sel[2..];
-                Type::Text
-            }
-            '1' => {
-                sel = &sel[2..];
-                Type::Menu
-            }
-            'h' => {
-                sel = &sel[2..];
-                Type::HTML
-            }
-            _ => typ,
+    if let (Some('/'), Some(c), Some('/')) = (chars.nth(0), chars.nth(0), chars.nth(0)) {
+        if let Some(t) = gopher::type_for_char(c) {
+            typ = t;
+            sel = &sel[2..];
         }
     }
 
