@@ -67,7 +67,6 @@ impl MenuView {
             }};
         }
 
-        let mut links = 0;
         for (i, line) in self.lines().iter().enumerate() {
             if i as u16 >= rows - 2 {
                 return out;
@@ -78,18 +77,17 @@ impl MenuView {
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
-                if links == self.link {
+                if line.link - 1 == self.link {
                     out.push('*');
                 } else {
                     out.push(' ');
                 }
-                links += 1;
                 out.push(' ');
                 out.push_str("\x1b[95m");
-                if links < 10 {
+                if line.link - 1 < 10 {
                     out.push(' ');
                 }
-                out.push_str(&links.to_string());
+                out.push_str(&line.link.to_string());
                 out.push_str(".\x1b[0m ");
             }
             match line.typ {
@@ -307,8 +305,9 @@ impl Menu {
                     url.push_str(parts[1]); // selector
                 }
                 let name = parts[0][1..].to_string();
-                link += 1;
-                let link = if typ == Type::Info { 0 } else { link };
+                if typ != Type::Info {
+                    link += 1;
+                }
 
                 lines.push(Line {
                     name,
