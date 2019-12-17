@@ -16,6 +16,7 @@ pub struct Menu {
     raw: String,      // raw gopher response
 }
 
+#[derive(Debug)]
 pub struct Line {
     name: String,
     url: String,
@@ -33,6 +34,10 @@ impl View for MenuView {
             a @ Action::Unknown => return a,
             a => a,
         }
+    }
+
+    fn url(&self) -> String {
+        self.menu.url.to_string()
     }
 }
 
@@ -84,7 +89,7 @@ impl MenuView {
                 }
                 out.push(' ');
                 out.push_str("\x1b[95m");
-                if line.link - 1 < 10 {
+                if line.link < 10 {
                     out.push(' ');
                 }
                 out.push_str(&line.link.to_string());
@@ -140,7 +145,7 @@ impl MenuView {
     }
 
     fn action_down(&mut self) -> Action {
-        if self.link < self.links().count() - 1 {
+        if self.link < self.links().count() {
             self.link += 1;
             Action::Redraw
         } else {
@@ -308,6 +313,7 @@ impl Menu {
                 if typ != Type::Info {
                     link += 1;
                 }
+                let link = if typ == Type::Info { 0 } else { link };
 
                 lines.push(Line {
                     name,
