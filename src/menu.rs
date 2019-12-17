@@ -165,8 +165,7 @@ impl MenuView {
                 if self.input.is_empty() {
                     Action::Back
                 } else {
-                    self.input.pop();
-                    self.redraw_input()
+                    Action::Unknown
                 }
             }
             Key::Delete => {

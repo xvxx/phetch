@@ -140,7 +140,7 @@ impl UI {
             match page.process_input(key) {
                 Action::Unknown => match key {
                     Key::Ctrl('q') | Key::Ctrl('c') => return Action::Quit,
-                    Key::Left => return Action::Back,
+                    Key::Left | Key::Backspace => return Action::Back,
                     Key::Right => return Action::Forward,
                     _ => {}
                 },
