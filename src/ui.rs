@@ -59,18 +59,14 @@ impl UI {
         String::new()
     }
 
-    pub fn load(&mut self, typ: Type, host: &str, port: &str, selector: &str) {
-        let response = gopher::fetch(host, port, selector)
+    pub fn load(&mut self, url: String) {
+        let (typ, host, port, sel) = gopher::parse_url(&url);
+        let response = gopher::fetch(host, port, sel)
             .map_err(|e| {
-                eprintln!(
-                    "\x1B[91merror loading \x1b[93m{}:{}{}: \x1B[0m{}",
-                    host, port, selector, e
-                );
+                eprintln!("\x1B[91merror loading \x1b[93m{}: \x1B[0m{}", url, e);
                 std::process::exit(1);
             })
             .unwrap();
-
-        let url = format!("{}:{}{}", host, port, selector); // TODO
 
         match typ {
             Type::Menu => self.add_view(MenuView::from(url, response)),

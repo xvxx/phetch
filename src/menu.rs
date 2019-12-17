@@ -13,9 +13,9 @@ pub struct MenuView {
 
 #[derive(Debug)]
 pub struct Menu {
+    url: String,      // gopher url
     lines: Vec<Line>, // lines
     raw: String,      // raw gopher response
-    url: String,      // gopher url
 }
 
 #[derive(Debug)]
@@ -128,15 +128,6 @@ impl Menu {
         Self::parse(url, gopher_response)
     }
 
-    // Loads a Menu given a URL.
-    pub fn load(host: &str, port: &str, selector: &str) -> io::Result<Menu> {
-        let url = format!("{}:{}{}", host, port, selector);
-        match gopher::fetch(host, port, selector) {
-            Ok(res) => Ok(Menu::from(url, res)),
-            Err(e) => Err(e),
-        }
-    }
-
     // Parses the lines in a raw Gopher menu response.
     fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
@@ -149,18 +140,23 @@ impl Menu {
             if start {
                 line.0 = i + 1;
                 match c {
-                    '0' => {
-                        line.2 = Type::Text;
-                    }
-                    '1' => {
-                        line.2 = Type::Menu;
-                    }
-                    'h' => {
-                        line.2 = Type::HTML;
-                    }
-                    'i' => {
-                        line.2 = Type::Info;
-                    }
+                    '0' => line.2 = Type::Text,
+                    '1' => line.2 = Type::Menu,
+                    '2' => panic!("CSOEntity not supported"), // TODO
+                    '3' => line.2 = Type::Error,
+                    '4' => panic!("Binhex not supported"), // TODO
+                    '5' => panic!("DOSFile not supported"), // TODO
+                    '6' => panic!("UUEncoded not supported"), // TODO
+                    '7' => panic!("Search not supported"), // TODO
+                    '8' => panic!("Telnet not supported"), // TODO
+                    '9' => panic!("Binary not supported"), // TODO
+                    '+' => panic!("Mirrors not supported"), // TODO
+                    'g' => panic!("GIF not supported"),    // TODO
+                    'T' => panic!("Telnet3270 not supported"), // TODO
+                    'h' => line.2 = Type::HTML,
+                    'i' => line.2 = Type::Info,
+                    's' => panic!("Sound not supported"), // TODO
+                    'd' => panic!("Document not supported"), // TODO
                     '\n' => continue,
                     _ => {
                         eprintln!("unknown line type: {}", c);

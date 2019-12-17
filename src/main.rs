@@ -8,6 +8,8 @@ mod menu;
 mod types;
 mod ui;
 
+use gopher::Type;
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
@@ -23,9 +25,9 @@ fn main() {
         print_usage();
         return;
     }
-
     let mut ui = ui::UI::new();
-    ui.load(gopher::Type::Menu, host, port, selector);
+    let url = format!("{}:{}/1/{}", host, port, selector);
+    ui.load(url);
     ui.run();
 }
 
