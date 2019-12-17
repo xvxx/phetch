@@ -145,7 +145,7 @@ impl MenuView {
     }
 
     fn action_down(&mut self) -> Action {
-        if self.link < self.links().count() {
+        if self.link < self.links().count() - 1 {
             self.link += 1;
             Action::Redraw
         } else {
@@ -289,6 +289,7 @@ impl Menu {
                     _ => continue,
                 };
 
+                // build string URL
                 let parts: Vec<&str> = line.split_terminator("\t").collect();
                 let mut url = String::from("gopher://");
                 if parts.len() > 2 {
@@ -303,6 +304,7 @@ impl Menu {
                     }
                 }
 
+                // auto-prepend gopher type to selector
                 if let Some(first_char) = parts[0].chars().nth(0) {
                     if first_char == '0' || first_char == '1' || first_char == 'h' {
                         url.push_str("/");
@@ -319,6 +321,11 @@ impl Menu {
                 }
                 let link = if typ == Type::Info { 0 } else { link };
 
+                if link > 0 {
+                    eprintln!("NEW LINK {}: {:?}", link, name);
+                } else {
+                    eprintln!("NEW LINE: {:?}", name);
+                }
                 lines.push(Line {
                     name,
                     url,
