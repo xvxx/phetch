@@ -295,8 +295,12 @@ impl Menu {
                     url.push_str(parts[2]); // host
                 }
                 if parts.len() > 3 {
-                    url.push(':');
-                    url.push_str(parts[3].trim_end_matches('\r')); // port
+                    // port
+                    let port = parts[3].trim_end_matches('\r');
+                    if port != "70" {
+                        url.push(':');
+                        url.push_str(parts[3].trim_end_matches('\r'));
+                    }
                 }
 
                 if let Some(first_char) = parts[0].chars().nth(0) {
