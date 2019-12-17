@@ -321,11 +321,6 @@ impl Menu {
                 }
                 let link = if typ == Type::Info { 0 } else { link };
 
-                if link > 0 {
-                    eprintln!("NEW LINK {}: {:?}", link, name);
-                } else {
-                    eprintln!("NEW LINE: {:?}", name);
-                }
                 lines.push(Line {
                     name,
                     url,
