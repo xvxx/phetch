@@ -87,6 +87,8 @@ dirt simple terminal gopher client.
     space page down
         t scroll to top
         b scroll to bottom
+        g same as t
+        G same as b
 - [ ] item types:
     - [ ] 0 text file
     - [ ] 1 submenu
