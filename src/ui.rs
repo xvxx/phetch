@@ -65,8 +65,8 @@ impl UI {
         String::from("N/A")
     }
 
-    pub fn load(&mut self, url: String) {
-        let (typ, host, port, sel) = gopher::parse_url(&url);
+    pub fn load(&mut self, url: &str) {
+        let (typ, host, port, sel) = gopher::parse_url(url);
         let response = gopher::fetch(host, port, sel)
             .map_err(|e| {
                 eprintln!("\x1B[91merror loading \x1b[93m{}: \x1B[0m{}", url, e);
@@ -75,7 +75,7 @@ impl UI {
             .unwrap();
 
         match typ {
-            Type::Menu => self.add_view(MenuView::from(url, response)),
+            Type::Menu => self.add_view(MenuView::from(url.to_string(), response)),
             // Type::Text => self.add_view(TextView::from(url, response)),
             _ => panic!("unknown type: {:?}", typ),
         }

@@ -14,21 +14,19 @@ fn main() {
         print_usage();
         return;
     }
-    let host = args.get(1).unwrap();
-    let port = "70".to_string();
-    let port = args.get(2).unwrap_or(&port);
-    let selector = "/".to_string();
-    let selector = args.get(3).unwrap_or(&selector);
-    if host == "--version" || host == "-v" || host == "-version" {
+
+    let url = args.get(1).unwrap();
+
+    if url == "--version" || url == "-v" || url == "-version" {
         print_version();
         return;
     }
-    if host == "--help" || host == "-h" || host == "-help" {
+    if url == "--help" || url == "-h" || url == "-help" {
         print_usage();
         return;
     }
+
     let mut ui = ui::UI::new();
-    let url = format!("{}:{}{}", host, port, selector); // TODO: url on cmdline
     ui.load(url);
     ui.run();
 }

@@ -90,7 +90,7 @@ pub fn parse_url<'a>(url: &'a str) -> (Type, &'a str, &'a str, &'a str) {
     };
 
     let mut chars = sel.chars();
-    if let (Some(fst), Some('/')) = (chars.nth(0), chars.nth(1)) {
+    if let (Some(fst), Some('/')) = (chars.nth(0), chars.nth(0)) {
         match fst {
             '0' => typ = Type::Text,
             '1' => typ = Type::Menu,
