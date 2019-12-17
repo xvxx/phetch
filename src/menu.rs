@@ -1,4 +1,3 @@
-use gopher;
 use gopher::Type;
 use std::io;
 use ui::{Action, Key, View};
@@ -21,9 +20,7 @@ pub struct Menu {
 #[derive(Debug)]
 pub struct Line {
     name: String,
-    host: String,
-    port: String,
-    selector: String,
+    url: String,
     typ: Type,
 }
 
@@ -36,8 +33,45 @@ impl View for MenuView {
     }
 
     fn process_input(&mut self, key: Key) -> Action {
+        match self.process_key(key) {
+            a @ Action::Unknown => return a,
+            a => a,
+        }
+    }
+}
+
+impl MenuView {
+    pub fn from(url: String, response: String) -> MenuView {
+        MenuView {
+            menu: Menu::from(url, response),
+            input: String::new(),
+            line: 0,
+            scroll: 0,
+        }
+    }
+
+    fn action_page_down(&self) {}
+    fn action_page_up(&self) {}
+    fn action_up(&self) {}
+    fn action_down(&self) {}
+
+    fn process_key(&mut self, key: Key) -> Action {
         match key {
-            Key::Char('\n') => Action::Open,
+            Key::Char('\n') => {
+                if let Some(line) = self.menu.lines.get(self.line) {
+                    Action::Open(line.url.to_string())
+                } else {
+                    Action::None
+                }
+            }
+            Key::Up | Key::Ctrl('p') => {
+                self.action_up();
+                Action::None
+            }
+            Key::Down | Key::Ctrl('n') => {
+                self.action_down();
+                Action::None
+            }
             Key::Backspace => {
                 if self.input.is_empty() {
                     Action::Back
@@ -60,7 +94,8 @@ impl View for MenuView {
             }
             Key::Char('-') => {
                 if self.input.is_empty() {
-                    Action::PageUp
+                    self.action_page_up();
+                    Action::None
                 } else {
                     self.input.push('-');
                     Action::Input
@@ -68,7 +103,8 @@ impl View for MenuView {
             }
             Key::Char(' ') => {
                 if self.input.is_empty() {
-                    return Action::PageDown;
+                    self.action_page_down();
+                    Action::None
                 } else {
                     self.input.push(' ');
                     Action::Input
@@ -118,17 +154,6 @@ impl View for MenuView {
     }
 }
 
-impl MenuView {
-    pub fn from(url: String, response: String) -> MenuView {
-        MenuView {
-            menu: Menu::from(url, response),
-            input: String::new(),
-            line: 0,
-            scroll: 0,
-        }
-    }
-}
-
 impl Menu {
     pub fn from(url: String, gopher_response: String) -> Menu {
         Self::parse(url, gopher_response)
@@ -164,13 +189,20 @@ impl Menu {
                 };
 
                 let parts: Vec<&str> = line.split_terminator("\t").collect();
-                lines.push(Line {
-                    name: parts[0][1..].to_string(),
-                    selector: parts[1].to_string(),
-                    host: parts[2].to_string(),
-                    port: parts[3].trim_end_matches('\r').to_string(),
-                    typ,
-                });
+                let mut url = String::from("gopher://");
+                if parts.len() > 2 {
+                    url.push_str(parts[2]); // host
+                }
+                if parts.len() > 3 {
+                    url.push(':');
+                    url.push_str(parts[3].trim_end_matches('\r')); // port
+                }
+                if parts.len() > 1 {
+                    url.push_str(parts[1]); // selector
+                }
+                let name = parts[0][1..].to_string();
+
+                lines.push(Line { name, url, typ });
             }
         }
 

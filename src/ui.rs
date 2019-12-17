@@ -5,7 +5,7 @@ use termion::raw::IntoRawMode;
 
 use gopher;
 use gopher::Type;
-use menu::{Menu, MenuView};
+use menu::MenuView;
 
 pub type Key = termion::event::Key;
 pub type Error = io::Error;
@@ -18,16 +18,12 @@ pub struct UI {
 #[derive(Debug)]
 pub enum Action {
     None,
-    Up,
-    Down,
-    PageUp,
-    PageDown,
     Back,
     Forward,
-    Open,
+    Open(String), // url
+    Input,        // redraw the input bar
     Quit,
     Unknown,
-    Input, // redraw the input bar
     FollowLink(usize),
 }
 
@@ -46,12 +42,12 @@ impl UI {
 
     pub fn run(&mut self) {
         loop {
-            self.print();
-            self.respond_to_user();
+            self.draw();
+            self.update();
         }
     }
 
-    pub fn print(&self) {
+    pub fn draw(&self) {
         print!("{}", self.render());
         // print!("{:#?}", self);
     }
@@ -66,7 +62,7 @@ impl UI {
         String::from("N/A")
     }
 
-    pub fn load(&mut self, url: &str) {
+    pub fn open(&mut self, url: &str) {
         let (typ, host, port, sel) = gopher::parse_url(url);
         let response = gopher::fetch(host, port, sel)
             .map_err(|e| {
@@ -76,20 +72,20 @@ impl UI {
             .unwrap();
 
         match typ {
-            Type::Menu => self.add_view(MenuView::from(url.to_string(), response)),
-            // Type::Text => self.add_view(TextView::from(url, response)),
+            Type::Menu => self.add_page(MenuView::from(url.to_string(), response)),
+            // Type::Text => self.add_page(TextView::from(url, response)),
             _ => panic!("unknown type: {:?}", typ),
         }
     }
 
-    fn add_view<T: View + 'static>(&mut self, view: T) {
+    fn add_page<T: View + 'static>(&mut self, view: T) {
         self.pages.push(Box::from(view));
         if self.pages.len() > 1 {
             self.page += 1;
         }
     }
 
-    fn respond_to_user(&mut self) {
+    fn update(&mut self) {
         match self.process_input() {
             Action::Quit => std::process::exit(1),
             _ => {}
@@ -107,8 +103,6 @@ impl UI {
             match page.process_input(key) {
                 Action::Unknown => match key {
                     Key::Ctrl('q') => return Action::Quit,
-                    Key::Up | Key::Ctrl('p') => return Action::Up,
-                    Key::Down | Key::Ctrl('n') => return Action::Down,
                     Key::Left => return Action::Back,
                     Key::Right => return Action::Forward,
                     _ => {}

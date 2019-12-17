@@ -7,6 +7,7 @@ mod gopher;
 mod menu;
 mod types;
 mod ui;
+use ui::UI;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -26,8 +27,8 @@ fn main() {
         return;
     }
 
-    let mut ui = ui::UI::new();
-    ui.load(url);
+    let mut ui = UI::new();
+    ui.open(url);
     ui.run();
 }
 
