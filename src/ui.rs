@@ -27,6 +27,7 @@ pub enum Action {
     Open,
     Quit,
     Unknown,
+    Input, // redraw the input bar
     FollowLink(usize),
 }
 

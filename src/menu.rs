@@ -37,23 +37,23 @@ impl View for MenuView {
 
     fn process_input(&mut self, key: Key) -> Action {
         match key {
-            Key::Char('\n') => return Action::Open,
+            Key::Char('\n') => Action::Open,
             Key::Backspace => {
                 if self.input.is_empty() {
                     Action::Back
                 } else {
                     self.input.pop();
-                    Action::None
+                    Action::Input
                 }
             }
             Key::Delete => {
                 self.input.pop();
-                Action::None
+                Action::Input
             }
             Key::Ctrl('c') => {
                 if self.input.len() > 0 {
                     self.input.clear();
-                    Action::None
+                    Action::Input
                 } else {
                     Action::Quit
                 }
@@ -63,7 +63,7 @@ impl View for MenuView {
                     Action::PageUp
                 } else {
                     self.input.push('-');
-                    Action::None
+                    Action::Input
                 }
             }
             Key::Char(' ') => {
@@ -71,7 +71,7 @@ impl View for MenuView {
                     return Action::PageDown;
                 } else {
                     self.input.push(' ');
-                    Action::None
+                    Action::Input
                 }
             }
             Key::Char(c) => {
@@ -111,9 +111,9 @@ impl View for MenuView {
                         }
                     }
                 }
-                Action::None
+                Action::Input
             }
-            _ => Action::None,
+            _ => Action::Unknown,
         }
     }
 }
