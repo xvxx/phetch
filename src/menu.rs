@@ -72,7 +72,7 @@ impl MenuView {
 
         s.push('\t');
         match line.typ {
-            Type::Text => push!("90", &line.name),
+            Type::Text => push!("96", &line.name),
             Type::Menu => push!("94", &line.name),
             Type::Info => push!("93", &line.name),
             Type::HTML => push!("92", &line.name),
@@ -85,6 +85,14 @@ impl MenuView {
     fn action_page_up(&self) {}
     fn action_up(&self) {}
     fn action_down(&self) {}
+
+    fn action_follow_link(&self, line: usize) -> Action {
+        if let Some(line) = self.lines().get(line) {
+            Action::Open(line.url.to_string())
+        } else {
+            Action::None
+        }
+    }
 
     fn process_key(&mut self, key: Key) -> Action {
         match key {
@@ -147,34 +155,34 @@ impl MenuView {
                     // jump to number
                     let count = self.menu.lines.len();
                     if count < 10 && c == '1' && i == 0 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if count < 20 && c == '2' && i == 1 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if count < 30 && c == '3' && i == 2 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if count < 40 && c == '4' && i == 3 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if count < 50 && c == '5' && i == 4 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if count < 60 && c == '6' && i == 5 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if count < 70 && c == '7' && i == 6 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if count < 80 && c == '8' && i == 7 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if count < 90 && c == '9' && i == 8 {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if self.input.len() > 1 && self.input == (i + 1).to_string() {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else if self.input.len() == 1 && self.input == (i + 1).to_string() {
-                        return Action::FollowLink(i);
+                        return self.action_follow_link(i);
                     } else {
                         if link
                             .name
                             .to_ascii_lowercase()
                             .contains(&self.input.to_ascii_lowercase())
                         {
-                            return Action::FollowLink(i);
+                            return self.action_follow_link(i);
                         }
                     }
                 }
@@ -212,6 +220,7 @@ impl Menu {
                     'i' => Type::Info,
                     's' => panic!("Sound not supported"), // TODO
                     'd' => panic!("Document not supported"), // TODO
+                    '.' => continue,
                     '\n' => continue,
                     _ => {
                         eprintln!("unknown line type: {}", c);

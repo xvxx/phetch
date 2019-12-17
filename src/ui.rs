@@ -13,18 +13,18 @@ pub type Error = io::Error;
 pub struct UI {
     pages: Vec<Box<dyn View>>,
     page: usize,
+    dirty: bool, // redraw?
 }
 
 #[derive(Debug)]
 pub enum Action {
-    None,
-    Back,
-    Forward,
+    None,         // do nothing
+    Back,         // back in history
+    Forward,      // also history
     Open(String), // url
     Input,        // redraw the input bar
-    Quit,
-    Unknown,
-    FollowLink(usize),
+    Quit,         // yup
+    Unknown,      // handler doesn't know what to do
 }
 
 pub trait View {
@@ -37,6 +37,7 @@ impl UI {
         UI {
             pages: vec![],
             page: 0,
+            dirty: true,
         }
     }
 
@@ -47,8 +48,11 @@ impl UI {
         }
     }
 
-    pub fn draw(&self) {
-        print!("{}", self.render());
+    pub fn draw(&mut self) {
+        if self.dirty {
+            print!("{}", self.render());
+            self.dirty = false;
+        }
     }
 
     pub fn update(&mut self) {
@@ -92,9 +96,20 @@ impl UI {
     }
 
     fn process_input(&mut self) -> Action {
-        let stdin = stdin();
         let mut stdout = stdout().into_raw_mode().unwrap();
         stdout.flush().unwrap();
+
+        match self.process_page_input() {
+            Action::Open(url) => {
+                self.open(&url);
+                Action::None
+            }
+            a => a,
+        }
+    }
+
+    fn process_page_input(&mut self) -> Action {
+        let stdin = stdin();
         let page = self.pages.get_mut(self.page).expect("expected Page"); // TODO
 
         for c in stdin.keys() {
