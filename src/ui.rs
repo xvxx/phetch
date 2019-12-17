@@ -16,13 +16,15 @@ pub struct UI {
 
 #[derive(Debug)]
 pub enum Action {
-    None,         // do nothing
-    Back,         // back in history
-    Forward,      // also history
-    Open(String), // url
-    Input,        // redraw the input bar
-    Quit,         // yup
-    Unknown,      // handler doesn't know what to do
+    None,          // do nothing
+    Back,          // back in history
+    Forward,       // also history
+    Open(String),  // url
+    Select(usize), // select link
+    Input,         // redraw the input bar
+    Redraw,        // redraw everything
+    Quit,          // yup
+    Unknown,       // handler doesn't know what to do
 }
 
 pub trait View {
@@ -48,8 +50,8 @@ impl UI {
 
     pub fn draw(&mut self) {
         if self.dirty {
-            // let prefix = ""; // debug
-            let prefix = "\x1b[2J\x1b[H"; // clear the screen
+            let prefix = ""; // debug
+                             // let prefix = "\x1b[2J\x1b[H"; // clear the screen
             print!("{}{}", prefix, self.render());
             self.dirty = false;
         }
@@ -104,6 +106,10 @@ impl UI {
         stdout.flush().unwrap();
 
         match self.process_page_input() {
+            Action::Redraw => {
+                self.dirty = true;
+                Action::None
+            }
             Action::Open(url) => {
                 self.open(&url);
                 Action::None
