@@ -22,6 +22,7 @@ dirt simple terminal gopher client.
 ## resources
 
 - [rfc 1346](https://tools.ietf.org/html/rfc1436)
+- http://ascii-table.com/ansi-escape-sequences.php
 
 ## gopher sites
 
@@ -34,17 +35,19 @@ dirt simple terminal gopher client.
 ## TODO
 
 ### Basics
-- [ ] TLS
-- [ ] status() helper
-- [ ] show all errors in status()
 - [ ] MENU: up/down scroll when next link out of view
 - [ ] MENU: page up/page down show next page, highlight first link
+- [ ] status() helper
+- [ ] show errors in status()
+- [ ] replace all panic! with errors
+- [ ] replace all unwrap/expect with errors
+- [ ] TLS
 - [ ] MENU: open HTML link in browser
 - [ ] `?` to show all keyboard shortcuts
-- [ ] `c` copies current URL to clipboard https://git.io/Je7YL
 - [ ] input field that... takes input
 - [ ] search functionality
 - [ ] download to ~/Downloads
+    - https://github.com/dvkt/gg/blob/master/gg.go#L442
 - [ ] save history to file
 - [ ] load history from file
 - [ ] load most recent URL when opening without args
@@ -61,3 +64,8 @@ dirt simple terminal gopher client.
       $ phetch gopher.antirez.com:70 | gg
 - [ ] syntax highlight code
       $ phetch code.some-gopher-site.io/gw/main.go
+- [ ] fuzzy find search links
+    - https://github.com/stewart/rff
+    - https://github.com/Schlechtwetterfront/fuzzy-rs
+- [ ] detect SIGWINCH 
+    - https://github.com/BurntSushi/chan-signal
