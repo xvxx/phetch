@@ -16,15 +16,14 @@ pub struct UI {
 
 #[derive(Debug)]
 pub enum Action {
-    None,          // do nothing
-    Back,          // back in history
-    Forward,       // also history
-    Open(String),  // url
-    Select(usize), // select link
-    Input,         // redraw the input bar
-    Redraw,        // redraw everything
-    Quit,          // yup
-    Unknown,       // handler doesn't know what to do
+    None,         // do nothing
+    Back,         // back in history
+    Forward,      // also history
+    Open(String), // url
+    Input,        // redraw the input bar
+    Redraw,       // redraw everything
+    Quit,         // yup
+    Unknown,      // handler doesn't know what to do
 }
 
 pub trait View {

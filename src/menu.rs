@@ -4,7 +4,7 @@ use ui::{Action, Key, View};
 pub struct MenuView {
     pub input: String, // user's inputted value
     pub menu: Menu,    // data
-    pub line: usize,   // selected line
+    pub link: usize,   // selected link
     pub scroll: usize, // scrolling offset
 }
 
@@ -39,7 +39,7 @@ impl MenuView {
         MenuView {
             menu: Menu::from(url, response),
             input: String::new(),
-            line: 0,
+            link: 0,
             scroll: 0,
         }
     }
@@ -68,9 +68,14 @@ impl MenuView {
         let mut links = 0;
         for line in self.lines() {
             if line.typ == Type::Info {
-                out.push_str("     ");
+                out.push_str("      ");
             } else {
                 links += 1;
+                if links == self.link {
+                    out.push('*');
+                } else {
+                    out.push(' ');
+                }
                 out.push(' ');
                 out.push_str("\x1b[95m");
                 if links < 10 {
@@ -96,6 +101,15 @@ impl MenuView {
     fn action_up(&self) {}
     fn action_down(&self) {}
 
+    fn action_select_link(&mut self, line: usize) -> Action {
+        if line < self.links().count() {
+            self.link = line;
+            Action::Redraw
+        } else {
+            Action::None
+        }
+    }
+
     fn action_follow_link(&self, line: usize) -> Action {
         if let Some(line) = self.links().nth(line) {
             Action::Open(line.url.to_string())
@@ -107,7 +121,7 @@ impl MenuView {
     fn process_key(&mut self, key: Key) -> Action {
         match key {
             Key::Char('\n') => {
-                if let Some(line) = self.lines().get(self.line) {
+                if let Some(line) = self.lines().get(self.link) {
                     Action::Open(line.url.to_string())
                 } else {
                     Action::None
@@ -162,6 +176,7 @@ impl MenuView {
             Key::Char(c) => {
                 self.input.push(c);
                 let count = self.links().count();
+                let input = &self.input;
                 for (i, link) in self.links().enumerate() {
                     // jump to number
                     if count < 10 && c == '1' && i == 0 {
@@ -182,17 +197,17 @@ impl MenuView {
                         return self.action_follow_link(i);
                     } else if count < 90 && c == '9' && i == 8 {
                         return self.action_follow_link(i);
-                    } else if self.input.len() > 1 && self.input == (i + 1).to_string() {
-                        return self.action_follow_link(i);
-                    } else if self.input.len() == 1 && self.input == (i + 1).to_string() {
-                        return self.action_follow_link(i);
+                    } else if input.len() > 1 && input == &(i + 1).to_string() {
+                        return self.action_select_link(i);
+                    } else if input.len() == 1 && input == &(i + 1).to_string() {
+                        return self.action_select_link(i);
                     } else {
                         if link
                             .name
                             .to_ascii_lowercase()
                             .contains(&self.input.to_ascii_lowercase())
                         {
-                            return self.action_follow_link(i);
+                            return self.action_select_link(i);
                         }
                     }
                 }
@@ -210,6 +225,10 @@ impl Menu {
 
     pub fn links(&self) -> impl Iterator<Item = &Line> {
         self.lines.iter().filter(|&line| line.link > 0)
+    }
+
+    pub fn links_mut(&self) -> impl Iterator<Item = &mut Line> {
+        self.lines.iter_mut().filter(|line| line.link > 0)
     }
 
     fn parse(url: String, raw: String) -> Menu {
