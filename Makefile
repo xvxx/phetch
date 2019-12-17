@@ -13,4 +13,4 @@ release:
 
 clean:
 	rm -rf target
-	fm -f phetch
+	rm -f phetch
