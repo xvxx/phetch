@@ -26,10 +26,7 @@ pub struct Line {
 
 impl View for MenuView {
     fn render(&self) -> String {
-        let mut out = self.menu.raw.to_string();
-        out.push('\n');
-        out.push_str(&format!("{:#?}", self));
-        out
+        self.render_lines()
     }
 
     fn process_input(&mut self, key: Key) -> Action {
@@ -48,6 +45,40 @@ impl MenuView {
             line: 0,
             scroll: 0,
         }
+    }
+
+    fn lines(&self) -> &Vec<Line> {
+        &self.menu.lines
+    }
+
+    fn render_lines(&self) -> String {
+        let mut out = String::new();
+        for line in self.lines() {
+            self.render_line_into(line, &mut out);
+        }
+        out
+    }
+
+    fn render_line_into(&self, line: &Line, s: &mut String) {
+        macro_rules! push {
+            ($c:expr, $e:expr) => {{
+                s.push_str("\x1b[");
+                s.push_str($c);
+                s.push_str("m");
+                s.push_str($e);
+                s.push_str("\x1b[0m");
+            }};
+        }
+
+        s.push('\t');
+        match line.typ {
+            Type::Text => push!("90", &line.name),
+            Type::Menu => push!("94", &line.name),
+            Type::Info => push!("93", &line.name),
+            Type::HTML => push!("92", &line.name),
+            _ => {}
+        }
+        s.push('\n');
     }
 
     fn action_page_down(&self) {}

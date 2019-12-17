@@ -49,7 +49,13 @@ impl UI {
 
     pub fn draw(&self) {
         print!("{}", self.render());
-        // print!("{:#?}", self);
+    }
+
+    pub fn update(&mut self) {
+        match self.process_input() {
+            Action::Quit => std::process::exit(1),
+            _ => {}
+        }
     }
 
     pub fn render(&self) -> String {
@@ -85,13 +91,6 @@ impl UI {
         }
     }
 
-    fn update(&mut self) {
-        match self.process_input() {
-            Action::Quit => std::process::exit(1),
-            _ => {}
-        }
-    }
-
     fn process_input(&mut self) -> Action {
         let stdin = stdin();
         let mut stdout = stdout().into_raw_mode().unwrap();
@@ -102,7 +101,7 @@ impl UI {
             let key = c.expect("UI error on stdin.keys"); // TODO
             match page.process_input(key) {
                 Action::Unknown => match key {
-                    Key::Ctrl('q') => return Action::Quit,
+                    Key::Ctrl('q') | Key::Ctrl('c') => return Action::Quit,
                     Key::Left => return Action::Back,
                     Key::Right => return Action::Forward,
                     _ => {}

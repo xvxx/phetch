@@ -35,6 +35,13 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
         })
         .and_then(|mut stream| {
             stream.read_to_string(&mut body);
+            let last: String = body.chars().rev().take(3).collect();
+
+            // Gopher responses should end .\r\n, but don't always.
+            if &last == ".\r\n" {
+                body.pop(); body.pop(); body.pop();
+            }
+
             Ok(())
         });
 
