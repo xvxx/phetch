@@ -8,7 +8,6 @@ use gopher::Type;
 use menu::MenuView;
 
 pub type Key = termion::event::Key;
-pub type Error = io::Error;
 
 pub struct UI {
     pages: Vec<Box<dyn View>>,

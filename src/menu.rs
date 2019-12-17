@@ -2,7 +2,6 @@ use gopher::Type;
 use std::io;
 use ui::{Action, Key, View};
 
-#[derive(Debug)]
 pub struct MenuView {
     pub input: String, // user's inputted value
     pub menu: Menu,    // data
@@ -10,14 +9,12 @@ pub struct MenuView {
     pub scroll: usize, // scrolling offset
 }
 
-#[derive(Debug)]
 pub struct Menu {
     url: String,      // gopher url
     lines: Vec<Line>, // lines
     raw: String,      // raw gopher response
 }
 
-#[derive(Debug)]
 pub struct Line {
     name: String,
     url: String,

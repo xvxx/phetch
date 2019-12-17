@@ -2,7 +2,6 @@
 
 extern crate termion;
 
-mod fetch;
 mod gopher;
 mod menu;
 mod types;
