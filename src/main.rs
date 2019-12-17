@@ -5,7 +5,6 @@ extern crate termion;
 mod gopher;
 mod menu;
 mod text;
-mod types;
 mod ui;
 use ui::UI;
 
