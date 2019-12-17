@@ -56,7 +56,7 @@ impl MenuView {
         self.menu.links()
     }
 
-    fn render_lines(&self, _cols: u16, rows: u16) -> String {
+    fn render_lines(&self, cols: u16, rows: u16) -> String {
         let mut out = String::new();
 
         macro_rules! push {
@@ -75,7 +75,14 @@ impl MenuView {
             .skip(self.scroll as usize)
             .take(rows as usize - 1);
 
+        let indent = if self.menu.longest > cols as usize {
+            String::from("")
+        } else {
+            " ".repeat(((cols as usize - self.menu.longest) / 2) - 6)
+        };
+
         for line in iter {
+            out.push_str(&indent);
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
@@ -318,8 +325,8 @@ impl Menu {
                 }
                 let link = if typ == Type::Info { 0 } else { link };
 
-                if line.len() > longest {
-                    longest = line.len();
+                if name.len() > longest {
+                    longest = name.len();
                 }
 
                 lines.push(Line {

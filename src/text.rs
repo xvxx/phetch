@@ -67,15 +67,21 @@ impl View for TextView {
         }
     }
 
-    fn render(&self, _cols: u16, rows: u16) -> String {
+    fn render(&self, cols: u16, rows: u16) -> String {
         let mut out = String::new();
-        for (i, line) in self.raw.split_terminator('\n').enumerate() {
-            if i as isize > (self.scroll + rows as isize) - 2 {
-                break;
-            }
-            if i < self.scroll as usize {
-                continue;
-            }
+        let indent = if self.longest > cols as usize {
+            String::from("")
+        } else {
+            " ".repeat((cols as usize - self.longest) / 2)
+        };
+        let iter = self
+            .raw
+            .split_terminator('\n')
+            .skip(self.scroll as usize)
+            .take(rows as usize - 1);
+
+        for line in iter {
+            out.push_str(&indent);
             out.push_str(line);
             out.push('\n');
         }
