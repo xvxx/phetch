@@ -58,7 +58,7 @@ dirt simple terminal gopher client.
 - [ ] ? download to pwd
 - [ ] ? download to custom location
 - [ ] pipe input to render as gopher
-      $ phetch gopher.antirez.com:70 | gg
+      $ curl gopher.antirez.com:70 | phetch
 - [ ] syntax highlight code
       $ phetch code.some-gopher-site.io/gw/main.go
 - [ ] fuzzy find search links
