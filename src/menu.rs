@@ -22,6 +22,7 @@ pub struct Line {
     name: String,
     url: String,
     typ: Type,
+    link: usize, // link #, if any
 }
 
 impl View for MenuView {
@@ -96,7 +97,7 @@ impl MenuView {
     fn action_down(&self) {}
 
     fn action_follow_link(&self, line: usize) -> Action {
-        if let Some(line) = self.lines().get(line) {
+        if let Some(line) = self.menu.links().nth(line) {
             Action::Open(line.url.to_string())
         } else {
             Action::None
@@ -160,9 +161,9 @@ impl MenuView {
             }
             Key::Char(c) => {
                 self.input.push(c);
-                for (i, link) in self.menu.lines.iter().enumerate() {
+                let count = self.menu.links().count();
+                for (i, link) in self.menu.links().enumerate() {
                     // jump to number
-                    let count = self.menu.lines.len();
                     if count < 10 && c == '1' && i == 0 {
                         return self.action_follow_link(i);
                     } else if count < 20 && c == '2' && i == 1 {
@@ -207,8 +208,13 @@ impl Menu {
         Self::parse(url, gopher_response)
     }
 
+    pub fn links(&self) -> impl Iterator<Item = &Line> {
+        self.lines.iter().filter(|&line| line.link > 0)
+    }
+
     fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
+        let mut link = 0;
         for line in raw.split_terminator("\n") {
             if let Some(c) = line.chars().nth(0) {
                 let typ = match c {
@@ -250,8 +256,15 @@ impl Menu {
                     url.push_str(parts[1]); // selector
                 }
                 let name = parts[0][1..].to_string();
+                let link_or_zero = if typ == Type::Info { 0 } else { link };
+                link += 1;
 
-                lines.push(Line { name, url, typ });
+                lines.push(Line {
+                    name,
+                    url,
+                    typ,
+                    link: link_or_zero,
+                });
             }
         }
 
