@@ -256,14 +256,14 @@ impl Menu {
                     url.push_str(parts[1]); // selector
                 }
                 let name = parts[0][1..].to_string();
-                let link_or_zero = if typ == Type::Info { 0 } else { link };
                 link += 1;
+                let link = if typ == Type::Info { 0 } else { link };
 
                 lines.push(Line {
                     name,
                     url,
                     typ,
-                    link: link_or_zero,
+                    link,
                 });
             }
         }
