@@ -1,4 +1,3 @@
-use std::io;
 use std::io::{stdin, stdout, Write};
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;

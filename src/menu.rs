@@ -1,5 +1,4 @@
 use gopher::Type;
-use std::io;
 use ui::{Action, Key, View};
 
 pub struct MenuView {
