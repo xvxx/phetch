@@ -50,7 +50,7 @@ impl UI {
 
     pub fn draw(&mut self) {
         if self.dirty {
-            print!("{}", self.render());
+            print!("\x1b[2J\x1b[H{}", self.render());
             self.dirty = false;
         }
     }
