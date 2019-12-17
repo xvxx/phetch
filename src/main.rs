@@ -30,6 +30,8 @@ fn main() {
 }
 
 fn print_usage() {
-    println!("\x1B[93;1musage:\x1B[0m ");
-    println!("\t$ phetch host [port [selector]]");
+    println!("\x1B[93;1musage:\x1B[0m phetch <gopher-url>        # Show GopherHole at URL");
+    println!("       phetch -raw <gopher-url>   # Print raw Gopher response.");
+    println!("       phetch -help               # Show this screen.");
+    println!("       phetch -version            # Show phetch version.");
 }
