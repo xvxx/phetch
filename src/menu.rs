@@ -73,7 +73,7 @@ impl MenuView {
             .lines()
             .iter()
             .skip(self.scroll as usize)
-            .take(rows as usize - 2);
+            .take(rows as usize - 1);
 
         for line in iter {
             if line.typ == Type::Info {
@@ -182,8 +182,8 @@ impl MenuView {
                     Action::None
                 }
             }
-            Key::Up | Key::Ctrl('p') => self.action_up(),
-            Key::Down | Key::Ctrl('n') => self.action_down(),
+            Key::Up | Key::Ctrl('p') | Key::Ctrl('k') => self.action_up(),
+            Key::Down | Key::Ctrl('n') | Key::Ctrl('j') => self.action_down(),
             Key::Backspace | Key::Delete => {
                 if self.input.is_empty() {
                     Action::Back
@@ -222,7 +222,7 @@ impl MenuView {
                 let input = &self.input;
                 for i in 0..count {
                     // jump to number
-                    for z in 1..9 {
+                    for z in 1..=9 {
                         if count < (z * 10) && c == to_char(z as u32) && i == z - 1 {
                             return self.action_follow_link(i);
                         }
