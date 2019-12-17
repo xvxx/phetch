@@ -52,6 +52,10 @@ impl MenuView {
         &self.menu.lines
     }
 
+    fn links(&self) -> impl Iterator<Item = &Line> {
+        self.menu.links()
+    }
+
     fn render_lines(&self) -> String {
         let mut out = String::new();
 
@@ -97,7 +101,7 @@ impl MenuView {
     fn action_down(&self) {}
 
     fn action_follow_link(&self, line: usize) -> Action {
-        if let Some(line) = self.menu.links().nth(line) {
+        if let Some(line) = self.links().nth(line) {
             Action::Open(line.url.to_string())
         } else {
             Action::None
@@ -107,7 +111,7 @@ impl MenuView {
     fn process_key(&mut self, key: Key) -> Action {
         match key {
             Key::Char('\n') => {
-                if let Some(line) = self.menu.lines.get(self.line) {
+                if let Some(line) = self.lines().get(self.line) {
                     Action::Open(line.url.to_string())
                 } else {
                     Action::None
@@ -161,8 +165,8 @@ impl MenuView {
             }
             Key::Char(c) => {
                 self.input.push(c);
-                let count = self.menu.links().count();
-                for (i, link) in self.menu.links().enumerate() {
+                let count = self.links().count();
+                for (i, link) in self.links().enumerate() {
                     // jump to number
                     if count < 10 && c == '1' && i == 0 {
                         return self.action_follow_link(i);
