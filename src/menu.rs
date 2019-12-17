@@ -30,10 +30,7 @@ impl View for MenuView {
     }
 
     fn process_input(&mut self, key: Key) -> Action {
-        match self.process_key(key) {
-            a @ Action::Unknown => return a,
-            a => a,
-        }
+        self.process_key(key)
     }
 
     fn url(&self) -> String {
@@ -187,16 +184,13 @@ impl MenuView {
             }
             Key::Up | Key::Ctrl('p') => self.action_up(),
             Key::Down | Key::Ctrl('n') => self.action_down(),
-            Key::Backspace => {
+            Key::Backspace | Key::Delete => {
                 if self.input.is_empty() {
                     Action::Back
                 } else {
-                    Action::Unknown
+                    self.input.pop();
+                    self.redraw_input()
                 }
-            }
-            Key::Delete => {
-                self.input.pop();
-                self.redraw_input()
             }
             Key::Ctrl('c') => {
                 if self.input.len() > 0 {
