@@ -29,7 +29,7 @@
 
 ## installation
 
-phetch is available as a standalone executable for MacOS and Linux:
+`phetch` is available as a standalone executable for MacOS and Linux:
 
 - MacOS: https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-macos.zip
 - Linux x86_64: https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-x86-64.tar.gz
