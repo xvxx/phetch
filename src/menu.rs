@@ -122,6 +122,9 @@ impl MenuView {
             }
             out.push('\n');
         }
+        if self.lines().len() < rows {
+            out.push_str(&format!("{}", "\r\n".repeat(rows - 1 - self.lines().len())));
+        }
         out.push_str(&self.input);
         out
     }
@@ -214,6 +217,14 @@ impl MenuView {
                     self.redraw_input()
                 }
             }
+            Key::Esc => {
+                if self.input.len() > 0 {
+                    self.input.clear();
+                    self.redraw_input()
+                } else {
+                    Action::None
+                }
+            }
             Key::Ctrl('c') => {
                 if self.input.len() > 0 {
                     self.input.clear();
@@ -222,7 +233,7 @@ impl MenuView {
                     Action::Quit
                 }
             }
-            Key::PageUp | Key::Char('-') => {
+            Key::Char('-') => {
                 if self.input.is_empty() {
                     self.action_page_up()
                 } else {
@@ -230,7 +241,9 @@ impl MenuView {
                     self.redraw_input()
                 }
             }
-            Key::PageDown | Key::Char(' ') => {
+            Key::PageUp => self.action_page_up(),
+            Key::PageDown => self.action_page_down(),
+            Key::Char(' ') => {
                 if self.input.is_empty() {
                     self.action_page_down()
                 } else {
