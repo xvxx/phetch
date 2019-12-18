@@ -34,8 +34,9 @@ pub enum Action {
 
 pub trait View {
     fn process_input(&mut self, c: Key) -> Action;
-    fn render(&self, width: usize, height: usize) -> String;
+    fn render(&self) -> String;
     fn url(&self) -> String;
+    fn set_size(&mut self, cols: usize, rows: usize);
 }
 
 impl UI {
@@ -71,11 +72,12 @@ impl UI {
         }
     }
 
-    pub fn render(&self) -> String {
+    pub fn render(&mut self) -> String {
         let (cols, rows) = termion::terminal_size().expect("can't get terminal size"); // TODO
         if self.pages.len() > 0 && self.page < self.pages.len() {
-            if let Some(page) = self.pages.get(self.page) {
-                return page.render(cols as usize, rows as usize);
+            if let Some(page) = self.pages.get_mut(self.page) {
+                page.set_size(cols as usize, rows as usize);
+                return page.render();
             }
         }
         String::from("N/A")

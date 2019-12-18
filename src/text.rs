@@ -3,14 +3,19 @@ use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 pub struct TextView {
     url: String,
     raw: String,
-    scroll: usize,  // offset
-    lines: usize,   // # of lines
-    longest: usize, // longest line
+    scroll: usize,        // offset
+    lines: usize,         // # of lines
+    longest: usize,       // longest line
+    size: (usize, usize), // cols, rows
 }
 
 impl View for TextView {
     fn url(&self) -> String {
         self.url.to_string()
+    }
+
+    fn set_size(&mut self, cols: usize, rows: usize) {
+        self.size = (cols, rows);
     }
 
     fn process_input(&mut self, c: Key) -> Action {
@@ -73,7 +78,8 @@ impl View for TextView {
         }
     }
 
-    fn render(&self, cols: usize, rows: usize) -> String {
+    fn render(&self) -> String {
+        let (cols, rows) = self.size;
         let mut out = String::new();
         let longest = if self.longest > MAX_COLS {
             MAX_COLS
@@ -121,6 +127,7 @@ impl TextView {
             scroll: 0,
             lines,
             longest,
+            size: (0, 0),
         }
     }
 }

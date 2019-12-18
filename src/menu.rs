@@ -5,10 +5,11 @@ use std::io::Write;
 use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct MenuView {
-    pub input: String, // user's inputted value
-    pub menu: Menu,    // data
-    pub link: usize,   // selected link
-    pub scroll: usize, // scrolling offset
+    pub input: String,        // user's inputted value
+    pub menu: Menu,           // data
+    pub link: usize,          // selected link
+    pub scroll: usize,        // scrolling offset
+    pub size: (usize, usize), // cols, rows
 }
 
 pub struct Menu {
@@ -26,8 +27,8 @@ pub struct Line {
 }
 
 impl View for MenuView {
-    fn render(&self, cols: usize, rows: usize) -> String {
-        self.render_lines(cols, rows)
+    fn render(&self) -> String {
+        self.render_lines()
     }
 
     fn process_input(&mut self, key: Key) -> Action {
@@ -36,6 +37,10 @@ impl View for MenuView {
 
     fn url(&self) -> String {
         self.menu.url.to_string()
+    }
+
+    fn set_size(&mut self, cols: usize, rows: usize) {
+        self.size = (cols, rows);
     }
 }
 
@@ -46,6 +51,7 @@ impl MenuView {
             input: String::new(),
             link: 0,
             scroll: 0,
+            size: (0, 0),
         }
     }
 
@@ -57,8 +63,9 @@ impl MenuView {
         self.menu.links()
     }
 
-    fn render_lines(&self, cols: usize, rows: usize) -> String {
+    fn render_lines(&self) -> String {
         let mut out = String::new();
+        let (cols, rows) = self.size;
 
         macro_rules! push {
             ($c:expr, $e:expr) => {{
@@ -394,4 +401,3 @@ impl Menu {
         }
     }
 }
-
