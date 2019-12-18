@@ -163,10 +163,7 @@ impl MenuView {
         }
         if self.lines().len() < rows {
             // fill in empty space
-            out.push_str(&format!(
-                "{}",
-                " \r\n".repeat(rows - 1 - self.lines().len())
-            ));
+            out.push_str(&" \r\n".repeat(rows - 1 - self.lines().len()).to_string());
         }
         out.push_str(&self.input);
         out
@@ -317,7 +314,7 @@ impl MenuView {
                 }
             }
             Key::Esc => {
-                if self.input.len() > 0 {
+                if !self.input.is_empty() {
                     self.input.clear();
                     self.redraw_input()
                 } else {
@@ -325,7 +322,7 @@ impl MenuView {
                 }
             }
             Key::Ctrl('c') => {
-                if self.input.len() > 0 {
+                if !self.input.is_empty() {
                     self.input.clear();
                     self.redraw_input()
                 } else {
@@ -426,7 +423,7 @@ impl Menu {
         let mut links = vec![];
         let mut link = 0;
         let mut longest = 0;
-        for line in raw.split_terminator("\n") {
+        for line in raw.split_terminator('\n') {
             if let Some(c) = line.chars().nth(0) {
                 let typ = match gopher::type_for_char(c) {
                     Some(t) => t,
@@ -434,7 +431,7 @@ impl Menu {
                 };
 
                 // build string URL
-                let parts: Vec<&str> = line.split_terminator("\t").collect();
+                let parts: Vec<&str> = line.split_terminator('\t').collect();
                 let mut url = String::from("gopher://");
                 if parts.len() > 2 {
                     url.push_str(parts[2]); // host
@@ -458,7 +455,7 @@ impl Menu {
                     url.push_str(parts[1]); // selector
                 }
                 let mut name = String::from("");
-                if parts[0].len() > 0 {
+                if !parts[0].is_empty() {
                     name.push_str(&parts[0][1..]);
                 }
                 if typ != Type::Info {

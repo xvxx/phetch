@@ -25,7 +25,7 @@ pub enum Type {
 }
 
 impl Type {
-    pub fn is_download(&self) -> bool {
+    pub fn is_download(self) -> bool {
         match self {
             Type::Binhex
             | Type::DOSFile
@@ -94,7 +94,7 @@ enum Parsing {
 }
 
 // Parses gopher URL into parts.
-pub fn parse_url<'a>(url: &'a str) -> (Type, &'a str, &'a str, &'a str) {
+pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     let url = url.trim_start_matches("gopher://");
 
     let mut host = "";

@@ -70,15 +70,14 @@ impl UI {
     }
 
     pub fn update(&mut self) {
-        match self.process_input() {
-            Action::Quit => self.running = false,
-            _ => {}
+        if let Action::Quit = self.process_input() {
+            self.running = false;
         }
     }
 
     pub fn render(&mut self) -> String {
         let (cols, rows) = termion::terminal_size().expect("can't get terminal size"); // TODO
-        if self.pages.len() > 0 && self.page < self.pages.len() {
+        if !self.pages.is_empty() && self.page < self.pages.len() {
             if let Some(page) = self.pages.get_mut(self.page) {
                 page.set_size(cols as usize, rows as usize);
                 return page.render();
@@ -108,7 +107,7 @@ impl UI {
     }
 
     fn add_page<T: View + 'static>(&mut self, view: T) {
-        if self.pages.len() > 0 && self.page < self.pages.len() - 1 {
+        if !self.pages.is_empty() && self.page < self.pages.len() - 1 {
             self.pages.truncate(self.page + 1);
         }
         self.pages.push(Box::from(view));

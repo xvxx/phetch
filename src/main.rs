@@ -37,7 +37,7 @@ fn main() {
         return;
     }
 
-    if url.len() > 0 && url.chars().nth(0).unwrap() == '-' {
+    if !url.is_empty() && url.chars().nth(0).unwrap() == '-' {
         eprintln!("unknown flag: {}\n", url);
         print_usage();
         return;
