@@ -29,23 +29,11 @@
 
 ## installation
 
-MacOS:
+phetch is available as a standalone executable for MacOS and Linux:
 
-    wget https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-macos.zip
-    unzip phetch-macos.zip
-    ./phetch -h
-
-Linux x86_64:
-
-    wget https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-x86-64.zip
-    unzip phetch-linux-x86-64.zip
-    ./phetch -h
-
-Linux ARM:
-
-    wget https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-arm.zip
-    unzip phetch-linux-arm.zip
-    ./phetch -h
+- MacOS: https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-macos.zip
+- Linux x86_64: https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-x86-64.tar.gz
+- Linux ARM: https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-arm.tar.gz
 
 ## development
 
