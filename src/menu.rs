@@ -67,7 +67,7 @@ impl MenuView {
                 out.push_str("\x1b[");
                 out.push_str($c);
                 out.push_str("m");
-                out.push_str($e);
+                out.push_str(&$e);
                 out.push_str("\x1b[0m");
             }};
         }
@@ -105,9 +105,9 @@ impl MenuView {
             }
             // truncate long lines, instead of wrapping
             let name = if line.name.len() + 6 > cols {
-                &line.name[0..cols - 6]
+                line.name.chars().take(cols - 6).collect::<String>()
             } else {
-                &line.name
+                line.name.to_string()
             };
             match line.typ {
                 Type::Text => push!("96", name),
@@ -312,7 +312,10 @@ impl Menu {
                 if parts.len() > 1 {
                     url.push_str(parts[1]); // selector
                 }
-                let name = parts[0][1..].to_string();
+                let mut name = String::from("");
+                if parts[0].len() > 0 {
+                    name.push_str(&parts[0][1..]);
+                }
                 if typ != Type::Info {
                     link += 1;
                 }

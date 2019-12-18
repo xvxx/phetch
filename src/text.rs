@@ -29,15 +29,15 @@ impl View for TextView {
                     Action::None
                 }
             }
-            Key::Down => {
-                if self.scroll < self.lines - 1 {
+            Key::Down | Key::Ctrl('n') | Key::Char('j') => {
+                if self.lines > SCROLL_LINES && self.scroll < (self.lines - SCROLL_LINES) {
                     self.scroll += 1;
                     Action::Redraw
                 } else {
                     Action::None
                 }
             }
-            Key::Up => {
+            Key::Up | Key::Ctrl('p') | Key::Char('k') => {
                 if self.scroll > 0 {
                     self.scroll -= 1;
                     Action::Redraw
