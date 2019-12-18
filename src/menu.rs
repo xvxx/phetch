@@ -202,8 +202,37 @@ impl MenuView {
     }
 
     fn action_up(&mut self) -> Action {
-        if self.link > 0 {
-            self.link -= 1;
+        if self.link == 0 {
+            return Action::None;
+        }
+
+        let new_link = self.link - 1;
+        if let Some(dir) = self.visible_link(new_link) {
+            match dir {
+                LinkDir::Above => {
+                    // scroll up by 1
+                    if self.scroll > 0 {
+                        self.scroll -= 1;
+                    }
+                    // select it if it's visible now
+                    if let Some(dir) = self.visible_link(new_link) {
+                        if dir == LinkDir::Visible {
+                            self.link = new_link;
+                        }
+                    }
+                }
+                LinkDir::Below => {
+                    // jump to link....
+                    if let Some(pos) = self.links().get(new_link) {
+                        self.scroll = *pos;
+                        self.link = new_link;
+                    }
+                }
+                LinkDir::Visible => {
+                    // select next link up
+                    self.link = new_link;
+                }
+            }
             Action::Redraw
         } else {
             Action::None
@@ -212,29 +241,30 @@ impl MenuView {
 
     fn action_down(&mut self) -> Action {
         let count = self.links().len();
+        let new_link = self.link + 1;
         if count > 0 && self.link < count - 1 {
-            if let Some(dir) = self.visible_link(self.link + 1) {
+            if let Some(dir) = self.visible_link(new_link) {
                 match dir {
                     LinkDir::Above => {
                         // jump to link....
-                        if let Some(pos) = self.links().get(self.link + 1) {
+                        if let Some(pos) = self.links().get(new_link) {
                             self.scroll = *pos;
-                            self.link = self.link + 1;
+                            self.link = new_link;
                         }
                     }
                     LinkDir::Below => {
                         // scroll down by 1
                         self.scroll += 1;
                         // select it if it's visible now
-                        if let Some(dir) = self.visible_link(self.link + 1) {
+                        if let Some(dir) = self.visible_link(new_link) {
                             if dir == LinkDir::Visible {
-                                self.link += 1;
+                                self.link = new_link;
                             }
                         }
                     }
                     LinkDir::Visible => {
                         // select next link down
-                        self.link += 1;
+                        self.link = new_link;
                     }
                 }
                 Action::Redraw
