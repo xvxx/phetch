@@ -27,6 +27,14 @@ pub struct Line {
     link: usize, // link #, if any
 }
 
+// direction of a given link relative to the visible screen
+#[derive(PartialEq)]
+enum LinkDir {
+    Above,
+    Below,
+    Visible,
+}
+
 impl View for MenuView {
     fn render(&self) -> String {
         self.render_lines()
@@ -67,6 +75,21 @@ impl MenuView {
     fn link(&self, i: usize) -> Option<&Line> {
         if let Some(line) = self.menu.links.get(i) {
             self.menu.lines.get(*line)
+        } else {
+            None
+        }
+    }
+
+    // is the given link visible on the screen right now?
+    fn visible_link(&self, i: usize) -> Option<LinkDir> {
+        if let Some(pos) = self.links().get(i) {
+            Some(if *pos < self.scroll {
+                LinkDir::Above
+            } else if *pos >= self.scroll + self.size.1 - 1 {
+                LinkDir::Below
+            } else {
+                LinkDir::Visible
+            })
         } else {
             None
         }
@@ -190,8 +213,34 @@ impl MenuView {
     fn action_down(&mut self) -> Action {
         let count = self.links().len();
         if count > 0 && self.link < count - 1 {
-            self.link += 1;
-            Action::Redraw
+            if let Some(dir) = self.visible_link(self.link + 1) {
+                match dir {
+                    LinkDir::Above => {
+                        // jump to link....
+                        if let Some(pos) = self.links().get(self.link + 1) {
+                            self.scroll = *pos;
+                            self.link = self.link + 1;
+                        }
+                    }
+                    LinkDir::Below => {
+                        // scroll down by 1
+                        self.scroll += 1;
+                        // select it if it's visible now
+                        if let Some(dir) = self.visible_link(self.link + 1) {
+                            if dir == LinkDir::Visible {
+                                self.link += 1;
+                            }
+                        }
+                    }
+                    LinkDir::Visible => {
+                        // select next link down
+                        self.link += 1;
+                    }
+                }
+                Action::Redraw
+            } else {
+                Action::None
+            }
         } else {
             Action::None
         }
