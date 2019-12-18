@@ -1,13 +1,6 @@
-````
-      /         /         /   
- ___ (___  ___ (___  ___ (___ 
-|   )|   )|___)|    |    |   )
-|__/ |  / |__  |__  |__  |  / 
-|                             
-
-````
-
 <p align="center">
+    <img src="./phetch.png">
+    <br> <br>
     <img src="https://img.shields.io/badge/license-apache_2.0-blueviolet?style=flat-square">
     <img src="https://img.shields.io/badge/current_release-0.0.0-brightgreen.svg?style=flat-square">
     <img src="https://img.shields.io/badge/dev_version-0.1.0--dev-lightgrey.svg?style=flat-square">
