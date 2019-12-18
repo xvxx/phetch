@@ -31,7 +31,14 @@ fn main() {
         print_version();
         return;
     }
+
     if url == "-help" || url == "-h" || url == "--help" {
+        print_usage();
+        return;
+    }
+
+    if url.len() > 0 && url.chars().nth(0).unwrap() == '-' {
+        eprintln!("unknown flag: {}\n", url);
         print_usage();
         return;
     }
@@ -48,10 +55,11 @@ fn print_version() {
 fn print_usage() {
     println!(
         "\x1B[93;1mUsage:\x1B[0m 
-    phetch <gopher-url>             # Show GopherHole at URL
-    phetch -r, --raw <gopher-url>   # Print raw Gopher response.
-    phetch -h, --help               # Show this screen.
-    phetch -v, --version            # Show phetch version."
+    phetch <gopher-url>              # Open Gopherhole at URL.
+    phetch -r, --raw <gopher-url>    # Print raw Gopher response.
+    phetch -p, --print <gopher-url>  # Pretty print Gopher response and exit.
+    phetch -h, --help                # Show this screen.
+    phetch -v, --version             # Show phetch version."
     );
 }
 
