@@ -1,9 +1,15 @@
 <p align="center">
     <img src="./phetch.png">
     <br> <br>
-    <img src="https://img.shields.io/badge/license-apache_2.0-blueviolet?style=flat-square">
-    <img src="https://img.shields.io/badge/current_release-0.0.0-brightgreen.svg?style=flat-square">
-    <img src="https://img.shields.io/badge/dev_version-0.1.0--dev-lightgrey.svg?style=flat-square">
+    <a href="LICENSE">
+        <img src="https://img.shields.io/badge/license-MIT-blueviolet?style=flat-square">
+    </a>
+    <a href="https://github.com/dvkt/phetch/releases/tag/v0.0.0">
+        <img src="https://img.shields.io/badge/current_release-0.0.0-brightgreen.svg?style=flat-square">
+    </a>
+    <a href="https://github.com/dvkt/phetch">
+        <img src="https://img.shields.io/badge/dev_version-0.1.0--dev-lightgrey.svg?style=flat-square">
+    </a>
 </p>
 
 `phetch` is a terminal gopher client designed for quick keyboard navigation. It is the spiritual success to [GILD](https://github.com/dvkt/gild).
