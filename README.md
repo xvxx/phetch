@@ -43,6 +43,7 @@ phetch is available as a standalone executable for MacOS and Linux:
 
 - [rfc 1346](https://tools.ietf.org/html/rfc1436)
 - http://ascii-table.com/ansi-escape-sequences.php
+- http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
 
 ## TODO
 
