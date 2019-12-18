@@ -48,8 +48,8 @@
 ## TODO
 
 ### Basics
-- [ ] MENU: up/down scroll when next link out of view
 - [ ] MENU: page up/page down show next page, highlight first link
+- [ ] search functionality
 - [ ] status() helper
 - [ ] show errors in status()
 - [ ] replace all panic! with errors
@@ -57,7 +57,6 @@
 - [ ] TLS
 - [ ] MENU: open HTML link in browser
 - [ ] `?` to show all keyboard shortcuts
-- [ ] search functionality
 - [ ] download to ~/Downloads
 - [ ] save history to file
 - [ ] load history from file
