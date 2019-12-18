@@ -93,6 +93,9 @@ impl View for TextView {
             .take(rows - 1);
 
         for line in iter {
+            if line == ".\r" {
+                continue;
+            }
             out.push_str(&indent);
             out.push_str(line);
             out.push('\n');
