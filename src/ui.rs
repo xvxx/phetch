@@ -58,9 +58,13 @@ impl UI {
 
     pub fn draw(&mut self) {
         if self.dirty {
-            // let prefix = ""; // debug
-            let prefix = "\x1b[2J\x1b[H\x1b[?25l"; // clear screen + hide cursor
-            print!("{}{}", prefix, self.render());
+            print!(
+                "{}{}{}{}",
+                termion::clear::All,
+                termion::cursor::Goto(1, 1),
+                termion::cursor::Hide,
+                self.render()
+            );
             self.dirty = false;
         }
     }
