@@ -68,3 +68,11 @@
     - https://github.com/Schlechtwetterfront/fuzzy-rs
 - [ ] detect SIGWINCH
     - https://github.com/BurntSushi/chan-signal
+
+## Screenies
+
+[Links](./screenshots/links.png)
+
+[DOS Menu](./screenshots/menu.png)
+
+[Game Archive](./screenshots/oldies.png)
