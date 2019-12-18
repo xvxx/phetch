@@ -2,7 +2,7 @@ use gopher;
 use gopher::Type;
 use std::io::stdout;
 use std::io::Write;
-use ui::{Action, Key, View};
+use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct MenuView {
     pub input: String, // user's inputted value
@@ -24,8 +24,6 @@ pub struct Line {
     typ: Type,
     link: usize, // link #, if any
 }
-
-const SCROLL_LINES: usize = 15;
 
 impl View for MenuView {
     fn render(&self, cols: usize, rows: usize) -> String {
@@ -73,11 +71,15 @@ impl MenuView {
         }
 
         let iter = self.lines().iter().skip(self.scroll).take(rows - 1);
-
-        let indent = if self.menu.longest > cols {
+        let longest = if self.menu.longest > MAX_COLS {
+            MAX_COLS
+        } else {
+            self.menu.longest
+        };
+        let indent = if longest > cols {
             String::from("")
         } else {
-            let left = (cols - self.menu.longest) / 2;
+            let left = (cols - longest) / 2;
             if left > 6 {
                 " ".repeat(left - 6)
             } else {

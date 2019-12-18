@@ -1,4 +1,4 @@
-use ui::{Action, Key, View};
+use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct TextView {
     url: String,
@@ -7,8 +7,6 @@ pub struct TextView {
     lines: usize,   // # of lines
     longest: usize, // longest line
 }
-
-const SCROLL_LINES: usize = 15;
 
 impl View for TextView {
     fn url(&self) -> String {
@@ -77,15 +75,16 @@ impl View for TextView {
 
     fn render(&self, cols: usize, rows: usize) -> String {
         let mut out = String::new();
-        let indent = if self.longest > cols {
+        let longest = if self.longest > MAX_COLS {
+            MAX_COLS
+        } else {
+            self.longest
+        };
+        let indent = if longest > cols {
             String::from("")
         } else {
-            let left = (cols - self.longest) / 2;
-            if left > 6 {
-                " ".repeat(left - 6)
-            } else {
-                String::from("")
-            }
+            let left = (cols - longest) / 2;
+            " ".repeat(left)
         };
         let iter = self
             .raw
