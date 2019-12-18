@@ -10,9 +10,9 @@
     <a href="https://github.com/dvkt/phetch">
         <img src="https://img.shields.io/badge/dev_version-0.1.0--dev-lightgrey.svg?style=flat-square">
     </a>
+</p>
 
 `phetch` is a terminal gopher client designed for quick keyboard navigation. It is the spiritual success to [GILD](https://github.com/dvkt/gild).
-</p>
 
 ## features
 
