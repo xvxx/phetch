@@ -242,28 +242,42 @@ impl MenuView {
                 self.input.push(c);
                 let count = self.links().count();
                 let input = &self.input;
-                for i in 0..count {
-                    // jump to number
-                    for z in 1..=9 {
-                        if count < (z * 10) && c == to_char(z as u32) && i == z - 1 {
-                            return self.action_follow_link(i);
+
+                // jump to <10 number
+                if input.len() == 1 {
+                    if let Some(c) = input.chars().nth(0) {
+                        if c.is_digit(10) {
+                            let i = c.to_digit(10).unwrap() as usize;
+                            if i < count && count < (i * 10) {
+                                return self.action_follow_link(i - 1);
+                            }
                         }
                     }
-                    if input.len() > 1 && input == &(i + 1).to_string() {
-                        return self.action_select_link(i);
-                    } else {
-                        let name = if let Some(link) = self.links().nth(i) {
-                            link.name.to_ascii_lowercase()
-                        } else {
-                            "".to_string()
-                        };
-
-                        if name.contains(&self.input.to_ascii_lowercase()) {
-                            return self.action_select_link(i);
+                } else if input.len() == 2 {
+                    // jump to >10 number
+                    let s = input.chars().take(2).collect::<String>();
+                    if let Ok(num) = s.parse::<usize>() {
+                        if num <= count {
+                            return self.action_follow_link(num - 1);
                         }
                     }
                 }
-                self.action_select_link(0)
+
+                for i in 0..count {
+                    // check for name match
+                    let name = if let Some(link) = self.links().nth(i) {
+                        link.name.to_ascii_lowercase()
+                    } else {
+                        "".to_string()
+                    };
+
+                    if name.contains(&self.input.to_ascii_lowercase()) {
+                        return self.action_select_link(i);
+                    }
+                }
+
+                self.link = 0;
+                Action::Redraw
             }
             _ => Action::Unknown,
         }
