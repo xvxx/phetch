@@ -265,8 +265,12 @@ impl MenuView {
                     if let Some(c) = input.chars().nth(0) {
                         if c.is_digit(10) {
                             let i = c.to_digit(10).unwrap() as usize;
-                            if i < count && count < (i * 10) {
-                                return self.action_follow_link(i - 1);
+                            if i < count {
+                                if count < (i * 10) {
+                                    return self.action_follow_link(i - 1);
+                                } else {
+                                    return self.action_select_link(i - 1);
+                                }
                             }
                         }
                     }
