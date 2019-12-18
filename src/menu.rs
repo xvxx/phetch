@@ -183,7 +183,9 @@ impl MenuView {
                 match dir {
                     LinkDir::Above => {
                         let scroll = self.scroll;
-                        if let Some(&pos) = self.links().iter().find(|&&i| i >= scroll) {
+                        if let Some(&pos) =
+                            self.links().iter().skip(self.link).find(|&&i| i >= scroll)
+                        {
                             self.link = pos;
                         }
                     }
