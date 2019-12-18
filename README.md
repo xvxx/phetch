@@ -1,6 +1,10 @@
 # phetch
 
-dirt simple terminal gopher client.
+<img src="https://img.shields.io/badge/license-apache_2.0-blueviolet?style=flat-square">
+<img src="https://img.shields.io/badge/current_release-0.0.0-brightgreen.svg?style=flat-square">
+<img src="https://img.shields.io/badge/dev_version-0.1.0--dev-lightgrey.svg?style=flat-square">
+
+`phetch` is a terminal gopher client designed for quick keyboard navigation. It is the spiritual success to [GILD](https://github.com/dvkt/gild).
 
 ## features
 
@@ -15,6 +19,26 @@ dirt simple terminal gopher client.
     phetch -help               # Show this screen.
     phetch -version            # Show phetch version.
 
+## installation
+
+MacOS:
+
+    wget https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-macos.zip
+    unzip phetch-macos.zip
+    ./phetch -h
+
+Linux x86_64:
+
+    wget https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-x86-64.zip
+    unzip phetch-linux-x86-64.zip
+    ./phetch -h
+
+Linux ARM:
+
+    wget https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-arm.zip
+    unzip phetch-linux-arm.zip
+    ./phetch -h
+
 ## development
 
     cargo run -- <gopher-url>
@@ -23,14 +47,6 @@ dirt simple terminal gopher client.
 
 - [rfc 1346](https://tools.ietf.org/html/rfc1436)
 - http://ascii-table.com/ansi-escape-sequences.php
-
-## gopher sites
-
-- gopher.black
-- sdf.org
-- gopher.quux.org
-- hngopher.com
-- bitreich.org
 
 ## TODO
 
@@ -44,23 +60,12 @@ dirt simple terminal gopher client.
 - [ ] TLS
 - [ ] MENU: open HTML link in browser
 - [ ] `?` to show all keyboard shortcuts
-- [ ] input field that... takes input
 - [ ] search functionality
 - [ ] download to ~/Downloads
-    - https://github.com/dvkt/gg/blob/master/gg.go#L442
 - [ ] save history to file
 - [ ] load history from file
 - [ ] load most recent URL when opening without args
 ### Bonus
-- [ ] play sound file in background
-- [ ] render markdown-lite
-- [ ] display HTML-lite
-- [ ] ? download to pwd
-- [ ] ? download to custom location
-- [ ] pipe input to render as gopher
-      $ curl gopher.antirez.com:70 | phetch
-- [ ] syntax highlight code
-      $ phetch code.some-gopher-site.io/gw/main.go
 - [ ] fuzzy find search links
     - https://github.com/stewart/rff
     - https://github.com/Schlechtwetterfront/fuzzy-rs
