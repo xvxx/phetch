@@ -71,8 +71,8 @@
 
 ## Screenies
 
-[Links](./screenshots/links.png)
+![Links](./screenshots/links.png)
 
-[DOS Menu](./screenshots/menu.png)
+![DOS Menu](./screenshots/menu.png)
 
-[Game Archive](./screenshots/oldies.png)
+![Game Archive](./screenshots/oldies.png)
