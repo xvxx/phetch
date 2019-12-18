@@ -123,7 +123,11 @@ impl MenuView {
             out.push('\n');
         }
         if self.lines().len() < rows {
-            out.push_str(&format!("{}", "\r\n".repeat(rows - 1 - self.lines().len())));
+            // fill in empty space
+            out.push_str(&format!(
+                "{}",
+                " \r\n".repeat(rows - 1 - self.lines().len())
+            ));
         }
         out.push_str(&self.input);
         out
