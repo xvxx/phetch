@@ -275,11 +275,27 @@ impl MenuView {
                         }
                     }
                 } else if input.len() == 2 {
-                    // jump to >10 number
+                    // jump to >=10 number
                     let s = input.chars().take(2).collect::<String>();
                     if let Ok(num) = s.parse::<usize>() {
                         if num <= count {
-                            return self.action_follow_link(num - 1);
+                            if count < (num * 10) {
+                                return self.action_follow_link(num - 1);
+                            } else {
+                                return self.action_select_link(num - 1);
+                            }
+                        }
+                    }
+                } else if input.len() == 3 {
+                    // jump to >=100 number
+                    let s = input.chars().take(3).collect::<String>();
+                    if let Ok(num) = s.parse::<usize>() {
+                        if num <= count {
+                            if count < (num * 10) {
+                                return self.action_follow_link(num - 1);
+                            } else {
+                                return self.action_select_link(num - 1);
+                            }
                         }
                     }
                 }
