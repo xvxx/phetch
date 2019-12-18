@@ -395,11 +395,3 @@ impl Menu {
     }
 }
 
-// number -> char of that number
-fn to_char(c: u32) -> char {
-    if let Some(ch) = std::char::from_digit(c, 10) {
-        ch
-    } else {
-        '0'
-    }
-}
