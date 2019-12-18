@@ -13,9 +13,10 @@ pub struct MenuView {
 }
 
 pub struct Menu {
-    url: String,      // gopher url
-    lines: Vec<Line>, // lines
-    longest: usize,   // size of the longest line
+    url: String,       // gopher url
+    lines: Vec<Line>,  // lines
+    links: Vec<usize>, // links (index of line in lines vec)
+    longest: usize,    // size of the longest line
 }
 
 #[derive(Debug)]
@@ -59,8 +60,16 @@ impl MenuView {
         &self.menu.lines
     }
 
-    fn links(&self) -> impl Iterator<Item = &Line> {
-        self.menu.links()
+    fn links(&self) -> &Vec<usize> {
+        &self.menu.links
+    }
+
+    fn link(&self, i: usize) -> Option<&Line> {
+        if let Some(line) = self.menu.links.get(i) {
+            self.menu.lines.get(*line)
+        } else {
+            None
+        }
     }
 
     fn render_lines(&self) -> String {
@@ -179,7 +188,7 @@ impl MenuView {
     }
 
     fn action_down(&mut self) -> Action {
-        let count = self.links().count();
+        let count = self.links().len();
         if count > 0 && self.link < count - 1 {
             self.link += 1;
             Action::Redraw
@@ -189,7 +198,7 @@ impl MenuView {
     }
 
     fn action_select_link(&mut self, line: usize) -> Action {
-        if line < self.links().count() {
+        if line < self.links().len() {
             self.link = line;
             Action::Redraw
         } else {
@@ -199,7 +208,7 @@ impl MenuView {
 
     fn action_follow_link(&mut self, link: usize) -> Action {
         self.input.clear();
-        if let Some(line) = self.links().nth(link) {
+        if let Some(line) = self.link(link) {
             let url = line.url.to_string();
             Action::Open(url)
         } else {
@@ -211,7 +220,7 @@ impl MenuView {
         match key {
             Key::Char('\n') => {
                 self.input.clear();
-                if let Some(line) = self.links().nth(self.link) {
+                if let Some(line) = self.link(self.link) {
                     let url = line.url.to_string();
                     Action::Open(url)
                 } else {
@@ -264,7 +273,7 @@ impl MenuView {
             }
             Key::Char(c) => {
                 self.input.push(c);
-                let count = self.links().count();
+                let count = self.links().len();
                 let input = &self.input;
 
                 // jump to <10 number
@@ -309,7 +318,7 @@ impl MenuView {
 
                 for i in 0..count {
                     // check for name match
-                    let name = if let Some(link) = self.links().nth(i) {
+                    let name = if let Some(link) = self.link(i) {
                         link.name.to_ascii_lowercase()
                     } else {
                         "".to_string()
@@ -333,12 +342,9 @@ impl Menu {
         Self::parse(url, gopher_response)
     }
 
-    pub fn links(&self) -> impl Iterator<Item = &Line> {
-        self.lines.iter().filter(|&line| line.link > 0)
-    }
-
     fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
+        let mut links = vec![];
         let mut link = 0;
         let mut longest = 0;
         for line in raw.split_terminator("\n") {
@@ -385,6 +391,10 @@ impl Menu {
                     longest = name.len();
                 }
 
+                if link > 0 {
+                    links.push(lines.len());
+                }
+
                 lines.push(Line {
                     name,
                     url,
@@ -397,6 +407,7 @@ impl Menu {
         Menu {
             url,
             lines,
+            links,
             longest,
         }
     }
