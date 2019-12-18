@@ -218,8 +218,8 @@ impl MenuView {
                     Action::None
                 }
             }
-            Key::Up | Key::Ctrl('p') | Key::Ctrl('k') => self.action_up(),
-            Key::Down | Key::Ctrl('n') | Key::Ctrl('j') => self.action_down(),
+            Key::Up | Key::Ctrl('p') => self.action_up(),
+            Key::Down | Key::Ctrl('n') => self.action_down(),
             Key::Backspace | Key::Delete => {
                 if self.input.is_empty() {
                     Action::Back
