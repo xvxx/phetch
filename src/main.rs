@@ -6,6 +6,7 @@ mod gopher;
 mod menu;
 mod text;
 mod ui;
+use std::process::exit;
 use ui::UI;
 
 fn main() {
@@ -23,6 +24,7 @@ fn main() {
             print_raw(url);
         } else {
             eprintln!("--raw needs gopher-url");
+            exit(1);
         }
         return;
     }
@@ -40,12 +42,18 @@ fn main() {
     if !url.is_empty() && url.chars().nth(0).unwrap() == '-' {
         eprintln!("unknown flag: {}\n", url);
         print_usage();
-        return;
+        exit(1);
     }
 
     let mut ui = UI::new();
-    ui.open(url);
+    ui.open(url)
+        .or_else(|e| Err(fatal(&format!("\r\x1b[91m{}\x1b[0m", e))));
     ui.run();
+}
+
+fn fatal(s: &str) {
+    eprintln!("{}", s);
+    exit(1);
 }
 
 fn print_version() {

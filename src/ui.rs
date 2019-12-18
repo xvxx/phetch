@@ -1,3 +1,4 @@
+use std::io;
 use std::io::{stdin, stdout, Write};
 use std::process::{Command, Stdio};
 use termion::input::TermRead;
@@ -29,6 +30,7 @@ pub enum Action {
     Redraw,            // redraw everything
     Quit,              // yup
     Clipboard(String), // copy to clipboard
+    Error(String),     // error message
     Unknown,           // handler doesn't know what to do
 }
 
@@ -37,6 +39,22 @@ pub trait View {
     fn render(&self) -> String;
     fn url(&self) -> String;
     fn set_size(&mut self, cols: usize, rows: usize);
+}
+
+macro_rules! status {
+    ($e:expr) => { status!("{}", $e); };
+    ($e:expr, $($y:expr),*) => {{
+        print!("\r{}\x1b[0m\x1b[K", format!($e, $($y),*));
+        stdout().flush();
+    }}
+}
+
+macro_rules! error {
+    ($e:expr) => { error!("{}", $e); };
+    ($e:expr, $($y:expr),*) => {{
+        eprint!("\r\x1b[0;91m{}\x1b[0m\x1b[K", format!($e, $($y),*));
+        stdout().flush();
+    }}
 }
 
 impl UI {
@@ -70,8 +88,10 @@ impl UI {
     }
 
     pub fn update(&mut self) {
-        if let Action::Quit = self.process_input() {
-            self.running = false;
+        match self.process_input() {
+            Action::Quit => self.running = false,
+            Action::Error(e) => error!(e),
+            _ => {}
         }
     }
 
@@ -86,27 +106,24 @@ impl UI {
         String::from("N/A")
     }
 
-    pub fn open(&mut self, url: &str) {
-        print!("\r\x1b[90mLoading...\x1b[0m\x1b[K");
-        stdout().flush();
-        self.dirty = true;
+    pub fn open(&mut self, url: &str) -> io::Result<()> {
+        status!("\x1b[90mLoading...");
         let (typ, host, port, sel) = gopher::parse_url(url);
-        let response = gopher::fetch(host, port, sel)
-            .map_err(|e| {
-                eprintln!("\x1B[91merror loading \x1b[93m{}: \x1B[0m{}[?25h", url, e); // TODO
-                std::process::exit(1);
+        gopher::fetch(host, port, sel)
+            .and_then(|response| match typ {
+                Type::Menu => Ok(self.add_page(MenuView::from(url.to_string(), response))),
+                Type::Text => Ok(self.add_page(TextView::from(url.to_string(), response))),
+                Type::HTML => Ok(self.add_page(TextView::from(url.to_string(), response))),
+                _ => Err(io::Error::new(
+                    io::ErrorKind::Other,
+                    format!("Unsupported Gopher Type: {:?}", typ),
+                )),
             })
-            .unwrap();
-
-        match typ {
-            Type::Menu => self.add_page(MenuView::from(url.to_string(), response)),
-            Type::Text => self.add_page(TextView::from(url.to_string(), response)),
-            Type::HTML => self.add_page(TextView::from(url.to_string(), response)),
-            _ => panic!("unknown type: {:?}", typ),
-        }
+            .map_err(|e| io::Error::new(e.kind(), format!("Error loading {}: {}", url, e)))
     }
 
     fn add_page<T: View + 'static>(&mut self, view: T) {
+        self.dirty = true;
         if !self.pages.is_empty() && self.page < self.pages.len() - 1 {
             self.pages.truncate(self.page + 1);
         }
@@ -125,10 +142,10 @@ impl UI {
                 self.dirty = true;
                 Action::None
             }
-            Action::Open(url) => {
-                self.open(&url);
-                Action::None
-            }
+            Action::Open(url) => match self.open(&url) {
+                Err(e) => Action::Error(e.to_string()),
+                Ok(()) => Action::None,
+            },
             Action::Back => {
                 if self.page > 0 {
                     self.dirty = true;
