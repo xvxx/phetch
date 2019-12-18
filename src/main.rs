@@ -48,10 +48,10 @@ fn print_version() {
 fn print_usage() {
     println!(
         "\x1B[93;1mUsage:\x1B[0m 
-    phetch <gopher-url>        # Show GopherHole at URL
-    phetch -raw <gopher-url>   # Print raw Gopher response.
-    phetch -help               # Show this screen.
-    phetch -version            # Show phetch version."
+    phetch <gopher-url>             # Show GopherHole at URL
+    phetch -r, --raw <gopher-url>   # Print raw Gopher response.
+    phetch -h, --help               # Show this screen.
+    phetch -v, --version            # Show phetch version."
     );
 }
 

@@ -22,10 +22,10 @@
 
 ## usage
 
-    phetch <gopher-url>        # Show GopherHole at URL
-    phetch -raw <gopher-url>   # Print raw Gopher response.
-    phetch -help               # Show this screen.
-    phetch -version            # Show phetch version.
+    phetch <gopher-url>    # Show GopherHole at URL
+    phetch -r <gopher-url> # Print raw Gopher response.
+    phetch -h              # Show this screen.
+    phetch -v              # Show phetch version.
 
 ## installation
 
