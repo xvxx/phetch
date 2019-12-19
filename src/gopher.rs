@@ -5,24 +5,24 @@ use std::net::TcpStream;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum Type {
-    Text = '0' as isize,       // 0 | 96 | cyan
-    Menu,                      // 1 | 94 | blue
-    CSOEntity,                 // 2
-    Error,                     // 3 | 91 | red
-    Binhex,                    // 4 |  4 | white underline
-    DOSFile,                   // 5 |  4 | white underline
-    UUEncoded,                 // 6 |  4 | white underline
-    Search,                    // 7 |  0 | white
-    Telnet,                    // 8
-    Binary,                    // 9 |  4 | white underline
-    Mirror = '+' as isize,     // +
-    GIF = 'g' as isize,        // g |  4 | white underline
-    Telnet3270 = 'T' as isize, // T
-    HTML = 'h' as isize,       // h | 92 | green
-    Image = 'I' as isize,      // I |
-    Info = 'i' as isize,       // i | 93 | yellow
-    Sound = 's' as isize,      // s |  4 | white underline
-    Document = 'd' as isize,   // d |  4 | white underline
+    Text,       // 0 | 96 | cyan
+    Menu,       // 1 | 94 | blue
+    CSOEntity,  // 2
+    Error,      // 3 | 91 | red
+    Binhex,     // 4 |  4 | white underline
+    DOSFile,    // 5 |  4 | white underline
+    UUEncoded,  // 6 |  4 | white underline
+    Search,     // 7 |  0 | white
+    Telnet,     // 8
+    Binary,     // 9 |  4 | white underline
+    Mirror,     // +
+    GIF,        // g |  4 | white underline
+    Telnet3270, // T
+    HTML,       // h | 92 | green
+    Image,      // I |
+    Info,       // i | 93 | yellow
+    Sound,      // s |  4 | white underline
+    Document,   // d |  4 | white underline
 }
 
 impl Type {
