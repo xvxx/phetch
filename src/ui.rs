@@ -1,6 +1,7 @@
 use std::io;
 use std::io::{stdin, stdout, Write};
-use std::process::{Command, Stdio};
+use std::process;
+use std::process::Stdio;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
@@ -31,6 +32,7 @@ pub enum Action {
     Quit,              // yup
     Clipboard(String), // copy to clipboard
     Error(String),     // error message
+    Status(String),    // status message
     Unknown,           // handler doesn't know what to do
 }
 
@@ -91,19 +93,25 @@ impl UI {
         match self.process_input() {
             Action::Quit => self.running = false,
             Action::Error(e) => error!(e),
+            Action::Status(e) => status!(e),
             _ => {}
         }
     }
 
     pub fn render(&mut self) -> String {
-        let (cols, rows) = termion::terminal_size().expect("can't get terminal size"); // TODO
-        if !self.pages.is_empty() && self.page < self.pages.len() {
-            if let Some(page) = self.pages.get_mut(self.page) {
-                page.set_size(cols as usize, rows as usize);
-                return page.render();
+        if let Ok((cols, rows)) = termion::terminal_size() {
+            if !self.pages.is_empty() && self.page < self.pages.len() {
+                if let Some(page) = self.pages.get_mut(self.page) {
+                    page.set_size(cols as usize, rows as usize);
+                    return page.render();
+                }
             }
+            String::from("No content to display.")
+        } else {
+            String::from(
+                "Error getting terminal size. Please file a bug: https://github.com/dvkt/phetch",
+            )
         }
-        String::from("N/A")
     }
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
@@ -163,10 +171,7 @@ impl UI {
                 }
                 Action::None
             }
-            Action::Clipboard(url) => {
-                copy_to_clipboard(&url);
-                Action::None
-            }
+            Action::Clipboard(url) => copy_to_clipboard(&url),
             a => a,
         }
     }
@@ -180,17 +185,20 @@ impl UI {
 
         let page = page_opt.unwrap();
         for c in stdin.keys() {
-            let key = c.expect("UI error on stdin.keys"); // TODO
-            match page.process_input(key) {
-                Action::Unknown => match key {
-                    Key::Ctrl('q') | Key::Ctrl('c') => return Action::Quit,
-                    Key::Left | Key::Backspace => return Action::Back,
-                    Key::Right => return Action::Forward,
-                    Key::Char('\n') => return Action::Redraw,
-                    Key::Ctrl('y') => return Action::Clipboard(page.url()),
-                    _ => {}
-                },
-                action => return action,
+            if let Ok(key) = c {
+                match page.process_input(key) {
+                    Action::Unknown => match key {
+                        Key::Ctrl('q') | Key::Ctrl('c') => return Action::Quit,
+                        Key::Left | Key::Backspace => return Action::Back,
+                        Key::Right => return Action::Forward,
+                        Key::Char('\n') => return Action::Redraw,
+                        Key::Ctrl('y') => return Action::Clipboard(page.url()),
+                        _ => {}
+                    },
+                    action => return action,
+                }
+            } else {
+                return Action::Error("Error in stdin.keys()".to_string());
             }
         }
         Action::None
@@ -203,20 +211,28 @@ impl Drop for UI {
     }
 }
 
-fn copy_to_clipboard(data: &str) {
-    let mut child = spawn_os_clipboard();
-    let child_stdin = child.stdin.as_mut().unwrap();
-    child_stdin.write_all(data.as_bytes());
+fn copy_to_clipboard(data: &str) -> Action {
+    match spawn_os_clipboard() {
+        Ok(mut child) => {
+            let child_stdin = child.stdin.as_mut().unwrap();
+            match child_stdin.write_all(data.as_bytes()) {
+                Ok(()) => Action::Status("Copied URL to clipboard.".to_string()),
+                Err(e) => Action::Error(format!("Clipboard error: {}", e)),
+            }
+        }
+        Err(e) => Action::Error(format!("Clipboard error: {}", e)),
+    }
 }
 
-fn spawn_os_clipboard() -> std::process::Child {
+fn spawn_os_clipboard() -> io::Result<process::Child> {
     if cfg!(target_os = "macos") {
-        Command::new("pbcopy").stdin(Stdio::piped()).spawn()
+        process::Command::new("pbcopy")
+            .stdin(Stdio::piped())
+            .spawn()
     } else {
-        Command::new("xclip")
+        process::Command::new("xclip")
             .args(&["-sel", "clip"])
             .stdin(Stdio::piped())
             .spawn()
     }
-    .unwrap() // TODO
 }
