@@ -111,12 +111,15 @@ impl UI {
         let (typ, host, port, sel) = gopher::parse_url(url);
         gopher::fetch(host, port, sel)
             .and_then(|response| match typ {
-                Type::Menu => Ok(self.add_page(MenuView::from(url.to_string(), response))),
-                Type::Text => Ok(self.add_page(TextView::from(url.to_string(), response))),
-                Type::HTML => Ok(self.add_page(TextView::from(url.to_string(), response))),
+                Type::Menu | Type::Search => {
+                    Ok(self.add_page(MenuView::from(url.to_string(), response)))
+                }
+                Type::Text | Type::HTML => {
+                    Ok(self.add_page(TextView::from(url.to_string(), response)))
+                }
                 _ => Err(io::Error::new(
                     io::ErrorKind::Other,
-                    format!("Unsupported Gopher Type: {:?}", typ),
+                    format!("Unsupported Gopher Response: {:?}", typ),
                 )),
             })
             .map_err(|e| io::Error::new(e.kind(), format!("Error loading {}: {}", url, e)))
@@ -170,8 +173,12 @@ impl UI {
 
     fn process_page_input(&mut self) -> Action {
         let stdin = stdin();
-        let page = self.pages.get_mut(self.page).expect("expected Page"); // TODO
+        let page_opt = self.pages.get_mut(self.page);
+        if page_opt.is_none() {
+            return Action::None;
+        }
 
+        let page = page_opt.unwrap();
         for c in stdin.keys() {
             let key = c.expect("UI error on stdin.keys"); // TODO
             match page.process_input(key) {

@@ -71,6 +71,7 @@ pub fn fetch_url(url: &str) -> io::Result<String> {
 // Fetches a URL by its component parts and returns a raw Gopher response.
 pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
     let mut body = String::new();
+    let selector = selector.replace('?', "\t"); // search queries
     let stream = TcpStream::connect(format!("{}:{}", host, port))
         .and_then(|mut stream| {
             stream.write(format!("{}\r\n", selector).as_ref());
@@ -87,6 +88,7 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
     }
 }
 
+// url parsing states
 enum Parsing {
     Host,
     Port,

@@ -49,9 +49,6 @@
 
 ### Basics
 - [ ] MENU: page up/page down show next page, highlight first link
-- [ ] search functionality
-- [ ] status() helper
-- [ ] show errors in status()
 - [ ] replace all panic! with errors
 - [ ] replace all unwrap/expect with errors
 - [ ] TLS
