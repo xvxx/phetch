@@ -150,7 +150,7 @@ impl UI {
     }
 
     // Display an error message to the user.
-    fn error(&self, e: &str) {
+    pub fn error(&self, e: &str) {
         print!(
             "{}{}{}{}{}",
             "\x1b[91m",

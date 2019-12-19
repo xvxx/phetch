@@ -52,11 +52,10 @@ fn main() {
     };
 
     let mut ui = UI::new();
-    ui.open(&url).or_else(|e| {
-        eprintln!("\r\x1b[91m{}\x1b[0m", e);
+    if let Err(e) = ui.open(&url) {
+        ui.error(&e.to_string());
         exit(1);
-        Err(e)
-    });
+    }
     ui.run();
 }
 
