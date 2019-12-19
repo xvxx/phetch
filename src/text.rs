@@ -74,7 +74,7 @@ impl View for TextView {
                     Action::None
                 }
             }
-            _ => Action::Unknown,
+            _ => Action::Keypress(c),
         }
     }
 

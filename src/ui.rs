@@ -24,16 +24,14 @@ pub struct UI {
 
 #[derive(Debug)]
 pub enum Action {
-    None,              // do nothing
-    Back,              // back in history
-    Forward,           // also history
-    Open(String),      // url
-    Redraw,            // redraw everything
-    Quit,              // yup
-    Clipboard(String), // copy to clipboard
-    Error(String),     // error message
-    Status(String),    // status message
-    Unknown,           // handler doesn't know what to do
+    None,          // do nothing
+    Back,          // back in history
+    Forward,       // also history
+    Open(String),  // url
+    Keypress(Key), // unknown keypress
+    Redraw,        // redraw everything
+    Quit,          // yup
+    Error(String), // error message
 }
 
 pub trait View {
@@ -90,29 +88,11 @@ impl UI {
     }
 
     pub fn update(&mut self) {
-        match self.process_input() {
-            Action::Quit => self.running = false,
-            Action::Error(e) => error!(e),
-            Action::Status(e) => status!(e),
-            _ => {}
-        }
-    }
+        let mut stdout = stdout().into_raw_mode().unwrap();
+        stdout.flush().unwrap();
 
-    pub fn render(&mut self) -> String {
-        if let Ok((cols, rows)) = termion::terminal_size() {
-            if !self.pages.is_empty() && self.page < self.pages.len() {
-                if let Some(page) = self.pages.get_mut(self.page) {
-                    page.set_size(cols as usize, rows as usize);
-                    return page.render();
-                }
-            }
-            String::from("No content to display.")
-        } else {
-            format!(
-                "Error getting terminal size. Please file a bug: {}",
-                "https://github.com/dvkt/phetch/issues/new"
-            )
-        }
+        let action = self.process_page_input();
+        self.process_action(action).map_err(|e| error!(e));
     }
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
@@ -134,6 +114,23 @@ impl UI {
             .map_err(|e| io::Error::new(e.kind(), format!("Error loading {}: {}", url, e)))
     }
 
+    pub fn render(&mut self) -> String {
+        if let Ok((cols, rows)) = termion::terminal_size() {
+            if !self.pages.is_empty() && self.page < self.pages.len() {
+                if let Some(page) = self.pages.get_mut(self.page) {
+                    page.set_size(cols as usize, rows as usize);
+                    return page.render();
+                }
+            }
+            String::from("No content to display.")
+        } else {
+            format!(
+                "Error getting terminal size. Please file a bug: {}",
+                "https://github.com/dvkt/phetch/issues/new"
+            )
+        }
+    }
+
     fn add_page<T: View + 'static>(&mut self, view: T) {
         self.dirty = true;
         if !self.pages.is_empty() && self.page < self.pages.len() - 1 {
@@ -145,64 +142,50 @@ impl UI {
         }
     }
 
-    fn process_input(&mut self) -> Action {
-        let mut stdout = stdout().into_raw_mode().unwrap();
-        stdout.flush().unwrap();
-
-        match self.process_focused_page_input() {
-            Action::Redraw => {
-                self.dirty = true;
-                Action::None
+    fn process_page_input(&mut self) -> Action {
+        if let Some(page) = self.pages.get_mut(self.page) {
+            if let Ok(key) = stdin()
+                .keys()
+                .nth(0)
+                .ok_or(Action::Error("stdin.keys() error".to_string()))
+            {
+                if let Ok(key) = key {
+                    return page.process_input(key);
+                }
             }
-            Action::Open(url) => match self.open(&url) {
-                Err(e) => Action::Error(e.to_string()),
-                Ok(()) => Action::None,
-            },
-            Action::Back => {
+        }
+
+        Action::None
+    }
+
+    fn process_action(&mut self, action: Action) -> io::Result<()> {
+        match action {
+            Action::Quit | Action::Keypress(Key::Ctrl('q')) | Action::Keypress(Key::Ctrl('c')) => {
+                self.running = false
+            }
+            Action::Error(e) => return Err(io::Error::new(io::ErrorKind::Other, e)),
+            Action::Redraw => self.dirty = true,
+            Action::Open(url) => self.open(&url)?,
+            Action::Back | Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
                 if self.page > 0 {
                     self.dirty = true;
                     self.page -= 1;
                 }
-                Action::None
             }
-            Action::Forward => {
+            Action::Forward | Action::Keypress(Key::Right) => {
                 if self.page < self.pages.len() - 1 {
                     self.dirty = true;
                     self.page += 1;
                 }
-                Action::None
             }
-            Action::Clipboard(url) => copy_to_clipboard(&url),
-            a => a,
-        }
-    }
-
-    fn process_focused_page_input(&mut self) -> Action {
-        let stdin = stdin();
-        let page_opt = self.pages.get_mut(self.page);
-        if page_opt.is_none() {
-            return Action::Error("No page loaded.".to_string());
-        }
-
-        let page = page_opt.unwrap();
-        for c in stdin.keys() {
-            if let Ok(key) = c {
-                match page.process_input(key) {
-                    Action::Unknown => match key {
-                        Key::Ctrl('q') | Key::Ctrl('c') => return Action::Quit,
-                        Key::Left | Key::Backspace => return Action::Back,
-                        Key::Right => return Action::Forward,
-                        Key::Char('\n') => return Action::Redraw,
-                        Key::Ctrl('y') => return Action::Clipboard(page.url()),
-                        _ => {}
-                    },
-                    action => return action,
+            Action::Keypress(Key::Ctrl('y')) => {
+                if let Some(page) = self.pages.get(self.page) {
+                    copy_to_clipboard(&page.url())?
                 }
-            } else {
-                return Action::Error("Error in stdin.keys()".to_string());
             }
+            _ => (),
         }
-        Action::None
+        Ok(())
     }
 }
 
@@ -212,17 +195,17 @@ impl Drop for UI {
     }
 }
 
-fn copy_to_clipboard(data: &str) -> Action {
-    match spawn_os_clipboard() {
-        Ok(mut child) => {
+fn copy_to_clipboard(data: &str) -> io::Result<()> {
+    spawn_os_clipboard()
+        .and_then(|mut child| {
             let child_stdin = child.stdin.as_mut().unwrap();
-            match child_stdin.write_all(data.as_bytes()) {
-                Ok(()) => Action::Status("Copied URL to clipboard.".to_string()),
-                Err(e) => Action::Error(format!("Clipboard error: {}", e)),
-            }
-        }
-        Err(e) => Action::Error(format!("Clipboard error: {}", e)),
-    }
+            child_stdin.write_all(data.as_bytes())
+        })
+        .and_then(|_| {
+            status!("Copied URL to clipboard.");
+            Ok(())
+        })
+        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Clipboard error: {}", e)))
 }
 
 fn spawn_os_clipboard() -> io::Result<process::Child> {

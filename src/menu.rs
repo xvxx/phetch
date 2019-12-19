@@ -413,7 +413,7 @@ impl MenuView {
                 self.input.push(c);
                 self.redraw_input()
             }
-            _ => Action::Unknown,
+            _ => Action::Keypress(key),
         }
     }
 
@@ -530,7 +530,7 @@ impl MenuView {
                 // Action::Redraw
                 self.redraw_input()
             }
-            _ => Action::Unknown,
+            _ => Action::Keypress(key),
         }
     }
 }
