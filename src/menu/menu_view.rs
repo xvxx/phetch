@@ -13,12 +13,6 @@ pub struct MenuView {
     pub size: (usize, usize), // cols, rows
 }
 
-#[derive(PartialEq)]
-pub enum State {
-    Default, // regular
-    Search,  // entering search term
-}
-
 // direction of a given link relative to the visible screen
 #[derive(PartialEq)]
 enum LinkDir {
