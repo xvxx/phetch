@@ -4,6 +4,8 @@ dev: debug
 
 debug: target/debug/phetch
 release: target/release/phetch
+install: release
+	cp phetch ~/bin
 
 target/debug/phetch: src/*.rs
 	cargo build
