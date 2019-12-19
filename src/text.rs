@@ -18,11 +18,11 @@ impl View for TextView {
         self.raw_response.to_string()
     }
 
-    fn set_size(&mut self, cols: usize, rows: usize) {
+    fn term_size(&mut self, cols: usize, rows: usize) {
         self.size = (cols, rows);
     }
 
-    fn process_input(&mut self, c: Key) -> Action {
+    fn respond(&mut self, c: Key) -> Action {
         match c {
             Key::Char('t') | Key::Char('g') => {
                 self.scroll = 0;

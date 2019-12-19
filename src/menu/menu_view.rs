@@ -23,24 +23,24 @@ enum LinkDir {
 }
 
 impl View for MenuView {
-    fn render(&self) -> String {
-        self.render_lines()
-    }
-
     fn raw(&self) -> String {
         self.menu.raw.to_string()
     }
 
-    fn process_input(&mut self, key: Key) -> Action {
+    fn render(&self) -> String {
+        self.render_lines()
+    }
+
+    fn respond(&mut self, key: Key) -> Action {
         self.process_key(key)
+    }
+
+    fn term_size(&mut self, cols: usize, rows: usize) {
+        self.size = (cols, rows);
     }
 
     fn url(&self) -> String {
         self.menu.url.to_string()
-    }
-
-    fn set_size(&mut self, cols: usize, rows: usize) {
-        self.size = (cols, rows);
     }
 }
 

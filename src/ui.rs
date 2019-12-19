@@ -39,11 +39,11 @@ pub enum Action {
 }
 
 pub trait View {
-    fn process_input(&mut self, c: Key) -> Action;
+    fn respond(&mut self, key: Key) -> Action;
     fn render(&self) -> String;
     fn url(&self) -> String;
     fn raw(&self) -> String;
-    fn set_size(&mut self, cols: usize, rows: usize);
+    fn term_size(&mut self, cols: usize, rows: usize);
 }
 
 impl UI {
@@ -118,10 +118,10 @@ impl UI {
 
     pub fn render(&mut self) -> String {
         if let Ok((cols, rows)) = termion::terminal_size() {
-            self.set_size(cols as usize, rows as usize);
+            self.term_size(cols as usize, rows as usize);
             if !self.pages.is_empty() && self.page < self.pages.len() {
                 if let Some(page) = self.pages.get_mut(self.page) {
-                    page.set_size(cols as usize, rows as usize);
+                    page.term_size(cols as usize, rows as usize);
                     return page.render();
                 }
             }
@@ -134,7 +134,7 @@ impl UI {
         }
     }
 
-    fn set_size(&mut self, cols: usize, rows: usize) {
+    fn term_size(&mut self, cols: usize, rows: usize) {
         self.size = (cols, rows);
     }
 
@@ -157,7 +157,7 @@ impl UI {
                 .ok_or(Action::Error("stdin.keys() error".to_string()))
             {
                 if let Ok(key) = key {
-                    return page.process_input(key);
+                    return page.respond(key);
                 }
             }
         }
