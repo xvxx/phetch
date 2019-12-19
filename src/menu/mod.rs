@@ -72,8 +72,8 @@ impl Menu {
                 if parts.len() > 2 {
                     url.push_str(parts[2]); // host
                 }
+                // port
                 if parts.len() > 3 {
-                    // port
                     let port = parts[3].trim_end_matches('\r');
                     if port != "70" {
                         url.push(':');
@@ -84,6 +84,10 @@ impl Menu {
                 if let Some(first_char) = parts[0].chars().nth(0) {
                     url.push_str("/");
                     url.push(first_char);
+                    // add trailing / if the selector is blank
+                    if parts.len() == 0 || parts[1].len() == 0 {
+                        url.push('/');
+                    }
                 }
                 if parts.len() > 1 {
                     url.push_str(parts[1]); // selector
@@ -110,21 +114,32 @@ impl Menu {
 mod tests {
     use super::*;
 
+    macro_rules! parse {
+        ($s:literal) => {
+            Menu::parse("test".to_string(), $s.to_string());
+        };
+    }
+
     #[test]
     fn test_simple_menu() {
-        let menu = Menu::parse(
-            "test".to_string(),
+        let menu = parse!(
             "
 i---------------------------------------------------------
 1SDF PHLOGOSPHERE (297 phlogs)	/phlogs/	gopher.club	70
 1SDF GOPHERSPACE (1303 ACTIVE users)	/maps/	sdf.org	70
 i---------------------------------------------------------
 "
-            .to_string(),
         );
         assert_eq!(menu.lines.len(), 4);
         assert_eq!(menu.links.len(), 2);
         assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
         assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
+    }
+
+    #[test]
+    fn test_no_path() {
+        let menu = parse!("1Circumlunar Space		circumlunar.space	70");
+        assert_eq!(menu.links.len(), 1);
+        assert_eq!(menu.lines[0].url, "gopher://circumlunar.space/1/");
     }
 }
