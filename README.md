@@ -48,8 +48,6 @@
 ## TODO
 
 ### Basics
-- [ ] MENU: page up/page down show next page, highlight first link
-- [ ] replace all unwrap/expect with errors
 - [ ] TLS
 - [ ] MENU: open HTML link in browser
 - [ ] `?` to show all keyboard shortcuts
@@ -57,6 +55,7 @@
 - [ ] save history to file
 - [ ] load history from file
 - [ ] load most recent URL when opening without args
+- [ ] async gopher request
 ### Bonus
 - [ ] fuzzy find search links
     - https://github.com/stewart/rff
