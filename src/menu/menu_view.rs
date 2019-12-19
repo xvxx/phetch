@@ -163,13 +163,24 @@ impl MenuView {
             // fill in empty space
             out.push_str(&" \r\n".repeat(rows - 1 - self.lines().len()).to_string());
         }
-        out.push_str(&self.prompt);
-        out.push_str(&self.input);
+        out.push_str(&format!(
+            "{}{}{}{}",
+            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::clear::CurrentLine,
+            self.prompt,
+            self.input
+        ));
         out
     }
 
     fn redraw_input(&self) -> Action {
-        print!("\r\x1b[K{}{}", self.prompt, self.input);
+        print!(
+            "{}{}{}{}",
+            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::clear::CurrentLine,
+            self.prompt,
+            self.input
+        );
         stdout().flush();
         Action::None
     }

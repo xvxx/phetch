@@ -2,6 +2,7 @@ use std::io;
 use std::io::{stdin, stdout, Write};
 use std::process;
 use std::process::Stdio;
+use termion::color;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
@@ -21,6 +22,7 @@ pub struct UI {
     page: usize,               // currently focused view
     dirty: bool,               // redraw?
     running: bool,             // main ui loop running?
+    pub size: (usize, usize),  // cols, rows
 }
 
 #[derive(Debug)]
@@ -42,22 +44,6 @@ pub trait View {
     fn set_size(&mut self, cols: usize, rows: usize);
 }
 
-macro_rules! status {
-    ($e:expr) => { status!("{}", $e); };
-    ($e:expr, $($y:expr),*) => {{
-        print!("\r{}\x1b[0m\x1b[K", format!($e, $($y),*));
-        stdout().flush();
-    }}
-}
-
-macro_rules! error {
-    ($e:expr) => { error!("{}", $e); };
-    ($e:expr, $($y:expr),*) => {{
-        eprint!("\r\x1b[K\x1b[0;91m{}\x1b[0m\x1b[K", format!($e, $($y),*));
-        stdout().flush();
-    }}
-}
-
 impl UI {
     pub fn new() -> UI {
         UI {
@@ -65,6 +51,7 @@ impl UI {
             page: 0,
             dirty: true,
             running: true,
+            size: (0, 0),
         }
     }
 
@@ -93,7 +80,34 @@ impl UI {
         stdout.flush().unwrap();
 
         let action = self.process_page_input();
-        self.process_action(action).map_err(|e| error!(e));
+        self.process_action(action)
+            .map_err(|e| self.error(&e.to_string()));
+    }
+
+    // Display a status message to the user.
+    fn status(&self, s: &str) {
+        print!(
+            "{}{}{}{}{}",
+            "\x1b[93m",
+            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::clear::CurrentLine,
+            s,
+            color::Fg(color::Reset)
+        );
+        stdout().flush();
+    }
+
+    // Display an error message to the user.
+    fn error(&self, e: &str) {
+        print!(
+            "{}{}{}{}{}",
+            "\x1b[91m",
+            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::clear::CurrentLine,
+            e,
+            color::Fg(color::Reset)
+        );
+        stdout().flush();
     }
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
@@ -103,7 +117,7 @@ impl UI {
         }
 
         // gopher URL
-        status!("\x1b[90mLoading...");
+        self.status("\x1b[90mLoading...");
         let (typ, host, port, sel) = gopher::parse_url(url);
         gopher::fetch(host, port, sel)
             .and_then(|response| match typ {
@@ -120,6 +134,7 @@ impl UI {
 
     pub fn render(&mut self) -> String {
         if let Ok((cols, rows)) = termion::terminal_size() {
+            self.set_size(cols as usize, rows as usize);
             if !self.pages.is_empty() && self.page < self.pages.len() {
                 if let Some(page) = self.pages.get_mut(self.page) {
                     page.set_size(cols as usize, rows as usize);
@@ -133,6 +148,10 @@ impl UI {
                 "https://github.com/dvkt/phetch/issues/new"
             )
         }
+    }
+
+    fn set_size(&mut self, cols: usize, rows: usize) {
+        self.size = (cols, rows);
     }
 
     fn add_page<T: View + 'static>(&mut self, view: T) {
@@ -182,9 +201,15 @@ impl UI {
                     self.page += 1;
                 }
             }
+            Action::Keypress(Key::Ctrl('u')) => {
+                if let Some(page) = self.pages.get(self.page) {
+                    self.status(&format!("Current URL: {}", page.url()));
+                }
+            }
             Action::Keypress(Key::Ctrl('y')) => {
                 if let Some(page) = self.pages.get(self.page) {
-                    copy_to_clipboard(&page.url())?
+                    copy_to_clipboard(&page.url())?;
+                    self.status(&format!("Copied {} to clipboard.", page.url()));
                 }
             }
             _ => (),
@@ -204,10 +229,6 @@ fn copy_to_clipboard(data: &str) -> io::Result<()> {
         .and_then(|mut child| {
             let child_stdin = child.stdin.as_mut().unwrap();
             child_stdin.write_all(data.as_bytes())
-        })
-        .and_then(|_| {
-            status!("Copied URL to clipboard.");
-            Ok(())
         })
         .map_err(|e| io_error(format!("Clipboard error: {}", e)))
 }
