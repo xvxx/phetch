@@ -84,32 +84,6 @@ impl UI {
             .map_err(|e| self.error(&e.to_string()));
     }
 
-    // Display a status message to the user.
-    fn status(&self, s: &str) {
-        print!(
-            "{}{}{}{}{}",
-            "\x1b[93m",
-            termion::cursor::Goto(1, self.size.1 as u16),
-            termion::clear::CurrentLine,
-            s,
-            color::Fg(color::Reset)
-        );
-        stdout().flush();
-    }
-
-    // Display an error message to the user.
-    fn error(&self, e: &str) {
-        print!(
-            "{}{}{}{}{}",
-            "\x1b[91m",
-            termion::cursor::Goto(1, self.size.1 as u16),
-            termion::clear::CurrentLine,
-            e,
-            color::Fg(color::Reset)
-        );
-        stdout().flush();
-    }
-
     pub fn open(&mut self, url: &str) -> io::Result<()> {
         // non-gopher URL
         if !url.starts_with("gopher://") {
@@ -152,6 +126,89 @@ impl UI {
 
     fn set_size(&mut self, cols: usize, rows: usize) {
         self.size = (cols, rows);
+    }
+
+    // Display a status message to the user.
+    fn status(&self, s: &str) {
+        print!(
+            "{}{}{}{}{}",
+            "\x1b[93m",
+            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::clear::CurrentLine,
+            s,
+            color::Fg(color::Reset)
+        );
+        stdout().flush();
+    }
+
+    // Display an error message to the user.
+    fn error(&self, e: &str) {
+        print!(
+            "{}{}{}{}{}",
+            "\x1b[91m",
+            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::clear::CurrentLine,
+            e,
+            color::Fg(color::Reset)
+        );
+        stdout().flush();
+    }
+
+    // Prompt user for input.
+    fn prompt(&self, prompt: &str) -> Option<String> {
+        print!(
+            "{}{}{}{}{}",
+            color::Fg(color::Reset),
+            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::clear::CurrentLine,
+            prompt,
+            termion::cursor::Show,
+        );
+        stdout().flush();
+
+        let mut input = String::new();
+        for k in stdin().keys() {
+            if let Ok(key) = k {
+                match key {
+                    Key::Char('\n') => {
+                        print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
+                        stdout().flush();
+                        return Some(input);
+                    }
+                    Key::Char(c) => input.push(c),
+                    Key::Esc | Key::Ctrl('c') => {
+                        if input.is_empty() {
+                            print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
+                            stdout().flush();
+                            return None;
+                        } else {
+                            input.clear();
+                        }
+                    }
+                    Key::Backspace | Key::Delete => {
+                        input.pop();
+                    }
+                    _ => {}
+                }
+            } else {
+                break;
+            }
+
+            print!(
+                "{}{}{}{}",
+                termion::cursor::Goto(1, self.size.1 as u16),
+                termion::clear::CurrentLine,
+                prompt,
+                input,
+            );
+            stdout().flush();
+        }
+
+        if !input.is_empty() {
+            Some(input)
+        } else {
+            None
+        }
     }
 
     fn add_page<T: View + 'static>(&mut self, view: T) {
@@ -199,6 +256,15 @@ impl UI {
                 if self.page < self.pages.len() - 1 {
                     self.dirty = true;
                     self.page += 1;
+                }
+            }
+            Action::Keypress(Key::Ctrl('g')) => {
+                if let Some(url) = self.prompt("Go to URL: ") {
+                    if !url.contains("://") && !url.starts_with("gopher://") {
+                        self.open(&format!("gopher://{}", url))?;
+                    } else {
+                        self.open(&url)?;
+                    }
                 }
             }
             Action::Keypress(Key::Ctrl('u')) => {
