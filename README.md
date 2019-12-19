@@ -51,15 +51,12 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ### basics
 - [ ] download to ~/Downloads
-- [ ] prompt
-- [ ] go to URL
 - [ ] `?` to show all keyboard shortcuts
 - [ ] save history to file
 - [ ] load history from file
 - [ ] load most recent URL when opening without args
 - [ ] ipv6
 ### bonus
-- [ ] show loading spinner during gopher request
 - [ ] TLS
 - [ ] fuzzy find search links
     - https://github.com/stewart/rff
