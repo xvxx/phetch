@@ -19,7 +19,7 @@ pub enum Type {
     GIF,        // g |  4 | white underline
     Telnet3270, // T
     HTML,       // h | 92 | green
-    Image,      // I |
+    Image,      // I |  4 | white underline
     Info,       // i | 93 | yellow
     Sound,      // s |  4 | white underline
     Document,   // d |  4 | white underline
@@ -33,6 +33,7 @@ impl Type {
             | Type::UUEncoded
             | Type::Binary
             | Type::GIF
+            | Type::Image
             | Type::Sound
             | Type::Document => true,
             _ => false,
