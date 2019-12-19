@@ -225,6 +225,9 @@ impl MenuView {
                 }
             }
             Action::Redraw
+        } else if self.link > 0 {
+            self.link = 0;
+            Action::Redraw
         } else {
             Action::None
         }
@@ -275,6 +278,12 @@ impl MenuView {
 
     fn action_down(&mut self) -> Action {
         let count = self.links().len();
+
+        // last link selected but there is more content
+        if self.lines().len() > self.size.1 + self.scroll - 1 && self.link == count - 1 {
+            self.scroll += 1;
+            return Action::Redraw;
+        }
 
         if count > 0
             && self.link == count - 1
