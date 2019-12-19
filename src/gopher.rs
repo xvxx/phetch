@@ -2,6 +2,11 @@ use gopher;
 use std::io;
 use std::io::{Read, Write};
 use std::net::TcpStream;
+use std::net::ToSocketAddrs;
+use std::time::Duration;
+
+pub const TCP_TIMEOUT_IN_SECS: u64 = 1;
+pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum Type {
@@ -75,20 +80,29 @@ pub fn fetch_url(url: &str) -> io::Result<String> {
 pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
     let mut body = String::new();
     let selector = selector.replace('?', "\t"); // search queries
-    let stream = TcpStream::connect(format!("{}:{}", host, port))
-        .and_then(|mut stream| {
-            stream.write(format!("{}\r\n", selector).as_ref());
-            Ok(stream)
-        })
-        .and_then(|mut stream| {
-            stream.read_to_string(&mut body);
-            Ok(())
-        });
 
-    match stream {
-        Ok(_) => Ok(body),
-        Err(e) => Err(e),
-    }
+    format!("{}:{}", host, port)
+        .to_socket_addrs()
+        .and_then(|mut socks| {
+            socks
+                .next()
+                .ok_or(io::Error::new(
+                    io::ErrorKind::Other,
+                    "Can't create socket".to_string(),
+                ))
+                .and_then(|sock| {
+                    TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)
+                        .and_then(|mut stream| {
+                            stream.write(format!("{}\r\n", selector).as_ref());
+                            Ok(stream)
+                        })
+                        .and_then(|mut stream| {
+                            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
+                            stream.read_to_string(&mut body)?;
+                            Ok(body)
+                        })
+                })
+        })
 }
 
 // url parsing states
