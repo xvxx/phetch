@@ -46,12 +46,16 @@ pub trait View {
 
 impl UI {
     pub fn new() -> UI {
+        let mut size = (0, 0);
+        if let Ok((cols, rows)) = termion::terminal_size() {
+            size = (cols as usize, rows as usize);
+        }
         UI {
             pages: vec![],
             page: 0,
             dirty: true,
             running: true,
-            size: (0, 0),
+            size,
         }
     }
 
@@ -91,7 +95,11 @@ impl UI {
         }
 
         // gopher URL
-        self.status("\x1b[90mLoading...");
+        self.status(&format!(
+            "{}Loading...{}",
+            color::Fg(color::LightBlack),
+            termion::cursor::Show
+        ));
         let (typ, host, port, sel) = gopher::parse_url(url);
         gopher::fetch(host, port, sel)
             .and_then(|response| match typ {
