@@ -96,6 +96,12 @@ impl UI {
     }
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
+        // non-gopher URL
+        if !url.starts_with("gopher://") {
+            return open_external(url);
+        }
+
+        // gopher URL
         status!("\x1b[90mLoading...");
         let (typ, host, port, sel) = gopher::parse_url(url);
         gopher::fetch(host, port, sel)
@@ -219,4 +225,12 @@ fn spawn_os_clipboard() -> io::Result<process::Child> {
             .stdin(Stdio::piped())
             .spawn()
     }
+}
+
+// runs the `open` shell command
+fn open_external(url: &str) -> io::Result<()> {
+    process::Command::new("open")
+        .arg(url)
+        .output()
+        .and_then(|_| Ok(()))
 }

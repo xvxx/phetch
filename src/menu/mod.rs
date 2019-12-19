@@ -36,8 +36,38 @@ impl Menu {
                     None => continue,
                 };
 
-                // build string URL
+                // assemble line info
                 let parts: Vec<&str> = line.split_terminator('\t').collect();
+
+                let mut name = String::from("");
+                if !parts[0].is_empty() {
+                    name.push_str(&parts[0][1..]);
+                }
+                if typ != Type::Info {
+                    link += 1;
+                }
+                if name.len() > longest {
+                    longest = name.len();
+                }
+                let link = if typ == Type::Info { 0 } else { link };
+                if link > 0 {
+                    links.push(lines.len());
+                }
+
+                // check for URL:<url> syntax
+                if parts.len() > 1 {
+                    if &parts[1].chars().take(4).collect::<String>() == "URL:" {
+                        lines.push(Line {
+                            name,
+                            url: parts[1].chars().skip(4).collect::<String>(),
+                            typ,
+                            link,
+                        });
+                        continue;
+                    }
+                }
+
+                // assemble regular, gopher-style URL
                 let mut url = String::from("gopher://");
                 if parts.len() > 2 {
                     url.push_str(parts[2]); // host
@@ -50,33 +80,14 @@ impl Menu {
                         url.push_str(parts[3].trim_end_matches('\r'));
                     }
                 }
-
                 // auto-prepend gopher type to selector
                 if let Some(first_char) = parts[0].chars().nth(0) {
                     url.push_str("/");
                     url.push(first_char);
                 }
-
                 if parts.len() > 1 {
                     url.push_str(parts[1]); // selector
                 }
-                let mut name = String::from("");
-                if !parts[0].is_empty() {
-                    name.push_str(&parts[0][1..]);
-                }
-                if typ != Type::Info {
-                    link += 1;
-                }
-                let link = if typ == Type::Info { 0 } else { link };
-
-                if name.len() > longest {
-                    longest = name.len();
-                }
-
-                if link > 0 {
-                    links.push(lines.len());
-                }
-
                 lines.push(Line {
                     name,
                     url,
