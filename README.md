@@ -27,6 +27,15 @@
     phetch -h              # Show this screen.
     phetch -v              # Show phetch version.
 
+A `<gopher-url>` should be something like:
+
+- gopherproject.org
+- gopher://txtn.ws/
+- forthworks.com/1/atua
+- "gopher://gopherpedia.com/0/Gascon campaign of 1345"
+- "gopher://gopherpedia.com/7/lookup?computers"
+- gopher://localhost:7070/1/links/gopher
+
 ## installation
 
 Binaries for Linux and Mac are available at https://github.com/dvkt/phetch/releases
