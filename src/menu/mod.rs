@@ -24,7 +24,7 @@ impl Menu {
         Self::parse(url, gopher_response)
     }
 
-    fn parse(url: String, raw: String) -> Menu {
+    pub fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
         let mut links = vec![];
         let mut link = 0;
