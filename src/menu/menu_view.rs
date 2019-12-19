@@ -141,8 +141,10 @@ impl MenuView {
                 out.push_str(".\x1b[0m ");
             }
             // truncate long lines, instead of wrapping
-            let name = if line.name.len() + 6 > cols {
-                line.name.chars().take(cols - 6).collect::<String>()
+            let name = if line.name.len() > MAX_COLS {
+                let mut s = line.name.chars().take(MAX_COLS).collect::<String>();
+                s.push_str("...");
+                s
             } else {
                 line.name.to_string()
             };
