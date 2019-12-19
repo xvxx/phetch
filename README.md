@@ -27,6 +27,8 @@
     phetch -h              # Show this screen.
     phetch -v              # Show phetch version.
 
+Once you've launched `phetch`, use `Ctrl-H` to view the on-line help.
+
 ## installation
 
 Binaries for Linux and Mac are available at https://github.com/dvkt/phetch/releases:
