@@ -52,7 +52,7 @@ macro_rules! status {
 macro_rules! error {
     ($e:expr) => { error!("{}", $e); };
     ($e:expr, $($y:expr),*) => {{
-        eprint!("\r\x1b[0;91m{}\x1b[0m\x1b[K", format!($e, $($y),*));
+        eprint!("\r\x1b[K\x1b[0;91m{}\x1b[0m\x1b[K", format!($e, $($y),*));
         stdout().flush();
     }}
 }

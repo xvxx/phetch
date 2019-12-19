@@ -194,11 +194,13 @@ impl MenuView {
                 match dir {
                     LinkDir::Above => {
                         let scroll = self.scroll;
-                        // TODO not working
-                        if let Some(&pos) =
-                            self.links().iter().skip(self.link).find(|&&i| i >= scroll)
+                        if let Some(&pos) = self
+                            .links()
+                            .iter()
+                            .skip(self.link)
+                            .find(|&&i| i >= scroll - 1)
                         {
-                            self.link = pos;
+                            self.link = self.lines().get(pos).unwrap().link;
                         }
                     }
                     LinkDir::Below => {}
@@ -226,7 +228,12 @@ impl MenuView {
 
     fn action_up(&mut self) -> Action {
         if self.link == 0 {
-            return Action::None;
+            return if self.scroll > 0 {
+                self.scroll -= 1;
+                Action::Redraw
+            } else {
+                Action::None
+            };
         }
 
         let new_link = self.link - 1;
@@ -264,6 +271,17 @@ impl MenuView {
 
     fn action_down(&mut self) -> Action {
         let count = self.links().len();
+
+        if count > 0
+            && self.link == count - 1
+            && self.lines().len() > self.link
+            && self.scroll > SCROLL_LINES
+            && count > self.scroll - SCROLL_LINES
+        {
+            self.scroll += 1;
+            return Action::Redraw;
+        }
+
         let new_link = self.link + 1;
         if count > 0 && self.link < count - 1 {
             if let Some(dir) = self.link_visibility(new_link) {

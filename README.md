@@ -49,7 +49,6 @@
 
 ### Basics
 - [ ] MENU: page up/page down show next page, highlight first link
-- [ ] replace all panic! with errors
 - [ ] replace all unwrap/expect with errors
 - [ ] TLS
 - [ ] MENU: open HTML link in browser
