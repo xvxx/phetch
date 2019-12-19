@@ -105,3 +105,26 @@ impl Menu {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_simple_menu() {
+        let menu = Menu::parse(
+            "test".to_string(),
+            "
+i---------------------------------------------------------
+1SDF PHLOGOSPHERE (297 phlogs)	/phlogs/	gopher.club	70
+1SDF GOPHERSPACE (1303 ACTIVE users)	/maps/	sdf.org	70
+i---------------------------------------------------------
+"
+            .to_string(),
+        );
+        assert_eq!(menu.lines.len(), 4);
+        assert_eq!(menu.links.len(), 2);
+        assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
+        assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
+    }
+}
