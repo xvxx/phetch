@@ -320,8 +320,7 @@ pub fn prompt(prompt: &str) -> Option<String> {
 pub fn status(s: &str) {
     let (_cols, rows) = termion::terminal_size().unwrap();
     print!(
-        "{}{}{}{}{}",
-        "\x1b[93m",
+        "{}{}{}{}",
         termion::cursor::Goto(1, rows),
         termion::clear::CurrentLine,
         s,

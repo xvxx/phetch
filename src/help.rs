@@ -27,11 +27,6 @@ iPress the # of a link to visit
 ior select it. Use ENTER to open
 ithe selected link.
 i
-iJust start typing to select links.
-i 
-1text mode shortcuts	/text	help
-1menu mode shortcuts	/menu	help
-i
-1....some of my poetry	/poetry	help
+iTo select a link, start typing.
 i
 ";
