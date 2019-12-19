@@ -49,7 +49,6 @@
 
 ### Basics
 - [ ] TLS
-- [ ] MENU: open HTML link in browser
 - [ ] `?` to show all keyboard shortcuts
 - [ ] download to ~/Downloads
 - [ ] save history to file
