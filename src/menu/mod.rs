@@ -56,7 +56,7 @@ impl Menu {
 
                 // check for URL:<url> syntax
                 if parts.len() > 1 {
-                    if &parts[1].chars().take(4).collect::<String>() == "URL:" {
+                    if parts[1].starts_with("URL:") {
                         lines.push(Line {
                             name,
                             url: parts[1].chars().skip(4).collect::<String>(),

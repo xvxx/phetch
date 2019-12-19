@@ -39,21 +39,25 @@ fn main() {
         return;
     }
 
-    if !url.is_empty() && url.chars().nth(0).unwrap() == '-' {
+    if !url.is_empty() && url.starts_with('-') {
         eprintln!("unknown flag: {}\n", url);
         print_usage();
         exit(1);
     }
 
-    let mut ui = UI::new();
-    ui.open(url)
-        .or_else(|e| Err(fatal(&format!("\r\x1b[91m{}\x1b[0m", e))));
-    ui.run();
-}
+    let url = if url.starts_with("gopher://") {
+        url.to_string()
+    } else {
+        format!("gopher://{}", url)
+    };
 
-fn fatal(s: &str) {
-    eprintln!("{}", s);
-    exit(1);
+    let mut ui = UI::new();
+    ui.open(&url).or_else(|e| {
+        eprintln!("\r\x1b[91m{}\x1b[0m", e);
+        exit(1);
+        Err(e)
+    });
+    ui.run();
 }
 
 fn print_version() {
@@ -71,7 +75,13 @@ fn print_usage() {
 }
 
 fn print_raw(url: &str) {
-    gopher::fetch_url(url)
+    let url = if url.starts_with("gopher://") {
+        url.to_string()
+    } else {
+        format!("gopher://{}", url)
+    };
+
+    gopher::fetch_url(&url)
         .and_then(|x| {
             println!("{}", x);
             Ok(())
