@@ -29,6 +29,7 @@
 
 A `<gopher-url>` should be something like:
 
+- gopher.floodgap.com/1/gopher
 - gopherproject.org
 - gopher://txtn.ws/
 - forthworks.com/1/atua
@@ -56,16 +57,18 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 - http://ascii-table.com/ansi-escape-sequences.php
 - http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
 
-## TODO
+## todo
 
-### Basics
+### basics
 - [ ] download to ~/Downloads
+- [ ] prompt
+- [ ] go to URL
 - [ ] `?` to show all keyboard shortcuts
 - [ ] save history to file
 - [ ] load history from file
 - [ ] load most recent URL when opening without args
 - [ ] ipv6
-### Bonus
+### bonus
 - [ ] show loading spinner during gopher request
 - [ ] TLS
 - [ ] fuzzy find search links
@@ -74,7 +77,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 - [ ] detect SIGWINCH
     - https://github.com/BurntSushi/chan-signal
 
-## Screenies
+## screenies
 
 ![Links](./img/links.png)
 

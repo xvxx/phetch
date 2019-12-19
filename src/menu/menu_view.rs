@@ -330,9 +330,18 @@ impl MenuView {
         }
     }
 
-    fn action_select_link(&mut self, line: usize) -> Action {
-        if line < self.links().len() {
-            self.link = line;
+    fn action_select_link(&mut self, link: usize) -> Action {
+        if link < self.links().len() {
+            if let Some(&line) = self.links().get(link) {
+                if self.link_visibility(link) != Some(LinkDir::Visible) {
+                    if line > SCROLL_LINES {
+                        self.scroll = line - SCROLL_LINES;
+                    } else {
+                        self.scroll = 0;
+                    }
+                }
+            }
+            self.link = link;
             Action::Redraw
         } else {
             Action::None
