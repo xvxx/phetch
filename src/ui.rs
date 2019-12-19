@@ -16,10 +16,10 @@ pub const SCROLL_LINES: usize = 15;
 pub const MAX_COLS: usize = 72;
 
 pub struct UI {
-    pages: Vec<Box<dyn View>>,
-    page: usize,   // currently focused page
-    dirty: bool,   // redraw?
-    running: bool, // main ui loop running?
+    pages: Vec<Box<dyn View>>, // loaded views
+    page: usize,               // currently focused view
+    dirty: bool,               // redraw?
+    running: bool,             // main ui loop running?
 }
 
 #[derive(Debug)]
