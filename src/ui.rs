@@ -149,7 +149,7 @@ impl UI {
         let mut stdout = stdout().into_raw_mode().unwrap();
         stdout.flush().unwrap();
 
-        match self.process_page_input() {
+        match self.process_focused_page_input() {
             Action::Redraw => {
                 self.dirty = true;
                 Action::None
@@ -177,11 +177,11 @@ impl UI {
         }
     }
 
-    fn process_page_input(&mut self) -> Action {
+    fn process_focused_page_input(&mut self) -> Action {
         let stdin = stdin();
         let page_opt = self.pages.get_mut(self.page);
         if page_opt.is_none() {
-            return Action::None;
+            return Action::Error("No page loaded.".to_string());
         }
 
         let page = page_opt.unwrap();
