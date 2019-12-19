@@ -56,6 +56,7 @@
 - [ ] load history from file
 - [ ] load most recent URL when opening without args
 - [ ] async gopher request
+- [ ] open local files
 ### Bonus
 - [ ] fuzzy find search links
     - https://github.com/stewart/rff
