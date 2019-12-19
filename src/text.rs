@@ -1,6 +1,6 @@
 use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
-pub struct TextView {
+pub struct Text {
     url: String,
     raw_response: String,
     scroll: usize,        // offset
@@ -9,7 +9,7 @@ pub struct TextView {
     size: (usize, usize), // cols, rows
 }
 
-impl View for TextView {
+impl View for Text {
     fn url(&self) -> String {
         self.url.to_string()
     }
@@ -116,8 +116,8 @@ impl View for TextView {
     }
 }
 
-impl TextView {
-    pub fn from(url: String, response: String) -> TextView {
+impl Text {
+    pub fn from(url: String, response: String) -> Text {
         let mut lines = 0;
         let mut longest = 0;
         for line in response.split_terminator('\n') {
@@ -127,7 +127,7 @@ impl TextView {
             }
         }
 
-        TextView {
+        Text {
             url,
             raw_response: response,
             scroll: 0,

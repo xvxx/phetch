@@ -10,8 +10,8 @@ use gopher;
 use gopher::io_error;
 use gopher::Type;
 use help;
-use menu::MenuView;
-use text::TextView;
+use menu::Menu;
+use text::Text;
 
 pub type Key = termion::event::Key;
 
@@ -106,11 +106,9 @@ impl UI {
         gopher::fetch(host, port, sel)
             .and_then(|response| match typ {
                 Type::Menu | Type::Search => {
-                    Ok(self.add_page(MenuView::from(url.to_string(), response)))
+                    Ok(self.add_page(Menu::from(url.to_string(), response)))
                 }
-                Type::Text | Type::HTML => {
-                    Ok(self.add_page(TextView::from(url.to_string(), response)))
-                }
+                Type::Text | Type::HTML => Ok(self.add_page(Text::from(url.to_string(), response))),
                 _ => Err(io_error(format!("Unsupported Gopher Response: {:?}", typ))),
             })
             .map_err(|e| io_error(format!("Error loading {}: {} ({:?})", url, e, e.kind())))
@@ -189,7 +187,7 @@ impl UI {
                 if let Some(page) = self.pages.get(self.page) {
                     let url = page.url().to_string();
                     let raw = page.raw().to_string();
-                    self.add_page(TextView::from(url, raw));
+                    self.add_page(Text::from(url, raw));
                 }
             }
             Action::Keypress(Key::Ctrl('g')) => {
@@ -202,7 +200,7 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Ctrl('h')) => {
-                self.add_page(MenuView::from("help".into(), help::GOPHERMAP.into()));
+                self.add_page(Menu::from("help".into(), help::GOPHERMAP.into()));
             }
             Action::Keypress(Key::Ctrl('u')) => {
                 if let Some(page) = self.pages.get(self.page) {

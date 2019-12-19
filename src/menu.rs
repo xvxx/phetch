@@ -1,17 +1,27 @@
 use gopher;
 use gopher::Type;
-use menu::{Line, Menu};
 use std::io::stdout;
 use std::io::Write;
 use ui;
 use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
-pub struct MenuView {
+pub struct Menu {
+    pub url: String,          // gopher url
+    pub lines: Vec<Line>,     // lines
+    pub links: Vec<usize>,    // links (index of line in lines vec)
+    pub longest: usize,       // size of the longest line
+    pub raw: String,          // raw response
     pub input: String,        // user's inputted value
-    pub menu: Menu,           // data
     pub link: usize,          // selected link
     pub scroll: usize,        // scrolling offset
     pub size: (usize, usize), // cols, rows
+}
+
+pub struct Line {
+    pub name: String,
+    pub url: String,
+    pub typ: Type,
+    pub link: usize, // link #, if any
 }
 
 // direction of a given link relative to the visible screen
@@ -22,9 +32,9 @@ enum LinkDir {
     Visible,
 }
 
-impl View for MenuView {
+impl View for Menu {
     fn raw(&self) -> String {
-        self.menu.raw.to_string()
+        self.raw.to_string()
     }
 
     fn render(&self) -> String {
@@ -40,32 +50,18 @@ impl View for MenuView {
     }
 
     fn url(&self) -> String {
-        self.menu.url.to_string()
+        self.url.to_string()
     }
 }
 
-impl MenuView {
-    pub fn from(url: String, response: String) -> MenuView {
-        MenuView {
-            menu: Menu::from(url, response),
-            input: String::new(),
-            link: 0,
-            scroll: 0,
-            size: (0, 0),
-        }
-    }
-
-    fn lines(&self) -> &Vec<Line> {
-        &self.menu.lines
-    }
-
-    fn links(&self) -> &Vec<usize> {
-        &self.menu.links
+impl Menu {
+    pub fn from(url: String, response: String) -> Menu {
+        Self::parse(url, response)
     }
 
     fn link(&self, i: usize) -> Option<&Line> {
-        if let Some(line) = self.menu.links.get(i) {
-            self.menu.lines.get(*line)
+        if let Some(line) = self.links.get(i) {
+            self.lines.get(*line)
         } else {
             None
         }
@@ -73,7 +69,7 @@ impl MenuView {
 
     // is the given link visible on the screen right now?
     fn link_visibility(&self, i: usize) -> Option<LinkDir> {
-        if let Some(&pos) = self.links().get(i) {
+        if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
                 LinkDir::Above
             } else if pos >= self.scroll + self.size.1 - 1 {
@@ -100,11 +96,11 @@ impl MenuView {
             }};
         }
 
-        let iter = self.lines().iter().skip(self.scroll).take(rows - 1);
-        let longest = if self.menu.longest > MAX_COLS {
+        let iter = self.lines.iter().skip(self.scroll).take(rows - 1);
+        let longest = if self.longest > MAX_COLS {
             MAX_COLS
         } else {
-            self.menu.longest
+            self.longest
         };
         let indent = if longest > cols {
             String::from("")
@@ -154,9 +150,9 @@ impl MenuView {
             }
             out.push('\n');
         }
-        if self.lines().len() < rows {
+        if self.lines.len() < rows {
             // fill in empty space
-            out.push_str(&" \r\n".repeat(rows - 1 - self.lines().len()).to_string());
+            out.push_str(&" \r\n".repeat(rows - 1 - self.lines.len()).to_string());
         }
         out.push_str(&format!(
             "{}{}{}",
@@ -179,7 +175,7 @@ impl MenuView {
     }
 
     fn action_page_down(&mut self) -> Action {
-        let lines = self.lines().len();
+        let lines = self.lines.len();
         if lines > SCROLL_LINES && self.scroll < lines - SCROLL_LINES {
             self.scroll += SCROLL_LINES;
             if let Some(dir) = self.link_visibility(self.link) {
@@ -187,9 +183,9 @@ impl MenuView {
                     LinkDir::Above => {
                         let scroll = self.scroll;
                         if let Some(&pos) =
-                            self.links().iter().skip(self.link).find(|&&i| i >= scroll)
+                            self.links.iter().skip(self.link).find(|&&i| i >= scroll)
                         {
-                            self.link = self.lines().get(pos).unwrap().link - 1;
+                            self.link = self.lines.get(pos).unwrap().link - 1;
                         }
                     }
                     LinkDir::Below => {}
@@ -217,13 +213,13 @@ impl MenuView {
                     LinkDir::Below => {
                         let scroll = self.scroll;
                         if let Some(&pos) = self
-                            .links()
+                            .links
                             .iter()
                             .take(self.link)
                             .rev()
                             .find(|&&i| i < (self.size.1 + scroll - 2))
                         {
-                            self.link = self.lines().get(pos).unwrap().link;
+                            self.link = self.lines.get(pos).unwrap().link;
                         }
                     }
                     LinkDir::Above => {}
@@ -266,7 +262,7 @@ impl MenuView {
                 }
                 LinkDir::Below => {
                     // jump to link....
-                    if let Some(&pos) = self.links().get(new_link) {
+                    if let Some(&pos) = self.links.get(new_link) {
                         self.scroll = pos;
                         self.link = new_link;
                     }
@@ -283,17 +279,17 @@ impl MenuView {
     }
 
     fn action_down(&mut self) -> Action {
-        let count = self.links().len();
+        let count = self.links.len();
 
         // last link selected but there is more content
-        if self.lines().len() > self.size.1 + self.scroll - 1 && self.link == count - 1 {
+        if self.lines.len() > self.size.1 + self.scroll - 1 && self.link == count - 1 {
             self.scroll += 1;
             return Action::Redraw;
         }
 
         if count > 0
             && self.link == count - 1
-            && self.lines().len() > self.link
+            && self.lines.len() > self.link
             && self.scroll > SCROLL_LINES
             && count > self.scroll - SCROLL_LINES
         {
@@ -307,7 +303,7 @@ impl MenuView {
                 match dir {
                     LinkDir::Above => {
                         // jump to link....
-                        if let Some(&pos) = self.links().get(new_link) {
+                        if let Some(&pos) = self.links.get(new_link) {
                             self.scroll = pos;
                             self.link = new_link;
                         }
@@ -337,8 +333,8 @@ impl MenuView {
     }
 
     fn action_select_link(&mut self, link: usize) -> Action {
-        if link < self.links().len() {
-            if let Some(&line) = self.links().get(link) {
+        if link < self.links.len() {
+            if let Some(&line) = self.links.get(link) {
                 if self.link_visibility(link) != Some(LinkDir::Visible) {
                     if line > SCROLL_LINES {
                         self.scroll = line - SCROLL_LINES;
@@ -432,7 +428,7 @@ impl MenuView {
             }
             Key::Char(c) => {
                 self.input.push(c);
-                let count = self.links().len();
+                let count = self.links.len();
                 let input = &self.input;
 
                 // jump to <10 number
@@ -494,5 +490,130 @@ impl MenuView {
             }
             _ => Action::Keypress(key),
         }
+    }
+
+    // parse gopher response into a Menu object
+    pub fn parse(url: String, raw: String) -> Menu {
+        let mut lines = vec![];
+        let mut links = vec![];
+        let mut link = 0;
+        let mut longest = 0;
+        for line in raw.split_terminator('\n') {
+            if let Some(c) = line.chars().nth(0) {
+                let typ = match gopher::type_for_char(c) {
+                    Some(t) => t,
+                    None => continue,
+                };
+
+                // assemble line info
+                let parts: Vec<&str> = line.split_terminator('\t').collect();
+
+                let mut name = String::from("");
+                if !parts[0].is_empty() {
+                    name.push_str(&parts[0][1..]);
+                }
+                if typ != Type::Info {
+                    link += 1;
+                }
+                if name.len() > longest {
+                    longest = name.len();
+                }
+                let link = if typ == Type::Info { 0 } else { link };
+                if link > 0 {
+                    links.push(lines.len());
+                }
+
+                // check for URL:<url> syntax
+                if parts.len() > 1 {
+                    if parts[1].starts_with("URL:") {
+                        lines.push(Line {
+                            name,
+                            url: parts[1].chars().skip(4).collect::<String>(),
+                            typ,
+                            link,
+                        });
+                        continue;
+                    }
+                }
+
+                // assemble regular, gopher-style URL
+                let mut url = String::from("gopher://");
+                if parts.len() > 2 {
+                    url.push_str(parts[2]); // host
+                }
+                // port
+                if parts.len() > 3 {
+                    let port = parts[3].trim_end_matches('\r');
+                    if port != "70" {
+                        url.push(':');
+                        url.push_str(parts[3].trim_end_matches('\r'));
+                    }
+                }
+                // auto-prepend gopher type to selector
+                if let Some(first_char) = parts[0].chars().nth(0) {
+                    url.push_str("/");
+                    url.push(first_char);
+                    // add trailing / if the selector is blank
+                    if parts.len() == 0 || parts.len() > 1 && parts[1].len() == 0 {
+                        url.push('/');
+                    }
+                }
+                if parts.len() > 1 {
+                    url.push_str(parts[1]); // selector
+                }
+                lines.push(Line {
+                    name,
+                    url,
+                    typ,
+                    link,
+                });
+            }
+        }
+
+        Menu {
+            url,
+            lines,
+            links,
+            longest,
+            raw,
+            input: String::new(),
+            link: 0,
+            scroll: 0,
+            size: (0, 0),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    macro_rules! parse {
+        ($s:literal) => {
+            Menu::parse("test".to_string(), $s.to_string());
+        };
+    }
+
+    #[test]
+    fn test_simple_menu() {
+        let menu = parse!(
+            "
+i---------------------------------------------------------
+1SDF PHLOGOSPHERE (297 phlogs)	/phlogs/	gopher.club	70
+1SDF GOPHERSPACE (1303 ACTIVE users)	/maps/	sdf.org	70
+i---------------------------------------------------------
+"
+        );
+        assert_eq!(menu.lines.len(), 4);
+        assert_eq!(menu.links.len(), 2);
+        assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
+        assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
+    }
+
+    #[test]
+    fn test_no_path() {
+        let menu = parse!("1Circumlunar Space		circumlunar.space	70");
+        assert_eq!(menu.links.len(), 1);
+        assert_eq!(menu.lines[0].url, "gopher://circumlunar.space/1/");
     }
 }
