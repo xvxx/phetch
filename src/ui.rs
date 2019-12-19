@@ -108,8 +108,9 @@ impl UI {
             }
             String::from("No content to display.")
         } else {
-            String::from(
-                "Error getting terminal size. Please file a bug: https://github.com/dvkt/phetch",
+            format!(
+                "Error getting terminal size. Please file a bug: {}",
+                "https://github.com/dvkt/phetch/issues/new"
             )
         }
     }
