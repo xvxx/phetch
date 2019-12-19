@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./phetch.png">
+    <img src="./img/logo.png">
     <br> <br>
     <a href="LICENSE">
         <img src="https://img.shields.io/badge/license-MIT-blueviolet?style=flat-square">
