@@ -14,15 +14,15 @@
 
 `phetch` is a terminal gopher client designed for quick keyboard navigation. It is the spiritual successor to [GILD](https://github.com/dvkt/gild).
 
-## features
+**features:**
 
-- small (<1MB) executable for linux and macos
+- small (<1MB) executable for linux and mac
 - technicolor design
 - no nonsense keyboard navigation
 
 ## usage
 
-    phetch <gopher-url>    # Show GopherHole at URL
+    phetch <gopher-url>    # Show Gopherhole at URL
     phetch -r <gopher-url> # Print raw Gopher response.
     phetch -h              # Show this screen.
     phetch -v              # Show phetch version.
@@ -30,6 +30,8 @@
 ## installation
 
 Binaries for Linux and Mac are available at https://github.com/dvkt/phetch/releases
+
+Just unzip/untar the `phetch` program into your $PATH get going!
 
 You can also build from source using `cargo build --release`, if you want. 
 
