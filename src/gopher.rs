@@ -19,6 +19,7 @@ pub enum Type {
     GIF = 'g' as isize,        // g |  4 | white underline
     Telnet3270 = 'T' as isize, // T
     HTML = 'h' as isize,       // h | 92 | green
+    Image = 'I' as isize,      // I |
     Info = 'i' as isize,       // i | 93 | yellow
     Sound = 's' as isize,      // s |  4 | white underline
     Document = 'd' as isize,   // d |  4 | white underline
@@ -55,6 +56,7 @@ pub fn type_for_char(c: char) -> Option<Type> {
         'g' => Some(Type::GIF),
         'T' => Some(Type::Telnet3270),
         'h' => Some(Type::HTML),
+        'I' => Some(Type::Image),
         'i' => Some(Type::Info),
         's' => Some(Type::Sound),
         'd' => Some(Type::Document),
