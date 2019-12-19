@@ -88,6 +88,6 @@ fn print_raw(url: &str) {
         })
         .map_err(|e| {
             eprintln!("{}", e);
-            std::process::exit(1);
+            exit(1);
         });
 }
