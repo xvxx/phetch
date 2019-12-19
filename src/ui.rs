@@ -162,63 +162,6 @@ impl UI {
         stdout().flush();
     }
 
-    // Prompt user for input.
-    fn prompt(&self, prompt: &str) -> Option<String> {
-        print!(
-            "{}{}{}{}{}",
-            color::Fg(color::Reset),
-            termion::cursor::Goto(1, self.size.1 as u16),
-            termion::clear::CurrentLine,
-            prompt,
-            termion::cursor::Show,
-        );
-        stdout().flush();
-
-        let mut input = String::new();
-        for k in stdin().keys() {
-            if let Ok(key) = k {
-                match key {
-                    Key::Char('\n') => {
-                        print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
-                        stdout().flush();
-                        return Some(input);
-                    }
-                    Key::Char(c) => input.push(c),
-                    Key::Esc | Key::Ctrl('c') => {
-                        if input.is_empty() {
-                            print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
-                            stdout().flush();
-                            return None;
-                        } else {
-                            input.clear();
-                        }
-                    }
-                    Key::Backspace | Key::Delete => {
-                        input.pop();
-                    }
-                    _ => {}
-                }
-            } else {
-                break;
-            }
-
-            print!(
-                "{}{}{}{}",
-                termion::cursor::Goto(1, self.size.1 as u16),
-                termion::clear::CurrentLine,
-                prompt,
-                input,
-            );
-            stdout().flush();
-        }
-
-        if !input.is_empty() {
-            Some(input)
-        } else {
-            None
-        }
-    }
-
     fn add_page<T: View + 'static>(&mut self, view: T) {
         self.dirty = true;
         if !self.pages.is_empty() && self.page < self.pages.len() - 1 {
@@ -267,7 +210,7 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Ctrl('g')) => {
-                if let Some(url) = self.prompt("Go to URL: ") {
+                if let Some(url) = prompt("Go to URL: ") {
                     if !url.contains("://") && !url.starts_with("gopher://") {
                         self.open(&format!("gopher://{}", url))?;
                     } else {
@@ -326,4 +269,63 @@ fn open_external(url: &str) -> io::Result<()> {
         .arg(url)
         .output()
         .and_then(|_| Ok(()))
+}
+
+/// Prompt user for input and return what was entered, if anything.
+pub fn prompt(prompt: &str) -> Option<String> {
+    let (_cols, rows) = termion::terminal_size().unwrap();
+
+    print!(
+        "{}{}{}{}{}",
+        color::Fg(color::Reset),
+        termion::cursor::Goto(1, rows),
+        termion::clear::CurrentLine,
+        prompt,
+        termion::cursor::Show,
+    );
+    stdout().flush();
+
+    let mut input = String::new();
+    for k in stdin().keys() {
+        if let Ok(key) = k {
+            match key {
+                Key::Char('\n') => {
+                    print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
+                    stdout().flush();
+                    return Some(input);
+                }
+                Key::Char(c) => input.push(c),
+                Key::Esc | Key::Ctrl('c') => {
+                    if input.is_empty() {
+                        print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
+                        stdout().flush();
+                        return None;
+                    } else {
+                        input.clear();
+                    }
+                }
+                Key::Backspace | Key::Delete => {
+                    input.pop();
+                }
+                _ => {}
+            }
+        } else {
+            break;
+        }
+
+        print!(
+            "{}{}{}{}",
+            termion::cursor::Goto(1, rows),
+            termion::clear::CurrentLine,
+            prompt,
+            input,
+        );
+        stdout().flush();
+    }
+
+    if !input.is_empty() {
+        Some(input)
+    } else {
+        None
+    }
 }

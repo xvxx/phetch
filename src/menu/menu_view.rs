@@ -3,7 +3,7 @@ use gopher::Type;
 use menu::{Line, Menu};
 use std::io::stdout;
 use std::io::Write;
-use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
+use ui::{prompt, Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct MenuView {
     pub input: String,        // user's inputted value
@@ -11,8 +11,6 @@ pub struct MenuView {
     pub link: usize,          // selected link
     pub scroll: usize,        // scrolling offset
     pub size: (usize, usize), // cols, rows
-    pub prompt: String,       // input prompt, if any
-    pub state: State,         // view state
 }
 
 #[derive(PartialEq)]
@@ -55,8 +53,6 @@ impl MenuView {
             link: 0,
             scroll: 0,
             size: (0, 0),
-            state: State::Default,
-            prompt: String::new(),
         }
     }
 
@@ -164,10 +160,9 @@ impl MenuView {
             out.push_str(&" \r\n".repeat(rows - 1 - self.lines().len()).to_string());
         }
         out.push_str(&format!(
-            "{}{}{}{}",
+            "{}{}{}",
             termion::cursor::Goto(1, self.size.1 as u16),
             termion::clear::CurrentLine,
-            self.prompt,
             self.input
         ));
         out
@@ -175,10 +170,9 @@ impl MenuView {
 
     fn redraw_input(&self) -> Action {
         print!(
-            "{}{}{}{}",
+            "{}{}{}",
             termion::cursor::Goto(1, self.size.1 as u16),
             termion::clear::CurrentLine,
-            self.prompt,
             self.input
         );
         stdout().flush();
@@ -377,9 +371,11 @@ impl MenuView {
             let url = line.url.to_string();
             let (typ, _, _, _) = gopher::parse_url(&url);
             if typ == Type::Search {
-                self.prompt = format!("{}> ", line.name);
-                self.state = State::Search;
-                self.redraw_input()
+                if let Some(query) = prompt(&format!("{}> ", line.name)) {
+                    Action::Open(format!("{}?{}", url, query))
+                } else {
+                    Action::None
+                }
             } else {
                 Action::Open(url)
             }
@@ -388,57 +384,7 @@ impl MenuView {
         }
     }
 
-    fn process_search_keypress(&mut self, key: Key) -> Action {
-        match key {
-            Key::Char('\n') => {
-                self.state = State::Default;
-                self.prompt.clear();
-                if let Some(link) = self.link(self.link) {
-                    let url = format!("{}?{}", link.url, self.input);
-                    self.input.clear();
-                    Action::Open(url)
-                } else {
-                    self.input.clear();
-                    Action::Error("Error searching".to_string())
-                }
-            }
-            Key::Backspace | Key::Delete => {
-                self.input.pop();
-                self.redraw_input()
-            }
-            Key::Esc => {
-                if !self.input.is_empty() {
-                    self.input.clear();
-                    self.redraw_input()
-                } else {
-                    self.state = State::Default;
-                    self.prompt.clear();
-                    self.redraw_input()
-                }
-            }
-            Key::Ctrl('c') => {
-                if !self.input.is_empty() {
-                    self.input.clear();
-                    self.redraw_input()
-                } else {
-                    self.state = State::Default;
-                    self.prompt.clear();
-                    self.redraw_input()
-                }
-            }
-            Key::Char(c) => {
-                self.input.push(c);
-                self.redraw_input()
-            }
-            _ => Action::Keypress(key),
-        }
-    }
-
     fn process_key(&mut self, key: Key) -> Action {
-        if self.state == State::Search {
-            return self.process_search_keypress(key);
-        }
-
         match key {
             Key::Char('\n') => self.action_open(),
             Key::Up | Key::Ctrl('p') => self.action_up(),
