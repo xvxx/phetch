@@ -28,5 +28,10 @@ ior select it. Use ENTER to open
 ithe selected link.
 i
 iTo select a link, start typing.
+i 
+i            ~ * ~
+i
+1about phetch	/phlog	help
+hvisit homepage	URL:https://github.com/dvkt/phetch
 i
 ";
