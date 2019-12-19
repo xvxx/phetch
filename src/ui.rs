@@ -6,6 +6,7 @@ use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 
 use gopher;
+use gopher::io_error;
 use gopher::Type;
 use menu::MenuView;
 use text::TextView;
@@ -112,12 +113,9 @@ impl UI {
                 Type::Text | Type::HTML => {
                     Ok(self.add_page(TextView::from(url.to_string(), response)))
                 }
-                _ => Err(io::Error::new(
-                    io::ErrorKind::Other,
-                    format!("Unsupported Gopher Response: {:?}", typ),
-                )),
+                _ => Err(io_error(format!("Unsupported Gopher Response: {:?}", typ))),
             })
-            .map_err(|e| io::Error::new(e.kind(), format!("Error loading {}: {}", url, e)))
+            .map_err(|e| io_error(format!("Error loading {}: {} ({:?})", url, e, e.kind())))
     }
 
     pub fn render(&mut self) -> String {
@@ -169,7 +167,7 @@ impl UI {
             Action::Quit | Action::Keypress(Key::Ctrl('q')) | Action::Keypress(Key::Ctrl('c')) => {
                 self.running = false
             }
-            Action::Error(e) => return Err(io::Error::new(io::ErrorKind::Other, e)),
+            Action::Error(e) => return Err(io_error(e)),
             Action::Redraw => self.dirty = true,
             Action::Open(url) => self.open(&url)?,
             Action::Back | Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
@@ -211,7 +209,7 @@ fn copy_to_clipboard(data: &str) -> io::Result<()> {
             status!("Copied URL to clipboard.");
             Ok(())
         })
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Clipboard error: {}", e)))
+        .map_err(|e| io_error(format!("Clipboard error: {}", e)))
 }
 
 fn spawn_os_clipboard() -> io::Result<process::Child> {

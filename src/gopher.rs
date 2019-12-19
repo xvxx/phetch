@@ -70,6 +70,11 @@ pub fn type_for_char(c: char) -> Option<Type> {
     }
 }
 
+// produces an io::Error more easily
+pub fn io_error(msg: String) -> io::Error {
+    io::Error::new(io::ErrorKind::Other, msg)
+}
+
 // Fetches a gopher URL and returns a raw Gopher response.
 pub fn fetch_url(url: &str) -> io::Result<String> {
     let (_, host, port, sel) = parse_url(url);
@@ -86,10 +91,7 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
         .and_then(|mut socks| {
             socks
                 .next()
-                .ok_or(io::Error::new(
-                    io::ErrorKind::Other,
-                    "Can't create socket".to_string(),
-                ))
+                .ok_or(io_error("Can't create socket".to_string()))
                 .and_then(|sock| {
                     TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)
                         .and_then(|mut stream| {
