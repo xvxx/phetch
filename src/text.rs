@@ -2,7 +2,7 @@ use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct TextView {
     url: String,
-    raw: String,
+    raw_response: String,
     scroll: usize,        // offset
     lines: usize,         // # of lines
     longest: usize,       // longest line
@@ -12,6 +12,10 @@ pub struct TextView {
 impl View for TextView {
     fn url(&self) -> String {
         self.url.to_string()
+    }
+
+    fn raw(&self) -> String {
+        self.raw_response.to_string()
     }
 
     fn set_size(&mut self, cols: usize, rows: usize) {
@@ -95,7 +99,7 @@ impl View for TextView {
             String::from("")
         };
         let iter = self
-            .raw
+            .raw_response
             .split_terminator('\n')
             .skip(self.scroll)
             .take(rows - 1);
@@ -125,7 +129,7 @@ impl TextView {
 
         TextView {
             url,
-            raw: response,
+            raw_response: response,
             scroll: 0,
             lines,
             longest,

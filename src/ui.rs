@@ -9,6 +9,7 @@ use termion::raw::IntoRawMode;
 use gopher;
 use gopher::io_error;
 use gopher::Type;
+use help;
 use menu::MenuView;
 use text::TextView;
 
@@ -41,6 +42,7 @@ pub trait View {
     fn process_input(&mut self, c: Key) -> Action;
     fn render(&self) -> String;
     fn url(&self) -> String;
+    fn raw(&self) -> String;
     fn set_size(&mut self, cols: usize, rows: usize);
 }
 
@@ -85,7 +87,7 @@ impl UI {
 
         let action = self.process_page_input();
         self.process_action(action)
-            .map_err(|e| self.error(&e.to_string()));
+            .map_err(|e| error(&e.to_string()));
     }
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
@@ -95,7 +97,7 @@ impl UI {
         }
 
         // gopher URL
-        self.status(&format!(
+        status(&format!(
             "{}Loading...{}",
             color::Fg(color::LightBlack),
             termion::cursor::Show
@@ -134,32 +136,6 @@ impl UI {
 
     fn set_size(&mut self, cols: usize, rows: usize) {
         self.size = (cols, rows);
-    }
-
-    // Display a status message to the user.
-    fn status(&self, s: &str) {
-        print!(
-            "{}{}{}{}{}",
-            "\x1b[93m",
-            termion::cursor::Goto(1, self.size.1 as u16),
-            termion::clear::CurrentLine,
-            s,
-            color::Fg(color::Reset)
-        );
-        stdout().flush();
-    }
-
-    // Display an error message to the user.
-    pub fn error(&self, e: &str) {
-        print!(
-            "{}{}{}{}{}",
-            "\x1b[91m",
-            termion::cursor::Goto(1, self.size.1 as u16),
-            termion::clear::CurrentLine,
-            e,
-            color::Fg(color::Reset)
-        );
-        stdout().flush();
     }
 
     fn add_page<T: View + 'static>(&mut self, view: T) {
@@ -209,6 +185,13 @@ impl UI {
                     self.page += 1;
                 }
             }
+            Action::Keypress(Key::Ctrl('r')) => {
+                if let Some(page) = self.pages.get(self.page) {
+                    let url = page.url().to_string();
+                    let raw = page.raw().to_string();
+                    self.add_page(TextView::from(url, raw));
+                }
+            }
             Action::Keypress(Key::Ctrl('g')) => {
                 if let Some(url) = prompt("Go to URL: ") {
                     if !url.contains("://") && !url.starts_with("gopher://") {
@@ -218,15 +201,18 @@ impl UI {
                     }
                 }
             }
+            Action::Keypress(Key::Ctrl('h')) => {
+                self.add_page(MenuView::from("help".into(), help::GOPHERMAP.into()));
+            }
             Action::Keypress(Key::Ctrl('u')) => {
                 if let Some(page) = self.pages.get(self.page) {
-                    self.status(&format!("Current URL: {}", page.url()));
+                    status(&format!("Current URL: {}", page.url()));
                 }
             }
             Action::Keypress(Key::Ctrl('y')) => {
                 if let Some(page) = self.pages.get(self.page) {
                     copy_to_clipboard(&page.url())?;
-                    self.status(&format!("Copied {} to clipboard.", page.url()));
+                    status(&format!("Copied {} to clipboard.", page.url()));
                 }
             }
             _ => (),
@@ -328,4 +314,32 @@ pub fn prompt(prompt: &str) -> Option<String> {
     } else {
         None
     }
+}
+
+// Display a status message to the user.
+pub fn status(s: &str) {
+    let (_cols, rows) = termion::terminal_size().unwrap();
+    print!(
+        "{}{}{}{}{}",
+        "\x1b[93m",
+        termion::cursor::Goto(1, rows),
+        termion::clear::CurrentLine,
+        s,
+        color::Fg(color::Reset)
+    );
+    stdout().flush();
+}
+
+// Display an error message to the user.
+pub fn error(e: &str) {
+    let (_cols, rows) = termion::terminal_size().unwrap();
+    print!(
+        "{}{}{}{}{}",
+        "\x1b[91m",
+        termion::cursor::Goto(1, rows),
+        termion::clear::CurrentLine,
+        e,
+        color::Fg(color::Reset)
+    );
+    stdout().flush();
 }

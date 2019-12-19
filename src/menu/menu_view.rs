@@ -3,7 +3,8 @@ use gopher::Type;
 use menu::{Line, Menu};
 use std::io::stdout;
 use std::io::Write;
-use ui::{prompt, Action, Key, View, MAX_COLS, SCROLL_LINES};
+use ui;
+use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct MenuView {
     pub input: String,        // user's inputted value
@@ -24,6 +25,10 @@ enum LinkDir {
 impl View for MenuView {
     fn render(&self) -> String {
         self.render_lines()
+    }
+
+    fn raw(&self) -> String {
+        self.menu.raw.to_string()
     }
 
     fn process_input(&mut self, key: Key) -> Action {
@@ -365,7 +370,7 @@ impl MenuView {
             let url = line.url.to_string();
             let (typ, _, _, _) = gopher::parse_url(&url);
             if typ == Type::Search {
-                if let Some(query) = prompt(&format!("{}> ", line.name)) {
+                if let Some(query) = ui::prompt(&format!("{}> ", line.name)) {
                     Action::Open(format!("{}?{}", url, query))
                 } else {
                     Action::None

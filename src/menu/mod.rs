@@ -9,6 +9,7 @@ pub struct Menu {
     pub lines: Vec<Line>,  // lines
     pub links: Vec<usize>, // links (index of line in lines vec)
     pub longest: usize,    // size of the longest line
+    pub raw: String,       // raw response
 }
 
 #[derive(Debug)]
@@ -85,7 +86,7 @@ impl Menu {
                     url.push_str("/");
                     url.push(first_char);
                     // add trailing / if the selector is blank
-                    if parts.len() == 0 || parts[1].len() == 0 {
+                    if parts.len() == 0 || parts.len() > 1 && parts[1].len() == 0 {
                         url.push('/');
                     }
                 }
@@ -106,6 +107,7 @@ impl Menu {
             lines,
             links,
             longest,
+            raw,
         }
     }
 }

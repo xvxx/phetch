@@ -3,6 +3,7 @@
 extern crate termion;
 
 mod gopher;
+mod help;
 mod menu;
 mod text;
 mod ui;
@@ -53,7 +54,7 @@ fn main() {
 
     let mut ui = UI::new();
     if let Err(e) = ui.open(&url) {
-        ui.error(&e.to_string());
+        ui::error(&e.to_string());
         exit(1);
     }
     ui.run();
