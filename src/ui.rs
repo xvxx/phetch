@@ -204,6 +204,10 @@ impl UI {
         let dotdir = dotdir.unwrap();
         let mut out = String::new();
         for page in &self.pages {
+            let url = page.url();
+            if url.starts_with("gopher://help/") {
+                continue;
+            }
             out.push_str(&page.url());
             out.push('\n');
         }

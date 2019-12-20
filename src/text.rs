@@ -1,4 +1,3 @@
-use ui;
 use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct Text {

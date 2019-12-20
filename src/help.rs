@@ -3,9 +3,33 @@ pub fn lookup(name: &str) -> Option<&str> {
         "" | "/" | "help" => Some(HELP),
         "types" => Some(TYPES),
         "nav" => Some(NAV),
+        "home" => Some(HOME),
         _ => None,
     }
 }
+
+pub const HOME: &str = "
+i
+i
+i      /         /         /   
+i ___ (___  ___ (___  ___ (___ 
+i|   )|   )|___)|    |    |   )
+i|__/ |  / |__  |__  |__  |  / 
+i|   
+i
+i~ the quick lil gopher client ~
+i
+7search gopher	/v2/vs	gopher.floodgap.com
+i
+1welcome to gopherspace	/gopher	gopher.floodgap.com
+1gopher lawn	/lawn	bitreich.org
+i 
+i            ~ * ~
+i
+1phetch help (ctrl+h)	/	help
+hphetch homepage	URL:https://github.com/dvkt/phetch
+i
+";
 
 pub const HELP: &str = "
 i
@@ -26,9 +50,9 @@ ipage up    scroll page up
 ipage down  scroll page down
 i
 ictrl-g     go to gopher url
-ictrl-u     show current gopher url
+ictrl-u     show gopher url
 ictrl-y     copy url to clipboard
-ictrl-r     view raw version of page
+ictrl-r     view raw source
 ictrl-w     toggle wide mode 
 i 
 i            ~ * ~
@@ -122,4 +146,7 @@ i
 +Mirrors
 TTelnet3270
 i
+hGopher is RFC 1436
+hGopher is RFC 1436	/html/rfc1436	help
+i  https://tools.ietf.org/html/rfc1436
 ";

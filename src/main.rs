@@ -12,12 +12,11 @@ use ui::UI;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    if args.len() < 2 {
-        print_usage();
-        return;
-    }
-
-    let url = args.get(1).unwrap();
+    let url = if args.len() < 2 {
+        "gopher://help/1/home"
+    } else {
+        args.get(1).unwrap()
+    };
 
     if url == "--raw" || url == "-r" || url == "-raw" {
         if args.len() > 2 {
@@ -67,6 +66,7 @@ fn print_version() {
 fn print_usage() {
     println!(
         "\x1B[93;1mUsage:\x1B[0m 
+    phetch                           # Launch and show start page.
     phetch <gopher-url>              # Open Gopherhole at URL.
     phetch -r, --raw <gopher-url>    # Print raw Gopher response.
     phetch -h, --help                # Show this screen.

@@ -22,12 +22,11 @@
 
 ## usage
 
+    phetch                 # Launch and show start page.
     phetch <gopher-url>    # Show Gopherhole at URL
     phetch -r <gopher-url> # Print raw Gopher response.
     phetch -h              # Show this screen.
     phetch -v              # Show phetch version.
-
-Once you've launched `phetch`, use `Ctrl-H` to view the on-line help.
 
 ## installation
 
@@ -54,18 +53,11 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ### basics
 - [ ] download to ~/Downloads
     gopher://zaibatsu.circumlunar.space/1/~cardboard64/
-- [ ] save history to file
-- [ ] load history from file
-- [ ] load most recent URL when opening without args
 - [ ] ipv6
 - [ ] flesh out help
-### bonus
-- [ ] TLS
-- [ ] fuzzy find search links
-    - https://github.com/stewart/rff
-    - https://github.com/Schlechtwetterfront/fuzzy-rs
-- [ ] detect SIGWINCH
-    - https://github.com/BurntSushi/chan-signal
+### bugs
+- [ ] `open` for irc links
+- [ ] gopher lawn is truncate
 
 ## screenies
 

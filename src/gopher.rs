@@ -5,7 +5,7 @@ use std::net::TcpStream;
 use std::net::ToSocketAddrs;
 use std::time::Duration;
 
-pub const TCP_TIMEOUT_IN_SECS: u64 = 4;
+pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
 pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
 #[derive(Copy, Clone, PartialEq, Debug)]
