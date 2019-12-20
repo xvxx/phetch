@@ -1,3 +1,6 @@
+mod view;
+pub use self::view::View;
+
 use std::io;
 use std::io::{stdin, stdout, BufRead, BufReader, Write};
 use std::process;

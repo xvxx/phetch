@@ -7,7 +7,6 @@ mod help;
 mod menu;
 mod text;
 mod ui;
-mod view;
 use std::process::exit;
 use ui::UI;
 
