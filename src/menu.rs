@@ -351,12 +351,8 @@ impl Menu {
 
     fn action_follow_link(&mut self, link: usize) -> Action {
         self.input.clear();
-        if let Some(line) = self.link(link) {
-            let url = line.url.to_string();
-            Action::Open(url)
-        } else {
-            Action::None
-        }
+        self.action_select_link(link);
+        self.action_open()
     }
 
     fn action_open(&mut self) -> Action {
