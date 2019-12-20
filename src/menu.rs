@@ -545,7 +545,7 @@ impl Menu {
                     if parts[1].starts_with("URL:") {
                         lines.push(Line {
                             name,
-                            url: parts[1].chars().skip(4).collect::<String>(),
+                            url: parts[1].trim_start_matches("URL:").to_string(),
                             typ,
                             link,
                         });

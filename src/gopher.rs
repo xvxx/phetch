@@ -166,3 +166,49 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
 
     (typ, host, port, sel)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_simple_parse() {
+        let urls = vec![
+            "gopher://gopher.club/1/phlogs/",
+            "gopher://sdf.org:7777/1/maps",
+            "gopher.floodgap.org",
+            "gopher.floodgap.com/0/gopher/relevance.txt",
+            "gopher://gopherpedia.com/7/lookup?Gopher",
+        ];
+
+        let (typ, host, port, sel) = parse_url(urls[0]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "gopher.club");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/phlogs/");
+
+        let (typ, host, port, sel) = parse_url(urls[1]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "sdf.org");
+        assert_eq!(port, "7777");
+        assert_eq!(sel, "/maps");
+
+        let (typ, host, port, sel) = parse_url(urls[2]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "gopher.floodgap.org");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/");
+
+        let (typ, host, port, sel) = parse_url(urls[3]);
+        assert_eq!(typ, Type::Text);
+        assert_eq!(host, "gopher.floodgap.com");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/gopher/relevance.txt");
+
+        let (typ, host, port, sel) = parse_url(urls[4]);
+        assert_eq!(typ, Type::Search);
+        assert_eq!(host, "gopherpedia.com");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/lookup?Gopher");
+    }
+}
