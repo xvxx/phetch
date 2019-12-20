@@ -1,5 +1,5 @@
 use std::io;
-use std::io::{stdin, stdout, Write};
+use std::io::{stdin, stdout, BufRead, BufReader, Write};
 use std::process;
 use std::process::Stdio;
 use termion::color;
@@ -11,6 +11,7 @@ use gopher::io_error;
 use gopher::Type;
 use help;
 use menu::Menu;
+use stub::Stub;
 use text::Text;
 
 pub type Key = termion::event::Key;
@@ -62,6 +63,7 @@ impl UI {
     }
 
     pub fn run(&mut self) {
+        self.startup();
         while self.running {
             self.draw();
             self.update();
@@ -158,33 +160,64 @@ impl UI {
         }
     }
 
+    fn startup(&mut self) {
+        self.load_history();
+    }
+
     fn shutdown(&self) {
         self.save_history();
     }
 
-    fn save_history(&self) {
-        use std::fs::OpenOptions;
-        use std::path::Path;
-
+    fn config_dir_path(&self) -> Option<std::path::PathBuf> {
         let homevar = std::env::var("HOME");
         if homevar.is_err() {
-            return;
+            return None;
         }
 
         let dotdir = "~/.config/phetch".replace('~', &homevar.unwrap());
-        let dotdir = Path::new(&dotdir);
-        if !dotdir.exists() {
+        let dotdir = std::path::Path::new(&dotdir);
+        if dotdir.exists() {
+            Some(std::path::PathBuf::from(dotdir))
+        } else {
+            None
+        }
+    }
+
+    fn load_history(&mut self) {
+        let dotdir = self.config_dir_path();
+        if dotdir.is_none() {
             return;
         }
+        let history = dotdir.unwrap().join("history");
+        if let Ok(file) = std::fs::OpenOptions::new().read(true).open(history) {
+            let buffered = BufReader::new(file);
+            let mut lines = buffered.lines();
+            while let Some(Ok(url)) = lines.next() {
+                self.add_page(Stub::from(&url));
+            }
+        }
+    }
 
+    fn save_history(&self) {
+        let dotdir = self.config_dir_path();
+        if dotdir.is_none() {
+            return;
+        }
+        let dotdir = dotdir.unwrap();
         let mut out = String::new();
         for page in &self.pages {
             out.push_str(&page.url());
             out.push('\n');
         }
-        let history = dotdir.join("history");
-        if let Ok(mut file) = OpenOptions::new().append(true).create(true).open(history) {
+        let history_tmp = dotdir.join("history.tmp");
+        if let Ok(mut file) = std::fs::OpenOptions::new()
+            .write(true)
+            .create(true)
+            .open(history_tmp.clone())
+        {
             file.write_all(out.as_ref());
+            let history = dotdir.join("history");
+            std::fs::rename(history_tmp, history);
         }
     }
 

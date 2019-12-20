@@ -5,6 +5,7 @@ extern crate termion;
 mod gopher;
 mod help;
 mod menu;
+mod stub;
 mod text;
 mod ui;
 use std::process::exit;
