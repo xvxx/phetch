@@ -45,14 +45,8 @@ fn main() {
         exit(1);
     }
 
-    let url = if url.starts_with("gopher://") {
-        url.to_string()
-    } else {
-        format!("gopher://{}", url)
-    };
-
     let mut ui = UI::new();
-    if let Err(e) = ui.open(&url) {
+    if let Err(e) = ui.open(url) {
         ui::error(&e.to_string());
         exit(1);
     }
@@ -75,13 +69,7 @@ fn print_usage() {
 }
 
 fn print_raw(url: &str) {
-    let url = if url.starts_with("gopher://") {
-        url.to_string()
-    } else {
-        format!("gopher://{}", url)
-    };
-
-    gopher::fetch_url(&url)
+    gopher::fetch_url(url)
         .and_then(|x| {
             println!("{}", x);
             Ok(())

@@ -395,7 +395,7 @@ impl Menu {
             }
             Key::Backspace | Key::Delete => {
                 if self.input.is_empty() {
-                    Action::Back
+                    Action::Keypress(key)
                 } else {
                     self.input.pop();
                     self.redraw_input()

@@ -30,9 +30,7 @@ pub struct UI {
 #[derive(Debug)]
 pub enum Action {
     None,          // do nothing
-    Back,          // back in history
-    Forward,       // also history
-    Open(String),  // url
+    Open(String),  // open url
     Keypress(Key), // unknown keypress
     Redraw,        // redraw everything
     Quit,          // yup
@@ -102,7 +100,7 @@ impl UI {
         }
 
         // non-gopher URL
-        if !url.starts_with("gopher://") {
+        if url.contains("://") && !url.starts_with("gopher://") {
             return open_external(url);
         }
 
@@ -260,13 +258,13 @@ impl UI {
             Action::Error(e) => return Err(io_error(e)),
             Action::Redraw => self.dirty = true,
             Action::Open(url) => self.open(&url)?,
-            Action::Back | Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
+            Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
                 if self.page > 0 {
                     self.dirty = true;
                     self.page -= 1;
                 }
             }
-            Action::Forward | Action::Keypress(Key::Right) => {
+            Action::Keypress(Key::Right) => {
                 if self.page < self.pages.len() - 1 {
                     self.dirty = true;
                     self.page += 1;
