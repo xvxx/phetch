@@ -12,21 +12,21 @@
     </a>
 </p>
 
-`phetch` is a terminal gopher client designed to help you quickly navigate the gophersphere. It is keyboard drive and always in "incremental search" mode. Design-wise, it uses at least eight colors and is the spiritual successor to [GILD](https://github.com/dvkt/gild).
+`phetch` is a terminal gopher client designed to help you quickly navigate the gophersphere.
 
 **features:**
 
-- small (<1MB) executable for linux and mac
-- technicolor design
+- <1MB executable for linux and mac
+- technicolor design (based on [GILD](https://github.com/dvkt/gild))
 - no nonsense keyboard navigation
 
 ## usage
 
     phetch                 # Launch and show start page.
-    phetch <gopher-url>    # Show Gopherhole at URL
+    phetch <gopher-url>    # Launch and show Gopherhole at URL.
     phetch -r <gopher-url> # Print raw Gopher response.
-    phetch -h              # Show this screen.
-    phetch -v              # Show phetch version.
+    phetch -h              # Show help.
+    phetch -v              # Show version.
 
 ## installation
 
@@ -42,19 +42,15 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
     cargo run -- <gopher-url>
 
-## resources
-
-- [rfc 1346](https://tools.ietf.org/html/rfc1436)
-- http://ascii-table.com/ansi-escape-sequences.php
-- http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html
-
 ## todo
 
 ### basics
 - [ ] download to ~/Downloads
     gopher://zaibatsu.circumlunar.space/1/~cardboard64/
+- [ ] telnet
 - [ ] ipv6
 - [ ] flesh out help
+- [ ] new screenshots
 ### bugs
 - [ ] `open` for irc links
 - [ ] gopher lawn is truncate
