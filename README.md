@@ -42,19 +42,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
     cargo run -- <gopher-url>
 
-## todo
-
-### basics
-- [ ] download to ~/Downloads
-    gopher://zaibatsu.circumlunar.space/1/~cardboard64/
-- [ ] telnet
-- [ ] ipv6
-- [ ] flesh out help
-- [ ] new screenshots
-### bugs
-- [ ] `open` for irc links
-- [ ] gopher lawn is truncate
-
 ## screenies
 
 ![Links](./img/links.png)
@@ -62,3 +49,20 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ![DOS Menu](./img/menu.png)
 
 ![Game Archive](./img/oldies.png)
+
+## todo
+
+- [ ] download to ~/Downloads
+    gopher://zaibatsu.circumlunar.space/1/~cardboard64/
+- [ ] telnet
+- [ ] ipv6
+- [ ] flesh out help
+- [ ] new screenshots
+- [ ] short screencast
+
+## bugs
+
+- [ ] stop 'page down' at a reasonable place
+- [ ] stop 'down arrow' at a reasonable place
+- [ ] `open` for irc links
+- [ ] gopher lawn is truncate
