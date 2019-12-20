@@ -12,7 +12,7 @@
     </a>
 </p>
 
-`phetch` is a terminal gopher client designed to help you quickly navigate the gophersphere. It is the spiritual successor to [GILD](https://github.com/dvkt/gild).
+`phetch` is a terminal gopher client designed to help you quickly navigate the gophersphere. It is keyboard drive and always in "incremental search" mode. Design-wise, it uses at least eight colors and is the spiritual successor to [GILD](https://github.com/dvkt/gild).
 
 **features:**
 
