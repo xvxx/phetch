@@ -5,6 +5,7 @@ use std::process::Stdio;
 use termion::color;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
+use termion::terminal_size;
 
 use gopher;
 use gopher::io_error;
@@ -49,7 +50,7 @@ pub trait View {
 impl UI {
     pub fn new() -> UI {
         let mut size = (0, 0);
-        if let Ok((cols, rows)) = termion::terminal_size() {
+        if let Ok((cols, rows)) = terminal_size() {
             size = (cols as usize, rows as usize);
         }
         UI {
@@ -142,7 +143,7 @@ impl UI {
     }
 
     pub fn render(&mut self) -> String {
-        if let Ok((cols, rows)) = termion::terminal_size() {
+        if let Ok((cols, rows)) = terminal_size() {
             self.term_size(cols as usize, rows as usize);
             if !self.pages.is_empty() && self.page < self.pages.len() {
                 if let Some(page) = self.pages.get_mut(self.page) {
@@ -339,7 +340,7 @@ fn open_external(url: &str) -> io::Result<()> {
 
 /// Prompt user for input and return what was entered, if anything.
 pub fn prompt(prompt: &str) -> Option<String> {
-    let (_cols, rows) = termion::terminal_size().unwrap();
+    let (_cols, rows) = terminal_size().unwrap();
 
     print!(
         "{}{}{}{}{}",
@@ -398,7 +399,7 @@ pub fn prompt(prompt: &str) -> Option<String> {
 
 // Display a status message to the user.
 pub fn status(s: &str) {
-    let (_cols, rows) = termion::terminal_size().unwrap();
+    let (_cols, rows) = terminal_size().unwrap();
     print!(
         "{}{}{}{}",
         termion::cursor::Goto(1, rows),
@@ -411,7 +412,7 @@ pub fn status(s: &str) {
 
 // Display an error message to the user.
 pub fn error(e: &str) {
-    let (_cols, rows) = termion::terminal_size().unwrap();
+    let (_cols, rows) = terminal_size().unwrap();
     print!(
         "{}{}{}{}{}",
         "\x1b[91m",
