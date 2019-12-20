@@ -52,6 +52,9 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
+- [ ] confirm() helper (downloads, other questions)
+- [ ] tests for scrolling
+- [ ] consolidate views into one struct
 - [ ] download to ~/Downloads
     gopher://zaibatsu.circumlunar.space/1/~cardboard64/
 - [ ] telnet
