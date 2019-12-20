@@ -1,3 +1,4 @@
+use ui;
 use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct Text {
@@ -7,6 +8,7 @@ pub struct Text {
     lines: usize,         // # of lines
     longest: usize,       // longest line
     size: (usize, usize), // cols, rows
+    wide: bool,      // in wide mode? turns off margins
 }
 
 impl View for Text {
@@ -35,6 +37,10 @@ impl View for Text {
                 } else {
                     Action::None
                 }
+            }
+            Key::Ctrl('w') => {
+                self.wide = !self.wide;
+                Action::Redraw
             }
             Key::Down | Key::Ctrl('n') | Key::Char('j') => {
                 if self.lines > SCROLL_LINES && self.scroll < (self.lines - SCROLL_LINES) {
@@ -108,7 +114,9 @@ impl View for Text {
             if line == ".\r" {
                 continue;
             }
-            out.push_str(&indent);
+            if !self.wide {
+                out.push_str(&indent);
+            }
             out.push_str(line);
             out.push('\n');
         }
@@ -134,6 +142,7 @@ impl Text {
             lines,
             longest,
             size: (0, 0),
+            wide: false,
         }
     }
 }

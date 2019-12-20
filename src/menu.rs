@@ -15,6 +15,7 @@ pub struct Menu {
     pub link: usize,          // selected link
     pub scroll: usize,        // scrolling offset
     pub size: (usize, usize), // cols, rows
+    pub wide: bool,           // in wide mode?
 }
 
 pub struct Line {
@@ -114,7 +115,9 @@ impl Menu {
         };
 
         for line in iter {
-            out.push_str(&indent);
+            if !self.wide {
+                out.push_str(&indent);
+            }
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
@@ -149,10 +152,6 @@ impl Menu {
                 _ => push!("0", name),
             }
             out.push('\n');
-        }
-        if self.lines.len() < rows {
-            // fill in empty space
-            out.push_str(&" \r\n".repeat(rows - 1 - self.lines.len()).to_string());
         }
         out.push_str(&format!(
             "{}{}{}",
@@ -384,6 +383,10 @@ impl Menu {
             Key::Char('\n') => self.action_open(),
             Key::Up | Key::Ctrl('p') => self.action_up(),
             Key::Down | Key::Ctrl('n') => self.action_down(),
+            Key::Ctrl('w') => {
+                self.wide = !self.wide;
+                Action::Redraw
+            }
             Key::Backspace | Key::Delete => {
                 if self.input.is_empty() {
                     Action::Back
@@ -580,6 +583,7 @@ impl Menu {
             link: 0,
             scroll: 0,
             size: (0, 0),
+            wide: false,
         }
     }
 }

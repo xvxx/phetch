@@ -20,6 +20,7 @@ ictrl-g     go to gopher url
 ictrl-u     show current gopher url
 ictrl-y     copy url to clipboard
 ictrl-r     view raw version of page
+ictrl-w     toggle wide mode 
 i 
 i            ~ * ~
 i
