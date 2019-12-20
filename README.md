@@ -54,11 +54,11 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ### basics
 - [ ] download to ~/Downloads
     gopher://zaibatsu.circumlunar.space/1/~cardboard64/
-- [ ] `?` to show all keyboard shortcuts
 - [ ] save history to file
 - [ ] load history from file
 - [ ] load most recent URL when opening without args
 - [ ] ipv6
+- [ ] flesh out help
 ### bonus
 - [ ] TLS
 - [ ] fuzzy find search links

@@ -66,6 +66,7 @@ impl UI {
             self.draw();
             self.update();
         }
+        self.shutdown();
     }
 
     pub fn draw(&mut self) {
@@ -154,6 +155,36 @@ impl UI {
                 "Error getting terminal size. Please file a bug: {}",
                 "https://github.com/dvkt/phetch/issues/new"
             )
+        }
+    }
+
+    fn shutdown(&self) {
+        self.save_history();
+    }
+
+    fn save_history(&self) {
+        use std::fs::OpenOptions;
+        use std::path::Path;
+
+        let homevar = std::env::var("HOME");
+        if homevar.is_err() {
+            return;
+        }
+
+        let dotdir = "~/.config/phetch".replace('~', &homevar.unwrap());
+        let dotdir = Path::new(&dotdir);
+        if !dotdir.exists() {
+            return;
+        }
+
+        let mut out = String::new();
+        for page in &self.pages {
+            out.push_str(&page.url());
+            out.push('\n');
+        }
+        let history = dotdir.join("history");
+        if let Ok(mut file) = OpenOptions::new().append(true).create(true).open(history) {
+            file.write_all(out.as_ref());
         }
     }
 
