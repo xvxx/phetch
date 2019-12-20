@@ -148,6 +148,8 @@ impl Menu {
                 Type::Info => push!("93", name),
                 Type::HTML => push!("92", name),
                 Type::Error => push!("91", name),
+                Type::Telnet => push!("4;97;90", name),
+                Type::Telnet3270 | Type::Mirror | Type::CSOEntity => push!("107;30", name),
                 typ if typ.is_download() => push!("4;97", name),
                 _ => push!("0", name),
             }
@@ -175,6 +177,14 @@ impl Menu {
 
     fn action_page_down(&mut self) -> Action {
         let lines = self.lines.len();
+        if lines < self.size.1 {
+            if self.links.len() > 0 {
+                self.link = self.links.len() - 1;
+                return Action::Redraw;
+            }
+            return Action::None;
+        }
+
         if lines > SCROLL_LINES && self.scroll < lines - SCROLL_LINES {
             self.scroll += SCROLL_LINES;
             if let Some(dir) = self.link_visibility(self.link) {

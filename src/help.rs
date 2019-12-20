@@ -20,8 +20,8 @@ i
 i~ the quick lil gopher client ~
 i
 7search gopher	/v2/vs	gopher.floodgap.com
-i
 1welcome to gopherspace	/gopher	gopher.floodgap.com
+1the gopher project	/	gopherproject.org
 1gopher lawn	/lawn	bitreich.org
 i 
 i            ~ * ~
@@ -122,31 +122,28 @@ i     ** gopher types **
 i
 iphetch supports these links:
 i
-0text files
-1menu items
-3errors
-hexternal URLs
-7search servers
-8telnet launching
+0text files	/types	help
+1menu items	/types	help
+3errors	/types	help
+7search servers	/types	help
+8telnet links	/types	help
+hexternal URLs	/types	help
 i
 iand these download types:
 i
-4binhex
-5dosfiles
-6uuencoded files
-9binaries
-gGIFs
-Iimages downloads
-ssound files
-ddocuments
+4binhex	/types	help
+5dosfiles	/types	help
+6uuencoded files	/types	help
+9binaries	/types	help
+gGIFs	/types	help
+Iimages downloads	/types	help
+ssound files	/types	help
+ddocuments	/types	help
 i
 iphetch does not support: 
 i
-2CSO Entries 
-+Mirrors
-TTelnet3270
+2CSO Entries 	/types	help
++Mirrors	/types	help
+TTelnet3270	/types	help
 i
-hGopher is RFC 1436
-hGopher is RFC 1436	/html/rfc1436	help
-i  https://tools.ietf.org/html/rfc1436
 ";
