@@ -102,12 +102,12 @@ impl UI {
             return self.fetch_help(url);
         }
 
-        // gopher URL
         status(&format!(
             "{}Loading...{}",
             color::Fg(color::LightBlack),
             termion::cursor::Show
         ));
+
         let (typ, host, port, sel) = gopher::parse_url(url);
         let res = gopher::fetch(host, port, sel)?;
         match typ {
