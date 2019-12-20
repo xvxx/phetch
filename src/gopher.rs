@@ -25,6 +25,7 @@ pub enum Type {
     Telnet3270, // T
     HTML,       // h | 92 | green
     Image,      // I |  4 | white underline
+    PNG,        // p |  4 | white underline
     Info,       // i | 93 | yellow
     Sound,      // s |  4 | white underline
     Document,   // d |  4 | white underline
@@ -39,6 +40,7 @@ impl Type {
             | Type::Binary
             | Type::GIF
             | Type::Image
+            | Type::PNG
             | Type::Sound
             | Type::Document => true,
             _ => false,
@@ -63,6 +65,7 @@ pub fn type_for_char(c: char) -> Option<Type> {
         'T' => Some(Type::Telnet3270),
         'h' => Some(Type::HTML),
         'I' => Some(Type::Image),
+        'p' => Some(Type::PNG),
         'i' => Some(Type::Info),
         's' => Some(Type::Sound),
         'd' => Some(Type::Document),
