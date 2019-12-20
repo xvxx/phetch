@@ -7,6 +7,9 @@ use std::io;
 use std::io::{stdin, stdout, BufRead, BufReader, Write};
 use std::process;
 use std::process::Stdio;
+use std::sync::mpsc;
+use std::thread;
+use std::time::Duration;
 use termion::color;
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
@@ -91,9 +94,10 @@ impl UI {
             return open_external(url);
         }
 
-        let view = self.fetch(url)?;
-        self.add_page(view);
-        Ok(())
+        self.fetch(url).and_then(|view| {
+            self.add_page(view);
+            Ok(())
+        })
     }
 
     fn fetch(&mut self, url: &str) -> io::Result<Box<dyn View>> {
@@ -108,8 +112,38 @@ impl UI {
             termion::cursor::Show
         ));
 
-        let (typ, host, port, sel) = gopher::parse_url(url);
-        let res = gopher::fetch(host, port, sel)?;
+        let (typ, _, _, _) = gopher::parse_url(url);
+        let (tx, rx) = mpsc::channel();
+
+        let thread_url = url.to_string();
+        thread::spawn(move || {
+            let (_, host, port, sel) = gopher::parse_url(&thread_url);
+            gopher::fetch(host, port, sel)
+                .and_then(|res| {
+                    tx.send(res).unwrap();
+                    Ok(())
+                })
+                .map_err(|e| error(&e.to_string()));
+        });
+
+        let mut res = String::new();
+        let mut i = 0;
+        loop {
+            print!(
+                "\r{}{}{}",
+                termion::cursor::Hide,
+                ".".repeat(i),
+                termion::clear::AfterCursor
+            );
+            stdout().flush();
+            i = if i >= 3 { 0 } else { i + 1 };
+            if let Ok(body) = rx.try_recv() {
+                res.push_str(&body);
+                break;
+            }
+            thread::sleep(Duration::from_millis(200));
+        }
+
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res))),
