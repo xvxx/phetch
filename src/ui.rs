@@ -174,16 +174,16 @@ impl UI {
     }
 
     fn load_history(&mut self) {
-        let dotdir = self.config_dir_path();
-        if dotdir.is_none() {
-            return;
-        }
-        let history = dotdir.unwrap().join("history");
-        if let Ok(file) = std::fs::OpenOptions::new().read(true).open(history) {
-            let buffered = BufReader::new(file);
-            let mut lines = buffered.lines();
-            while let Some(Ok(url)) = lines.next() {}
-        }
+        // let dotdir = self.config_dir_path();
+        // if dotdir.is_none() {
+        //     return;
+        // }
+        // let history = dotdir.unwrap().join("history");
+        // if let Ok(file) = std::fs::OpenOptions::new().read(true).open(history) {
+        //     let buffered = BufReader::new(file);
+        //     let mut lines = buffered.lines();
+        //     while let Some(Ok(url)) = lines.next() {}
+        // }
     }
 
     fn save_history(&self) {
