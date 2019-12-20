@@ -60,6 +60,14 @@ impl Menu {
         Self::parse(url, response)
     }
 
+    fn _cols(&self) -> usize {
+        self.size.0
+    }
+
+    fn rows(&self) -> usize {
+        self.size.1
+    }
+
     fn link(&self, i: usize) -> Option<&Line> {
         if let Some(line) = self.links.get(i) {
             self.lines.get(*line)
@@ -73,7 +81,7 @@ impl Menu {
         if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
                 LinkDir::Above
-            } else if pos >= self.scroll + self.size.1 - 1 {
+            } else if pos >= self.scroll + self.rows() - 1 {
                 LinkDir::Below
             } else {
                 LinkDir::Visible
@@ -157,7 +165,7 @@ impl Menu {
         }
         out.push_str(&format!(
             "{}{}{}",
-            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::cursor::Goto(1, self.rows() as u16),
             termion::clear::CurrentLine,
             self.input
         ));
@@ -167,7 +175,7 @@ impl Menu {
     fn redraw_input(&self) -> Action {
         print!(
             "{}{}{}",
-            termion::cursor::Goto(1, self.size.1 as u16),
+            termion::cursor::Goto(1, self.rows() as u16),
             termion::clear::CurrentLine,
             self.input
         );
@@ -177,7 +185,7 @@ impl Menu {
 
     fn action_page_down(&mut self) -> Action {
         let lines = self.lines.len();
-        if lines < self.size.1 {
+        if lines < self.rows() {
             if self.links.len() > 0 {
                 self.link = self.links.len() - 1;
                 return Action::Redraw;
@@ -226,7 +234,7 @@ impl Menu {
                             .iter()
                             .take(self.link)
                             .rev()
-                            .find(|&&i| i < (self.size.1 + scroll - 2))
+                            .find(|&&i| i < (self.rows() + scroll - 2))
                         {
                             self.link = self.lines.get(pos).unwrap().link;
                         }
@@ -291,7 +299,7 @@ impl Menu {
         let count = self.links.len();
 
         // last link selected but there is more content
-        if self.lines.len() > self.size.1 + self.scroll - 1 && self.link == count - 1 {
+        if self.lines.len() > self.rows() + self.scroll - 1 && self.link == count - 1 {
             self.scroll += 1;
             return Action::Redraw;
         }
