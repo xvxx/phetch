@@ -26,7 +26,7 @@ pub const MAX_COLS: usize = 72;
 
 pub struct UI {
     views: Vec<Box<dyn View>>, // loaded views
-    page: usize,               // currently focused view
+    focused: usize,            // currently focused view
     dirty: bool,               // redraw?
     running: bool,             // main ui loop running?
     pub size: (usize, usize),  // cols, rows
@@ -40,7 +40,7 @@ impl UI {
         }
         UI {
             views: vec![],
-            page: 0,
+            focused: 0,
             dirty: true,
             running: true,
             size,
@@ -80,7 +80,7 @@ impl UI {
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
         // no open loops
-        if let Some(page) = self.views.get(self.page) {
+        if let Some(page) = self.views.get(self.focused) {
             if &page.url() == url {
                 return Ok(());
             }
@@ -132,8 +132,8 @@ impl UI {
     pub fn render(&mut self) -> String {
         if let Ok((cols, rows)) = terminal_size() {
             self.term_size(cols as usize, rows as usize);
-            if !self.views.is_empty() && self.page < self.views.len() {
-                if let Some(page) = self.views.get_mut(self.page) {
+            if !self.views.is_empty() && self.focused < self.views.len() {
+                if let Some(page) = self.views.get_mut(self.focused) {
                     page.term_size(cols as usize, rows as usize);
                     return page.render();
                 }
@@ -214,17 +214,17 @@ impl UI {
 
     fn add_page(&mut self, view: Box<dyn View>) {
         self.dirty = true;
-        if !self.views.is_empty() && self.page < self.views.len() - 1 {
-            self.views.truncate(self.page + 1);
+        if !self.views.is_empty() && self.focused < self.views.len() - 1 {
+            self.views.truncate(self.focused + 1);
         }
         self.views.push(view);
         if self.views.len() > 1 {
-            self.page += 1;
+            self.focused += 1;
         }
     }
 
     fn process_page_input(&mut self) -> Action {
-        if let Some(page) = self.views.get_mut(self.page) {
+        if let Some(page) = self.views.get_mut(self.focused) {
             if let Ok(key) = stdin()
                 .keys()
                 .nth(0)
@@ -248,19 +248,19 @@ impl UI {
             Action::Redraw => self.dirty = true,
             Action::Open(url) => self.open(&url)?,
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
-                if self.page > 0 {
+                if self.focused > 0 {
                     self.dirty = true;
-                    self.page -= 1;
+                    self.focused -= 1;
                 }
             }
             Action::Keypress(Key::Right) => {
-                if self.page < self.views.len() - 1 {
+                if self.focused < self.views.len() - 1 {
                     self.dirty = true;
-                    self.page += 1;
+                    self.focused += 1;
                 }
             }
             Action::Keypress(Key::Ctrl('r')) => {
-                if let Some(page) = self.views.get(self.page) {
+                if let Some(page) = self.views.get(self.focused) {
                     let url = page.url().to_string();
                     let raw = page.raw().to_string();
                     self.add_page(Box::new(Text::from(url, raw)));
@@ -277,12 +277,12 @@ impl UI {
             }
             Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
             Action::Keypress(Key::Ctrl('u')) => {
-                if let Some(page) = self.views.get(self.page) {
+                if let Some(page) = self.views.get(self.focused) {
                     status(&format!("Current URL: {}", page.url()));
                 }
             }
             Action::Keypress(Key::Ctrl('y')) => {
-                if let Some(page) = self.views.get(self.page) {
+                if let Some(page) = self.views.get(self.focused) {
                     copy_to_clipboard(&page.url())?;
                     status(&format!("Copied {} to clipboard.", page.url()));
                 }
