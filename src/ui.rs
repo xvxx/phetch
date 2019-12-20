@@ -11,7 +11,6 @@ use gopher::io_error;
 use gopher::Type;
 use help;
 use menu::Menu;
-use stub::Stub;
 use text::Text;
 
 pub type Key = termion::event::Key;
@@ -192,9 +191,7 @@ impl UI {
         if let Ok(file) = std::fs::OpenOptions::new().read(true).open(history) {
             let buffered = BufReader::new(file);
             let mut lines = buffered.lines();
-            while let Some(Ok(url)) = lines.next() {
-                self.add_page(Stub::from(&url));
-            }
+            while let Some(Ok(url)) = lines.next() {}
         }
     }
 
@@ -209,15 +206,13 @@ impl UI {
             out.push_str(&page.url());
             out.push('\n');
         }
-        let history_tmp = dotdir.join("history.tmp");
+        let history = dotdir.join("history");
         if let Ok(mut file) = std::fs::OpenOptions::new()
-            .write(true)
+            .append(true)
             .create(true)
-            .open(history_tmp.clone())
+            .open(history)
         {
             file.write_all(out.as_ref());
-            let history = dotdir.join("history");
-            std::fs::rename(history_tmp, history);
         }
     }
 
