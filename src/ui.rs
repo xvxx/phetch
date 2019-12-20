@@ -1,4 +1,6 @@
+mod action;
 mod view;
+pub use self::action::Action;
 pub use self::view::View;
 
 use std::io;
@@ -23,21 +25,11 @@ pub const SCROLL_LINES: usize = 15;
 pub const MAX_COLS: usize = 72;
 
 pub struct UI {
-    pages: Vec<Box<dyn View>>, // loaded views
+    views: Vec<Box<dyn View>>, // loaded views
     page: usize,               // currently focused view
     dirty: bool,               // redraw?
     running: bool,             // main ui loop running?
     pub size: (usize, usize),  // cols, rows
-}
-
-#[derive(Debug)]
-pub enum Action {
-    None,          // do nothing
-    Open(String),  // open url
-    Keypress(Key), // unknown keypress
-    Redraw,        // redraw everything
-    Quit,          // yup
-    Error(String), // error message
 }
 
 impl UI {
@@ -47,7 +39,7 @@ impl UI {
             size = (cols as usize, rows as usize);
         }
         UI {
-            pages: vec![],
+            views: vec![],
             page: 0,
             dirty: true,
             running: true,
@@ -88,7 +80,7 @@ impl UI {
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
         // no open loops
-        if let Some(page) = self.pages.get(self.page) {
+        if let Some(page) = self.views.get(self.page) {
             if &page.url() == url {
                 return Ok(());
             }
@@ -99,9 +91,15 @@ impl UI {
             return open_external(url);
         }
 
+        let view = self.fetch(url)?;
+        self.add_page(view);
+        Ok(())
+    }
+
+    fn fetch(&mut self, url: &str) -> io::Result<Box<dyn View>> {
         // on-line help
         if url.starts_with("gopher://help/") {
-            return self.open_help(url);
+            return self.fetch_help(url);
         }
 
         // gopher URL
@@ -111,25 +109,21 @@ impl UI {
             termion::cursor::Show
         ));
         let (typ, host, port, sel) = gopher::parse_url(url);
-        gopher::fetch(host, port, sel)
-            .and_then(|response| match typ {
-                Type::Menu | Type::Search => {
-                    Ok(self.add_page(Menu::from(url.to_string(), response)))
-                }
-                Type::Text | Type::HTML => Ok(self.add_page(Text::from(url.to_string(), response))),
-                _ => Err(io_error(format!("Unsupported Gopher Response: {:?}", typ))),
-            })
-            .map_err(|e| io_error(format!("Error loading {}: {} ({:?})", url, e, e.kind())))
+        let res = gopher::fetch(host, port, sel)?;
+        match typ {
+            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
+            Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res))),
+            _ => Err(io_error(format!("Unsupported Gopher Response: {:?}", typ))),
+        }
     }
 
-    // open a phetch on-line help url, ex: gopher://help/1/types
-    pub fn open_help(&mut self, url: &str) -> io::Result<()> {
+    // get Menu for on-line help url, ex: gopher://help/1/types
+    fn fetch_help(&mut self, url: &str) -> io::Result<Box<dyn View>> {
         if let Some(source) = help::lookup(
             &url.trim_start_matches("gopher://help/")
                 .trim_start_matches("1/"),
         ) {
-            self.add_page(Menu::from(url.to_string(), source.to_string()));
-            Ok(())
+            Ok(Box::new(Menu::from(url.to_string(), source.to_string())))
         } else {
             Err(gopher::io_error(format!("Help file not found: {}", url)))
         }
@@ -138,8 +132,8 @@ impl UI {
     pub fn render(&mut self) -> String {
         if let Ok((cols, rows)) = terminal_size() {
             self.term_size(cols as usize, rows as usize);
-            if !self.pages.is_empty() && self.page < self.pages.len() {
-                if let Some(page) = self.pages.get_mut(self.page) {
+            if !self.views.is_empty() && self.page < self.views.len() {
+                if let Some(page) = self.views.get_mut(self.page) {
                     page.term_size(cols as usize, rows as usize);
                     return page.render();
                 }
@@ -196,7 +190,7 @@ impl UI {
         }
         let dotdir = dotdir.unwrap();
         let mut out = String::new();
-        for page in &self.pages {
+        for page in &self.views {
             let url = page.url();
             if url.starts_with("gopher://help/") {
                 continue;
@@ -218,19 +212,19 @@ impl UI {
         self.size = (cols, rows);
     }
 
-    fn add_page<T: View + 'static>(&mut self, view: T) {
+    fn add_page(&mut self, view: Box<dyn View>) {
         self.dirty = true;
-        if !self.pages.is_empty() && self.page < self.pages.len() - 1 {
-            self.pages.truncate(self.page + 1);
+        if !self.views.is_empty() && self.page < self.views.len() - 1 {
+            self.views.truncate(self.page + 1);
         }
-        self.pages.push(Box::from(view));
-        if self.pages.len() > 1 {
+        self.views.push(view);
+        if self.views.len() > 1 {
             self.page += 1;
         }
     }
 
     fn process_page_input(&mut self) -> Action {
-        if let Some(page) = self.pages.get_mut(self.page) {
+        if let Some(page) = self.views.get_mut(self.page) {
             if let Ok(key) = stdin()
                 .keys()
                 .nth(0)
@@ -260,16 +254,16 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Right) => {
-                if self.page < self.pages.len() - 1 {
+                if self.page < self.views.len() - 1 {
                     self.dirty = true;
                     self.page += 1;
                 }
             }
             Action::Keypress(Key::Ctrl('r')) => {
-                if let Some(page) = self.pages.get(self.page) {
+                if let Some(page) = self.views.get(self.page) {
                     let url = page.url().to_string();
                     let raw = page.raw().to_string();
-                    self.add_page(Text::from(url, raw));
+                    self.add_page(Box::new(Text::from(url, raw)));
                 }
             }
             Action::Keypress(Key::Ctrl('g')) => {
@@ -283,12 +277,12 @@ impl UI {
             }
             Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
             Action::Keypress(Key::Ctrl('u')) => {
-                if let Some(page) = self.pages.get(self.page) {
+                if let Some(page) = self.views.get(self.page) {
                     status(&format!("Current URL: {}", page.url()));
                 }
             }
             Action::Keypress(Key::Ctrl('y')) => {
-                if let Some(page) = self.pages.get(self.page) {
+                if let Some(page) = self.views.get(self.page) {
                     copy_to_clipboard(&page.url())?;
                     status(&format!("Copied {} to clipboard.", page.url()));
                 }
