@@ -61,7 +61,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 - [ ] ipv6
 - [ ] flesh out help
 - [ ] new screenshots
-- [ ] short screencast
+- [ ] little GIF screencast in README
 
 ## bugs
 
@@ -69,3 +69,8 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 - [ ] stop 'down arrow' at a reasonable place
 - [ ] `open` for irc links
 - [ ] gopher lawn is truncate
+
+## future features
+
+- [ ] TLS https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
+- [ ] Fuzzy Find incremental search
