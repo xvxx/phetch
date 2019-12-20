@@ -44,7 +44,6 @@ i            ~ * ~
 i
 1menu navigation	/nav	help
 1gopher types	/types	help
-1all keys	/keys	help
 hvisit homepage	URL:https://github.com/dvkt/phetch
 i
 ";
