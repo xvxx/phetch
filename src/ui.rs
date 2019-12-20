@@ -91,9 +91,21 @@ impl UI {
     }
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
+        // no open loops
+        if let Some(page) = self.pages.get(self.page) {
+            if &page.url() == url {
+                return Ok(());
+            }
+        }
+
         // non-gopher URL
         if !url.starts_with("gopher://") {
             return open_external(url);
+        }
+
+        // on-line help
+        if url.starts_with("gopher://help/") {
+            return self.open_help(url);
         }
 
         // gopher URL
@@ -112,6 +124,19 @@ impl UI {
                 _ => Err(io_error(format!("Unsupported Gopher Response: {:?}", typ))),
             })
             .map_err(|e| io_error(format!("Error loading {}: {} ({:?})", url, e, e.kind())))
+    }
+
+    // open a phetch on-line help url, ex: gopher://help/1/types
+    pub fn open_help(&mut self, url: &str) -> io::Result<()> {
+        if let Some(source) = help::lookup(
+            &url.trim_start_matches("gopher://help/")
+                .trim_start_matches("1/"),
+        ) {
+            self.add_page(Menu::from(url.to_string(), source.to_string()));
+            Ok(())
+        } else {
+            Err(gopher::io_error(format!("Help file not found: {}", url)))
+        }
     }
 
     pub fn render(&mut self) -> String {
@@ -199,9 +224,7 @@ impl UI {
                     }
                 }
             }
-            Action::Keypress(Key::Ctrl('h')) => {
-                self.add_page(Menu::from("help".into(), help::GOPHERMAP.into()));
-            }
+            Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
             Action::Keypress(Key::Ctrl('u')) => {
                 if let Some(page) = self.pages.get(self.page) {
                     status(&format!("Current URL: {}", page.url()));
