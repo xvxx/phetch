@@ -3,7 +3,6 @@ pub fn lookup(name: &str) -> Option<&str> {
         "" | "/" | "help" => Some(HELP),
         "types" => Some(TYPES),
         "nav" => Some(NAV),
-        "keys" => Some(KEYS),
         _ => None,
     }
 }
