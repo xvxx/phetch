@@ -1,5 +1,5 @@
 use gopher;
-use std::io::{BufWriter, Read, Result, Write};
+use std::io::{Read, Result, Write};
 use std::net::TcpStream;
 use std::net::ToSocketAddrs;
 use std::os::unix::fs::OpenOptionsExt;
@@ -135,22 +135,21 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
         .and_then(|mut stream| {
             stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
 
-            let file = std::fs::OpenOptions::new()
+            let mut file = std::fs::OpenOptions::new()
                 .write(true)
                 .create(true)
                 .truncate(true)
                 .mode(0o770)
                 .open(path)?;
 
-            let mut file_buffer = BufWriter::new(file);
-            let mut buf = [0 as u8; 8]; // read 8 bytes at a time
+            let mut buf = [0; 1024];
             let mut bytes = 0;
             while let Ok(count) = stream.read(&mut buf) {
                 if count == 0 {
                     break;
                 }
                 bytes += count;
-                file_buffer.write_all(&buf);
+                file.write(&buf[..count]);
                 if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
                     return Err(error!("Download canceled"));
                 }
