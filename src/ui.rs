@@ -122,13 +122,19 @@ impl UI {
             return open_external(url);
         }
 
+        // binary downloads
+        let (typ, _, _, _) = gopher::parse_url(url);
+        if typ.is_download() {
+            return self.download(url);
+        }
+
         self.fetch(url).and_then(|page| {
             self.add_page(page);
             Ok(())
         })
     }
 
-    fn download(&mut self, url: &str) -> io::Result<Page> {
+    fn download(&mut self, url: &str) -> io::Result<()> {
         // request thread
         let download_url = url.to_string();
         let req = thread::spawn(move || match gopher::download_url(&download_url) {
@@ -168,22 +174,14 @@ impl UI {
             Err(_) => return Err(io_error("Connection error".into())),
         };
 
-        Ok(Box::new(Text::from(
-            url.into(),
-            format!("Download complete! {}", res),
-        )))
+        self.set_status(format!("Download complete! {}", res));
+        Ok(())
     }
 
     fn fetch(&mut self, url: &str) -> io::Result<Page> {
         // on-line help
         if url.starts_with("gopher://help/") {
             return self.fetch_help(url);
-        }
-
-        // binary downloads
-        let (typ, _, _, _) = gopher::parse_url(url);
-        if typ.is_download() {
-            return self.download(url);
         }
 
         // request thread
@@ -222,6 +220,7 @@ impl UI {
             },
             Err(_) => return Err(io_error("Connection error".into())),
         };
+        let (typ, _, _, _) = gopher::parse_url(&url);
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res))),
