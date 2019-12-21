@@ -136,10 +136,7 @@ impl UI {
     fn download(&mut self, url: &str) -> io::Result<()> {
         // request thread
         let download_url = url.to_string();
-        let req = thread::spawn(move || match gopher::download_url(&download_url) {
-            Ok(res) => Ok(res),
-            Err(e) => Err(e),
-        });
+        let req = thread::spawn(move || gopher::download_url(&download_url));
 
         // spinner thead
         let download_url = url.to_string();
@@ -185,10 +182,7 @@ impl UI {
 
         // request thread
         let thread_url = url.to_string();
-        let req = thread::spawn(move || match gopher::fetch_url(&thread_url) {
-            Ok(res) => Ok(res),
-            Err(e) => Err(e),
-        });
+        let req = thread::spawn(move || gopher::fetch_url(&thread_url));
 
         // spinner thead
         let (spintx, spinrx) = mpsc::channel();

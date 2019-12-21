@@ -96,18 +96,16 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
             socks
                 .next()
                 .ok_or_else(|| io_error("Can't create socket".to_string()))
-                .and_then(|sock| {
-                    TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)
-                        .and_then(|mut stream| {
-                            stream.write(format!("{}\r\n", selector).as_ref());
-                            Ok(stream)
-                        })
-                        .and_then(|mut stream| {
-                            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
-                            stream.read_to_string(&mut body)?;
-                            Ok(body)
-                        })
-                })
+        })
+        .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
+        .and_then(|mut stream| {
+            stream.write(format!("{}\r\n", selector).as_ref());
+            Ok(stream)
+        })
+        .and_then(|mut stream| {
+            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
+            stream.read_to_string(&mut body)?;
+            Ok(body)
         })
 }
 
@@ -129,31 +127,29 @@ pub fn download_url(url: &str) -> io::Result<String> {
             socks
                 .next()
                 .ok_or_else(|| io_error("Can't create socket".to_string()))
-                .and_then(|sock| {
-                    TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)
-                        .and_then(|mut stream| {
-                            stream.write(format!("{}\r\n", sel).as_ref());
-                            Ok(stream)
-                        })
-                        .and_then(|mut stream| {
-                            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
-                            std::fs::OpenOptions::new()
-                                .write(true)
-                                .create(true)
-                                .truncate(true)
-                                .mode(0o770)
-                                .open(path)
-                                .and_then(|mut file| {
-                                    let mut buf = [0; 1024];
-                                    while let Ok(count) = stream.read(&mut buf) {
-                                        if count == 0 {
-                                            break;
-                                        }
-                                        file.write_all(&buf);
-                                    }
-                                    Ok(filename.to_string())
-                                })
-                        })
+        })
+        .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
+        .and_then(|mut stream| {
+            stream.write(format!("{}\r\n", sel).as_ref());
+            Ok(stream)
+        })
+        .and_then(|mut stream| {
+            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
+            std::fs::OpenOptions::new()
+                .write(true)
+                .create(true)
+                .truncate(true)
+                .mode(0o770)
+                .open(path)
+                .and_then(|mut file| {
+                    let mut buf = [0; 1024];
+                    while let Ok(count) = stream.read(&mut buf) {
+                        if count == 0 {
+                            break;
+                        }
+                        file.write_all(&buf);
+                    }
+                    Ok(filename.to_string())
                 })
         })
 }
