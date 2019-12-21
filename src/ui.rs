@@ -195,9 +195,8 @@ impl UI {
                     return;
                 }
                 print!(
-                    "\r{}{}{}{}{}{}",
+                    "\r{}{}{}{}{}",
                     termion::cursor::Hide,
-                    color::Fg(color::LightBlack),
                     label,
                     ".".repeat(i),
                     termion::clear::AfterCursor,
