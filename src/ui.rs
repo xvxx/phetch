@@ -145,7 +145,7 @@ impl UI {
                     return;
                 }
                 print!(
-                    "\r{}Downloading {}{}{}{}",
+                    "\r{}{}Downloading {}{}{}",
                     termion::cursor::Hide,
                     color::Fg(color::LightBlack),
                     download_url,

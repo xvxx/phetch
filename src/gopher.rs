@@ -3,6 +3,7 @@ use std::io;
 use std::io::{Read, Write};
 use std::net::TcpStream;
 use std::net::ToSocketAddrs;
+use std::os::unix::fs::OpenOptionsExt;
 use std::time::Duration;
 
 pub const TCP_TIMEOUT_IN_SECS: u64 = 1;
@@ -140,6 +141,7 @@ pub fn download_url(url: &str) -> io::Result<String> {
                                 .write(true)
                                 .create(true)
                                 .truncate(true)
+                                .mode(0o770)
                                 .open(path)
                                 .and_then(|mut file| {
                                     let mut buf = [0; 1024];
