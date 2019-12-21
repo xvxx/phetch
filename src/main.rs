@@ -47,7 +47,7 @@ fn main() {
 
     let mut ui = UI::new();
     if let Err(e) = ui.open(url) {
-        ui::error(&e.to_string());
+        eprintln!("{}", e);
         exit(1);
     }
     ui.run();

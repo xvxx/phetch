@@ -150,7 +150,7 @@ impl UI {
         });
 
         // main thread - check for updates in a loop
-        let mut res = String::new();
+        let res;
         loop {
             if let Ok(body) = rx.try_recv() {
                 spintx.send(true);
@@ -161,7 +161,7 @@ impl UI {
                         return Err(io_error("Connection error".into()));
                     }
                 }
-                res.push_str(&body);
+                res = body;
                 break;
             }
         }
