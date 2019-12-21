@@ -52,12 +52,9 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
-- [ ] confirm() helper (downloads, other questions)
 - [ ] tests for scrolling
-    gopher://zaibatsu.circumlunar.space/1/~cardboard64/
 - [ ] telnet
 - [ ] ipv6
-- [ ] cancel download
 - [ ] flesh out help
 - [ ] new screenshots
 - [ ] little GIF screencast in README

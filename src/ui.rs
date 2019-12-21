@@ -120,7 +120,12 @@ impl UI {
         // binary downloads
         let (typ, _, _, _) = gopher::parse_url(url);
         if typ.is_download() {
-            return self.download(url);
+            self.dirty = true;
+            return if confirm(&format!("Download {}?", url)) {
+                self.download(url)
+            } else {
+                Ok(())
+            };
         }
 
         self.fetch(url).and_then(|page| {
@@ -424,6 +429,31 @@ fn open_external(url: &str) -> Result<()> {
         .arg(url)
         .output()
         .and_then(|_| Ok(()))
+}
+
+/// Ask user to confirm action with ENTER or Y.
+pub fn confirm(question: &str) -> bool {
+    let (_cols, rows) = terminal_size().unwrap();
+
+    print!(
+        "{}{}{}{} [Y/n]: {}",
+        color::Fg(color::Reset),
+        termion::cursor::Goto(1, rows),
+        termion::clear::CurrentLine,
+        question,
+        termion::cursor::Show,
+    );
+    stdout().flush();
+
+    if let Some(Ok(key)) = stdin().keys().next() {
+        match key {
+            Key::Char('\n') => true,
+            Key::Char('y') | Key::Char('Y') => true,
+            _ => false,
+        }
+    } else {
+        false
+    }
 }
 
 /// Prompt user for input and return what was entered, if anything.
