@@ -6,6 +6,5 @@ pub enum Action {
     Open(String),  // open url
     Keypress(Key), // unknown keypress
     Redraw,        // redraw everything
-    Quit,          // yup
     Error(String), // error message
 }

@@ -34,7 +34,7 @@ pub struct UI {
     dirty: bool,              // redraw?
     running: bool,            // main ui loop running?
     pub size: (usize, usize), // cols, rows
-    error: String,            // error string, if any
+    status: String,           // status message, if any
 }
 
 impl UI {
@@ -49,7 +49,7 @@ impl UI {
             dirty: true,
             running: true,
             size,
-            error: String::new(),
+            status: String::new(),
         }
     }
 
@@ -62,29 +62,30 @@ impl UI {
         self.shutdown();
     }
 
+    fn render_status(&self) -> Option<String> {
+        if self.status.is_empty() {
+            None
+        } else {
+            Some(format!(
+                "{}{}{}{}{}",
+                color::Fg(color::LightRed),
+                termion::cursor::Goto(1, self.rows()),
+                termion::clear::CurrentLine,
+                self.status,
+                color::Fg(color::Reset)
+            ))
+        }
+    }
+
     pub fn draw(&mut self) {
         if self.dirty {
-            let error = if self.error.is_empty() {
-                "".into()
-            } else {
-                let e = format!(
-                    "{}{}{}{}{}",
-                    color::Fg(color::LightRed),
-                    termion::cursor::Goto(1, self.rows()),
-                    termion::clear::CurrentLine,
-                    self.error,
-                    color::Fg(color::Reset)
-                );
-                self.error.clear();
-                e
-            };
             print!(
                 "{}{}{}{}{}",
                 termion::clear::All,
                 termion::cursor::Goto(1, 1),
                 termion::cursor::Hide,
                 self.render(),
-                error
+                self.render_status().unwrap_or("".into()),
             );
 
             self.dirty = false;
@@ -97,11 +98,13 @@ impl UI {
 
         let action = self.process_page_input();
         if let Err(e) = self.process_action(action) {
-            self.error = e.to_string();
+            self.status = format!("{}{}", color::Fg(color::LightRed), e);
         }
     }
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
+        self.status.clear();
+
         // no open loops
         if let Some(page) = self.views.get(self.focused) {
             if &page.url() == url {
@@ -299,9 +302,16 @@ impl UI {
 
     fn process_action(&mut self, action: Action) -> io::Result<()> {
         match action {
-            Action::Quit | Action::Keypress(Key::Ctrl('q')) | Action::Keypress(Key::Ctrl('c')) => {
-                self.running = false
+            Action::Keypress(Key::Esc) => self.status.clear(),
+            Action::Keypress(Key::Ctrl('c')) => {
+                if self.status.is_empty() {
+                    self.running = false
+                } else {
+                    self.dirty = true;
+                    self.status.clear();
+                }
             }
+            Action::Keypress(Key::Ctrl('q')) => self.running = false,
             Action::Error(e) => return Err(io_error(e)),
             Action::Redraw => self.dirty = true,
             Action::Open(url) => self.open(&url)?,

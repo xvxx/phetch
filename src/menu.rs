@@ -414,7 +414,7 @@ impl Menu {
                     self.input.clear();
                     self.redraw_input()
                 } else {
-                    Action::None
+                    Action::Keypress(key)
                 }
             }
             Key::Ctrl('c') => {
@@ -422,7 +422,7 @@ impl Menu {
                     self.input.clear();
                     self.redraw_input()
                 } else {
-                    Action::Quit
+                    Action::Keypress(key)
                 }
             }
             Key::Char('-') => {
