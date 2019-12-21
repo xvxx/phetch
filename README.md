@@ -69,6 +69,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 - [ ] stop 'down arrow' at a reasonable place
 - [ ] `open` for irc links
 - [ ] gopher lawn is truncate
+- [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by Nathaniel" weirdness)
 
 ## future features
 
