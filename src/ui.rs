@@ -4,7 +4,7 @@ pub use self::action::Action;
 pub use self::view::View;
 
 use std::io;
-use std::io::{stdin, stdout, BufRead, BufReader, Write};
+use std::io::{stdin, stdout, Write};
 use std::process;
 use std::process::Stdio;
 use std::sync::mpsc;
@@ -112,9 +112,10 @@ impl UI {
             termion::cursor::Show
         ));
 
-        let (typ, _, _, _) = gopher::parse_url(url);
-
+        // request thread
+        // two channels: one to send success, one to send failure.
         let (tx, rx) = mpsc::channel();
+        let (errtx, errrx) = mpsc::channel();
         let thread_url = url.to_string();
         thread::spawn(move || {
             let (_, host, port, sel) = gopher::parse_url(&thread_url);
@@ -124,11 +125,13 @@ impl UI {
                     Ok(())
                 })
                 .map_err(|e| {
+                    errtx.send(e.to_string());
                     tx.send("".to_string());
                     e
                 })
         });
 
+        // spinner thead
         let (spintx, spinrx) = mpsc::channel();
         thread::spawn(move || loop {
             for i in 0..=3 {
@@ -146,18 +149,24 @@ impl UI {
             }
         });
 
+        // main thread - check for updates in a loop
         let mut res = String::new();
         loop {
             if let Ok(body) = rx.try_recv() {
                 spintx.send(true);
                 if body.is_empty() {
-                    return Err(io_error("Connection error".into()));
+                    if let Ok(err) = errrx.try_recv() {
+                        return Err(io_error(err));
+                    } else {
+                        return Err(io_error("Connection error".into()));
+                    }
                 }
                 res.push_str(&body);
                 break;
             }
         }
 
+        let (typ, _, _, _) = gopher::parse_url(url);
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res))),
