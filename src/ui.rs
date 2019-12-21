@@ -134,44 +134,13 @@ impl UI {
     }
 
     fn download(&mut self, url: &str) -> io::Result<()> {
-        // request thread
-        let download_url = url.to_string();
-        let req = thread::spawn(move || gopher::download_url(&download_url));
-
-        // spinner thead
-        let download_url = url.to_string();
-        let (spintx, spinrx) = mpsc::channel();
-        thread::spawn(move || loop {
-            for i in 0..=3 {
-                if spinrx.try_recv().is_ok() {
-                    return;
-                }
-                print!(
-                    "\r{}{}Downloading {}{}{}",
-                    termion::cursor::Hide,
-                    color::Fg(color::LightBlack),
-                    download_url,
-                    ".".repeat(i),
-                    termion::clear::AfterCursor
-                );
-                stdout().flush();
-                thread::sleep(Duration::from_millis(350));
-            }
-        });
-
-        let work = req.join();
-        spintx.send(true); // stop spinner
-        self.dirty = true;
-        let res = match work {
-            Ok(opt) => match opt {
-                Ok(body) => body,
-                Err(e) => return Err(e),
-            },
-            Err(_) => return Err(io_error("Connection error".into())),
-        };
-
-        self.set_status(format!("Download complete! {}", res));
-        Ok(())
+        let url = url.to_string();
+        self.spinner("", move || gopher::download_url(&url))
+            .and_then(|res| res)
+            .and_then(|res| {
+                self.set_status(format!("Download complete! {}", res));
+                Ok(())
+            })
     }
 
     fn fetch(&mut self, url: &str) -> io::Result<Page> {
@@ -182,37 +151,7 @@ impl UI {
 
         // request thread
         let thread_url = url.to_string();
-        let req = thread::spawn(move || gopher::fetch_url(&thread_url));
-
-        // spinner thead
-        let (spintx, spinrx) = mpsc::channel();
-        thread::spawn(move || loop {
-            for i in 0..=3 {
-                if spinrx.try_recv().is_ok() {
-                    return;
-                }
-                print!(
-                    "\r{}{}{}{}",
-                    termion::cursor::Hide,
-                    color::Fg(color::LightBlack),
-                    ".".repeat(i),
-                    termion::clear::AfterCursor
-                );
-                stdout().flush();
-                thread::sleep(Duration::from_millis(350));
-            }
-        });
-
-        let work = req.join();
-        spintx.send(true); // stop spinner
-        self.dirty = true;
-        let res = match work {
-            Ok(opt) => match opt {
-                Ok(body) => body,
-                Err(e) => return Err(e),
-            },
-            Err(_) => return Err(io_error("Connection error".into())),
-        };
+        let res = self.spinner("", move || gopher::fetch_url(&thread_url))??;
         let (typ, _, _, _) = gopher::parse_url(&url);
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
@@ -231,6 +170,42 @@ impl UI {
         } else {
             Err(gopher::io_error(format!("Help file not found: {}", url)))
         }
+    }
+
+    // Show a spinner while running a thread. Used to make gopher requests or
+    // download files.
+    fn spinner<T: Send + 'static, F: 'static + Send + FnOnce() -> T>(
+        &mut self,
+        label: &str,
+        work: F,
+    ) -> io::Result<T> {
+        let req = thread::spawn(work);
+
+        let (tx, rx) = mpsc::channel();
+        let label = label.to_string();
+        thread::spawn(move || loop {
+            for i in 0..=3 {
+                if rx.try_recv().is_ok() {
+                    return;
+                }
+                print!(
+                    "\r{}{}{}{}{}{}",
+                    termion::cursor::Hide,
+                    color::Fg(color::LightBlack),
+                    label,
+                    ".".repeat(i),
+                    termion::clear::AfterCursor,
+                    color::Fg(color::Reset)
+                );
+                stdout().flush();
+                thread::sleep(Duration::from_millis(350));
+            }
+        });
+
+        let result = req.join();
+        tx.send(true); // stop spinner
+        self.dirty = true;
+        result.map_err(|e| io_error(format!("Spinner error: {:?}", e)))
     }
 
     pub fn render(&mut self) -> String {

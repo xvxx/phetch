@@ -142,7 +142,7 @@ pub fn download_url(url: &str) -> io::Result<String> {
                 .mode(0o770)
                 .open(path)
                 .and_then(|mut file| {
-                    let mut buf = [0; 1024];
+                    let mut buf = [0 as u8; 8]; // read 8 bytes at a time
                     while let Ok(count) = stream.read(&mut buf) {
                         if count == 0 {
                             break;
