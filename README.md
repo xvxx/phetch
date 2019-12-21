@@ -53,7 +53,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ## todo
 
 - [ ] telnet
-- [ ] ipv6
 - [ ] flesh out help
 - [ ] new screenshots
 - [ ] little GIF screencast in README
