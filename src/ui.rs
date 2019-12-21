@@ -133,8 +133,12 @@ impl UI {
         let url = url.to_string();
         self.spinner("", move || gopher::download_url(&url))
             .and_then(|res| res)
-            .and_then(|res| {
-                self.set_status(format!("Download complete! {}", res));
+            .and_then(|(path, bytes)| {
+                self.set_status(format!(
+                    "Download complete! {} saved to {}",
+                    human_bytes(bytes),
+                    path
+                ));
                 Ok(())
             })
     }
@@ -477,4 +481,20 @@ pub fn prompt(prompt: &str) -> Option<String> {
     } else {
         None
     }
+}
+
+fn human_bytes(bytes: usize) -> String {
+    let (count, tag) = if bytes < 1000 {
+        (bytes, " bytes")
+    } else if bytes < 1_000_000 {
+        (bytes / 1000, "Kb")
+    } else if bytes < 1_000_000_000 {
+        (bytes / 1_000_000, "Mb")
+    } else if bytes < 1_000_000_000_000 {
+        (bytes / 1_000_000_000, "Gb")
+    } else {
+        (bytes, "?b")
+    };
+
+    format!("{}{}", count, tag)
 }

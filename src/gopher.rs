@@ -108,8 +108,9 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
         })
 }
 
-// Downloads a binary to disk and returns the path it was saved to.
-pub fn download_url(url: &str) -> Result<String> {
+// Downloads a binary to disk.
+// Returns the path it was saved to and the size in bytes.
+pub fn download_url(url: &str) -> Result<(String, usize)> {
     let (_, host, port, sel) = parse_url(url);
     let sel = sel.replace('?', "\t"); // search queries
     let filename = sel
@@ -120,35 +121,36 @@ pub fn download_url(url: &str) -> Result<String> {
     let mut path = std::path::PathBuf::from(".");
     path.push(filename);
 
-    let mut stream = format!("{}:{}", host, port)
+    format!("{}:{}", host, port)
         .to_socket_addrs()
         .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))
         .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
         .and_then(|mut stream| {
             stream.write(format!("{}\r\n", sel).as_ref());
             Ok(stream)
-        })?;
+        })
+        .and_then(|mut stream| {
+            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
 
-    stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-    stream.set_nonblocking(true)?;
+            let file = std::fs::OpenOptions::new()
+                .write(true)
+                .create(true)
+                .truncate(true)
+                .mode(0o770)
+                .open(path)?;
 
-    let file = std::fs::OpenOptions::new()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .mode(0o770)
-        .open(path)?;
-
-    let mut file_buffer = BufWriter::new(file);
-    let mut buf = [0 as u8; 8]; // read 8 bytes at a time
-    while let Ok(count) = stream.read(&mut buf) {
-        if count == 0 {
-            break;
-        }
-        file_buffer.write_all(&buf);
-    }
-    file_buffer.flush();
-    Ok(filename.to_string())
+            let mut file_buffer = BufWriter::new(file);
+            let mut buf = [0 as u8; 8]; // read 8 bytes at a time
+            let mut bytes = 0;
+            while let Ok(count) = stream.read(&mut buf) {
+                if count == 0 {
+                    break;
+                }
+                bytes += count;
+                file_buffer.write_all(&buf);
+            }
+            Ok((filename.to_string(), bytes))
+        })
 }
 
 // url parsing states
