@@ -62,6 +62,11 @@ impl UI {
         self.shutdown();
     }
 
+    fn set_status(&mut self, status: String) {
+        self.status = status;
+        self.dirty = true;
+    }
+
     fn render_status(&self) -> Option<String> {
         if self.status.is_empty() {
             None
@@ -98,7 +103,7 @@ impl UI {
 
         let action = self.process_page_input();
         if let Err(e) = self.process_action(action) {
-            self.status = format!("{}{}", color::Fg(color::LightRed), e);
+            self.set_status(format!("{}{}", color::Fg(color::LightRed), e));
         }
     }
 
@@ -346,13 +351,13 @@ impl UI {
             Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
             Action::Keypress(Key::Ctrl('u')) => {
                 if let Some(page) = self.views.get(self.focused) {
-                    status(&format!("Current URL: {}", page.url()));
+                    self.set_status(format!("Current URL: {}", page.url()));
                 }
             }
             Action::Keypress(Key::Ctrl('y')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     copy_to_clipboard(&page.url())?;
-                    status(&format!("Copied {} to clipboard.", page.url()));
+                    self.set_status(format!("Copied {} to clipboard.", page.url()));
                 }
             }
             _ => (),
@@ -454,17 +459,4 @@ pub fn prompt(prompt: &str) -> Option<String> {
     } else {
         None
     }
-}
-
-// Display a status message to the user.
-pub fn status(s: &str) {
-    let (_cols, rows) = terminal_size().unwrap();
-    print!(
-        "{}{}{}{}",
-        termion::cursor::Goto(1, rows),
-        termion::clear::CurrentLine,
-        s,
-        color::Fg(color::Reset)
-    );
-    stdout().flush();
 }
