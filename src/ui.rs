@@ -95,8 +95,8 @@ impl UI {
             return open_external(url);
         }
 
-        self.fetch(url).and_then(|view| {
-            self.add_page(view);
+        self.fetch(url).and_then(|page| {
+            self.add_page(page);
             Ok(())
         })
     }
@@ -251,12 +251,12 @@ impl UI {
         self.size = (cols, rows);
     }
 
-    fn add_page(&mut self, view: Page) {
+    fn add_page(&mut self, page: Page) {
         self.dirty = true;
         if !self.views.is_empty() && self.focused < self.views.len() - 1 {
             self.views.truncate(self.focused + 1);
         }
-        self.views.push(view);
+        self.views.push(page);
         if self.views.len() > 1 {
             self.focused += 1;
         }
