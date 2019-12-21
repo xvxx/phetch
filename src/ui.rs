@@ -113,22 +113,10 @@ impl UI {
         ));
 
         // request thread
-        // two channels: one to send success, one to send failure.
-        let (tx, rx) = mpsc::channel();
-        let (errtx, errrx) = mpsc::channel();
         let thread_url = url.to_string();
-        thread::spawn(move || {
-            let (_, host, port, sel) = gopher::parse_url(&thread_url);
-            gopher::fetch(host, port, sel)
-                .and_then(|res| {
-                    tx.send(res);
-                    Ok(())
-                })
-                .map_err(|e| {
-                    errtx.send(e.to_string());
-                    tx.send("".to_string());
-                    e
-                })
+        let req = thread::spawn(move || match gopher::fetch_url(&thread_url) {
+            Ok(res) => Ok(res),
+            Err(e) => Err(e),
         });
 
         // spinner thead
@@ -149,22 +137,15 @@ impl UI {
             }
         });
 
-        // main thread - check for updates in a loop
-        let res;
-        loop {
-            if let Ok(body) = rx.try_recv() {
-                spintx.send(true);
-                if body.is_empty() {
-                    if let Ok(err) = errrx.try_recv() {
-                        return Err(io_error(err));
-                    } else {
-                        return Err(io_error("Connection error".into()));
-                    }
-                }
-                res = body;
-                break;
-            }
-        }
+        let work = req.join();
+        spintx.send(true); // stop spinner
+        let res = match work {
+            Ok(opt) => match opt {
+                Ok(body) => body,
+                Err(e) => return Err(e),
+            },
+            Err(_) => return Err(io_error("Connection error".into())),
+        };
 
         let (typ, _, _, _) = gopher::parse_url(url);
         match typ {
