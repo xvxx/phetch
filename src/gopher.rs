@@ -114,8 +114,10 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
 pub fn download_url(url: &str) -> io::Result<String> {
     let (_, host, port, sel) = parse_url(url);
     let sel = sel.replace('?', "\t"); // search queries
-    let filename = "./tmp-download".to_string();
-    let path = std::path::Path::new("./tmp-download");
+    let parts = sel.split_terminator("/").collect::<Vec<&str>>();
+    let filename = parts.iter().rev().nth(0).unwrap_or(&"download");
+    let mut path = std::path::PathBuf::from(".");
+    path.push(filename);
 
     format!("{}:{}", host, port)
         .to_socket_addrs()
@@ -137,10 +139,13 @@ pub fn download_url(url: &str) -> io::Result<String> {
                                 .open(path)
                                 .and_then(|mut file| {
                                     let mut buf = [0; 1024];
-                                    while let Ok(()) = stream.read_exact(&mut buf) {
+                                    while let Ok(count) = stream.read(&mut buf) {
+                                        if count == 0 {
+                                            break;
+                                        }
                                         file.write_all(&buf);
                                     }
-                                    Ok(filename)
+                                    Ok(filename.to_string())
                                 })
                         })
                 })
