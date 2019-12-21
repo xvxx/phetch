@@ -145,7 +145,6 @@ impl UI {
         if url.starts_with("gopher://help/") {
             return self.fetch_help(url);
         }
-
         // request thread
         let thread_url = url.to_string();
         let res = self.spinner("", move || gopher::fetch_url(&thread_url))??;
