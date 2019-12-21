@@ -296,26 +296,23 @@ impl Menu {
     }
 
     fn action_down(&mut self) -> Action {
-        let count = self.links.len();
-
-        // last link selected but there is more content
-        if self.lines.len() > self.rows() + self.scroll - 1 && self.link == count - 1 {
-            self.scroll += 1;
-            return Action::Redraw;
-        }
-
-        if count > 0
-            && self.link == count - 1
-            && self.lines.len() > self.link
-            && self.scroll > SCROLL_LINES
-            && count > self.scroll - SCROLL_LINES
-        {
-            self.scroll += 1;
-            return Action::Redraw;
-        }
-
         let new_link = self.link + 1;
-        if count > 0 && self.link < count - 1 {
+
+        // final link selected already
+        if new_link >= self.links.len() {
+            // if there are more rows, scroll down
+            let rows_from_bottom = (self.rows() as f64 * 0.75) as usize;
+            if rows_from_bottom <= self.links.len()
+                && self.scroll < self.links.len() - rows_from_bottom
+            {
+                self.scroll += 1;
+                return Action::Redraw;
+            } else {
+                return Action::None;
+            }
+        }
+
+        if !self.links.is_empty() && self.link < self.links.len() - 1 {
             if let Some(dir) = self.link_visibility(new_link) {
                 match dir {
                     LinkDir::Above => {
@@ -338,6 +335,12 @@ impl Menu {
                     LinkDir::Visible => {
                         // select next link down
                         self.link = new_link;
+                        // scroll if we are within 5 lines of the end
+                        if let Some(&pos) = self.links.get(self.link) {
+                            if pos >= self.scroll + self.rows() - 6 {
+                                self.scroll += 1;
+                            }
+                        }
                     }
                 }
                 Action::Redraw
