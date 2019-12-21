@@ -23,16 +23,17 @@ use menu::Menu;
 use text::Text;
 
 pub type Key = termion::event::Key;
+pub type Page = Box<dyn View>;
 
 pub const SCROLL_LINES: usize = 15;
 pub const MAX_COLS: usize = 72;
 
 pub struct UI {
-    views: Vec<Box<dyn View>>, // loaded views
-    focused: usize,            // currently focused view
-    dirty: bool,               // redraw?
-    running: bool,             // main ui loop running?
-    pub size: (usize, usize),  // cols, rows
+    views: Vec<Page>,         // loaded views
+    focused: usize,           // currently focused view
+    dirty: bool,              // redraw?
+    running: bool,            // main ui loop running?
+    pub size: (usize, usize), // cols, rows
 }
 
 impl UI {
@@ -100,7 +101,7 @@ impl UI {
         })
     }
 
-    fn fetch(&mut self, url: &str) -> io::Result<Box<dyn View>> {
+    fn fetch(&mut self, url: &str) -> io::Result<Page> {
         // on-line help
         if url.starts_with("gopher://help/") {
             return self.fetch_help(url);
@@ -156,7 +157,7 @@ impl UI {
     }
 
     // get Menu for on-line help url, ex: gopher://help/1/types
-    fn fetch_help(&mut self, url: &str) -> io::Result<Box<dyn View>> {
+    fn fetch_help(&mut self, url: &str) -> io::Result<Page> {
         if let Some(source) = help::lookup(
             &url.trim_start_matches("gopher://help/")
                 .trim_start_matches("1/"),
@@ -250,7 +251,7 @@ impl UI {
         self.size = (cols, rows);
     }
 
-    fn add_page(&mut self, view: Box<dyn View>) {
+    fn add_page(&mut self, view: Page) {
         self.dirty = true;
         if !self.views.is_empty() && self.focused < self.views.len() - 1 {
             self.views.truncate(self.focused + 1);
