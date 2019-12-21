@@ -195,12 +195,13 @@ impl UI {
                     return;
                 }
                 print!(
-                    "\r{}{}{}{}{}",
+                    "\r{}{}{}{}{}{}",
                     termion::cursor::Hide,
                     label,
                     ".".repeat(i),
                     termion::clear::AfterCursor,
-                    color::Fg(color::Reset)
+                    color::Fg(color::Reset),
+                    termion::cursor::Show,
                 );
                 stdout().flush();
                 thread::sleep(Duration::from_millis(350));
