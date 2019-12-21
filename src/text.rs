@@ -7,7 +7,7 @@ pub struct Text {
     lines: usize,         // # of lines
     longest: usize,       // longest line
     size: (usize, usize), // cols, rows
-    wide: bool,      // in wide mode? turns off margins
+    wide: bool,           // in wide mode? turns off margins
 }
 
 impl View for Text {
@@ -42,7 +42,7 @@ impl View for Text {
                 Action::Redraw
             }
             Key::Down | Key::Ctrl('n') | Key::Char('j') => {
-                if self.lines > SCROLL_LINES && self.scroll < (self.lines - SCROLL_LINES) {
+                if self.scroll < self.padding() {
                     self.scroll += 1;
                     Action::Redraw
                 } else {
@@ -70,13 +70,11 @@ impl View for Text {
                 }
             }
             Key::PageDown | Key::Char(' ') => {
-                let lines = self.lines - 1;
-                if lines > SCROLL_LINES {
-                    if self.scroll < lines - SCROLL_LINES {
-                        self.scroll += SCROLL_LINES;
-                        if self.scroll >= lines {
-                            self.scroll = lines;
-                        }
+                let padding = self.padding();
+                if self.scroll < padding {
+                    self.scroll += SCROLL_LINES;
+                    if self.scroll >= padding {
+                        self.scroll = padding;
                     }
                     Action::Redraw
                 } else {
@@ -142,6 +140,16 @@ impl Text {
             longest,
             size: (0, 0),
             wide: false,
+        }
+    }
+
+    // how many rows to pad with blank lines at the end of the page
+    fn padding(&self) -> usize {
+        let padding = (self.size.1 as f64 * 0.75) as usize;
+        if self.lines > padding {
+            self.lines - padding
+        } else {
+            0
         }
     }
 }
