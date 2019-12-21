@@ -186,7 +186,7 @@ impl Menu {
     fn action_page_down(&mut self) -> Action {
         let lines = self.lines.len();
         if lines < self.rows() {
-            if self.links.len() > 0 {
+            if !self.links.is_empty() {
                 self.link = self.links.len() - 1;
                 return Action::Redraw;
             }
@@ -541,16 +541,14 @@ impl Menu {
                 }
 
                 // check for URL:<url> syntax
-                if parts.len() > 1 {
-                    if parts[1].starts_with("URL:") {
-                        lines.push(Line {
-                            name,
-                            url: parts[1].trim_start_matches("URL:").to_string(),
-                            typ,
-                            link,
-                        });
-                        continue;
-                    }
+                if parts.len() > 1 && parts[1].starts_with("URL:") {
+                    lines.push(Line {
+                        name,
+                        url: parts[1].trim_start_matches("URL:").to_string(),
+                        typ,
+                        link,
+                    });
+                    continue;
                 }
 
                 // assemble regular, gopher-style URL
@@ -571,7 +569,7 @@ impl Menu {
                     url.push_str("/");
                     url.push(first_char);
                     // add trailing / if the selector is blank
-                    if parts.len() == 0 || parts.len() > 1 && parts[1].len() == 0 {
+                    if parts.is_empty() || parts.len() > 1 && parts[1].is_empty() {
                         url.push('/');
                     }
                 }

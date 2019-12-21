@@ -90,7 +90,7 @@ impl UI {
                 termion::cursor::Goto(1, 1),
                 termion::cursor::Hide,
                 self.render(),
-                self.render_status().unwrap_or("".into()),
+                self.render_status().unwrap_or_else(|| "".into()),
             );
 
             self.dirty = false;
@@ -112,7 +112,7 @@ impl UI {
 
         // no open loops
         if let Some(page) = self.views.get(self.focused) {
-            if &page.url() == url {
+            if page.url() == url {
                 return Ok(());
             }
         }
@@ -145,7 +145,7 @@ impl UI {
         let (spintx, spinrx) = mpsc::channel();
         thread::spawn(move || loop {
             for i in 0..=3 {
-                if let Ok(_) = spinrx.try_recv() {
+                if spinrx.try_recv().is_ok() {
                     return;
                 }
                 print!(
@@ -294,7 +294,7 @@ impl UI {
             if let Ok(key) = stdin()
                 .keys()
                 .nth(0)
-                .ok_or(Action::Error("stdin.keys() error".to_string()))
+                .ok_or_else(|| Action::Error("stdin.keys() error".to_string()))
             {
                 if let Ok(key) = key {
                     return page.respond(key);
@@ -334,8 +334,8 @@ impl UI {
             }
             Action::Keypress(Key::Ctrl('r')) => {
                 if let Some(page) = self.views.get(self.focused) {
-                    let url = page.url().to_string();
-                    let raw = page.raw().to_string();
+                    let url = page.url();
+                    let raw = page.raw();
                     self.add_page(Box::new(Text::from(url, raw)));
                 }
             }
@@ -351,13 +351,15 @@ impl UI {
             Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
             Action::Keypress(Key::Ctrl('u')) => {
                 if let Some(page) = self.views.get(self.focused) {
-                    self.set_status(format!("Current URL: {}", page.url()));
+                    let url = page.url();
+                    self.set_status(format!("Current URL: {}", url));
                 }
             }
             Action::Keypress(Key::Ctrl('y')) => {
                 if let Some(page) = self.views.get(self.focused) {
-                    copy_to_clipboard(&page.url())?;
-                    self.set_status(format!("Copied {} to clipboard.", page.url()));
+                    let url = page.url();
+                    copy_to_clipboard(&url)?;
+                    self.set_status(format!("Copied {} to clipboard.", url));
                 }
             }
             _ => (),

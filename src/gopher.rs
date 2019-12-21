@@ -94,7 +94,7 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
         .and_then(|mut socks| {
             socks
                 .next()
-                .ok_or(io_error("Can't create socket".to_string()))
+                .ok_or_else(|| io_error("Can't create socket".to_string()))
                 .and_then(|sock| {
                     TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)
                         .and_then(|mut stream| {
