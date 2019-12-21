@@ -363,7 +363,9 @@ impl UI {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     let raw = page.raw();
-                    self.add_page(Box::new(Text::from(url, raw)));
+                    let mut text = Text::from(url, raw);
+                    text.wide = true;
+                    self.add_page(Box::new(text));
                 }
             }
             Action::Keypress(Key::Ctrl('g')) => {

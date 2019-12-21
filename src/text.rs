@@ -7,7 +7,7 @@ pub struct Text {
     lines: usize,         // # of lines
     longest: usize,       // longest line
     size: (usize, usize), // cols, rows
-    wide: bool,           // in wide mode? turns off margins
+    pub wide: bool,       // in wide mode? turns off margins
 }
 
 impl View for Text {
