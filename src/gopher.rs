@@ -158,52 +158,39 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
         })
 }
 
-// url parsing states
-enum Parsing {
-    Host,
-    Port,
-    Selector,
-}
 
 // Parses gopher URL into parts.
+// Return (Type, host, port, sel)
 pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     let url = url.trim_start_matches("gopher://");
 
-    let mut host = "";
+    // simple URLs
+    if !url.contains(':') && !url.contains('/') {
+        return (Type::Menu, url, "70", "/");
+    }
+
+    let mut typ = Type::Menu;
+    let mut host;
     let mut port = "70";
     let mut sel = "/";
-    let mut typ = Type::Menu;
-    let mut state = Parsing::Host;
-    let mut start = 0;
 
-    for (i, c) in url.char_indices() {
-        match state {
-            Parsing::Host => {
-                state = match c {
-                    ':' => Parsing::Port,
-                    '/' => Parsing::Selector,
-                    _ => continue,
-                };
-                host = &url[start..i];
-                start = if c == '/' { i } else { i + 1 };
-            }
-            Parsing::Port => {
-                if c == '/' {
-                    state = Parsing::Selector;
-                    port = &url[start..i];
-                    start = i;
-                }
-            }
-            Parsing::Selector => {}
+    // check selector first
+    if let Some(idx) = url.find('/') {
+        host = &url[..idx];
+        sel = &url[idx..];
+    } else {
+        host = &url;
+    }
+
+    // grab port
+    if let Some(idx) = host.find(':') {
+        if host.len() > idx + 1 {
+            port = &host[idx + 1..];
+            host = &host[..idx];
         }
     }
 
-    match state {
-        Parsing::Selector => sel = &url[start..],
-        Parsing::Port => port = &url[start..],
-        Parsing::Host => host = &url[start..],
-    };
-
+    // ignore type prefix on selector
     let mut chars = sel.chars();
     if let (Some('/'), Some(c), Some('/')) = (chars.nth(0), chars.nth(0), chars.nth(0)) {
         if let Some(t) = gopher::type_for_char(c) {
@@ -227,6 +214,12 @@ mod tests {
             "gopher.floodgap.org",
             "gopher.floodgap.com/0/gopher/relevance.txt",
             "gopher://gopherpedia.com/7/lookup?Gopher",
+            "::1",
+            "gopher://dead:beef:1234:5678:9012:3456:feed:deed",
+            "1234:2345:dead:4567:7890:1234:beef:1111:7443/1/files",
+            "2001:cdba:0000:0000:0000:0000:3257:9652",
+            "2001:cdba::3257:9652",
+            "2001:cdba::3257:9652:71",
         ];
 
         let (typ, host, port, sel) = parse_url(urls[0]);
@@ -258,5 +251,41 @@ mod tests {
         assert_eq!(host, "gopherpedia.com");
         assert_eq!(port, "70");
         assert_eq!(sel, "/lookup?Gopher");
+
+        let (typ, host, port, sel) = parse_url(urls[5]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "::1");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/");
+
+        let (typ, host, port, sel) = parse_url(urls[6]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "dead:beef:1234:5678:9012:3456:feed:deed");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/");
+
+        let (typ, host, port, sel) = parse_url(urls[7]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "1234:2345:dead:4567:7890:1234:beef:1111");
+        assert_eq!(port, "7443");
+        assert_eq!(sel, "/files");
+
+        let (typ, host, port, sel) = parse_url(urls[8]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "2001:cdba:0000:0000:0000:0000:3257:9652");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/");
+
+        let (typ, host, port, sel) = parse_url(urls[9]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "2001:cdba::3257:9652");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/");
+
+        let (typ, host, port, sel) = parse_url(urls[10]);
+        assert_eq!(typ, Type::Menu);
+        assert_eq!(host, "2001:cdba::3257:9652");
+        assert_eq!(port, "71");
+        assert_eq!(sel, "/");
     }
 }
