@@ -173,11 +173,11 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     for (i, c) in url.char_indices() {
         match state {
             Parsing::Host => {
-                match c {
-                    ':' => state = Parsing::Port,
-                    '/' => state = Parsing::Selector,
+                state = match c {
+                    ':' => Parsing::Port,
+                    '/' => Parsing::Selector,
                     _ => continue,
-                }
+                };
                 host = &url[start..i];
                 start = if c == '/' { i } else { i + 1 };
             }
