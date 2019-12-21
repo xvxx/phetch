@@ -91,7 +91,6 @@ impl UI {
                 self.render_status().unwrap_or_else(|| "".into()),
             );
 
-            self.status.clear();
             self.dirty = false;
         }
     }
@@ -107,8 +106,6 @@ impl UI {
     }
 
     pub fn open(&mut self, url: &str) -> Result<()> {
-        self.status.clear();
-
         // no open loops
         if let Some(page) = self.views.get(self.focused) {
             if page.url() == url {
@@ -323,14 +320,18 @@ impl UI {
     }
 
     fn process_action(&mut self, action: Action) -> Result<()> {
+        let cleared = if !self.status.is_empty() {
+            self.status.clear();
+            self.dirty = true;
+            true
+        } else {
+            false
+        };
+
         match action {
-            Action::Keypress(Key::Esc) => self.status.clear(),
             Action::Keypress(Key::Ctrl('c')) => {
-                if self.status.is_empty() {
+                if !cleared {
                     self.running = false
-                } else {
-                    self.dirty = true;
-                    self.status.clear();
                 }
             }
             Action::Keypress(Key::Ctrl('q')) => self.running = false,
