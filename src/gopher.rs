@@ -158,7 +158,6 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
         })
 }
 
-
 // Parses gopher URL into parts.
 // Return (Type, host, port, sel)
 pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
@@ -182,9 +181,22 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
         host = &url;
     }
 
-    // grab port
-    if let Some(idx) = host.find(':') {
-        if host.len() > idx + 1 {
+    // ipv6
+    if let Some(idx) = host.find('[') {
+        if let Some(end) = host[idx + 1..].find(']') {
+            host = &host[idx + 1..end + 1];
+            if host.len() > end {
+                if let Some(idx) = host[end..].find(':') {
+                    port = &host[idx + 1..];
+                }
+            }
+        } else {
+            return (Type::Error, "Unclosed ipv6 bracket", "", url);
+        }
+    } else if let Some(idx) = host.find(':') {
+        // two :'s == probably ipv6
+        if host.len() > idx + 1 && !host[idx + 1..].contains(':') {
+            // regular hostname w/ port -- grab port
             port = &host[idx + 1..];
             host = &host[..idx];
         }
@@ -214,12 +226,13 @@ mod tests {
             "gopher.floodgap.org",
             "gopher.floodgap.com/0/gopher/relevance.txt",
             "gopher://gopherpedia.com/7/lookup?Gopher",
-            "::1",
             "gopher://dead:beef:1234:5678:9012:3456:feed:deed",
-            "1234:2345:dead:4567:7890:1234:beef:1111:7443/1/files",
-            "2001:cdba:0000:0000:0000:0000:3257:9652",
-            "2001:cdba::3257:9652",
-            "2001:cdba::3257:9652:71",
+            "gopher://[1234:2345:dead:4567:7890:1234:beef:1111]:7443/1/files",
+            "gopher://2001:cdba:0000:0000:0000:0000:3257:9121",
+            "[2001:cdba::3257:9652]",
+            "gopher://9999:aaaa::abab:baba:aaaa:9999",
+            "[2001:2099:dead:beef:0000",
+            "::1",
         ];
 
         let (typ, host, port, sel) = parse_url(urls[0]);
@@ -254,38 +267,44 @@ mod tests {
 
         let (typ, host, port, sel) = parse_url(urls[5]);
         assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "::1");
+        assert_eq!(host, "dead:beef:1234:5678:9012:3456:feed:deed");
         assert_eq!(port, "70");
         assert_eq!(sel, "/");
 
         let (typ, host, port, sel) = parse_url(urls[6]);
         assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "dead:beef:1234:5678:9012:3456:feed:deed");
+        assert_eq!(host, "1234:2345:dead:4567:7890:1234:beef:1111");
         assert_eq!(port, "70");
-        assert_eq!(sel, "/");
+        assert_eq!(sel, "/files");
 
         let (typ, host, port, sel) = parse_url(urls[7]);
         assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "1234:2345:dead:4567:7890:1234:beef:1111");
-        assert_eq!(port, "7443");
-        assert_eq!(sel, "/files");
+        assert_eq!(host, "2001:cdba:0000:0000:0000:0000:3257:9121");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "/");
 
         let (typ, host, port, sel) = parse_url(urls[8]);
         assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "2001:cdba:0000:0000:0000:0000:3257:9652");
+        assert_eq!(host, "2001:cdba::3257:9652");
         assert_eq!(port, "70");
         assert_eq!(sel, "/");
 
         let (typ, host, port, sel) = parse_url(urls[9]);
         assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "2001:cdba::3257:9652");
+        assert_eq!(host, "9999:aaaa::abab:baba:aaaa:9999");
         assert_eq!(port, "70");
         assert_eq!(sel, "/");
 
         let (typ, host, port, sel) = parse_url(urls[10]);
+        assert_eq!(typ, Type::Error);
+        assert_eq!(host, "Unclosed ipv6 bracket");
+        assert_eq!(port, "");
+        assert_eq!(sel, "[2001:2099:dead:beef:0000");
+
+        let (typ, host, port, sel) = parse_url(urls[11]);
         assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "2001:cdba::3257:9652");
-        assert_eq!(port, "71");
+        assert_eq!(host, "::1");
+        assert_eq!(port, "70");
         assert_eq!(sel, "/");
     }
 }
