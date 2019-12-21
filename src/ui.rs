@@ -113,35 +113,49 @@ impl UI {
         ));
 
         let (typ, _, _, _) = gopher::parse_url(url);
-        let (tx, rx) = mpsc::channel();
 
+        let (tx, rx) = mpsc::channel();
         let thread_url = url.to_string();
         thread::spawn(move || {
             let (_, host, port, sel) = gopher::parse_url(&thread_url);
             gopher::fetch(host, port, sel)
                 .and_then(|res| {
-                    tx.send(res).unwrap();
+                    tx.send(res);
                     Ok(())
                 })
-                .map_err(|e| error(&e.to_string()));
+                .map_err(|e| {
+                    tx.send("".to_string());
+                    e
+                })
+        });
+
+        let (spintx, spinrx) = mpsc::channel();
+        thread::spawn(move || loop {
+            for i in 0..=3 {
+                if let Ok(_) = spinrx.try_recv() {
+                    return;
+                }
+                print!(
+                    "\r{}{}{}",
+                    termion::cursor::Hide,
+                    ".".repeat(i),
+                    termion::clear::AfterCursor
+                );
+                stdout().flush();
+                thread::sleep(Duration::from_millis(350));
+            }
         });
 
         let mut res = String::new();
-        let mut i = 0;
         loop {
-            print!(
-                "\r{}{}{}",
-                termion::cursor::Hide,
-                ".".repeat(i),
-                termion::clear::AfterCursor
-            );
-            stdout().flush();
-            i = if i >= 3 { 0 } else { i + 1 };
             if let Ok(body) = rx.try_recv() {
+                spintx.send(true);
+                if body.is_empty() {
+                    return Err(io_error("Connection error".into()));
+                }
                 res.push_str(&body);
                 break;
             }
-            thread::sleep(Duration::from_millis(200));
         }
 
         match typ {
