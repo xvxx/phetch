@@ -1,6 +1,6 @@
 use gopher;
 use std::io;
-use std::io::{Read, Result, Write};
+use std::io::{BufWriter, Read, Result, Write};
 use std::net::TcpStream;
 use std::net::ToSocketAddrs;
 use std::os::unix::fs::OpenOptionsExt;
@@ -141,14 +141,16 @@ pub fn download_url(url: &str) -> Result<String> {
                 .truncate(true)
                 .mode(0o770)
                 .open(path)
-                .and_then(|mut file| {
+                .and_then(|file| {
+                    let mut file_buffer = BufWriter::new(file);
                     let mut buf = [0 as u8; 8]; // read 8 bytes at a time
                     while let Ok(count) = stream.read(&mut buf) {
                         if count == 0 {
                             break;
                         }
-                        file.write_all(&buf);
+                        file_buffer.write_all(&buf);
                     }
+                    file_buffer.flush();
                     Ok(filename.to_string())
                 })
         })
