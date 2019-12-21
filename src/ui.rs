@@ -72,8 +72,7 @@ impl UI {
             None
         } else {
             Some(format!(
-                "{}{}{}{}{}",
-                color::Fg(color::LightRed),
+                "{}{}{}{}",
                 termion::cursor::Goto(1, self.rows()),
                 termion::clear::CurrentLine,
                 self.status,
