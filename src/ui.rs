@@ -3,8 +3,7 @@ mod view;
 pub use self::action::Action;
 pub use self::view::View;
 
-use std::io;
-use std::io::{stdin, stdout, Write};
+use std::io::{stdin, stdout, Result, Write};
 use std::process;
 use std::process::Stdio;
 use std::sync::mpsc;
@@ -16,7 +15,7 @@ use termion::raw::IntoRawMode;
 use termion::terminal_size;
 
 use gopher;
-use gopher::io_error;
+use gopher::error;
 use gopher::Type;
 use help;
 use menu::Menu;
@@ -92,6 +91,7 @@ impl UI {
                 self.render_status().unwrap_or_else(|| "".into()),
             );
 
+            self.status.clear();
             self.dirty = false;
         }
     }
@@ -106,7 +106,7 @@ impl UI {
         }
     }
 
-    pub fn open(&mut self, url: &str) -> io::Result<()> {
+    pub fn open(&mut self, url: &str) -> Result<()> {
         self.status.clear();
 
         // no open loops
@@ -133,7 +133,7 @@ impl UI {
         })
     }
 
-    fn download(&mut self, url: &str) -> io::Result<()> {
+    fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
         self.spinner("", move || gopher::download_url(&url))
             .and_then(|res| res)
@@ -143,7 +143,7 @@ impl UI {
             })
     }
 
-    fn fetch(&mut self, url: &str) -> io::Result<Page> {
+    fn fetch(&mut self, url: &str) -> Result<Page> {
         // on-line help
         if url.starts_with("gopher://help/") {
             return self.fetch_help(url);
@@ -156,19 +156,19 @@ impl UI {
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res))),
-            _ => Err(io_error(format!("Unsupported Gopher Response: {:?}", typ))),
+            _ => Err(error(format!("Unsupported Gopher Response: {:?}", typ))),
         }
     }
 
     // get Menu for on-line help url, ex: gopher://help/1/types
-    fn fetch_help(&mut self, url: &str) -> io::Result<Page> {
+    fn fetch_help(&mut self, url: &str) -> Result<Page> {
         if let Some(source) = help::lookup(
             &url.trim_start_matches("gopher://help/")
                 .trim_start_matches("1/"),
         ) {
             Ok(Box::new(Menu::from(url.to_string(), source.to_string())))
         } else {
-            Err(gopher::io_error(format!("Help file not found: {}", url)))
+            Err(gopher::error(format!("Help file not found: {}", url)))
         }
     }
 
@@ -178,7 +178,7 @@ impl UI {
         &mut self,
         label: &str,
         work: F,
-    ) -> io::Result<T> {
+    ) -> Result<T> {
         let req = thread::spawn(work);
 
         let (tx, rx) = mpsc::channel();
@@ -205,7 +205,7 @@ impl UI {
         let result = req.join();
         tx.send(true); // stop spinner
         self.dirty = true;
-        result.map_err(|e| io_error(format!("Spinner error: {:?}", e)))
+        result.map_err(|e| error(format!("Spinner error: {:?}", e)))
     }
 
     pub fn render(&mut self) -> String {
@@ -322,7 +322,7 @@ impl UI {
         Action::None
     }
 
-    fn process_action(&mut self, action: Action) -> io::Result<()> {
+    fn process_action(&mut self, action: Action) -> Result<()> {
         match action {
             Action::Keypress(Key::Esc) => self.status.clear(),
             Action::Keypress(Key::Ctrl('c')) => {
@@ -334,7 +334,7 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Ctrl('q')) => self.running = false,
-            Action::Error(e) => return Err(io_error(e)),
+            Action::Error(e) => return Err(error(e)),
             Action::Redraw => self.dirty = true,
             Action::Open(url) => self.open(&url)?,
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
@@ -391,16 +391,16 @@ impl Drop for UI {
     }
 }
 
-fn copy_to_clipboard(data: &str) -> io::Result<()> {
+fn copy_to_clipboard(data: &str) -> Result<()> {
     spawn_os_clipboard()
         .and_then(|mut child| {
             let child_stdin = child.stdin.as_mut().unwrap();
             child_stdin.write_all(data.as_bytes())
         })
-        .map_err(|e| io_error(format!("Clipboard error: {}", e)))
+        .map_err(|e| error(format!("Clipboard error: {}", e)))
 }
 
-fn spawn_os_clipboard() -> io::Result<process::Child> {
+fn spawn_os_clipboard() -> Result<process::Child> {
     if cfg!(target_os = "macos") {
         process::Command::new("pbcopy")
             .stdin(Stdio::piped())
@@ -414,7 +414,7 @@ fn spawn_os_clipboard() -> io::Result<process::Child> {
 }
 
 // runs the `open` shell command
-fn open_external(url: &str) -> io::Result<()> {
+fn open_external(url: &str) -> Result<()> {
     process::Command::new("open")
         .arg(url)
         .output()

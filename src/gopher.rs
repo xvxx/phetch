@@ -1,6 +1,6 @@
 use gopher;
 use std::io;
-use std::io::{Read, Write};
+use std::io::{Read, Result, Write};
 use std::net::TcpStream;
 use std::net::ToSocketAddrs;
 use std::os::unix::fs::OpenOptionsExt;
@@ -75,18 +75,18 @@ pub fn type_for_char(c: char) -> Option<Type> {
 }
 
 // produces an io::Error more easily
-pub fn io_error(msg: String) -> io::Error {
+pub fn error(msg: String) -> io::Error {
     io::Error::new(io::ErrorKind::Other, msg)
 }
 
 // Fetches a gopher URL and returns a raw Gopher response.
-pub fn fetch_url(url: &str) -> io::Result<String> {
+pub fn fetch_url(url: &str) -> Result<String> {
     let (_, host, port, sel) = parse_url(url);
     fetch(host, port, sel)
 }
 
 // Fetches a gopher URL by its component parts and returns a raw Gopher response.
-pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
+pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
     let mut body = String::new();
     let selector = selector.replace('?', "\t"); // search queries
 
@@ -95,7 +95,7 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
         .and_then(|mut socks| {
             socks
                 .next()
-                .ok_or_else(|| io_error("Can't create socket".to_string()))
+                .ok_or_else(|| error("Can't create socket".to_string()))
         })
         .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
         .and_then(|mut stream| {
@@ -110,7 +110,7 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
 }
 
 // Downloads a binary to disk and returns the path it was saved to.
-pub fn download_url(url: &str) -> io::Result<String> {
+pub fn download_url(url: &str) -> Result<String> {
     let (_, host, port, sel) = parse_url(url);
     let sel = sel.replace('?', "\t"); // search queries
     let filename = sel
@@ -126,7 +126,7 @@ pub fn download_url(url: &str) -> io::Result<String> {
         .and_then(|mut socks| {
             socks
                 .next()
-                .ok_or_else(|| io_error("Can't create socket".to_string()))
+                .ok_or_else(|| error("Can't create socket".to_string()))
         })
         .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
         .and_then(|mut stream| {
