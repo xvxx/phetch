@@ -110,6 +110,43 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> io::Result<String> {
         })
 }
 
+// Downloads a binary to disk and returns the path it was saved to.
+pub fn download_url(url: &str) -> io::Result<String> {
+    let (_, host, port, sel) = parse_url(url);
+    let sel = sel.replace('?', "\t"); // search queries
+    let filename = "./tmp-download".to_string();
+    let path = std::path::Path::new("./tmp-download");
+
+    format!("{}:{}", host, port)
+        .to_socket_addrs()
+        .and_then(|mut socks| {
+            socks
+                .next()
+                .ok_or_else(|| io_error("Can't create socket".to_string()))
+                .and_then(|sock| {
+                    TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)
+                        .and_then(|mut stream| {
+                            stream.write(format!("{}\r\n", sel).as_ref());
+                            Ok(stream)
+                        })
+                        .and_then(|mut stream| {
+                            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
+                            std::fs::OpenOptions::new()
+                                .write(true)
+                                .create(true)
+                                .open(path)
+                                .and_then(|mut file| {
+                                    let mut buf = [0; 1024];
+                                    while let Ok(()) = stream.read_exact(&mut buf) {
+                                        file.write_all(&buf);
+                                    }
+                                    Ok(filename)
+                                })
+                        })
+                })
+        })
+}
+
 // url parsing states
 enum Parsing {
     Host,
