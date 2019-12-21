@@ -4,6 +4,7 @@ use std::net::TcpStream;
 use std::net::ToSocketAddrs;
 use std::os::unix::fs::OpenOptionsExt;
 use std::time::Duration;
+use termion::input::TermRead;
 
 pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
 pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
@@ -120,6 +121,8 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
         .ok_or_else(|| error!("Bad download filename: {}", sel))?;
     let mut path = std::path::PathBuf::from(".");
     path.push(filename);
+    let stdin = termion::async_stdin();
+    let mut keys = stdin.keys();
 
     format!("{}:{}", host, port)
         .to_socket_addrs()
@@ -148,6 +151,9 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
                 }
                 bytes += count;
                 file_buffer.write_all(&buf);
+                if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
+                    return Err(error!("Download canceled"));
+                }
             }
             Ok((filename.to_string(), bytes))
         })

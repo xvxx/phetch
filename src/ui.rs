@@ -131,16 +131,18 @@ impl UI {
 
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
-        self.spinner("", move || gopher::download_url(&url))
-            .and_then(|res| res)
-            .and_then(|(path, bytes)| {
-                self.set_status(format!(
-                    "Download complete! {} saved to {}",
-                    human_bytes(bytes),
-                    path
-                ));
-                Ok(())
-            })
+        self.spinner(&format!("Downloading {}", url), move || {
+            gopher::download_url(&url)
+        })
+        .and_then(|res| res)
+        .and_then(|(path, bytes)| {
+            self.set_status(format!(
+                "Download complete! {} saved to {}",
+                human_bytes(bytes),
+                path
+            ));
+            Ok(())
+        })
     }
 
     fn fetch(&mut self, url: &str) -> Result<Page> {
