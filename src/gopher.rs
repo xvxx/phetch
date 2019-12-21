@@ -1,5 +1,4 @@
 use gopher;
-use std::io;
 use std::io::{BufWriter, Read, Result, Write};
 use std::net::TcpStream;
 use std::net::ToSocketAddrs;
@@ -74,9 +73,13 @@ pub fn type_for_char(c: char) -> Option<Type> {
     }
 }
 
-// produces an io::Error more easily
-pub fn error(msg: String) -> io::Error {
-    io::Error::new(io::ErrorKind::Other, msg)
+macro_rules! error {
+    ($e:expr) => {
+        std::io::Error::new(std::io::ErrorKind::Other, $e)
+    };
+    ($e:expr, $($y:expr),*) => {
+        error!(format!($e, $($y),*));
+    };
 }
 
 // Fetches a gopher URL and returns a raw Gopher response.
@@ -92,11 +95,7 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
 
     format!("{}:{}", host, port)
         .to_socket_addrs()
-        .and_then(|mut socks| {
-            socks
-                .next()
-                .ok_or_else(|| error("Can't create socket".to_string()))
-        })
+        .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))
         .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
         .and_then(|mut stream| {
             stream.write(format!("{}\r\n", selector).as_ref());
@@ -117,43 +116,39 @@ pub fn download_url(url: &str) -> Result<String> {
         .split_terminator('/')
         .rev()
         .nth(0)
-        .unwrap_or(&"download");
+        .ok_or_else(|| error!("Bad download filename: {}", sel))?;
     let mut path = std::path::PathBuf::from(".");
     path.push(filename);
 
-    format!("{}:{}", host, port)
+    let mut stream = format!("{}:{}", host, port)
         .to_socket_addrs()
-        .and_then(|mut socks| {
-            socks
-                .next()
-                .ok_or_else(|| error("Can't create socket".to_string()))
-        })
+        .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))
         .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
         .and_then(|mut stream| {
             stream.write(format!("{}\r\n", sel).as_ref());
             Ok(stream)
-        })
-        .and_then(|mut stream| {
-            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
-            std::fs::OpenOptions::new()
-                .write(true)
-                .create(true)
-                .truncate(true)
-                .mode(0o770)
-                .open(path)
-                .and_then(|file| {
-                    let mut file_buffer = BufWriter::new(file);
-                    let mut buf = [0 as u8; 8]; // read 8 bytes at a time
-                    while let Ok(count) = stream.read(&mut buf) {
-                        if count == 0 {
-                            break;
-                        }
-                        file_buffer.write_all(&buf);
-                    }
-                    file_buffer.flush();
-                    Ok(filename.to_string())
-                })
-        })
+        })?;
+
+    stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
+    stream.set_nonblocking(true)?;
+
+    let file = std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .mode(0o770)
+        .open(path)?;
+
+    let mut file_buffer = BufWriter::new(file);
+    let mut buf = [0 as u8; 8]; // read 8 bytes at a time
+    while let Ok(count) = stream.read(&mut buf) {
+        if count == 0 {
+            break;
+        }
+        file_buffer.write_all(&buf);
+    }
+    file_buffer.flush();
+    Ok(filename.to_string())
 }
 
 // url parsing states

@@ -2,6 +2,7 @@
 
 extern crate termion;
 
+#[macro_use]
 mod gopher;
 mod help;
 mod menu;

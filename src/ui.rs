@@ -15,7 +15,6 @@ use termion::raw::IntoRawMode;
 use termion::terminal_size;
 
 use gopher;
-use gopher::error;
 use gopher::Type;
 use help;
 use menu::Menu;
@@ -152,7 +151,7 @@ impl UI {
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res))),
-            _ => Err(error(format!("Unsupported Gopher Response: {:?}", typ))),
+            _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
     }
 
@@ -164,7 +163,7 @@ impl UI {
         ) {
             Ok(Box::new(Menu::from(url.to_string(), source.to_string())))
         } else {
-            Err(gopher::error(format!("Help file not found: {}", url)))
+            Err(error!("Help file not found: {}", url))
         }
     }
 
@@ -201,7 +200,7 @@ impl UI {
         let result = req.join();
         tx.send(true); // stop spinner
         self.dirty = true;
-        result.map_err(|e| error(format!("Spinner error: {:?}", e)))
+        result.map_err(|e| error!("Spinner error: {:?}", e))
     }
 
     pub fn render(&mut self) -> String {
@@ -334,7 +333,7 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Ctrl('q')) => self.running = false,
-            Action::Error(e) => return Err(error(e)),
+            Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
             Action::Open(url) => self.open(&url)?,
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
@@ -397,7 +396,7 @@ fn copy_to_clipboard(data: &str) -> Result<()> {
             let child_stdin = child.stdin.as_mut().unwrap();
             child_stdin.write_all(data.as_bytes())
         })
-        .map_err(|e| error(format!("Clipboard error: {}", e)))
+        .map_err(|e| error!("Clipboard error: {}", e))
 }
 
 fn spawn_os_clipboard() -> Result<process::Child> {
