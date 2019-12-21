@@ -272,6 +272,15 @@ impl Menu {
             };
         }
 
+        // if text is entered, find previous match
+        if !self.input.is_empty() {
+            if let Some(pos) = self.rlink_matching(self.link + 1, &self.input) {
+                return self.action_select_link(pos);
+            } else {
+                return Action::None;
+            }
+        }
+
         let new_link = self.link - 1;
         if let Some(dir) = self.link_visibility(new_link) {
             match dir {
@@ -315,11 +324,41 @@ impl Menu {
         }
     }
 
+    // search through links to find a match based on the pattern,
+    // starting at link position `start`. returns the link position.
+    fn link_matching(&self, start: usize, pattern: &str) -> Option<usize> {
+        self.link_match_with_iter(pattern, &mut self.links.iter().skip(start))
+    }
+
+    // search backwards
+    fn rlink_matching(&self, start: usize, pattern: &str) -> Option<usize> {
+        self.link_match_with_iter(pattern, &mut self.links.iter().take(start - 1).rev())
+    }
+
+    fn link_match_with_iter<'a, T>(&self, pattern: &str, it: &mut T) -> Option<usize>
+    where
+        T: std::iter::Iterator<Item = &'a usize>,
+    {
+        let pattern = pattern.to_ascii_lowercase();
+        while let Some(&i) = it.next() {
+            let name = if let Some(link) = self.link(i) {
+                link.name.to_ascii_lowercase()
+            } else {
+                continue;
+            };
+
+            if name.contains(&pattern) {
+                return Some(i);
+            }
+        }
+        None
+    }
+
     fn action_down(&mut self) -> Action {
         let new_link = self.link + 1;
 
-        // final link selected already
-        if new_link >= self.links.len() {
+        // no links or final link selected already
+        if self.links.is_empty() || new_link >= self.links.len() {
             // if there are more rows, scroll down
             if self.scroll < self.padding_bottom() {
                 self.scroll += 1;
@@ -329,7 +368,16 @@ impl Menu {
             }
         }
 
-        if !self.links.is_empty() && self.link < self.links.len() - 1 {
+        // if text is entered, find next match
+        if !self.input.is_empty() {
+            if let Some(pos) = self.link_matching(self.link + 1, &self.input) {
+                return self.action_select_link(pos);
+            } else {
+                return Action::None;
+            }
+        }
+
+        if self.link < self.links.len() - 1 {
             if let Some(dir) = self.link_visibility(new_link) {
                 match dir {
                     LinkDir::Above => {
@@ -508,21 +556,11 @@ impl Menu {
                     }
                 }
 
-                for i in 0..count {
-                    // check for name match
-                    let name = if let Some(link) = self.link(i) {
-                        link.name.to_ascii_lowercase()
-                    } else {
-                        "".to_string()
-                    };
-
-                    if name.contains(&self.input.to_ascii_lowercase()) {
-                        return self.action_select_link(i);
-                    }
+                // name search
+                if let Some(pos) = self.link_matching(0, &self.input) {
+                    return self.action_select_link(pos);
                 }
 
-                // self.link = 0;
-                // Action::Redraw
                 self.redraw_input()
             }
             _ => Action::Keypress(key),
