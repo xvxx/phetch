@@ -34,6 +34,7 @@ pub struct UI {
     dirty: bool,              // redraw?
     running: bool,            // main ui loop running?
     pub size: (usize, usize), // cols, rows
+    error: String,            // error string, if any
 }
 
 impl UI {
@@ -48,6 +49,7 @@ impl UI {
             dirty: true,
             running: true,
             size,
+            error: String::new(),
         }
     }
 
@@ -62,13 +64,29 @@ impl UI {
 
     pub fn draw(&mut self) {
         if self.dirty {
+            let error = if self.error.is_empty() {
+                "".into()
+            } else {
+                let e = format!(
+                    "{}{}{}{}{}",
+                    color::Fg(color::LightRed),
+                    termion::cursor::Goto(1, self.rows()),
+                    termion::clear::CurrentLine,
+                    self.error,
+                    color::Fg(color::Reset)
+                );
+                self.error.clear();
+                e
+            };
             print!(
-                "{}{}{}{}",
+                "{}{}{}{}{}",
                 termion::clear::All,
                 termion::cursor::Goto(1, 1),
                 termion::cursor::Hide,
-                self.render()
+                self.render(),
+                error
             );
+
             self.dirty = false;
         }
     }
@@ -78,8 +96,9 @@ impl UI {
         stdout.flush().unwrap();
 
         let action = self.process_page_input();
-        self.process_action(action)
-            .map_err(|e| error(&e.to_string()));
+        if let Err(e) = self.process_action(action) {
+            self.error = e.to_string();
+        }
     }
 
     pub fn open(&mut self, url: &str) -> io::Result<()> {
@@ -107,12 +126,6 @@ impl UI {
             return self.fetch_help(url);
         }
 
-        status(&format!(
-            "{}Loading...{}",
-            color::Fg(color::LightBlack),
-            termion::cursor::Show
-        ));
-
         // request thread
         let thread_url = url.to_string();
         let req = thread::spawn(move || match gopher::fetch_url(&thread_url) {
@@ -128,8 +141,9 @@ impl UI {
                     return;
                 }
                 print!(
-                    "\r{}{}{}",
+                    "\r{}{}{}{}",
                     termion::cursor::Hide,
+                    color::Fg(color::LightBlack),
                     ".".repeat(i),
                     termion::clear::AfterCursor
                 );
@@ -140,6 +154,7 @@ impl UI {
 
         let work = req.join();
         spintx.send(true); // stop spinner
+        self.dirty = true;
         let res = match work {
             Ok(opt) => match opt {
                 Ok(body) => body,
@@ -184,6 +199,10 @@ impl UI {
                 "https://github.com/dvkt/phetch/issues/new"
             )
         }
+    }
+
+    fn rows(&self) -> u16 {
+        self.size.1 as u16
     }
 
     fn startup(&mut self) {
@@ -435,20 +454,6 @@ pub fn status(s: &str) {
         termion::cursor::Goto(1, rows),
         termion::clear::CurrentLine,
         s,
-        color::Fg(color::Reset)
-    );
-    stdout().flush();
-}
-
-// Display an error message to the user.
-pub fn error(e: &str) {
-    let (_cols, rows) = terminal_size().unwrap();
-    print!(
-        "{}{}{}{}{}",
-        "\x1b[91m",
-        termion::cursor::Goto(1, rows),
-        termion::clear::CurrentLine,
-        e,
         color::Fg(color::Reset)
     );
     stdout().flush();
