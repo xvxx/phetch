@@ -52,7 +52,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
-- [ ] tests for scrolling
 - [ ] telnet
 - [ ] ipv6
 - [ ] flesh out help
