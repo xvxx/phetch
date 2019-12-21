@@ -59,11 +59,8 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## bugs
 
-- [ ] stop 'page down' at a reasonable place
-- [ ] stop 'down arrow' at a reasonable place
-- [ ] `open` failure mode for irc links
-- [ ] `open` for irc links
-- [ ] gopher lawn is truncated
+- [ ] `open` silently fails on `irc://` links & friends
+- [ ] Long lines on gopher lawn shouldn't be truncated
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by Nathaniel" weirdness)
 
 ## future features
