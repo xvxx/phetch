@@ -185,6 +185,8 @@ impl Menu {
 
     fn action_page_down(&mut self) -> Action {
         let lines = self.lines.len();
+
+        // fewer lines than visible rows, just select last link
         if lines < self.rows() {
             if !self.links.is_empty() {
                 self.link = self.links.len() - 1;
@@ -193,8 +195,16 @@ impl Menu {
             return Action::None;
         }
 
-        if lines > SCROLL_LINES && self.scroll < lines - SCROLL_LINES {
+        let padding = self.padding_bottom();
+        if self.scroll <= padding {
             self.scroll += SCROLL_LINES;
+            if self.scroll > padding {
+                self.scroll = padding;
+                if !self.links.is_empty() {
+                    self.link = self.links.len() - 1;
+                    return Action::Redraw;
+                }
+            }
             if let Some(dir) = self.link_visibility(self.link) {
                 match dir {
                     LinkDir::Above => {
@@ -295,16 +305,24 @@ impl Menu {
         }
     }
 
+    // how many rows to pad with blank lines at the end of the page
+    fn padding_bottom(&self) -> usize {
+        let padding = (self.rows() as f64 * 0.75) as usize;
+        let lines = self.lines.len();
+        if lines > padding {
+            lines - padding
+        } else {
+            0
+        }
+    }
+
     fn action_down(&mut self) -> Action {
         let new_link = self.link + 1;
 
         // final link selected already
         if new_link >= self.links.len() {
             // if there are more rows, scroll down
-            let rows_from_bottom = (self.rows() as f64 * 0.75) as usize;
-            if rows_from_bottom <= self.links.len()
-                && self.scroll < self.links.len() - rows_from_bottom
-            {
+            if self.scroll < self.padding_bottom() {
                 self.scroll += 1;
                 return Action::Redraw;
             } else {
