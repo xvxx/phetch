@@ -95,7 +95,6 @@ pub fn char_for_type(t: Type) -> Option<char> {
         Type::Info => 'i',
         Type::Sound => 's',
         Type::Document => 'd',
-        _ => return None,
     })
 }
 
