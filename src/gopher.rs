@@ -102,17 +102,21 @@ pub fn char_for_type(t: Type) -> Option<char> {
 #[allow(unused_macros)]
 macro_rules! log {
     ($e:expr) => {{
-        if let Ok(mut file) = std::fs::OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open("phetch.log")
-    {
-        file.write($e.as_ref());
-        file.write(b"\n");
+        if cfg!(debug_assertions) {
+            if let Ok(mut file) = std::fs::OpenOptions::new()
+            .append(true)
+            .create(true)
+            .open("phetch.log")
+        {
+            file.write($e.as_ref());
+            file.write(b"\n");
+        }
     }
     }};
     ($e:expr, $($y:expr),*) => {
-        log!(format!($e, $($y),*));
+        if cfg!(debug_assertions) {
+            log!(format!($e, $($y),*));
+        }
     };
 }
 
