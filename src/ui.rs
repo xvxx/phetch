@@ -373,10 +373,17 @@ fn spawn_os_clipboard() -> Result<process::Child> {
 
 // runs the `open` shell command
 fn open_external(url: &str) -> Result<()> {
-    process::Command::new("open")
-        .arg(url)
-        .output()
-        .and_then(|_| Ok(()))
+    let output = process::Command::new("open").arg(url).output()?;
+    if output.stderr.is_empty() {
+        Ok(())
+    } else {
+        Err(error!(
+            "`open` error: {}",
+            String::from_utf8(output.stderr)
+                .unwrap_or("?".into())
+                .trim_end()
+        ))
+    }
 }
 
 /// Ask user to confirm action with ENTER or Y.
