@@ -25,7 +25,7 @@ pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;
 
 pub const SCROLL_LINES: usize = 15;
-pub const MAX_COLS: usize = 80;
+pub const MAX_COLS: usize = 77;
 
 pub struct UI {
     views: Vec<Page>,         // loaded views
@@ -38,16 +38,12 @@ pub struct UI {
 
 impl UI {
     pub fn new() -> UI {
-        let mut size = (0, 0);
-        if let Ok((cols, rows)) = terminal_size() {
-            size = (cols as usize, rows as usize);
-        }
         UI {
             views: vec![],
             focused: 0,
             dirty: true,
             running: true,
-            size,
+            size: (0, 0),
             status: String::new(),
         }
     }
@@ -59,25 +55,6 @@ impl UI {
             self.update();
         }
         self.shutdown();
-    }
-
-    fn set_status(&mut self, status: String) {
-        self.status = status;
-        self.dirty = true;
-    }
-
-    fn render_status(&self) -> Option<String> {
-        if self.status.is_empty() {
-            None
-        } else {
-            Some(format!(
-                "{}{}{}{}",
-                termion::cursor::Goto(1, self.rows()),
-                termion::clear::CurrentLine,
-                self.status,
-                color::Fg(color::Reset)
-            ))
-        }
     }
 
     pub fn draw(&mut self) {
@@ -184,6 +161,20 @@ impl UI {
         }
     }
 
+    fn rows(&self) -> u16 {
+        self.size.1 as u16
+    }
+
+    fn startup(&mut self) {}
+
+    fn shutdown(&self) {
+        history::save(&self.views);
+    }
+
+    fn term_size(&mut self, cols: usize, rows: usize) {
+        self.size = (cols, rows);
+    }
+
     // Show a spinner while running a thread. Used to make gopher requests or
     // download files.
     fn spinner<T: Send + 'static, F: 'static + Send + FnOnce() -> T>(
@@ -238,18 +229,23 @@ impl UI {
         }
     }
 
-    fn rows(&self) -> u16 {
-        self.size.1 as u16
+    fn set_status(&mut self, status: String) {
+        self.status = status;
+        self.dirty = true;
     }
 
-    fn startup(&mut self) {}
-
-    fn shutdown(&self) {
-        history::save(&self.views);
-    }
-
-    fn term_size(&mut self, cols: usize, rows: usize) {
-        self.size = (cols, rows);
+    fn render_status(&self) -> Option<String> {
+        if self.status.is_empty() {
+            None
+        } else {
+            Some(format!(
+                "{}{}{}{}",
+                termion::cursor::Goto(1, self.rows()),
+                termion::clear::CurrentLine,
+                self.status,
+                color::Fg(color::Reset)
+            ))
+        }
     }
 
     fn add_page(&mut self, page: Page) {
@@ -329,7 +325,7 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
-            Action::Keypress(Key::Ctrl('e')) => self.open("gopher://help/1/history")?,
+            Action::Keypress(Key::Ctrl('a')) => self.open("gopher://help/1/history")?,
             Action::Keypress(Key::Ctrl('u')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
@@ -352,6 +348,7 @@ impl UI {
 impl Drop for UI {
     fn drop(&mut self) {
         print!("\x1b[?25h"); // show cursor
+        stdout().flush();
     }
 }
 

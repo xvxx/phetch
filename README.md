@@ -52,7 +52,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
-- [ ] telnet
+- [ ] telnet: gopher://bitreich.org/1/lawn/bbs
 - [ ] flesh out help
 - [ ] new screenshots
 - [ ] little GIF screencast in README
@@ -60,7 +60,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ## bugs
 
 - [ ] `open` silently fails on `irc://` links & friends
-- [ ] Long lines on gopher lawn shouldn't be truncated
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by Nathaniel" weirdness)
 
 ## future features

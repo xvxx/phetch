@@ -35,9 +35,8 @@ i
 i            ~ * ~
 i
 1phetch help        \x1b[90mctrl+h	/	help
-1show history       \x1b[90mctrl+e	/history	help
+1show history       \x1b[90mctrl+a	/history	help
 1show bookmarks     \x1b[90mctrl+b	/bookmarks	help
-hphetch homepage	URL:https://github.com/dvkt/phetch
 i
 ";
 
