@@ -442,6 +442,20 @@ impl Menu {
     }
 
     fn action_open(&mut self) -> Action {
+        // if the selected link isn't visible, jump to it:
+        if let Some(dir) = self.link_visibility(self.link) {
+            if dir != LinkDir::Visible {
+                if let Some(&pos) = self.links.get(self.link) {
+                    if pos > 5 {
+                        self.scroll = pos - 5;
+                    } else {
+                        self.scroll = 0;
+                    }
+                    return Action::Redraw;
+                }
+            }
+        }
+
         self.input.clear();
         if let Some(line) = self.link(self.link) {
             let url = line.url.to_string();
