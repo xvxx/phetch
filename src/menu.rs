@@ -1,8 +1,11 @@
-use gopher;
-use gopher::Type;
 use std::fmt;
 use std::io::stdout;
 use std::io::Write;
+use std::thread;
+
+use gopher;
+use gopher::Type;
+use history;
 use ui;
 use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
@@ -478,7 +481,12 @@ impl Menu {
                 }
                 Type::Error => Action::Error(line.name.to_string()),
                 Type::Telnet => Action::Error("Telnet support coming soon".into()),
-                _ => Action::Open(url),
+                _ => {
+                    let hurl = url.to_string();
+                    let hname = line.name.clone();
+                    thread::spawn(move || history::save(&hurl, &hname));
+                    Action::Open(url)
+                }
             }
         } else {
             Action::None

@@ -4,7 +4,7 @@ pub fn lookup(name: &str) -> Option<String> {
     Some(match name {
         "" | "/" | "help" => format!("{}{}", HEADER, HELP),
         "home" => format!("{}{}", HEADER, HOME),
-        "history" => history::load_as_raw_menu().unwrap_or_else(|| String::new()),
+        "history" => history::load_as_raw_menu(),
         "bookmarks" => format!("{}", "3Coming soon"),
         "keys" => format!("{}{}", HEADER, KEYS),
         "nav" => format!("{}{}", HEADER, NAV),

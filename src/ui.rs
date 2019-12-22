@@ -17,7 +17,6 @@ use termion::terminal_size;
 use gopher;
 use gopher::Type;
 use help;
-use history;
 use menu::Menu;
 use text::Text;
 
@@ -167,9 +166,7 @@ impl UI {
 
     fn startup(&mut self) {}
 
-    fn shutdown(&self) {
-        history::save(&self.views);
-    }
+    fn shutdown(&self) {}
 
     fn term_size(&mut self, cols: usize, rows: usize) {
         self.size = (cols, rows);
