@@ -88,7 +88,7 @@ impl Menu {
         if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
                 LinkDir::Above
-            } else if pos >= self.scroll + self.rows() - 1 {
+            } else if pos > self.scroll + self.rows() {
                 LinkDir::Below
             } else {
                 LinkDir::Visible
@@ -143,10 +143,10 @@ impl Menu {
                 }
                 out.push(' ');
                 out.push_str("\x1b[95m");
-                if line.link < 10 {
+                if line.link < 9 {
                     out.push(' ');
                 }
-                out.push_str(&line.link.to_string());
+                out.push_str(&(line.link + 1).to_string());
                 out.push_str(".\x1b[0m ");
             }
             // truncate long lines, instead of wrapping
@@ -217,9 +217,9 @@ impl Menu {
                     LinkDir::Above => {
                         let scroll = self.scroll;
                         if let Some(&pos) =
-                            self.links.iter().skip(self.link).find(|&&i| i >= scroll)
+                            self.links.iter().skip(self.link + 1).find(|&&i| i > scroll)
                         {
-                            self.link = self.lines.get(pos).unwrap().link - 1;
+                            self.link = self.lines.get(pos).unwrap().link;
                         }
                     }
                     LinkDir::Below => {}
@@ -251,7 +251,7 @@ impl Menu {
                             .iter()
                             .take(self.link)
                             .rev()
-                            .find(|&&i| i < (self.rows() + scroll - 2))
+                            .find(|&&i| i < (self.rows() + scroll - 1))
                         {
                             self.link = self.lines.get(pos).unwrap().link;
                         }
@@ -281,7 +281,7 @@ impl Menu {
 
         // if text is entered, find previous match
         if !self.input.is_empty() {
-            if let Some(pos) = self.rlink_matching(self.link + 1, &self.input) {
+            if let Some(pos) = self.rlink_matching(self.link, &self.input) {
                 return self.action_select_link(pos);
             } else {
                 return Action::None;
@@ -619,7 +619,7 @@ impl Menu {
                         link: links.len(),
                     });
                     if typ != Type::Info {
-                        links.push(links.len());
+                        links.push(lines.len() - 1);
                     }
                     continue;
                 }
@@ -658,7 +658,7 @@ impl Menu {
                     link: links.len(),
                 });
                 if typ != Type::Info {
-                    links.push(links.len());
+                    links.push(lines.len() - 1);
                 }
             }
         }
