@@ -137,17 +137,12 @@ pub fn fetch_url(url: &str) -> Result<String> {
 
 // Fetches a gopher URL by its component parts and returns a raw Gopher response.
 pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
-    get(host, port, selector)
-        .and_then(|mut stream| {
-            stream.write(format!("{}\r\n", selector).as_ref());
-            Ok(stream)
-        })
-        .and_then(|mut stream| {
-            let mut body = String::new();
-            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
-            stream.read_to_string(&mut body)?;
-            Ok(body)
-        })
+    get(host, port, selector).and_then(|mut stream| {
+        let mut body = String::new();
+        stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
+        stream.read_to_string(&mut body)?;
+        Ok(body)
+    })
 }
 
 // Downloads a binary to disk.
