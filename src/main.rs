@@ -1,16 +1,8 @@
-#![allow(unused_must_use)]
+extern crate phetch;
 
-extern crate termion;
-
-#[macro_use]
-mod gopher;
-mod help;
-mod history;
-mod menu;
-mod text;
-mod ui;
+use phetch::gopher;
+use phetch::ui::UI;
 use std::process::exit;
-use ui::UI;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -71,7 +63,7 @@ fn print_usage() {
 }
 
 fn print_raw(url: &str) {
-    gopher::fetch_url(url)
+    let _ = gopher::fetch_url(url)
         .and_then(|x| {
             println!("{}", x);
             Ok(())
