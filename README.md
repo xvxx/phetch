@@ -53,6 +53,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ## todo
 
 - [ ] telnet: gopher://bitreich.org/1/lawn/bbs
+- [ ] redo history view
 - [ ] flesh out help
 - [ ] new screenshots
 - [ ] little GIF screencast in README
@@ -64,5 +65,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## future features
 
+- [ ] bookmarks (ctrl+s, ctrl+b)
 - [ ] TLS https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
 - [ ] Fuzzy Find incremental search
