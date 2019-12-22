@@ -136,7 +136,7 @@ impl Menu {
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
-                if line.link - 1 == self.link {
+                if line.link == self.link {
                     out.push_str("\x1b[97;1m*\x1b[0m")
                 } else {
                     out.push(' ');
@@ -592,7 +592,6 @@ impl Menu {
     pub fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
         let mut links = vec![];
-        let mut link = 0;
         let mut longest = 0;
         for line in raw.split_terminator('\n') {
             if let Some(c) = line.chars().nth(0) {
@@ -608,32 +607,28 @@ impl Menu {
                 if !parts[0].is_empty() {
                     name.push_str(&parts[0][1..]);
                 }
-                if typ != Type::Info {
-                    link += 1;
-                }
                 if name.len() > longest {
                     longest = name.len();
                 }
-                let link = if typ == Type::Info { 0 } else { link };
-                if link > 0 {
-                    links.push(lines.len());
-                }
-
                 // check for URL:<url> syntax
                 if parts.len() > 1 && parts[1].starts_with("URL:") {
                     lines.push(Line {
                         name,
                         url: parts[1].trim_start_matches("URL:").to_string(),
                         typ,
-                        link,
+                        link: links.len(),
                     });
+                    if typ != Type::Info {
+                        links.push(links.len());
+                    }
                     continue;
                 }
 
                 // assemble regular, gopher-style URL
                 let mut url = String::from("gopher://");
+                // host
                 if parts.len() > 2 {
-                    url.push_str(parts[2]); // host
+                    url.push_str(parts[2]);
                 }
                 // port
                 if parts.len() > 3 {
@@ -652,15 +647,19 @@ impl Menu {
                         url.push('/');
                     }
                 }
+                // selector
                 if parts.len() > 1 {
-                    url.push_str(parts[1]); // selector
+                    url.push_str(parts[1]);
                 }
                 lines.push(Line {
                     name,
                     url,
                     typ,
-                    link,
+                    link: links.len(),
                 });
+                if typ != Type::Info {
+                    links.push(links.len());
+                }
             }
         }
 
