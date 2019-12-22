@@ -1,5 +1,6 @@
 use gopher;
 use gopher::Type;
+use std::fmt;
 use std::io::stdout;
 use std::io::Write;
 use ui;
@@ -31,6 +32,12 @@ enum LinkDir {
     Above,
     Below,
     Visible,
+}
+
+impl fmt::Display for Menu {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.url())
+    }
 }
 
 impl View for Menu {

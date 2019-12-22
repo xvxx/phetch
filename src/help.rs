@@ -1,11 +1,14 @@
-pub fn lookup(name: &str) -> Option<&str> {
-    match name {
-        "" | "/" | "help" => Some(HELP),
-        "types" => Some(TYPES),
-        "nav" => Some(NAV),
-        "home" => Some(HOME),
-        _ => None,
-    }
+use history;
+
+pub fn lookup(name: &str) -> Option<String> {
+    Some(match name {
+        "" | "/" | "help" => HELP.into(),
+        "types" => TYPES.into(),
+        "nav" => NAV.into(),
+        "home" => HOME.into(),
+        "history" => history::load_as_raw_menu().unwrap_or_else(|| String::new()),
+        _ => return None,
+    })
 }
 
 pub const HOME: &str = "

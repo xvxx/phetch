@@ -17,6 +17,7 @@ use termion::terminal_size;
 use gopher;
 use gopher::Type;
 use help;
+use history;
 use menu::Menu;
 use text::Text;
 
@@ -172,7 +173,7 @@ impl UI {
             &url.trim_start_matches("gopher://help/")
                 .trim_start_matches("1/"),
         ) {
-            Ok(Box::new(Menu::from(url.to_string(), source.to_string())))
+            Ok(Box::new(Menu::from(url.to_string(), source)))
         } else {
             Err(error!("Help file not found: {}", url))
         }
@@ -236,65 +237,10 @@ impl UI {
         self.size.1 as u16
     }
 
-    fn startup(&mut self) {
-        self.load_history();
-    }
+    fn startup(&mut self) {}
 
     fn shutdown(&self) {
-        self.save_history();
-    }
-
-    fn config_dir_path(&self) -> Option<std::path::PathBuf> {
-        let homevar = std::env::var("HOME");
-        if homevar.is_err() {
-            return None;
-        }
-
-        let dotdir = "~/.config/phetch".replace('~', &homevar.unwrap());
-        let dotdir = std::path::Path::new(&dotdir);
-        if dotdir.exists() {
-            Some(std::path::PathBuf::from(dotdir))
-        } else {
-            None
-        }
-    }
-
-    fn load_history(&mut self) {
-        // let dotdir = self.config_dir_path();
-        // if dotdir.is_none() {
-        //     return;
-        // }
-        // let history = dotdir.unwrap().join("history");
-        // if let Ok(file) = std::fs::OpenOptions::new().read(true).open(history) {
-        //     let buffered = BufReader::new(file);
-        //     let mut lines = buffered.lines();
-        //     while let Some(Ok(url)) = lines.next() {}
-        // }
-    }
-
-    fn save_history(&self) {
-        let dotdir = self.config_dir_path();
-        if dotdir.is_none() {
-            return;
-        }
-        let dotdir = dotdir.unwrap();
-        let mut out = String::new();
-        for page in &self.views {
-            let url = page.url();
-            if url.starts_with("gopher://help/") {
-                continue;
-            }
-            out.push_str(&page.url());
-            out.push('\n');
-        }
-        let history = dotdir.join("history");
-        if let Ok(mut file) = std::fs::OpenOptions::new()
-            .append(true)
-            .create(true)
-            .open(history)
-        {
-            file.write_all(out.as_ref());
-        }
+        history::save(&self.views);
     }
 
     fn term_size(&mut self, cols: usize, rows: usize) {
@@ -378,6 +324,7 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
+            Action::Keypress(Key::Ctrl('e')) => self.open("gopher://help/1/history")?,
             Action::Keypress(Key::Ctrl('u')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();

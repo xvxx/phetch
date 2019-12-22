@@ -50,28 +50,53 @@ impl Type {
 }
 
 pub fn type_for_char(c: char) -> Option<Type> {
-    match c {
-        '0' => Some(Type::Text),
-        '1' => Some(Type::Menu),
-        '2' => Some(Type::CSOEntity),
-        '3' => Some(Type::Error),
-        '4' => Some(Type::Binhex),
-        '5' => Some(Type::DOSFile),
-        '6' => Some(Type::UUEncoded),
-        '7' => Some(Type::Search),
-        '8' => Some(Type::Telnet),
-        '9' => Some(Type::Binary),
-        '+' => Some(Type::Mirror),
-        'g' => Some(Type::GIF),
-        'T' => Some(Type::Telnet3270),
-        'h' => Some(Type::HTML),
-        'I' => Some(Type::Image),
-        'p' => Some(Type::PNG),
-        'i' => Some(Type::Info),
-        's' => Some(Type::Sound),
-        'd' => Some(Type::Document),
-        _ => None,
-    }
+    Some(match c {
+        '0' => Type::Text,
+        '1' => Type::Menu,
+        '2' => Type::CSOEntity,
+        '3' => Type::Error,
+        '4' => Type::Binhex,
+        '5' => Type::DOSFile,
+        '6' => Type::UUEncoded,
+        '7' => Type::Search,
+        '8' => Type::Telnet,
+        '9' => Type::Binary,
+        '+' => Type::Mirror,
+        'g' => Type::GIF,
+        'T' => Type::Telnet3270,
+        'h' => Type::HTML,
+        'I' => Type::Image,
+        'p' => Type::PNG,
+        'i' => Type::Info,
+        's' => Type::Sound,
+        'd' => Type::Document,
+        _ => return None,
+    })
+}
+
+pub fn char_for_type(t: Type) -> Option<char> {
+    Some(match t {
+        Type::Text => '0',
+        Type::Menu => '1',
+        Type::CSOEntity => '2',
+        Type::Error => '3',
+        Type::Binhex => '4',
+        Type::DOSFile => '5',
+        Type::UUEncoded => '6',
+        Type::Search => '7',
+        Type::Telnet => '8',
+        Type::Binary => '9',
+        Type::Mirror => '+',
+        Type::GIF => 'g',
+        Type::Telnet3270 => 'T',
+        Type::HTML => 'h',
+        Type::Image => 'I',
+        Type::PNG => 'p',
+        Type::Info => 'i',
+        Type::Sound => 's',
+        Type::Document => 'd',
+        _ => return None,
+    })
 }
 
 macro_rules! error {

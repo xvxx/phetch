@@ -1,6 +1,7 @@
+use std::fmt;
 use ui;
 
-pub trait View {
+pub trait View: fmt::Display {
     fn respond(&mut self, key: ui::Key) -> ui::Action;
     fn render(&self) -> String;
     fn url(&self) -> String;

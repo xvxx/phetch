@@ -1,3 +1,4 @@
+use std::fmt;
 use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct Text {
@@ -8,6 +9,12 @@ pub struct Text {
     longest: usize,       // longest line
     size: (usize, usize), // cols, rows
     pub wide: bool,       // in wide mode? turns off margins
+}
+
+impl fmt::Display for Text {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.url())
+    }
 }
 
 impl View for Text {
