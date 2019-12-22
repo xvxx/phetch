@@ -2,16 +2,18 @@ use history;
 
 pub fn lookup(name: &str) -> Option<String> {
     Some(match name {
-        "" | "/" | "help" => HELP.into(),
-        "types" => TYPES.into(),
-        "nav" => NAV.into(),
-        "home" => HOME.into(),
+        "" | "/" | "help" => format!("{}{}", HEADER, HELP),
+        "home" => format!("{}{}", HEADER, HOME),
         "history" => history::load_as_raw_menu().unwrap_or_else(|| String::new()),
+        "bookmarks" => format!("{}", "3Coming soon"),
+        "keys" => format!("{}{}", HEADER, KEYS),
+        "nav" => format!("{}{}", HEADER, NAV),
+        "types" => format!("{}{}", HEADER, TYPES),
         _ => return None,
     })
 }
 
-pub const HOME: &str = "
+pub const HEADER: &str = "
 i                                      	/spacer
 i
 i      /         /         /   
@@ -20,6 +22,9 @@ i|   )|   )|___)|    |    |   )
 i|__/ |  / |__  |__  |__  |  / 
 i|   
 i
+";
+
+pub const HOME: &str = "
 i~ the quick lil gopher client ~
 i
 7search gopher	/v2/vs	gopher.floodgap.com
@@ -29,61 +34,54 @@ i
 i 
 i            ~ * ~
 i
-1phetch help (ctrl+h)	/	help
+1phetch help        \x1b[90mctrl+h	/	help
+1show history       \x1b[90mctrl+e	/history	help
+1show bookmarks     \x1b[90mctrl+b	/bookmarks	help
 hphetch homepage	URL:https://github.com/dvkt/phetch
 i
 ";
 
 pub const HELP: &str = "
-i                                      	/spacer
+i      ** help topics **
 i
-i      /         /         /   
-i ___ (___  ___ (___  ___ (___ 
-i|   )|   )|___)|    |    |   )
-i|__/ |  / |__  |__  |__  |  / 
-i|   
-i
-i   ** keyboard shortcuts **
-i
-ileft       back in history
-iright      forward in history
-iup         select prev link 
-idown       select next link 
-ipage up    scroll page up
-ipage down  scroll page down
-i
-ictrl-g     go to gopher url
-ictrl-u     show gopher url
-ictrl-y     copy url to clipboard
-ictrl-r     view raw source
-ictrl-w     toggle wide mode 
-i 
-i            ~ * ~
-i
-iPress the # of a link to visit
-ior select it. Use ENTER to open
-ithe selected link.
-i
-iTo select a link by name, just 
-istart typing.
-i 
-i            ~ * ~
-i
+1keyboard shortcuts	/keys	help
 1menu navigation	/nav	help
 1gopher types	/types	help
-hvisit homepage	URL:https://github.com/dvkt/phetch
+i 
+i            ~ * ~
+i 
+1start screen	/home	help
+1history	/history	help
+hphetch webpage	URL:https://github.com/dvkt/phetch
+i 
+";
+
+pub const KEYS: &str = "
+i   ** keyboard shortcuts **
 i
+i\x1b[95mleft       \x1b[96mback in history
+i\x1b[95mright      \x1b[96mforward in history
+i\x1b[95mup         \x1b[96mselect prev link 
+i\x1b[95mdown       \x1b[96mselect next link 
+i\x1b[95mpage up    \x1b[96mscroll page up
+i\x1b[95mpage down  \x1b[96mscroll page down
+i
+i\x1b[95mnum key    \x1b[96mopen / select link
+i\x1b[95menter      \x1b[96mopen selected link
+i\x1b[95mescape     \x1b[96mcancel / clear input
+i
+i\x1b[95mctrl-g     \x1b[96mgo to gopher url
+i\x1b[95mctrl-u     \x1b[96mshow gopher url
+i\x1b[95mctrl-y     \x1b[96mcopy url to clipboard
+i\x1b[95mctrl-r     \x1b[96mview raw source
+i\x1b[95mctrl-w     \x1b[96mtoggle wide mode 
+i
+i\x1b[95mctrl-b     \x1b[96mshow bookmarks
+i\x1b[95mctrl-e     \x1b[96mshow history
+i 
 ";
 
 pub const NAV: &str = "
-i                                      	/spacer
-i
-i      /         /         /   
-i ___ (___  ___ (___  ___ (___ 
-i|   )|   )|___)|    |    |   )
-i|__/ |  / |__  |__  |__  |  / 
-i|   
-i
 i    ** menu navigation **
 i
 ithere are three ways to navigate
@@ -94,33 +92,27 @@ i
 iuse the up and down arrows or the
 ictrl-p/ctrl-n combos to select menu 
 iitems. phetch will scroll for you,
-ibut you can use page up & page down
-ito jump by many lines quickly.
+ior you can use page up & page down
+i(or - and spacebar) to jump by many 
+ilines quickly.
 i
 1number keys	/nav	help
 i
 iif there are few enough menu items,
 ipressing a number key will open the
 iitem immediately. otherwise, it'll
-ibe selected.
+ibe selected. use enter to open it.
 i
 1incremental search	/nav	help
 i
 ijust start typing. phetch will look
 ifor the first case insensitive match
-iand try to select it.
+iand try to select it. use the arrow
+ior ctrl-p/n keys to cycle matches.
 i
 ";
 
 pub const TYPES: &str = "
-i                                      	/spacer
-i
-i      /         /         /   
-i ___ (___  ___ (___  ___ (___ 
-i|   )|   )|___)|    |    |   )
-i|__/ |  / |__  |__  |__  |  / 
-i|   
-i
 i     ** gopher types **
 i
 iphetch supports these links:
