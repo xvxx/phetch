@@ -483,6 +483,7 @@ impl Menu {
     fn process_key(&mut self, key: Key) -> Action {
         match key {
             Key::Char('\n') => self.action_open(),
+            Key::Char('\t') => Action::None,
             Key::Up | Key::Ctrl('p') => self.action_up(),
             Key::Down | Key::Ctrl('n') => self.action_down(),
             Key::Ctrl('w') => {
