@@ -281,7 +281,7 @@ impl Menu {
 
         // if text is entered, find previous match
         if !self.input.is_empty() {
-            if let Some(pos) = self.rlink_matching(self.link - 1, &self.input) {
+            if let Some(pos) = self.rlink_matching(self.link, &self.input) {
                 return self.action_select_link(pos);
             } else {
                 return Action::None;
@@ -345,7 +345,7 @@ impl Menu {
 
     // search backwards
     fn rlink_matching(&self, start: usize, pattern: &str) -> Option<usize> {
-        self.link_match_with_iter(pattern, &mut self.links.iter().take(start - 1).rev())
+        self.link_match_with_iter(pattern, &mut self.links.iter().take(start).rev())
     }
 
     fn link_match_with_iter<'a, T>(&self, pattern: &str, it: &mut T) -> Option<usize>
