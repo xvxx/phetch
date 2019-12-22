@@ -313,6 +313,12 @@ impl Menu {
                 LinkDir::Visible => {
                     // select next link up
                     self.link = new_link;
+                    // scroll if we are within 5 lines of the top
+                    if let Some(&pos) = self.links.get(self.link) {
+                        if pos < self.scroll + 5 {
+                            self.scroll -= 1;
+                        }
+                    }
                 }
             }
             Action::Redraw
