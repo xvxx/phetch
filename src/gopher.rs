@@ -133,18 +133,13 @@ pub fn fetch_url(url: &str) -> Result<String> {
 
 // Fetches a gopher URL by its component parts and returns a raw Gopher response.
 pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
-    let mut body = String::new();
-    let selector = selector.replace('?', "\t"); // search queries
-
-    format!("{}:{}", host, port)
-        .to_socket_addrs()
-        .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))
-        .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
+    get(host, port, selector)
         .and_then(|mut stream| {
             stream.write(format!("{}\r\n", selector).as_ref());
             Ok(stream)
         })
         .and_then(|mut stream| {
+            let mut body = String::new();
             stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
             stream.read_to_string(&mut body)?;
             Ok(body)
@@ -155,7 +150,6 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
 // Returns the path it was saved to and the size in bytes.
 pub fn download_url(url: &str) -> Result<(String, usize)> {
     let (_, host, port, sel) = parse_url(url);
-    let sel = sel.replace('?', "\t"); // search queries
     let filename = sel
         .split_terminator('/')
         .rev()
@@ -166,37 +160,41 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
     let stdin = termion::async_stdin();
     let mut keys = stdin.keys();
 
+    get(host, port, sel).and_then(|mut stream| {
+        stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
+
+        let mut file = std::fs::OpenOptions::new()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .mode(0o770)
+            .open(path)?;
+
+        let mut buf = [0; 1024];
+        let mut bytes = 0;
+        while let Ok(count) = stream.read(&mut buf) {
+            if count == 0 {
+                break;
+            }
+            bytes += count;
+            file.write(&buf[..count]);
+            if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
+                return Err(error!("Download canceled"));
+            }
+        }
+        Ok((filename.to_string(), bytes))
+    })
+}
+
+pub fn get(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
+    let selector = selector.replace('?', "\t"); // search queries
     format!("{}:{}", host, port)
         .to_socket_addrs()
         .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))
         .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
         .and_then(|mut stream| {
-            stream.write(format!("{}\r\n", sel).as_ref());
+            stream.write(format!("{}\r\n", selector).as_ref());
             Ok(stream)
-        })
-        .and_then(|mut stream| {
-            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-
-            let mut file = std::fs::OpenOptions::new()
-                .write(true)
-                .create(true)
-                .truncate(true)
-                .mode(0o770)
-                .open(path)?;
-
-            let mut buf = [0; 1024];
-            let mut bytes = 0;
-            while let Ok(count) = stream.read(&mut buf) {
-                if count == 0 {
-                    break;
-                }
-                bytes += count;
-                file.write(&buf[..count]);
-                if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
-                    return Err(error!("Download canceled"));
-                }
-            }
-            Ok((filename.to_string(), bytes))
         })
 }
 

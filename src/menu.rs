@@ -88,7 +88,7 @@ impl Menu {
         if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
                 LinkDir::Above
-            } else if pos >= self.scroll + self.rows() {
+            } else if pos > self.scroll + self.rows() {
                 LinkDir::Below
             } else {
                 LinkDir::Visible
@@ -315,7 +315,7 @@ impl Menu {
                     self.link = new_link;
                     // scroll if we are within 5 lines of the top
                     if let Some(&pos) = self.links.get(self.link) {
-                        if pos < self.scroll + 5 {
+                        if self.scroll > 0 && pos < self.scroll + 5 {
                             self.scroll -= 1;
                         }
                     }
@@ -353,15 +353,10 @@ impl Menu {
         T: std::iter::Iterator<Item = &'a usize>,
     {
         let pattern = pattern.to_ascii_lowercase();
-        while let Some(&i) = it.next() {
-            let name = if let Some(link) = self.link(i) {
-                link.name.to_ascii_lowercase()
-            } else {
-                continue;
-            };
-
-            if name.contains(&pattern) {
-                return Some(i);
+        for &pos in it {
+            let line = self.lines.get(pos)?;
+            if line.name.to_ascii_lowercase().contains(&pattern) {
+                return Some(line.link);
             }
         }
         None
