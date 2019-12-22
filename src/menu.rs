@@ -88,7 +88,7 @@ impl Menu {
         if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
                 LinkPos::Above
-            } else if pos > self.scroll + self.rows() - 2 {
+            } else if pos >= self.scroll + self.rows() - 1 {
                 LinkPos::Below
             } else {
                 LinkPos::Visible

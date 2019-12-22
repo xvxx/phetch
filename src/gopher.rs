@@ -13,17 +13,17 @@ pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SE
 pub enum Type {
     Text,       // 0 | 96 | cyan
     Menu,       // 1 | 94 | blue
-    CSOEntity,  // 2
+    CSOEntity,  // 2 |    | white background
     Error,      // 3 | 91 | red
     Binhex,     // 4 |  4 | white underline
     DOSFile,    // 5 |  4 | white underline
     UUEncoded,  // 6 |  4 | white underline
     Search,     // 7 |  0 | white
-    Telnet,     // 8
+    Telnet,     // 8 | 90 | gray underline
     Binary,     // 9 |  4 | white underline
-    Mirror,     // +
+    Mirror,     // + |    | white background
     GIF,        // g |  4 | white underline
-    Telnet3270, // T
+    Telnet3270, // T |    | white background
     HTML,       // h | 92 | green
     Image,      // I |  4 | white underline
     PNG,        // p |  4 | white underline
