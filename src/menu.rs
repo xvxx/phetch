@@ -431,14 +431,12 @@ impl Menu {
     }
 
     fn action_select_link(&mut self, link: usize) -> Action {
-        if link < self.links.len() {
-            if let Some(&line) = self.links.get(link) {
-                if self.link_visibility(link) != Some(LinkDir::Visible) {
-                    if line > SCROLL_LINES {
-                        self.scroll = line - SCROLL_LINES;
-                    } else {
-                        self.scroll = 0;
-                    }
+        if let Some(&pos) = self.links.get(link) {
+            if self.link_visibility(link) != Some(LinkDir::Visible) {
+                if pos > 5 {
+                    self.scroll = pos - 5;
+                } else {
+                    self.scroll = 0;
                 }
             }
             self.link = link;
