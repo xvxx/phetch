@@ -115,7 +115,12 @@ impl UI {
 
         // non-gopher URL
         if url.contains("://") && !url.starts_with("gopher://") {
-            return open_external(url);
+            self.dirty = true;
+            return if confirm(&format!("Open external URL? {}", url)) {
+                open_external(url)
+            } else {
+                Ok(())
+            };
         }
 
         // binary downloads
