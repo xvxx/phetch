@@ -28,7 +28,7 @@ pub struct Line {
 
 // direction of a given link relative to the visible screen
 #[derive(PartialEq)]
-enum LinkDir {
+enum LinkPos {
     Above,
     Below,
     Visible,
@@ -84,14 +84,14 @@ impl Menu {
     }
 
     // is the given link visible on the screen right now?
-    fn link_visibility(&self, i: usize) -> Option<LinkDir> {
+    fn link_visibility(&self, i: usize) -> Option<LinkPos> {
         if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
-                LinkDir::Above
+                LinkPos::Above
             } else if pos > self.scroll + self.rows() {
-                LinkDir::Below
+                LinkPos::Below
             } else {
-                LinkDir::Visible
+                LinkPos::Visible
             })
         } else {
             None
@@ -214,7 +214,7 @@ impl Menu {
             }
             if let Some(dir) = self.link_visibility(self.link) {
                 match dir {
-                    LinkDir::Above => {
+                    LinkPos::Above => {
                         let scroll = self.scroll;
                         if let Some(&pos) =
                             self.links.iter().skip(self.link).find(|&&i| i >= scroll)
@@ -222,8 +222,8 @@ impl Menu {
                             self.link = self.lines.get(pos).unwrap().link;
                         }
                     }
-                    LinkDir::Below => {}
-                    LinkDir::Visible => {}
+                    LinkPos::Below => {}
+                    LinkPos::Visible => {}
                 }
             }
             Action::Redraw
@@ -244,7 +244,7 @@ impl Menu {
             }
             if let Some(dir) = self.link_visibility(self.link) {
                 match dir {
-                    LinkDir::Below => {
+                    LinkPos::Below => {
                         let scroll = self.scroll;
                         if let Some(&pos) = self
                             .links
@@ -256,8 +256,8 @@ impl Menu {
                             self.link = self.lines.get(pos).unwrap().link;
                         }
                     }
-                    LinkDir::Above => {}
-                    LinkDir::Visible => {}
+                    LinkPos::Above => {}
+                    LinkPos::Visible => {}
                 }
             }
             Action::Redraw
@@ -291,26 +291,26 @@ impl Menu {
         let new_link = self.link - 1;
         if let Some(dir) = self.link_visibility(new_link) {
             match dir {
-                LinkDir::Above => {
+                LinkPos::Above => {
                     // scroll up by 1
                     if self.scroll > 0 {
                         self.scroll -= 1;
                     }
                     // select it if it's visible now
                     if let Some(dir) = self.link_visibility(new_link) {
-                        if dir == LinkDir::Visible {
+                        if dir == LinkPos::Visible {
                             self.link = new_link;
                         }
                     }
                 }
-                LinkDir::Below => {
+                LinkPos::Below => {
                     // jump to link....
                     if let Some(&pos) = self.links.get(new_link) {
                         self.scroll = pos;
                         self.link = new_link;
                     }
                 }
-                LinkDir::Visible => {
+                LinkPos::Visible => {
                     // select next link up
                     self.link = new_link;
                     // scroll if we are within 5 lines of the top
@@ -388,24 +388,24 @@ impl Menu {
         if self.link < self.links.len() {
             if let Some(dir) = self.link_visibility(new_link) {
                 match dir {
-                    LinkDir::Above => {
+                    LinkPos::Above => {
                         // jump to link....
                         if let Some(&pos) = self.links.get(new_link) {
                             self.scroll = pos;
                             self.link = new_link;
                         }
                     }
-                    LinkDir::Below => {
+                    LinkPos::Below => {
                         // scroll down by 1
                         self.scroll += 1;
                         // select it if it's visible now
                         if let Some(dir) = self.link_visibility(new_link) {
-                            if dir == LinkDir::Visible {
+                            if dir == LinkPos::Visible {
                                 self.link = new_link;
                             }
                         }
                     }
-                    LinkDir::Visible => {
+                    LinkPos::Visible => {
                         // select next link down
                         self.link = new_link;
                         // scroll if we are within 5 lines of the end
@@ -427,7 +427,7 @@ impl Menu {
 
     fn action_select_link(&mut self, link: usize) -> Action {
         if let Some(&pos) = self.links.get(link) {
-            if self.link_visibility(link) != Some(LinkDir::Visible) {
+            if self.link_visibility(link) != Some(LinkPos::Visible) {
                 if pos > 5 {
                     self.scroll = pos - 5;
                 } else {
@@ -450,7 +450,7 @@ impl Menu {
     fn action_open(&mut self) -> Action {
         // if the selected link isn't visible, jump to it:
         if let Some(dir) = self.link_visibility(self.link) {
-            if dir != LinkDir::Visible {
+            if dir != LinkPos::Visible {
                 if let Some(&pos) = self.links.get(self.link) {
                     if pos > 5 {
                         self.scroll = pos - 5;
