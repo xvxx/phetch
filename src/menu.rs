@@ -340,15 +340,12 @@ impl Menu {
         T: std::iter::Iterator<Item = &'a usize>,
     {
         let pattern = pattern.to_ascii_lowercase();
-        while let Some(&i) = it.next() {
-            let name = if let Some(link) = self.link(i) {
-                link.name.to_ascii_lowercase()
-            } else {
-                continue;
-            };
-
-            if name.contains(&pattern) {
-                return Some(i);
+        let mut it = it.enumerate();
+        while let Some((i, _)) = it.next() {
+            if let Some(link) = self.link(i) {
+                if link.name.to_ascii_lowercase().contains(&pattern) {
+                    return Some(i);
+                }
             }
         }
         None
