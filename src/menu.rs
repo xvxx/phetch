@@ -710,4 +710,64 @@ i---------------------------------------------------------
         assert_eq!(menu.links.len(), 1);
         assert_eq!(menu.lines[0].url, "gopher://circumlunar.space/1/");
     }
+
+    #[test]
+    fn test_find_links() {
+        let mut menu = parse!(
+            "
+i________________________________G_O_P_H_E_R_______________________________	Err	bitreich.org	70
+iHelp us building a nice sorted directory of the gopherspace:	Err	bitreich.org	70
+1THE GOPHER LAWN – THE gopher directory	/lawn	bitreich.org	70
+i	Err	bitreich.org	70
+1Gopher Tutorials Project	/tutorials	bitreich.org	70
+i	Err	bitreich.org	70
+iRun more gopherholes on tor!	Err	bitreich.org	70
+1The Gopher Onion Initiative	/onion	bitreich.org	70
+i	Err	bitreich.org	70
+1You are missing a gopher client? Use our kiosk mode.	/kiosk	bitreich.org	70
+hssh kiosk@bitreich.org	URL:ssh://kiosk@bitreich.org	bitreich.org	70
+i	Err	bitreich.org	70
+iFurther gopherspace links:	Err	bitreich.org	70
+1The Gopher Project	/	gopherproject.org	70
+7Search the global gopherspace at Veronica II	/v2/vs	gopher.floodgap.com	70
+i	Err	bitreich.org	70
+iBest viewed using:	Err	bitreich.org	70
+1sacc	/scm/sacc	bitreich.org	70
+1clic	/scm/clic	bitreich.org	70
+i	Err	bitreich.org	70"
+        );
+        menu.term_size(80, 40);
+
+        assert_eq!(menu.links.len(), 9);
+        assert_eq!(menu.link(0).unwrap().url, "gopher://bitreich.org/1/lawn");
+        assert_eq!(
+            menu.link(1).unwrap().url,
+            "gopher://bitreich.org/1/tutorials"
+        );
+        assert_eq!(menu.link(2).unwrap().url, "gopher://bitreich.org/1/onion");
+        assert_eq!(menu.link(3).unwrap().url, "gopher://bitreich.org/1/kiosk");
+        assert_eq!(menu.link(4).unwrap().url, "ssh://kiosk@bitreich.org");
+        assert_eq!(menu.link, 0);
+
+        menu.action_down();
+        assert_eq!(menu.link, 1);
+        assert_eq!(menu.link(menu.link).unwrap().link, 1);
+
+        menu.action_down();
+        assert_eq!(menu.link, 2);
+        assert_eq!(menu.link(menu.link).unwrap().link, 2);
+
+        menu.action_page_down();
+        assert_eq!(menu.link, 8);
+        assert_eq!(menu.link(menu.link).unwrap().link, 8);
+
+        menu.action_up();
+        assert_eq!(menu.link, 7);
+        assert_eq!(menu.link(menu.link).unwrap().link, 7);
+
+        assert_eq!(menu.scroll, 0);
+        menu.action_page_up();
+        assert_eq!(menu.link, 0);
+        assert_eq!(menu.link(menu.link).unwrap().link, 0);
+    }
 }
