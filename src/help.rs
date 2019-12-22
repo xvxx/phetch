@@ -125,12 +125,12 @@ i     ** gopher types **
 i
 iphetch supports these links:
 i
-0text files	/types	help
-1menu items	/types	help
+0text files	/Mirrors/RFC/rfc1436.txt	fnord.one	65446
+1menu items	/lawn/ascii	bitreich.org
 3errors	/types	help
-7search servers	/types	help
+7search servers	/	forthworks.com	7001
 8telnet links	/types	help
-hexternal URLs	/types	help
+hexternal URLs	URL:https://en.wikipedia.org/wiki/Phetch/	help
 i
 iand these download types:
 i

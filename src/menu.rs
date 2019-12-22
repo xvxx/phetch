@@ -88,7 +88,7 @@ impl Menu {
         if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
                 LinkPos::Above
-            } else if pos > self.scroll + self.rows() {
+            } else if pos > self.scroll + self.rows() - 2 {
                 LinkPos::Below
             } else {
                 LinkPos::Visible
@@ -368,7 +368,7 @@ impl Menu {
         // no links or final link selected already
         if self.links.is_empty() || new_link >= self.links.len() {
             // if there are more rows, scroll down
-            if self.scroll < self.padding_bottom() {
+            if self.lines.len() >= self.rows() && self.scroll < self.padding_bottom() {
                 self.scroll += 1;
                 return Action::Redraw;
             } else {
@@ -410,7 +410,9 @@ impl Menu {
                         self.link = new_link;
                         // scroll if we are within 5 lines of the end
                         if let Some(&pos) = self.links.get(self.link) {
-                            if pos >= self.scroll + self.rows() - 6 {
+                            if self.lines.len() >= self.rows() // dont scroll if content too small
+                                && pos >= self.scroll + self.rows() - 6
+                            {
                                 self.scroll += 1;
                             }
                         }
@@ -466,14 +468,17 @@ impl Menu {
         if let Some(line) = self.link(self.link) {
             let url = line.url.to_string();
             let (typ, _, _, _) = gopher::parse_url(&url);
-            if typ == Type::Search {
-                if let Some(query) = ui::prompt(&format!("{}> ", line.name)) {
-                    Action::Open(format!("{}?{}", url, query))
-                } else {
-                    Action::None
+            match typ {
+                Type::Search => {
+                    if let Some(query) = ui::prompt(&format!("{}> ", line.name)) {
+                        Action::Open(format!("{}?{}", url, query))
+                    } else {
+                        Action::None
+                    }
                 }
-            } else {
-                Action::Open(url)
+                Type::Error => Action::Error(line.name.to_string()),
+                Type::Telnet => Action::Error("Telnet support coming soon".into()),
+                _ => Action::Open(url),
             }
         } else {
             Action::None

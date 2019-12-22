@@ -139,7 +139,6 @@ pub fn fetch_url(url: &str) -> Result<String> {
 pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
     get(host, port, selector).and_then(|mut stream| {
         let mut body = String::new();
-        stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION));
         stream.read_to_string(&mut body)?;
         Ok(body)
     })
@@ -160,8 +159,6 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
     let mut keys = stdin.keys();
 
     get(host, port, sel).and_then(|mut stream| {
-        stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-
         let mut file = std::fs::OpenOptions::new()
             .write(true)
             .create(true)
@@ -192,6 +189,7 @@ pub fn get(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
         .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))
         .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
         .and_then(|mut stream| {
+            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
             stream.write(format!("{}\r\n", selector).as_ref());
             Ok(stream)
         })
