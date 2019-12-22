@@ -9,7 +9,7 @@ pub fn lookup(name: &str) -> Option<&str> {
 }
 
 pub const HOME: &str = "
-i
+i                                      	/spacer
 i
 i      /         /         /   
 i ___ (___  ___ (___  ___ (___ 
@@ -32,7 +32,7 @@ i
 ";
 
 pub const HELP: &str = "
-i
+i                                      	/spacer
 i
 i      /         /         /   
 i ___ (___  ___ (___  ___ (___ 
@@ -73,7 +73,7 @@ i
 ";
 
 pub const NAV: &str = "
-i
+i                                      	/spacer
 i
 i      /         /         /   
 i ___ (___  ___ (___  ___ (___ 
@@ -110,7 +110,7 @@ i
 ";
 
 pub const TYPES: &str = "
-i
+i                                      	/spacer
 i
 i      /         /         /   
 i ___ (___  ___ (___  ___ (___ 
