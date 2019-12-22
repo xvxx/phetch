@@ -88,7 +88,7 @@ impl Menu {
         if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
                 LinkDir::Above
-            } else if pos > self.scroll + self.rows() {
+            } else if pos >= self.scroll + self.rows() {
                 LinkDir::Below
             } else {
                 LinkDir::Visible
@@ -217,7 +217,7 @@ impl Menu {
                     LinkDir::Above => {
                         let scroll = self.scroll;
                         if let Some(&pos) =
-                            self.links.iter().skip(self.link + 1).find(|&&i| i > scroll)
+                            self.links.iter().skip(self.link).find(|&&i| i >= scroll)
                         {
                             self.link = self.lines.get(pos).unwrap().link;
                         }
@@ -281,7 +281,7 @@ impl Menu {
 
         // if text is entered, find previous match
         if !self.input.is_empty() {
-            if let Some(pos) = self.rlink_matching(self.link, &self.input) {
+            if let Some(pos) = self.rlink_matching(self.link - 1, &self.input) {
                 return self.action_select_link(pos);
             } else {
                 return Action::None;
@@ -384,7 +384,7 @@ impl Menu {
             }
         }
 
-        if self.link < self.links.len() - 1 {
+        if self.link < self.links.len() {
             if let Some(dir) = self.link_visibility(new_link) {
                 match dir {
                     LinkDir::Above => {

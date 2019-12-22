@@ -205,7 +205,7 @@ impl UI {
                     termion::cursor::Show,
                 );
                 stdout().flush();
-                thread::sleep(Duration::from_millis(350));
+                thread::sleep(Duration::from_millis(500));
             }
         });
 
