@@ -25,7 +25,7 @@ pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;
 
 pub const SCROLL_LINES: usize = 15;
-pub const MAX_COLS: usize = 72;
+pub const MAX_COLS: usize = 80;
 
 pub struct UI {
     views: Vec<Page>,         // loaded views
