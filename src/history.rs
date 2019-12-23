@@ -1,4 +1,5 @@
 use config;
+use std::io::BufRead;
 
 const HISTORY_FILE: &str = "history.gph";
 
@@ -7,7 +8,7 @@ pub fn as_raw_menu() -> String {
 
     config::load(HISTORY_FILE)
         .and_then(|reader| {
-            let lines = reader.lines();
+            let mut lines = reader.lines();
             while let Some(Ok(line)) = lines.next() {
                 out.insert(1, line);
             }

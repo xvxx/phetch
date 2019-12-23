@@ -1,18 +1,19 @@
 use config;
 
+use std::io::Read;
+
 const BOOKMARKS_FILE: &str = "bookmarks.gph";
 
 pub fn as_raw_menu() -> String {
-    let mut out = vec![format!("i** bookmarks **\r\ni")];
+    let mut out = format!("i** bookmarks **\r\ni\r\n");
 
     config::load(BOOKMARKS_FILE)
-        .and_then(|reader| reader.read(&mut out))
+        .and_then(|mut reader| reader.read_to_string(&mut out))
         .map_err(|e| {
-            out.push(format!("3{}", e));
+            out = format!("3{}", e);
             e
         });
-
-    out.join("\r\n")
+    out
 }
 
 // save a single history entry
