@@ -52,16 +52,14 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
-- [ ] bookmarks help file
-- [ ] bookmarks no ~/.config/phetch/ error
 - [ ] history help file
-- [ ] history no ~/.config/phetch/ error
 - [ ] new screenshots
 - [ ] little GIF screencast in README
 - [ ] telnet: gopher://bitreich.org/1/lawn/bbs
 
 ## bugs
 
+- [ ] history is only saved for Menu links, not ctrl-g or cmdline.
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by Nathaniel" weirdness)
 
 ## future features
