@@ -14,6 +14,7 @@ use termion::input::TermRead;
 use termion::raw::IntoRawMode;
 use termion::terminal_size;
 
+use bookmarks;
 use gopher;
 use gopher::Type;
 use help;
@@ -323,6 +324,14 @@ impl UI {
             }
             Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
             Action::Keypress(Key::Ctrl('a')) => self.open("gopher://help/1/history")?,
+            Action::Keypress(Key::Ctrl('b')) => self.open("gopher://help/1/bookmarks")?,
+            Action::Keypress(Key::Ctrl('s')) => {
+                if let Some(page) = self.views.get(self.focused) {
+                    let url = page.url();
+                    self.set_status(format!("Saved bookmark: {}", url));
+                    bookmarks::save(url, url);
+                }
+            }
             Action::Keypress(Key::Ctrl('u')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
