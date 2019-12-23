@@ -20,6 +20,7 @@ use gopher::Type;
 use help;
 use menu::Menu;
 use text::Text;
+use utils;
 
 pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;
@@ -126,7 +127,7 @@ impl UI {
         .and_then(|(path, bytes)| {
             self.set_status(format!(
                 "Download complete! {} saved to {}",
-                human_bytes(bytes),
+                utils::human_bytes(bytes),
                 path
             ));
             Ok(())
@@ -364,12 +365,10 @@ impl Drop for UI {
 }
 
 fn copy_to_clipboard(data: &str) -> Result<()> {
-    spawn_os_clipboard()
-        .and_then(|mut child| {
-            let child_stdin = child.stdin.as_mut().unwrap();
-            child_stdin.write_all(data.as_bytes())
-        })
-        .map_err(|e| error!("Clipboard error: {}", e))
+    spawn_os_clipboard().and_then(|mut child| {
+        let child_stdin = child.stdin.as_mut().unwrap();
+        child_stdin.write_all(data.as_bytes())
+    })
 }
 
 fn spawn_os_clipboard() -> Result<process::Child> {
@@ -482,20 +481,4 @@ pub fn prompt(prompt: &str) -> Option<String> {
     } else {
         None
     }
-}
-
-fn human_bytes(bytes: usize) -> String {
-    let (count, tag) = if bytes < 1000 {
-        (bytes, " bytes")
-    } else if bytes < 1_000_000 {
-        (bytes / 1000, "Kb")
-    } else if bytes < 1_000_000_000 {
-        (bytes / 1_000_000, "Mb")
-    } else if bytes < 1_000_000_000_000 {
-        (bytes / 1_000_000_000, "Gb")
-    } else {
-        (bytes, "?b")
-    };
-
-    format!("{}{}", count, tag)
 }

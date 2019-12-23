@@ -27,3 +27,20 @@ macro_rules! error {
         error!(format!($e, $($y),*));
     };
 }
+
+// Number of bytes in a human-ish readable format.
+pub fn human_bytes(bytes: usize) -> String {
+    let (count, tag) = if bytes < 1000 {
+        (bytes, " bytes")
+    } else if bytes < 1_000_000 {
+        (bytes / 1000, "Kb")
+    } else if bytes < 1_000_000_000 {
+        (bytes / 1_000_000, "Mb")
+    } else if bytes < 1_000_000_000_000 {
+        (bytes / 1_000_000_000, "Gb")
+    } else {
+        (bytes, "?b")
+    };
+
+    format!("{}{}", count, tag)
+}
