@@ -1,6 +1,6 @@
-use std::fs::{File, OpenOptions};
-use std::io::{BufRead, BufReader, Result, Write};
 use gopher;
+use std::fs::{File, OpenOptions};
+use std::io::{BufReader, Result, Write};
 
 pub const DIR: &str = "~/.config/phetch/";
 
@@ -26,19 +26,20 @@ pub fn append(filename: &str, label: &str, url: &str) {
             .append(true)
             .create(true)
             .open(filename)
-    {
-        let (t, host, port, sel) = gopher::parse_url(&url);
-        file.write_all(
-            format!(
-                "{}{}\t{}\t{}\t{}\r\n",
-                gopher::char_for_type(t).unwrap_or('i'),
-                label,
-                sel,
-                host,
-                port
-            )
-            .as_ref(),
-        );
+        {
+            let (t, host, port, sel) = gopher::parse_url(&url);
+            file.write_all(
+                format!(
+                    "{}{}\t{}\t{}\t{}\r\n",
+                    gopher::char_for_type(t).unwrap_or('i'),
+                    label,
+                    sel,
+                    host,
+                    port
+                )
+                .as_ref(),
+            );
+        }
     }
 }
 

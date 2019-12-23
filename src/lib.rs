@@ -4,6 +4,7 @@ extern crate termion;
 
 #[macro_use]
 pub mod gopher;
+pub mod bookmarks;
 pub mod help;
 pub mod history;
 pub mod menu;
