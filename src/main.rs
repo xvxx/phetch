@@ -40,7 +40,7 @@ fn main() {
     }
 
     let mut ui = UI::new();
-    if let Err(e) = ui.open(url) {
+    if let Err(e) = ui.open(url, url) {
         eprintln!("{}", e);
         exit(1);
     }

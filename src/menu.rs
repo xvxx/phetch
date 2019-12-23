@@ -1,11 +1,9 @@
 use std::fmt;
 use std::io::stdout;
 use std::io::Write;
-use std::thread;
 
 use gopher;
 use gopher::Type;
-use history;
 use ui;
 use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
@@ -470,26 +468,21 @@ impl Menu {
         self.input.clear();
         if let Some(line) = self.link(self.link) {
             let url = line.url.to_string();
-            let (typ, host, _, _) = gopher::parse_url(&url);
+            let (typ, _, _, _) = gopher::parse_url(&url);
             match typ {
                 Type::Search => {
                     if let Some(query) = ui::prompt(&format!("{}> ", line.name)) {
-                        Action::Open(format!("{}?{}", url, query))
+                        Action::Open(
+                            format!("{}> {}", line.name, query),
+                            format!("{}?{}", url, query),
+                        )
                     } else {
                         Action::None
                     }
                 }
                 Type::Error => Action::Error(line.name.to_string()),
                 Type::Telnet => Action::Error("Telnet support coming soon".into()),
-                _ => {
-                    // don't record internal urls
-                    if host != "phetch" && (typ == Type::Text || typ == Type::Menu) {
-                        let hurl = url.to_string();
-                        let hname = line.name.clone();
-                        thread::spawn(move || history::save(&hname, &hurl));
-                    }
-                    Action::Open(url)
-                }
+                _ => Action::Open(line.name.to_string(), url),
             }
         } else {
             Action::None

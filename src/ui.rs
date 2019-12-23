@@ -18,6 +18,7 @@ use bookmarks;
 use gopher;
 use gopher::Type;
 use help;
+use history;
 use menu::Menu;
 use text::Text;
 use utils;
@@ -83,7 +84,7 @@ impl UI {
         }
     }
 
-    pub fn open(&mut self, url: &str) -> Result<()> {
+    pub fn open(&mut self, title: &str, url: &str) -> Result<()> {
         // no open loops
         if let Some(page) = self.views.get(self.focused) {
             if page.url() == url {
@@ -112,7 +113,7 @@ impl UI {
             };
         }
 
-        self.fetch(url).and_then(|page| {
+        self.fetch(title, url).and_then(|page| {
             self.add_page(page);
             Ok(())
         })
@@ -134,11 +135,15 @@ impl UI {
         })
     }
 
-    fn fetch(&mut self, url: &str) -> Result<Page> {
+    fn fetch(&mut self, title: &str, url: &str) -> Result<Page> {
         // on-line help
         if url.starts_with("gopher://phetch/") {
             return self.fetch_internal(url);
         }
+        // record history urls
+        let hurl = url.to_string();
+        let hname = title.to_string();
+        thread::spawn(move || history::save(&hname, &hurl));
         // request thread
         let thread_url = url.to_string();
         let res = self.spinner("", move || gopher::fetch_url(&thread_url))??;
@@ -292,7 +297,7 @@ impl UI {
             Action::Keypress(Key::Ctrl('q')) => self.running = false,
             Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
-            Action::Open(url) => self.open(&url)?,
+            Action::Open(title, url) => self.open(&title, &url)?,
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
                 if self.focused > 0 {
                     self.dirty = true;
@@ -317,15 +322,19 @@ impl UI {
             Action::Keypress(Key::Ctrl('g')) => {
                 if let Some(url) = prompt("Go to URL: ") {
                     if !url.contains("://") && !url.starts_with("gopher://") {
-                        self.open(&format!("gopher://{}", url))?;
+                        self.open(&url, &format!("gopher://{}", url))?;
                     } else {
-                        self.open(&url)?;
+                        self.open(&url, &url)?;
                     }
                 }
             }
-            Action::Keypress(Key::Ctrl('h')) => self.open("gopher://phetch/1/help")?,
-            Action::Keypress(Key::Ctrl('a')) => self.open("gopher://phetch/1/history")?,
-            Action::Keypress(Key::Ctrl('b')) => self.open("gopher://phetch/1/bookmarks")?,
+            Action::Keypress(Key::Ctrl('h')) => self.open("Help", "gopher://phetch/1/help")?,
+            Action::Keypress(Key::Ctrl('a')) => {
+                self.open("History", "gopher://phetch/1/history")?
+            }
+            Action::Keypress(Key::Ctrl('b')) => {
+                self.open("Bookmarks", "gopher://phetch/1/bookmarks")?
+            }
             Action::Keypress(Key::Ctrl('s')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
