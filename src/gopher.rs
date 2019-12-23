@@ -172,9 +172,14 @@ pub fn get(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
 pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     let url = url.trim_start_matches("gopher://");
 
-    // simple URLs
+    // simple URLs, ex: "dog.com"
     if !url.contains(':') && !url.contains('/') {
         return (Type::Menu, url, "70", "/");
+    }
+
+    // non-gopher URLs, stick everything in selector
+    if url.contains("://") {
+        return (Type::HTML, "", "", url);
     }
 
     let mut typ = Type::Menu;
@@ -320,14 +325,14 @@ mod tests {
 
         let (typ, host, port, sel) = parse_url(urls[12]);
         assert_eq!(typ, Type::HTML);
-        assert_eq!(host, "kiosk@bitreich.org");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "");
+        assert_eq!(host, "");
+        assert_eq!(port, "");
+        assert_eq!(sel, "ssh://kiosk@bitreich.org");
 
         let (typ, host, port, sel) = parse_url(urls[13]);
         assert_eq!(typ, Type::HTML);
-        assert_eq!(host, "https://github.com/dvkt/phetch");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "");
+        assert_eq!(host, "");
+        assert_eq!(port, "");
+        assert_eq!(sel, "https://github.com/dvkt/phetch");
     }
 }
