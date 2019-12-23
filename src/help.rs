@@ -37,7 +37,7 @@ i
 1phetch help        \x1b[90mctrl+h	/	help
 1show history       \x1b[90mctrl+a	/history	help
 1show bookmarks     \x1b[90mctrl+b	/bookmarks	help
-i
+i\x1b[0m
 ";
 
 pub const HELP: &str = "
@@ -77,7 +77,7 @@ i\x1b[95mctrl-w     \x1b[96mtoggle wide mode
 i
 i\x1b[95mctrl-b     \x1b[96mshow bookmarks
 i\x1b[95mctrl-e     \x1b[96mshow history
-i 
+i\x1b[0m
 ";
 
 pub const NAV: &str = "
