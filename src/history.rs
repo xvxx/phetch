@@ -36,7 +36,7 @@ pub fn as_raw_menu() -> String {
         );
     }
 
-    let mut out = vec![format!("i{}:\r\ni", file.to_string_lossy())];
+    let mut out = vec![format!("i{}:\r\ni", homepath)];
     config::load(HISTORY_FILE)
         .and_then(|reader| {
             let mut lines = reader.lines();

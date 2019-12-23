@@ -8,20 +8,23 @@ macro_rules! dir_missing_fmt {
     () => {
         "i\r\ni\r
 i\r\ni\x1b[91m{error}\x1b[0m\r
+i\r\niBookmarks can only be saved if {dir} exists.\r
 i\r\niRun this in your terminal to enable bookmarking:\r
 i\r\nimkdir -p {dir}"
     };
 }
 
 pub fn as_raw_menu() -> String {
-    let mut out = format!("i** bookmarks **\r\ni\r\n");
     let path = config::path();
     if let Err(e) = path {
         return format!(dir_missing_fmt!(), error = e, dir = config::DIR);
     }
+
+    let mut out = format!("i{}{}:\r\ni\r\n", config::DIR, BOOKMARKS_FILE);
+
     let path = path.unwrap().join(BOOKMARKS_FILE);
     if !path.exists() {
-        out.push_str("iNo bookmarks found.\r\ni\r\niUse <ctrl-s> to bookmark a page.\r\n");
+        out.push_str("iNo bookmarks yet.\r\ni\r\niUse <ctrl-s> to bookmark a page.\r\n");
         return out;
     }
 
