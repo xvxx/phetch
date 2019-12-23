@@ -7,6 +7,7 @@ authors = ["dvkt <c@dvkt.io>"]
 lto = true
 codegen-units = 1
 panic = 'abort'
+opt-level = 'z'  # Optimize for size.
 
 [dependencies]
 termion = "1.5.3"
