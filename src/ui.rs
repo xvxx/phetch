@@ -328,8 +328,10 @@ impl UI {
             Action::Keypress(Key::Ctrl('s')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
-                    self.set_status(format!("Saved bookmark: {}", url));
-                    bookmarks::save(&url, &url);
+                    match bookmarks::save(&url, &url) {
+                        Ok(()) => self.set_status(format!("Saved bookmark: {}", url)),
+                        Err(e) => return Err(error!("Save failed: {}", e)),
+                    }
                 }
             }
             Action::Keypress(Key::Ctrl('u')) => {

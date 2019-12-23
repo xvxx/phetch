@@ -6,26 +6,24 @@ pub const DIR: &str = "~/.config/phetch/";
 
 // Loads a file in the config directory for reading.
 pub fn load(filename: &str) -> Result<BufReader<File>> {
-    if let Some(dotdir) = path() {
+    path().and_then(|dotdir| {
         let path = dotdir.join(filename);
         if let Ok(file) = OpenOptions::new().read(true).open(&path) {
             Ok(BufReader::new(file))
         } else {
             Err(error!("Couldn't open {:?}", path))
         }
-    } else {
-        Err(error!("{} directory doesn't exist", DIR))
-    }
+    })
 }
 
 // Append a menu item as a line to a file in the config dir.
-pub fn append(filename: &str, label: &str, url: &str) {
-    if let Some(dotdir) = path() {
-        let filename = dotdir.join(filename);
+pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
+    path().and_then(|dotdir| {
+        let path = dotdir.join(filename);
         if let Ok(mut file) = std::fs::OpenOptions::new()
             .append(true)
             .create(true)
-            .open(filename)
+            .open(path)
         {
             let (t, host, port, sel) = gopher::parse_url(&url);
             file.write_all(
@@ -39,23 +37,26 @@ pub fn append(filename: &str, label: &str, url: &str) {
                 )
                 .as_ref(),
             );
+            Ok(())
+        } else {
+            Err(error!("Can't open file for writing: {:?}", filename))
         }
-    }
+    })
 }
 
 // PathBuf to config dir if it exists.
 // None if the config dir doesn't exist.
-pub fn path() -> Option<std::path::PathBuf> {
+pub fn path() -> Result<std::path::PathBuf> {
     let homevar = std::env::var("HOME");
     if homevar.is_err() {
-        return None;
+        return Err(error!("$HOME not set, can't decode `~`"));
     }
 
     let dotdir = DIR.replace('~', &homevar.unwrap());
     let dotdir = std::path::Path::new(&dotdir);
     if dotdir.exists() {
-        Some(std::path::PathBuf::from(dotdir))
+        Ok(std::path::PathBuf::from(dotdir))
     } else {
-        None
+        Err(error!("Config dir not found: {}", DIR))
     }
 }

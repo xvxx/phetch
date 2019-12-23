@@ -1,5 +1,5 @@
 use config;
-use std::io::BufRead;
+use std::io::{BufRead, Result};
 
 const HISTORY_FILE: &str = "history.gph";
 
@@ -23,6 +23,6 @@ pub fn as_raw_menu() -> String {
 }
 
 // save a single history entry
-pub fn save(label: &str, url: &str) {
-    config::append(HISTORY_FILE, label, url);
+pub fn save(label: &str, url: &str) -> Result<()> {
+    config::append(HISTORY_FILE, label, url)
 }

@@ -1,6 +1,6 @@
 use config;
 
-use std::io::Read;
+use std::io::{Read, Result};
 
 const BOOKMARKS_FILE: &str = "bookmarks.gph";
 
@@ -17,6 +17,6 @@ pub fn as_raw_menu() -> String {
 }
 
 // save a single history entry
-pub fn save(label: &str, url: &str) {
-    config::append(BOOKMARKS_FILE, label, url);
+pub fn save(label: &str, url: &str) -> Result<()> {
+    config::append(BOOKMARKS_FILE, label, url)
 }

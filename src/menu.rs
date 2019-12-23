@@ -470,7 +470,7 @@ impl Menu {
         self.input.clear();
         if let Some(line) = self.link(self.link) {
             let url = line.url.to_string();
-            let (typ, _, _, _) = gopher::parse_url(&url);
+            let (typ, host, _, _) = gopher::parse_url(&url);
             match typ {
                 Type::Search => {
                     if let Some(query) = ui::prompt(&format!("{}> ", line.name)) {
@@ -482,10 +482,15 @@ impl Menu {
                 Type::Error => Action::Error(line.name.to_string()),
                 Type::Telnet => Action::Error("Telnet support coming soon".into()),
                 _ => {
-                    let hurl = url.to_string();
-                    let hname = line.name.clone();
-                    thread::spawn(move || history::save(&hurl, &hname));
-                    Action::Open(url)
+                    // don't record internal urls
+                    if host != "help" {
+                        let hurl = url.to_string();
+                        let hname = line.name.clone();
+                        thread::spawn(move || history::save(&hurl, &hname));
+                        Action::Open(url)
+                    } else {
+                        Action::None
+                    }
                 }
             }
         } else {
