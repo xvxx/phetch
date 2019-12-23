@@ -35,9 +35,9 @@ i
 i 
 i            ~ * ~
 i
-1phetch help        \x1b[90mctrl+h	/	help
-1show history       \x1b[90mctrl+a	/history	help
-1show bookmarks     \x1b[90mctrl+b	/bookmarks	help
+1phetch help        \x1b[90mctrl-h	/	help
+1show history       \x1b[90mctrl-a	/history	help
+1show bookmarks     \x1b[90mctrl-b	/bookmarks	help
 i\x1b[0m
 ";
 
@@ -68,16 +68,17 @@ i\x1b[95mpage down  \x1b[96mscroll page down
 i
 i\x1b[95mnum key    \x1b[96mopen / select link
 i\x1b[95menter      \x1b[96mopen selected link
-i\x1b[95mescape     \x1b[96mcancel / clear input
+i\x1b[95mescape     \x1b[96mcancel
 i
 i\x1b[95mctrl-g     \x1b[96mgo to gopher url
 i\x1b[95mctrl-u     \x1b[96mshow gopher url
-i\x1b[95mctrl-y     \x1b[96mcopy url to clipboard
+i\x1b[95mctrl-y     \x1b[96mcopy url 
 i\x1b[95mctrl-r     \x1b[96mview raw source
-i\x1b[95mctrl-w     \x1b[96mtoggle wide mode 
+i\x1b[95mctrl-w     \x1b[96mtoggle wide mode
 i
+i\x1b[95mctrl-a     \x1b[96mshow history
 i\x1b[95mctrl-b     \x1b[96mshow bookmarks
-i\x1b[95mctrl-e     \x1b[96mshow history
+i\x1b[95mctrl-s     \x1b[96msave bookmark
 i\x1b[0m
 ";
 

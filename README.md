@@ -52,10 +52,13 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
+- [ ] bookmarks help file
+- [ ] bookmarks no ~/.config/phetch/ error
+- [ ] history help file
+- [ ] history no ~/.config/phetch/ error
 - [ ] new screenshots
 - [ ] little GIF screencast in README
 - [ ] telnet: gopher://bitreich.org/1/lawn/bbs
-- [ ] bookmarks (ctrl+s, ctrl+b)
 
 ## bugs
 
