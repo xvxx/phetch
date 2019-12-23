@@ -50,6 +50,10 @@ pub fn save(url: &str, label: &str) {
         .open(history)
     {
         let (t, host, port, sel) = gopher::parse_url(&url);
+        // ignore internal URLs
+        if host == "help" {
+            return;
+        }
         file.write_all(
             format!(
                 "{}{}\t{}\t{}\t{}\r\n",
