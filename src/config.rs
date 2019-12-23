@@ -44,7 +44,7 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
     })
 }
 
-// PathBuf to config dir if it exists.
+// PathBuf to expanded config dir if it exists.
 // None if the config dir doesn't exist.
 pub fn path() -> Result<std::path::PathBuf> {
     let homevar = std::env::var("HOME");
