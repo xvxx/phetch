@@ -63,5 +63,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## future features
 
-- [ ] TLS https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
+- [ ] Incremental search in Text views
+- [ ] Linked gopher and http links in Text views
+- [ ] TLS -- https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
 - [ ] Fuzzy Find incremental search
