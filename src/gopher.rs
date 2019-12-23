@@ -6,6 +6,8 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::time::Duration;
 use termion::input::TermRead;
 
+// Some Gopher servers can be kind of slow, we may want to up this or
+// make it configurable eventually.
 pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
 pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
@@ -49,6 +51,30 @@ impl Type {
     }
 }
 
+pub fn char_for_type(t: Type) -> Option<char> {
+    Some(match t {
+        Type::Text => '0',
+        Type::Menu => '1',
+        Type::CSOEntity => '2',
+        Type::Error => '3',
+        Type::Binhex => '4',
+        Type::DOSFile => '5',
+        Type::UUEncoded => '6',
+        Type::Search => '7',
+        Type::Telnet => '8',
+        Type::Binary => '9',
+        Type::Mirror => '+',
+        Type::GIF => 'g',
+        Type::Telnet3270 => 'T',
+        Type::HTML => 'h',
+        Type::Image => 'I',
+        Type::PNG => 'p',
+        Type::Info => 'i',
+        Type::Sound => 's',
+        Type::Document => 'd',
+    })
+}
+
 pub fn type_for_char(c: char) -> Option<Type> {
     Some(match c {
         '0' => Type::Text,
@@ -74,30 +100,6 @@ pub fn type_for_char(c: char) -> Option<Type> {
     })
 }
 
-pub fn char_for_type(t: Type) -> Option<char> {
-    Some(match t {
-        Type::Text => '0',
-        Type::Menu => '1',
-        Type::CSOEntity => '2',
-        Type::Error => '3',
-        Type::Binhex => '4',
-        Type::DOSFile => '5',
-        Type::UUEncoded => '6',
-        Type::Search => '7',
-        Type::Telnet => '8',
-        Type::Binary => '9',
-        Type::Mirror => '+',
-        Type::GIF => 'g',
-        Type::Telnet3270 => 'T',
-        Type::HTML => 'h',
-        Type::Image => 'I',
-        Type::PNG => 'p',
-        Type::Info => 'i',
-        Type::Sound => 's',
-        Type::Document => 'd',
-    })
-}
-
 // Fetches a gopher URL and returns a raw Gopher response.
 pub fn fetch_url(url: &str) -> Result<String> {
     let (_, host, port, sel) = parse_url(url);
@@ -113,7 +115,7 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
     })
 }
 
-// Downloads a binary to disk.
+// Downloads a binary to disk. Allows canceling with Ctrl-c.
 // Returns the path it was saved to and the size in bytes.
 pub fn download_url(url: &str) -> Result<(String, usize)> {
     let (_, host, port, sel) = parse_url(url);
@@ -151,6 +153,7 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
     })
 }
 
+// Make a Gopher request and return a TcpStream ready to be read()'d.
 pub fn get(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
     let selector = selector.replace('?', "\t"); // search queries
     format!("{}:{}", host, port)
