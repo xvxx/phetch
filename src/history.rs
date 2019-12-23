@@ -58,9 +58,8 @@ pub fn as_raw_menu() -> String {
 
 // save a single history entry if the history file exists
 pub fn save(label: &str, url: &str) -> Result<()> {
-    let file = format!("{}{}", config::DIR, HISTORY_FILE);
-    if !std::path::Path::new(&file).exists() {
-        return Err(error!("History file doesn't exist: {}", file));
+    if let Err(e) = config::path() {
+        return Err(error!("History file doesn't exist: {}", e));
     }
 
     config::append(HISTORY_FILE, label, url)

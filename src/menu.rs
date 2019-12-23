@@ -486,7 +486,7 @@ impl Menu {
                     if host != "help" {
                         let hurl = url.to_string();
                         let hname = line.name.clone();
-                        thread::spawn(move || history::save(&hurl, &hname));
+                        thread::spawn(move || history::save(&hname, &hurl));
                         Action::Open(url)
                     } else {
                         Action::None
