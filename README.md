@@ -30,11 +30,7 @@
 
 ## installation
 
-Binaries for Linux and Mac are available at https://github.com/dvkt/phetch/releases:
-
-- MacOS: https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-macos.zip
-- Linux x86_64: https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-x86-64.tar.gz
-- Linux ARM: https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-arm.tar.gz
+Binaries for Linux and Mac are available at https://github.com/dvkt/phetch/releases
 
 Just unzip/untar the `phetch` program into your $PATH and get going!
 

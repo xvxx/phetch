@@ -10,6 +10,8 @@ pub fn lookup(name: &str) -> Option<String> {
         "help/keys" => format!("{}{}", HEADER, KEYS),
         "help/nav" => format!("{}{}", HEADER, NAV),
         "help/types" => format!("{}{}", HEADER, TYPES),
+        "help/bookmarks" => format!("{}{}", HEADER, BOOKMARKS),
+        "help/history" => format!("{}{}", HEADER, HISTORY),
         _ => return None,
     })
 }
@@ -47,11 +49,12 @@ i
 1keyboard shortcuts	/help/keys	phetch
 1menu navigation	/help/nav	phetch
 1gopher types	/help/types	phetch
+1bookmarks	/help/bookmarks	phetch
+1history	/help/history	phetch
 i 
 i            ~ * ~
 i 
 1start screen	/home	phetch
-1history	/history	phetch
 hphetch webpage	URL:https://github.com/dvkt/phetch
 i 
 ";
@@ -116,11 +119,40 @@ i
 pub const BOOKMARKS: &str = "
 i       ** bookmarks **
 i
-";
+iphetch includes two ways to save 
+ithe current url:
+i
+i\x1b[95mctrl-y   \x1b[96mcopy url
+i\x1b[95mctrl-s   \x1b[96msave bookmark
+i\x1b[0m
+iif the ~/.config/phetch/ directory
+iexists, bookmarks will be saved to
+i~/.config/phetch/bookmarks.gph
+i
+iuse ctrl-b to view them at any time.
+i
+ithe clipboard function uses:  
+i
+i- `pbcopy` on macos
+i- `xclip -sel clip` on linux
+i";
 
 pub const HISTORY: &str = "
 i        ** history **
 i
+iif you create a history.gph file
+iin ~/.config/phetch/, each url
+iyou visit will be store there.
+i
+inew urls are appended to the 
+ibottom, but loaded in reverse 
+iorder so you'll see the most
+irecently visited pages first
+iwhen you use ctrl-a.
+i
+ifeel free to edit your history
+ifile directly, or share it with
+iyour friends!
 ";
 
 pub const TYPES: &str = "
@@ -133,7 +165,7 @@ i
 3errors	/help/types	phetch
 7search servers	/	forthworks.com	7001
 8telnet links	/help/types	phetch
-hexternal URLs	URL:https://en.wikipedia.org/wiki/Phetch	phetch
+hexternal urls	URL:https://en.wikipedia.org/wiki/Phetch	phetch
 i
 iand these download types:
 i
