@@ -12,7 +12,7 @@
     </a>
 </p>
 
-`phetch` is a terminal gopher client designed to help you quickly navigate the gophersphere.
+`phetch` is a terminal client designed to quickly navigate the gophersphere.
 
 **features:**
 
