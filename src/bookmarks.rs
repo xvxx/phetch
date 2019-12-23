@@ -1,5 +1,4 @@
 use config;
-use std::io::{BufRead, BufReader, Result, Write};
 
 const BOOKMARKS_FILE: &str = "bookmarks.gph";
 

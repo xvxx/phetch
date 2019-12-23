@@ -329,7 +329,7 @@ impl UI {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     self.set_status(format!("Saved bookmark: {}", url));
-                    bookmarks::save(url, url);
+                    bookmarks::save(&url, &url);
                 }
             }
             Action::Keypress(Key::Ctrl('u')) => {

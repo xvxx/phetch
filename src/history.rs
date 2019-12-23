@@ -1,5 +1,4 @@
 use config;
-use std::io::BufRead;
 
 const HISTORY_FILE: &str = "history.gph";
 

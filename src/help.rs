@@ -1,11 +1,12 @@
+use bookmarks;
 use history;
 
 pub fn lookup(name: &str) -> Option<String> {
     Some(match name {
         "" | "/" | "help" => format!("{}{}", HEADER, HELP),
         "home" => format!("{}{}", HEADER, HOME),
-        "history" => history::load_as_raw_menu(),
-        "bookmarks" => format!("{}", "3Coming soon"),
+        "history" => history::as_raw_menu(),
+        "bookmarks" => bookmarks::as_raw_menu(),
         "keys" => format!("{}{}", HEADER, KEYS),
         "nav" => format!("{}{}", HEADER, NAV),
         "types" => format!("{}{}", HEADER, TYPES),
