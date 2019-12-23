@@ -336,6 +336,9 @@ impl UI {
                     self.set_status(format!("Copied {} to clipboard.", url));
                 }
             }
+            Action::Keypress(key) => {
+                return Err(error!("Unknown keypress: {:?}", key));
+            }
             _ => (),
         }
         Ok(())
