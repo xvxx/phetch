@@ -113,6 +113,16 @@ ior ctrl-p/n keys to cycle matches.
 i
 ";
 
+pub const BOOKMARKS: &str = "
+i       ** bookmarks **
+i
+";
+
+pub const HISTORY: &str = "
+i        ** history **
+i
+";
+
 pub const TYPES: &str = "
 i     ** gopher types **
 i
