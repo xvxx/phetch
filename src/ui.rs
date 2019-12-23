@@ -135,8 +135,8 @@ impl UI {
 
     fn fetch(&mut self, url: &str) -> Result<Page> {
         // on-line help
-        if url.starts_with("gopher://help/") {
-            return self.fetch_help(url);
+        if url.starts_with("gopher://phetch/") {
+            return self.fetch_internal(url);
         }
         // request thread
         let thread_url = url.to_string();
@@ -149,15 +149,15 @@ impl UI {
         }
     }
 
-    // get Menu for on-line help url, ex: gopher://help/1/types
-    fn fetch_help(&mut self, url: &str) -> Result<Page> {
+    // get Menu for on-line help, home page, etc, ex: gopher://home/1/help/types
+    fn fetch_internal(&mut self, url: &str) -> Result<Page> {
         if let Some(source) = help::lookup(
-            &url.trim_start_matches("gopher://help/")
+            &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
         ) {
             Ok(Box::new(Menu::from(url.to_string(), source)))
         } else {
-            Err(error!("Help file not found: {}", url))
+            Err(error!("phetch URL not found: {}", url))
         }
     }
 
@@ -322,9 +322,9 @@ impl UI {
                     }
                 }
             }
-            Action::Keypress(Key::Ctrl('h')) => self.open("gopher://help/")?,
-            Action::Keypress(Key::Ctrl('a')) => self.open("gopher://help/1/history")?,
-            Action::Keypress(Key::Ctrl('b')) => self.open("gopher://help/1/bookmarks")?,
+            Action::Keypress(Key::Ctrl('h')) => self.open("gopher://phetch/1/help")?,
+            Action::Keypress(Key::Ctrl('a')) => self.open("gopher://phetch/1/history")?,
+            Action::Keypress(Key::Ctrl('b')) => self.open("gopher://phetch/1/bookmarks")?,
             Action::Keypress(Key::Ctrl('s')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();

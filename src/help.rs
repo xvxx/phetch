@@ -3,13 +3,13 @@ use history;
 
 pub fn lookup(name: &str) -> Option<String> {
     Some(match name {
-        "" | "/" | "help" => format!("{}{}", HEADER, HELP),
-        "home" => format!("{}{}", HEADER, HOME),
+        "" | "/" | "home" | "home/" => format!("{}{}", HEADER, HOME),
+        "help" | "help/" => format!("{}{}", HEADER, HELP),
         "history" => history::as_raw_menu(),
         "bookmarks" => bookmarks::as_raw_menu(),
-        "keys" => format!("{}{}", HEADER, KEYS),
-        "nav" => format!("{}{}", HEADER, NAV),
-        "types" => format!("{}{}", HEADER, TYPES),
+        "help/keys" => format!("{}{}", HEADER, KEYS),
+        "help/nav" => format!("{}{}", HEADER, NAV),
+        "help/types" => format!("{}{}", HEADER, TYPES),
         _ => return None,
     })
 }
@@ -35,23 +35,23 @@ i
 i 
 i            ~ * ~
 i
-1phetch help        \x1b[90mctrl-h	/	help
-1show history       \x1b[90mctrl-a	/history	help
-1show bookmarks     \x1b[90mctrl-b	/bookmarks	help
+1show help          \x1b[90mctrl-h	/help	phetch
+1show history       \x1b[90mctrl-a	/history	phetch
+1show bookmarks     \x1b[90mctrl-b	/bookmarks	phetch
 i\x1b[0m
 ";
 
 pub const HELP: &str = "
 i      ** help topics **
 i
-1keyboard shortcuts	/keys	help
-1menu navigation	/nav	help
-1gopher types	/types	help
+1keyboard shortcuts	/help/keys	phetch
+1menu navigation	/help/nav	phetch
+1gopher types	/help/types	phetch
 i 
 i            ~ * ~
 i 
-1start screen	/home	help
-1history	/history	help
+1start screen	/home	phetch
+1history	/history	phetch
 hphetch webpage	URL:https://github.com/dvkt/phetch
 i 
 ";
@@ -88,7 +88,7 @@ i
 ithere are three ways to navigate
 imenus in phetch:
 i
-1up & down arrows	/nav	help
+1up & down arrows	/help/nav	phetch
 i
 iuse the up and down arrows or the
 ictrl-p/ctrl-n combos to select menu 
@@ -97,14 +97,14 @@ ior you can use page up & page down
 i(or - and spacebar) to jump by many 
 ilines quickly.
 i
-1number keys	/nav	help
+1number keys	/help/nav	phetch
 i
 iif there are few enough menu items,
 ipressing a number key will open the
 iitem immediately. otherwise, it'll
 ibe selected. use enter to open it.
 i
-1incremental search	/nav	help
+1incremental search	/help/nav	phetch
 i
 ijust start typing. phetch will look
 ifor the first case insensitive match
@@ -130,26 +130,26 @@ iphetch supports these links:
 i
 0text files	/Mirrors/RFC/rfc1436.txt	fnord.one	65446
 1menu items	/lawn/ascii	bitreich.org
-3errors	/types	help
+3errors	/help/types	phetch
 7search servers	/	forthworks.com	7001
-8telnet links	/types	help
-hexternal URLs	URL:https://en.wikipedia.org/wiki/Phetch/	help
+8telnet links	/help/types	phetch
+hexternal URLs	URL:https://en.wikipedia.org/wiki/Phetch	phetch
 i
 iand these download types:
 i
-4binhex	/types	help
-5dosfiles	/types	help
-6uuencoded files	/types	help
-9binaries	/types	help
-gGIFs	/types	help
-Iimages downloads	/types	help
-ssound files	/types	help
-ddocuments	/types	help
+4binhex	/help/types	phetch
+5dosfiles	/help/types	phetch
+6uuencoded files	/help/types	phetch
+9binaries	/help/types	phetch
+gGIFs	/help/types	phetch
+Iimages downloads	/help/types	phetch
+ssound files	/help/types	phetch
+ddocuments	/help/types	phetch
 i
 iphetch does not support: 
 i
-2CSO Entries 	/types	help
-+Mirrors	/types	help
-TTelnet3270	/types	help
+2CSO Entries 	/help/types	phetch
++Mirrors	/help/types	phetch
+TTelnet3270	/help/types	phetch
 i
 ";

@@ -7,7 +7,7 @@ use std::process::exit;
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let url = if args.len() < 2 {
-        "gopher://help/1/home"
+        "gopher://phetch/1/home"
     } else {
         args.get(1).unwrap()
     };

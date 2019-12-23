@@ -242,6 +242,8 @@ mod tests {
             "gopher://9999:aaaa::abab:baba:aaaa:9999",
             "[2001:2099:dead:beef:0000",
             "::1",
+            "ssh://kiosk@bitreich.org",
+            "https://github.com/dvkt/phetch",
         ];
 
         let (typ, host, port, sel) = parse_url(urls[0]);
@@ -315,5 +317,17 @@ mod tests {
         assert_eq!(host, "::1");
         assert_eq!(port, "70");
         assert_eq!(sel, "/");
+
+        let (typ, host, port, sel) = parse_url(urls[12]);
+        assert_eq!(typ, Type::HTML);
+        assert_eq!(host, "kiosk@bitreich.org");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "");
+
+        let (typ, host, port, sel) = parse_url(urls[13]);
+        assert_eq!(typ, Type::HTML);
+        assert_eq!(host, "https://github.com/dvkt/phetch");
+        assert_eq!(port, "70");
+        assert_eq!(sel, "");
     }
 }

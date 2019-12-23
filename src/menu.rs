@@ -483,14 +483,12 @@ impl Menu {
                 Type::Telnet => Action::Error("Telnet support coming soon".into()),
                 _ => {
                     // don't record internal urls
-                    if host != "help" {
+                    if host != "phetch" && (typ == Type::Text || typ == Type::Menu) {
                         let hurl = url.to_string();
                         let hname = line.name.clone();
                         thread::spawn(move || history::save(&hname, &hurl));
-                        Action::Open(url)
-                    } else {
-                        Action::None
                     }
+                    Action::Open(url)
                 }
             }
         } else {
@@ -764,8 +762,11 @@ i	Err	bitreich.org	70"
         );
         assert_eq!(menu.link(2).unwrap().url, "gopher://bitreich.org/1/onion");
         assert_eq!(menu.link(3).unwrap().url, "gopher://bitreich.org/1/kiosk");
-        assert_eq!(menu.link(4).unwrap().url, "ssh://kiosk@bitreich.org");
         assert_eq!(menu.link, 0);
+
+        let ssh = menu.link(4).unwrap();
+        assert_eq!(ssh.url, "ssh://kiosk@bitreich.org");
+        assert_eq!(ssh.typ, Type::HTML);
 
         menu.action_down();
         assert_eq!(menu.link, 1);
