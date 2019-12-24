@@ -602,7 +602,7 @@ impl Menu {
         let mut longest = 0;
         for line in raw.split_terminator('\n') {
             if let Some(c) = line.chars().nth(0) {
-                let typ = match gopher::type_for_char(c) {
+                let typ = match Type::from(c) {
                     Some(t) => t,
                     None => continue,
                 };

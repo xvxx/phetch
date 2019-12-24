@@ -29,7 +29,7 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
             file.write_all(
                 format!(
                     "{}{}\t{}\t{}\t{}\r\n",
-                    gopher::char_for_type(t).unwrap_or('i'),
+                    t.char().unwrap_or('i'),
                     label,
                     sel,
                     host,

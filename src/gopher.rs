@@ -51,53 +51,55 @@ impl Type {
     }
 }
 
-pub fn char_for_type(t: Type) -> Option<char> {
-    Some(match t {
-        Type::Text => '0',
-        Type::Menu => '1',
-        Type::CSOEntity => '2',
-        Type::Error => '3',
-        Type::Binhex => '4',
-        Type::DOSFile => '5',
-        Type::UUEncoded => '6',
-        Type::Search => '7',
-        Type::Telnet => '8',
-        Type::Binary => '9',
-        Type::Mirror => '+',
-        Type::GIF => 'g',
-        Type::Telnet3270 => 'T',
-        Type::HTML => 'h',
-        Type::Image => 'I',
-        Type::PNG => 'p',
-        Type::Info => 'i',
-        Type::Sound => 's',
-        Type::Document => 'd',
-    })
-}
+impl Type {
+    pub fn char(&self) -> Option<char> {
+        Some(match self {
+            Type::Text => '0',
+            Type::Menu => '1',
+            Type::CSOEntity => '2',
+            Type::Error => '3',
+            Type::Binhex => '4',
+            Type::DOSFile => '5',
+            Type::UUEncoded => '6',
+            Type::Search => '7',
+            Type::Telnet => '8',
+            Type::Binary => '9',
+            Type::Mirror => '+',
+            Type::GIF => 'g',
+            Type::Telnet3270 => 'T',
+            Type::HTML => 'h',
+            Type::Image => 'I',
+            Type::PNG => 'p',
+            Type::Info => 'i',
+            Type::Sound => 's',
+            Type::Document => 'd',
+        })
+    }
 
-pub fn type_for_char(c: char) -> Option<Type> {
-    Some(match c {
-        '0' => Type::Text,
-        '1' => Type::Menu,
-        '2' => Type::CSOEntity,
-        '3' => Type::Error,
-        '4' => Type::Binhex,
-        '5' => Type::DOSFile,
-        '6' => Type::UUEncoded,
-        '7' => Type::Search,
-        '8' => Type::Telnet,
-        '9' => Type::Binary,
-        '+' => Type::Mirror,
-        'g' => Type::GIF,
-        'T' => Type::Telnet3270,
-        'h' => Type::HTML,
-        'I' => Type::Image,
-        'p' => Type::PNG,
-        'i' => Type::Info,
-        's' => Type::Sound,
-        'd' => Type::Document,
-        _ => return None,
-    })
+    pub fn from(c: char) -> Option<Type> {
+        Some(match c {
+            '0' => Type::Text,
+            '1' => Type::Menu,
+            '2' => Type::CSOEntity,
+            '3' => Type::Error,
+            '4' => Type::Binhex,
+            '5' => Type::DOSFile,
+            '6' => Type::UUEncoded,
+            '7' => Type::Search,
+            '8' => Type::Telnet,
+            '9' => Type::Binary,
+            '+' => Type::Mirror,
+            'g' => Type::GIF,
+            'T' => Type::Telnet3270,
+            'h' => Type::HTML,
+            'I' => Type::Image,
+            'p' => Type::PNG,
+            'i' => Type::Info,
+            's' => Type::Sound,
+            'd' => Type::Document,
+            _ => return None,
+        })
+    }
 }
 
 // Fetches a gopher URL and returns a raw Gopher response.
@@ -219,7 +221,7 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     // ignore type prefix on selector
     let mut chars = sel.chars();
     if let (Some('/'), Some(c), Some('/')) = (chars.nth(0), chars.nth(0), chars.nth(0)) {
-        if let Some(t) = gopher::type_for_char(c) {
+        if let Some(t) = Type::from(c) {
             typ = t;
             sel = &sel[2..];
         }
