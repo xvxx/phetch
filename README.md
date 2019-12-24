@@ -2,7 +2,7 @@
     <img src="./img/logo.png">
 </p>
 
-`phetch` is a terminal client designed to help you quickly navigate the gophersphere.
+`phetch` is a terminal client designed to help you quickly navigate the gophersphere: use arrow keys to move around, press a number to jump to a link, or just start typing - phetch is always in incremental search mode when viewing a gopher menu.
 
 **features:**
 
