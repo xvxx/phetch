@@ -25,11 +25,11 @@
 
 ## installation
 
-Binaries for Linux and Mac are available at https://github.com/dvkt/phetch/releases:
+Binaries for Linux, Mac, and Raspberry Pi are available at https://github.com/dvkt/phetch/releases:
 
-- [phetch-linux-arm.tar.gz](https://github.com/dvkt/phetch/releases/download/v0.1.1/phetch-linux-arm.tar.gz)
-- [phetch-linux-x86_64.tar.gz](https://github.com/dvkt/phetch/releases/download/v0.1.1/phetch-linux-x86_64.tar.gz)
-- [phetch-macos.zip](https://github.com/dvkt/phetch/releases/download/v0.1.1/phetch-macos.zip)
+- [phetch-linux-x86_64.tar.gz](https://github.com/dvkt/phetch/releases/download/v0.1.2/phetch-linux-x86_64.tar.gz)
+- [phetch-linux-armv7.tar.gz (RPi)](https://github.com/dvkt/phetch/releases/download/v0.1.2/phetch-linux-armv7.tar.gz)
+- [phetch-macos.zip](https://github.com/dvkt/phetch/releases/download/v0.1.2/phetch-macos.zip)
 
 Just unzip/untar the `phetch` program into your $PATH and get going!
 
