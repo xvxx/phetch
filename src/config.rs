@@ -1,4 +1,4 @@
-use gopher;
+use crate::gopher;
 use std::fs::{File, OpenOptions};
 use std::io::{BufReader, Result, Write};
 

@@ -3,6 +3,7 @@ name = "phetch"
 version = "0.1.1"
 authors = ["dvkt <c@dvkt.io>"]
 license = "MIT"
+edition = "2018"
 description = "a terminal gopher client designed to help you quickly navigate the gophersphere"
 readme = "README.md"
 repository = "https://github.com/dvkt/phetch"

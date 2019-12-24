@@ -1,4 +1,4 @@
-use config;
+use crate::config;
 use std::io::{Read, Result};
 
 // Bookmarks only work if you've created a ~/.config/phetch/ manually.

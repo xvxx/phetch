@@ -1,4 +1,4 @@
-use config;
+use crate::config;
 use std::io::{BufRead, Result};
 
 // History only works if you've created ~/.config/phetch/history.gph manually.

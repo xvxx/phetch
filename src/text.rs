@@ -1,5 +1,5 @@
+use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::fmt;
-use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct Text {
     url: String,

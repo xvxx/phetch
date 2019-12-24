@@ -1,4 +1,3 @@
-use gopher;
 use std::io::{Read, Result, Write};
 use std::net::TcpStream;
 use std::net::ToSocketAddrs;

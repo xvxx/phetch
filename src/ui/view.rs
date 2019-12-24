@@ -1,5 +1,5 @@
+use crate::ui;
 use std::fmt;
-use ui;
 
 pub trait View: fmt::Display {
     fn respond(&mut self, key: ui::Key) -> ui::Action;

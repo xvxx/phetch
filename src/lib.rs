@@ -1,7 +1,5 @@
 #![allow(unused_must_use)]
 
-extern crate termion;
-
 #[macro_use]
 pub mod utils;
 pub mod bookmarks;

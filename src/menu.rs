@@ -1,11 +1,10 @@
+use crate::gopher;
+use crate::gopher::Type;
+use crate::ui;
+use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::fmt;
 use std::io::stdout;
 use std::io::Write;
-
-use gopher;
-use gopher::Type;
-use ui;
-use ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 
 pub struct Menu {
     pub url: String,          // gopher url

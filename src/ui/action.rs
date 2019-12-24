@@ -1,4 +1,4 @@
-use ui::Key;
+use crate::ui::Key;
 
 #[derive(Debug)]
 pub enum Action {
