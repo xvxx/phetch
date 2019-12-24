@@ -48,12 +48,12 @@ fn main() {
 }
 
 fn print_version() {
-    println!("\x1b[93;1mphetch v0.0.1-dev\x1b[m");
+    println!("phetch v0.0.1-dev");
 }
 
 fn print_usage() {
     println!(
-        "\x1B[93;1mUsage:\x1B[0m 
+        "Usage: 
     phetch                           # Launch and show start page.
     phetch <gopher-url>              # Open Gopherhole at URL.
     phetch -r, --raw <gopher-url>    # Print raw Gopher response.
