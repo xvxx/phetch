@@ -152,9 +152,7 @@ impl Menu {
             }
             // truncate long lines, instead of wrapping
             let name = if line.name.len() > MAX_COLS {
-                let mut s = line.name.chars().take(MAX_COLS).collect::<String>();
-                s.push_str("...");
-                s
+                line.name.chars().take(MAX_COLS).collect::<String>()
             } else {
                 line.name.to_string()
             };
