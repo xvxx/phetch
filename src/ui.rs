@@ -289,7 +289,7 @@ impl UI {
         };
 
         match action {
-            Action::Keypress(Key::Ctrl('c')) => {
+            Action::Keypress(Key::Ctrl('c')) | Action::Keypress(Key::Esc) => {
                 if !cleared {
                     self.running = false
                 }

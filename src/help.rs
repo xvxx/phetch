@@ -83,7 +83,7 @@ ictrl-s     save bookmark
 i
 ictrl-q     quit phetch
 ictrl-c     cancel / quit
-iescape     cancel
+iescape     cancel / quit
 i
 ";
 
