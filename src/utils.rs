@@ -36,10 +36,8 @@ pub fn human_bytes(bytes: usize) -> String {
         (bytes / 1000, "Kb")
     } else if bytes < 1_000_000_000 {
         (bytes / 1_000_000, "Mb")
-    } else if bytes < 1_000_000_000_000 {
-        (bytes / 1_000_000_000, "Gb")
     } else {
-        (bytes, "?b")
+        (bytes / 1_000_000_000, "Gb")
     };
 
     format!("{}{}", count, tag)
