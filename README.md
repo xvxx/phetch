@@ -42,7 +42,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## screenshots
 
-
 ![DOS Archive](./img/dos.png)
 
 ![Menu View](./img/menu-view.png)
@@ -51,9 +50,12 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ![Start Page](./img/start.png)
 
+## screencast
+
+[![asciicast](https://asciinema.org/a/oVwXkFUKfrJ1C7TaKvFCsicOv.svg)](https://asciinema.org/a/oVwXkFUKfrJ1C7TaKvFCsicOv)
+
 ## todo
 
-- [ ] little GIF screencast in README
 - [ ] telnet: gopher://bitreich.org/1/lawn/bbs
 
 ## bugs
