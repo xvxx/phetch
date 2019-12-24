@@ -17,12 +17,11 @@ pub fn lookup(name: &str) -> Option<String> {
 }
 
 pub const HEADER: &str = "
-i
-i      /         /         /   
-i ___ (___  ___ (___  ___ (___ 
+i      /         /         /
+i ___ (___  ___ (___  ___ (___
 i|   )|   )|___)|    |    |   )
-i|__/ |  / |__  |__  |__  |  / 
-i|   
+i|__/ |  / |__  |__  |__  |  /
+i|
 i
 ";
 
@@ -33,7 +32,7 @@ i
 1welcome to gopherspace	/gopher	gopher.floodgap.com
 1the gopher project	/	gopherproject.org
 1gopher lawn	/lawn	bitreich.org
-i 
+i
 i            ~ * ~
 i
 1show help          (ctrl-h)	/help	phetch
@@ -50,12 +49,12 @@ i
 1gopher types	/help/types	phetch
 1bookmarks	/help/bookmarks	phetch
 1history	/help/history	phetch
-i 
+i
 i            ~ * ~
-i 
+i
 1start screen	/home	phetch
 hphetch webpage	URL:https://github.com/dvkt/phetch
-i 
+i
 ";
 
 pub const KEYS: &str = "
@@ -63,8 +62,8 @@ i   ** keyboard shortcuts **
 i
 ileft       back in history
 iright      next in history
-iup         select prev link 
-idown       select next link 
+iup         select prev link
+idown       select next link
 ipage up    scroll page up
 ipage down  scroll page down
 i
@@ -74,7 +73,7 @@ iescape     cancel
 i
 ictrl-g     go to gopher url
 ictrl-u     show gopher url
-ictrl-y     copy url 
+ictrl-y     copy url
 ictrl-r     view raw source
 ictrl-w     toggle wide mode
 i
@@ -87,7 +86,7 @@ i
 pub const NAV: &str = "
 i    ** menu navigation **
 i
-ithere are three ways to 
+ithere are three ways to
 inavigate menus in phetch:
 i
 1up & down arrows	/help/nav	phetch
@@ -97,7 +96,7 @@ ithe ctrl-p/ctrl-n combos to
 iselect menu items. phetch will
 iscroll for you, or you can use
 ipage up & page down (or - and
-ispacebar) to scroll by many 
+ispacebar) to scroll by many
 ilines at once.
 i
 1number keys	/help/nav	phetch
@@ -122,7 +121,7 @@ i
 pub const BOOKMARKS: &str = "
 i       ** bookmarks **
 i
-iphetch has two ways to save 
+iphetch has two ways to save
 ithe url of the current page:
 i
 ictrl-y   copy url
@@ -155,7 +154,7 @@ irecently visited pages first
 iwhen you use ctrl-a.
 i
 ifeel free to edit your history
-ifile directly, or share it 
+ifile directly, or share it
 iwith your friends!
 ";
 
@@ -182,7 +181,7 @@ Iimages downloads	/help/types	phetch
 ssound files	/help/types	phetch
 ddocuments	/help/types	phetch
 i
-iphetch does not support: 
+iphetch does not support:
 i
 2CSO Entries 	/help/types	phetch
 +Mirrors	/help/types	phetch
