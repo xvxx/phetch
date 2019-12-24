@@ -3,7 +3,7 @@ use history;
 
 pub fn lookup(name: &str) -> Option<String> {
     Some(match name {
-        "" | "/" | "home" | "home/" => format!("{}{}", HEADER, HOME),
+        "" | "/" | "home" | "home/" => format!("{}{}", HEADER, START),
         "help" | "help/" => format!("{}{}", HEADER, HELP),
         "history" => history::as_raw_menu(),
         "bookmarks" => bookmarks::as_raw_menu(),
@@ -17,7 +17,7 @@ pub fn lookup(name: &str) -> Option<String> {
 }
 
 pub const HEADER: &str = "
-i                                      	/spacer
+i
 i      /         /         /   
 i ___ (___  ___ (___  ___ (___ 
 i|   )|   )|___)|    |    |   )
@@ -26,8 +26,8 @@ i|
 i
 ";
 
-pub const HOME: &str = "
-i~ the quick lil gopher client ~
+pub const START: &str = "
+i            ~ * ~
 i
 7search gopher	/v2/vs	gopher.floodgap.com
 1welcome to gopherspace	/gopher	gopher.floodgap.com
@@ -36,10 +36,10 @@ i
 i 
 i            ~ * ~
 i
-1show help          \x1b[90mctrl-h	/help	phetch
-1show history       \x1b[90mctrl-a	/history	phetch
-1show bookmarks     \x1b[90mctrl-b	/bookmarks	phetch
-i\x1b[0m
+1show help          (ctrl-h)	/help	phetch
+1show history       (ctrl-a)	/history	phetch
+1show bookmarks     (ctrl-b)	/bookmarks	phetch
+i
 ";
 
 pub const HELP: &str = "
@@ -61,76 +61,80 @@ i
 pub const KEYS: &str = "
 i   ** keyboard shortcuts **
 i
-i\x1b[95mleft       \x1b[96mback in history
-i\x1b[95mright      \x1b[96mnext in history
-i\x1b[95mup         \x1b[96mselect prev link 
-i\x1b[95mdown       \x1b[96mselect next link 
-i\x1b[95mpage up    \x1b[96mscroll page up
-i\x1b[95mpage down  \x1b[96mscroll page down
+ileft       back in history
+iright      next in history
+iup         select prev link 
+idown       select next link 
+ipage up    scroll page up
+ipage down  scroll page down
 i
-i\x1b[95mnum key    \x1b[96mopen/select link
-i\x1b[95menter      \x1b[96mopen current link
-i\x1b[95mescape     \x1b[96mcancel
+inum key    open/select link
+ienter      open current link
+iescape     cancel
 i
-i\x1b[95mctrl-g     \x1b[96mgo to gopher url
-i\x1b[95mctrl-u     \x1b[96mshow gopher url
-i\x1b[95mctrl-y     \x1b[96mcopy url 
-i\x1b[95mctrl-r     \x1b[96mview raw source
-i\x1b[95mctrl-w     \x1b[96mtoggle wide mode
+ictrl-g     go to gopher url
+ictrl-u     show gopher url
+ictrl-y     copy url 
+ictrl-r     view raw source
+ictrl-w     toggle wide mode
 i
-i\x1b[95mctrl-a     \x1b[96mshow history
-i\x1b[95mctrl-b     \x1b[96mshow bookmarks
-i\x1b[95mctrl-s     \x1b[96msave bookmark
-i\x1b[0m
+ictrl-a     show history
+ictrl-b     show bookmarks
+ictrl-s     save bookmark
+i
 ";
 
 pub const NAV: &str = "
 i    ** menu navigation **
 i
-ithere are three ways to navigate
-imenus in phetch:
+ithere are three ways to 
+inavigate menus in phetch:
 i
 1up & down arrows	/help/nav	phetch
 i
-iuse the up and down arrows or the
-ictrl-p/ctrl-n combos to select menu 
-iitems. phetch will scroll for you,
-ior you can use page up & page down
-i(or - and spacebar) to jump by many 
-ilines quickly.
+iuse the up and down arrows or
+ithe ctrl-p/ctrl-n combos to
+iselect menu items. phetch will
+iscroll for you, or you can use
+ipage up & page down (or - and
+ispacebar) to scroll by many 
+ilines at once.
 i
 1number keys	/help/nav	phetch
 i
-iif there are few enough menu items,
-ipressing a number key will open the
-iitem immediately. otherwise, it'll
-ibe selected. use enter to open it.
+iif there are few enough menu
+iitems, pressing a number key
+iwill open a link. otherwise,
+ithe first matching number will
+ibe selected. use enter to open
+ithe selected link.
 i
 1incremental search	/help/nav	phetch
 i
-ijust start typing. phetch will look
-ifor the first case insensitive match
-iand try to select it. use the arrow
-ior ctrl-p/n keys to cycle matches.
+ijust start typing. phetch will
+ilook for the first case-
+iinsensitive match and try to
+iselect it. use arrow keys or
+ictrl-p/n to cycle matches.
 i
 ";
 
 pub const BOOKMARKS: &str = "
 i       ** bookmarks **
 i
-iphetch includes two ways to save 
-ithe current url:
+iphetch has two ways to save 
+ithe url of the current page:
 i
-i\x1b[95mctrl-y   \x1b[96mcopy url
-i\x1b[95mctrl-s   \x1b[96msave bookmark
-i\x1b[0m
-iif the ~/.config/phetch/ directory
-iexists, bookmarks will be saved to
+ictrl-y   copy url
+ictrl-s   save bookmark
+i
+iif ~/.config/phetch/ exists,
+ibookmarks will be saved to
 i~/.config/phetch/bookmarks.gph
 i
-iuse ctrl-b to view them at any time.
+iuse ctrl-b to view them.
 i
-ithe clipboard function uses:  
+ithe clipboard function uses:
 i
 i- `pbcopy` on macos
 i- `xclip -sel clip` on linux
@@ -139,19 +143,20 @@ i";
 pub const HISTORY: &str = "
 i        ** history **
 i
-iif you create a history.gph file
-iin ~/.config/phetch/, each url
-iyou visit will be store there.
+iif you create a history.gph
+ifile in ~/.config/phetch/,
+ieach gopher url you open will
+ibe stored there.
 i
-inew urls are appended to the 
-ibottom, but loaded in reverse 
-iorder so you'll see the most
+inew urls are appended to the
+ibottom, but loaded in reverse
+iorder, so you'll see the most
 irecently visited pages first
 iwhen you use ctrl-a.
 i
 ifeel free to edit your history
-ifile directly, or share it with
-iyour friends!
+ifile directly, or share it 
+iwith your friends!
 ";
 
 pub const TYPES: &str = "
