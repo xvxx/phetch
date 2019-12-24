@@ -32,7 +32,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## screencast
 
-[![asciicast](./img/start.png)](https://asciinema.org/a/oVwXkFUKfrJ1C7TaKvFCsicOv)
+[![asciicast](./img/start-play.png)](https://asciinema.org/a/oVwXkFUKfrJ1C7TaKvFCsicOv)
 
 ## screenshots
 
