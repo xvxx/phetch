@@ -48,7 +48,7 @@ fn main() {
 }
 
 fn print_version() {
-    println!("phetch v0.0.1-dev");
+    println!("phetch v{}", phetch::VERSION);
 }
 
 fn print_usage() {

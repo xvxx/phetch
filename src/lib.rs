@@ -12,3 +12,5 @@ pub mod history;
 pub mod menu;
 pub mod text;
 pub mod ui;
+
+pub const VERSION: &'static str = env!("CARGO_PKG_VERSION");
