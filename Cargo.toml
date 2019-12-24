@@ -5,7 +5,7 @@ authors = ["dvkt <c@dvkt.io>"]
 license = "MIT"
 description = "a terminal gopher client designed to help you quickly navigate the gophersphere"
 repository = "https://github.com/dvkt/phetch"
-keywords = ["gopher", "tui", "cli"]
+keywords = ["gopher", "tui", "terminal"]
 exclude = [
     "img/*"
 ]
