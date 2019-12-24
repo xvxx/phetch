@@ -1,15 +1,5 @@
 <p align="center">
     <img src="./img/logo.png">
-    <br> <br>
-    <a href="LICENSE">
-        <img src="https://img.shields.io/badge/license-MIT-blueviolet?style=flat-square">
-    </a>
-    <a href="https://github.com/dvkt/phetch/releases/tag/v0.0.0">
-        <img src="https://img.shields.io/badge/current_release-0.0.0-brightgreen.svg?style=flat-square">
-    </a>
-    <a href="https://github.com/dvkt/phetch">
-        <img src="https://img.shields.io/badge/dev_version-0.1.0--dev-lightgrey.svg?style=flat-square">
-    </a>
 </p>
 
 `phetch` is a terminal client designed to quickly navigate the gophersphere.
