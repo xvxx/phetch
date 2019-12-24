@@ -40,17 +40,19 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
     cargo run -- <gopher-url>
 
-## screenies
+## screenshots
 
-![Links](./img/links.png)
 
-![DOS Menu](./img/menu.png)
+![Menu View](./img/menu-view.png)
 
-![Game Archive](./img/oldies.png)
+![Text View](./img/text-view.png)
+
+![DOS Archive](./img/dos.png)
+
+![Start Page](./img/start.png)
 
 ## todo
 
-- [ ] new screenshots
 - [ ] little GIF screencast in README
 - [ ] telnet: gopher://bitreich.org/1/lawn/bbs
 
