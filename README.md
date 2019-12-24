@@ -40,6 +40,10 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
     cargo run -- <gopher-url>
 
+## screencast
+
+[![asciicast](./img/start.png)](https://asciinema.org/a/oVwXkFUKfrJ1C7TaKvFCsicOv)
+
 ## screenshots
 
 ![DOS Archive](./img/dos.png)
@@ -47,12 +51,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ![Menu View](./img/menu-view.png)
 
 ![Text View](./img/text-view.png)
-
-![Start Page](./img/start.png)
-
-## screencast
-
-[![asciicast](https://asciinema.org/a/oVwXkFUKfrJ1C7TaKvFCsicOv.svg)](https://asciinema.org/a/oVwXkFUKfrJ1C7TaKvFCsicOv)
 
 ## todo
 
