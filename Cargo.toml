@@ -6,6 +6,9 @@ license = "MIT"
 description = "a terminal gopher client designed to help you quickly navigate the gophersphere"
 repository = "https://github.com/dvkt/phetch"
 keywords = ["gopher", "tui", "cli"]
+exclude = [
+    "img/*"
+]
 
 [profile.release]
 lto = true
