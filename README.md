@@ -43,11 +43,11 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ## screenshots
 
 
+![DOS Archive](./img/dos.png)
+
 ![Menu View](./img/menu-view.png)
 
 ![Text View](./img/text-view.png)
-
-![DOS Archive](./img/dos.png)
 
 ![Start Page](./img/start.png)
 
