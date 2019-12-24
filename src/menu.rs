@@ -549,7 +549,7 @@ impl Menu {
                     if let Some(c) = input.chars().nth(0) {
                         if c.is_digit(10) {
                             let i = c.to_digit(10).unwrap() as usize;
-                            if i <= count {
+                            if i > 0 && i <= count {
                                 if count < (i * 10) {
                                     return self.action_follow_link(i - 1);
                                 } else {
@@ -562,7 +562,7 @@ impl Menu {
                     // jump to >=10 number
                     let s = input.chars().take(2).collect::<String>();
                     if let Ok(num) = s.parse::<usize>() {
-                        if num <= count {
+                        if num > 0 && num <= count {
                             if count < (num * 10) {
                                 return self.action_follow_link(num - 1);
                             } else {
@@ -574,7 +574,7 @@ impl Menu {
                     // jump to >=100 number
                     let s = input.chars().take(3).collect::<String>();
                     if let Ok(num) = s.parse::<usize>() {
-                        if num <= count {
+                        if num > 0 && num <= count {
                             if count < (num * 10) {
                                 return self.action_follow_link(num - 1);
                             } else {
