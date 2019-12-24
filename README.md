@@ -27,9 +27,9 @@ Once you've launched phetch, use `ctrl-h` to view the on-line help.
 
 Binaries for Linux and Mac are available at https://github.com/dvkt/phetch/releases:
 
-- [phetch-linux-arm.tar.gz](https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-arm.tar.gz)
-- [phetch-linux-x86_64.tar.gz](https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-linux-x86_64.tar.gz)
-- [phetch-macos.zip](https://github.com/dvkt/phetch/releases/download/v0.1.0/phetch-macos.zip)
+- [phetch-linux-arm.tar.gz](https://github.com/dvkt/phetch/releases/download/v0.1.1/phetch-linux-arm.tar.gz)
+- [phetch-linux-x86_64.tar.gz](https://github.com/dvkt/phetch/releases/download/v0.1.1/phetch-linux-x86_64.tar.gz)
+- [phetch-macos.zip](https://github.com/dvkt/phetch/releases/download/v0.1.1/phetch-macos.zip)
 
 Just unzip/untar the `phetch` program into your $PATH and get going!
 
