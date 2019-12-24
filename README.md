@@ -9,8 +9,9 @@
 - <1MB executable for linux and mac
 - technicolor design (based on [GILD](https://github.com/dvkt/gild))
 - no nonsense keyboard navigation
-- supports gopher searches, text and menu views, and downloads.
-- opt-in bookmarking and local history tracking.
+- supports gopher searches, text and menu pages, and downloads
+- save your favorite gopherholes with bookmarks
+- opt-in history tracking
 
 ## usage
 
