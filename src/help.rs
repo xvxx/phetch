@@ -18,7 +18,6 @@ pub fn lookup(name: &str) -> Option<String> {
 
 pub const HEADER: &str = "
 i                                      	/spacer
-i
 i      /         /         /   
 i ___ (___  ___ (___  ___ (___ 
 i|   )|   )|___)|    |    |   )
@@ -63,14 +62,14 @@ pub const KEYS: &str = "
 i   ** keyboard shortcuts **
 i
 i\x1b[95mleft       \x1b[96mback in history
-i\x1b[95mright      \x1b[96mforward in history
+i\x1b[95mright      \x1b[96mnext in history
 i\x1b[95mup         \x1b[96mselect prev link 
 i\x1b[95mdown       \x1b[96mselect next link 
 i\x1b[95mpage up    \x1b[96mscroll page up
 i\x1b[95mpage down  \x1b[96mscroll page down
 i
-i\x1b[95mnum key    \x1b[96mopen / select link
-i\x1b[95menter      \x1b[96mopen selected link
+i\x1b[95mnum key    \x1b[96mopen/select link
+i\x1b[95menter      \x1b[96mopen current link
 i\x1b[95mescape     \x1b[96mcancel
 i
 i\x1b[95mctrl-g     \x1b[96mgo to gopher url
