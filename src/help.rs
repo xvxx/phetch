@@ -81,6 +81,10 @@ ictrl-a     show history
 ictrl-b     show bookmarks
 ictrl-s     save bookmark
 i
+ictrl-q     quit phetch
+ictrl-c     cancel / quit
+iescape     cancel
+i
 ";
 
 pub const NAV: &str = "
