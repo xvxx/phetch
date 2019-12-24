@@ -17,6 +17,7 @@ pub fn lookup(name: &str) -> Option<String> {
 }
 
 pub const HEADER: &str = "
+i
 i      /         /         /
 i ___ (___  ___ (___  ___ (___
 i|   )|   )|___)|    |    |   )
