@@ -4,11 +4,13 @@
 
 `phetch` is a terminal client designed to help you quickly navigate the gophersphere: use arrow keys to move around, press a number to jump to a link, or just start typing - phetch is always in incremental search mode when viewing a gopher menu.
 
-**features:**
+## features
 
 - <1MB executable for linux and mac
 - technicolor design (based on [GILD](https://github.com/dvkt/gild))
 - no nonsense keyboard navigation
+- supports gopher searches, text and menu views, and downloads.
+- opt-in bookmarking and local history tracking.
 
 ## usage
 
