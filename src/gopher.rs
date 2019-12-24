@@ -51,7 +51,7 @@ impl Type {
 }
 
 impl Type {
-    pub fn char(&self) -> Option<char> {
+    pub fn to_char(&self) -> Option<char> {
         Some(match self {
             Type::Text => '0',
             Type::Menu => '1',

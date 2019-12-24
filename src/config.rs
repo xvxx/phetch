@@ -29,7 +29,7 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
             file.write_all(
                 format!(
                     "{}{}\t{}\t{}\t{}\r\n",
-                    t.char().unwrap_or('i'),
+                    t.to_char().unwrap_or('i'),
                     label,
                     sel,
                     host,
