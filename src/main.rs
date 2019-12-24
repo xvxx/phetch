@@ -53,12 +53,14 @@ fn print_version() {
 
 fn print_usage() {
     println!(
-        "Usage: 
-    phetch                           # Launch and show start page.
-    phetch <gopher-url>              # Open Gopherhole at URL.
-    phetch -r, --raw <gopher-url>    # Print raw Gopher response.
-    phetch -h, --help                # Show this screen.
-    phetch -v, --version             # Show phetch version."
+        "Usage:
+    phetch                           launch and show start page
+    phetch <gopher-url>              open gopherhole at url
+    phetch -r, --raw <gopher-url>    print raw gopher response
+    phetch -h, --help                show this screen
+    phetch -v, --version             show phetch version
+
+Once you've launched phetch, use `ctrl-h` to view the on-line help."
     );
 }
 

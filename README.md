@@ -15,13 +15,13 @@
 
 ## usage
 
-    phetch                 # Launch and show start page.
-    phetch <gopher-url>    # Launch and show Gopherhole at URL.
-    phetch -r <gopher-url> # Print raw Gopher response.
-    phetch -h              # Show help.
-    phetch -v              # Show version.
+    phetch                           launch and show start page
+    phetch <gopher-url>              open gopherhole at url
+    phetch -r, --raw <gopher-url>    print raw gopher response
+    phetch -h, --help                show this screen
+    phetch -v, --version             show phetch version
 
-Once you've launched phetch, use `ctrl-h` to view the on-line help.
+    Once you've launched phetch, use `ctrl-h` to view the on-line help.
 
 ## installation
 
