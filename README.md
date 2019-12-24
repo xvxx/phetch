@@ -30,11 +30,11 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
     cargo run -- <gopher-url>
 
-## screencast
+## gifcast
 
-[![asciicast](./img/start-play.png)](https://asciinema.org/a/oVwXkFUKfrJ1C7TaKvFCsicOv)
+[![asciicast](./img/start-play.png)](http://dvkt.io/phetchcast/v0.1.0.gif)
 
-## screenshots
+## screenies
 
 ![DOS Archive](./img/dos.png)
 
