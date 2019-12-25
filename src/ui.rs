@@ -365,6 +365,12 @@ impl UI {
     }
 }
 
+impl Default for UI {
+    fn default() -> Self {
+        UI::new()
+    }
+}
+
 impl Drop for UI {
     fn drop(&mut self) {
         print!("\x1b[?25h"); // show cursor
