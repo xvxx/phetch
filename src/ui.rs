@@ -401,7 +401,7 @@ fn open_external(url: &str) -> Result<()> {
         Err(error!(
             "`open` error: {}",
             String::from_utf8(output.stderr)
-                .unwrap_or("?".into())
+                .unwrap_or_else(|_| "?".into())
                 .trim_end()
         ))
     }

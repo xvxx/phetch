@@ -51,7 +51,7 @@ impl Type {
 }
 
 impl Type {
-    pub fn to_char(&self) -> Option<char> {
+    pub fn to_char(self) -> Option<char> {
         Some(match self {
             Type::Text => '0',
             Type::Menu => '1',
@@ -199,7 +199,7 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     // ipv6
     if let Some(idx) = host.find('[') {
         if let Some(end) = host[idx + 1..].find(']') {
-            host = &host[idx + 1..end + 1];
+            host = &host[idx + 1..=end];
             if host.len() > end {
                 if let Some(idx) = host[end..].find(':') {
                     port = &host[idx + 1..];

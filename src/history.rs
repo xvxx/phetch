@@ -17,12 +17,12 @@ i\r\nimkdir -p {dir} && touch {file}"
 pub fn as_raw_menu() -> String {
     let homepath = format!("{}{}", config::DIR, HISTORY_FILE);
     let path = config::path();
-    if path.is_err() {
+    if let Err(error) = path {
         return format!(
             file_missing_fmt!(),
             file = homepath,
             dir = config::DIR,
-            error = path.unwrap_err()
+            error = error
         );
     }
     let path = path.unwrap();
