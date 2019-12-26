@@ -398,55 +398,53 @@ impl UI {
                     self.focused += 1;
                 }
             }
-            _ if action.key_or_ctrl('a') => self.open("History", "gopher://phetch/1/history")?,
-            _ if action.key_or_ctrl('b') => {
-                self.open("Bookmarks", "gopher://phetch/1/bookmarks")?
-            }
-            _ if action.key_or_ctrl('g') => {
-                if let Some(url) = self.prompt("Go to URL: ") {
-                    if !url.contains("://") && !url.starts_with("gopher://") {
-                        self.open(&url, &format!("gopher://{}", url))?;
-                    } else {
-                        self.open(&url, &url)?;
+            Action::Keypress(Key::Char(key)) | Action::Keypress(Key::Ctrl(key)) => match key {
+                'a' => self.open("History", "gopher://phetch/1/history")?,
+                'b' => self.open("Bookmarks", "gopher://phetch/1/bookmarks")?,
+                'g' => {
+                    if let Some(url) = self.prompt("Go to URL: ") {
+                        if !url.contains("://") && !url.starts_with("gopher://") {
+                            self.open(&url, &format!("gopher://{}", url))?;
+                        } else {
+                            self.open(&url, &url)?;
+                        }
                     }
                 }
-            }
-            _ if action.key_or_ctrl('h') => self.open("Help", "gopher://phetch/1/help")?,
-            _ if action.key_or_ctrl('r') => {
-                if let Some(page) = self.views.get(self.focused) {
-                    let url = page.url();
-                    let raw = page.raw();
-                    let mut text = Text::from(url, raw);
-                    text.wide = true;
-                    self.add_page(Box::new(text));
-                }
-            }
-            _ if action.key_or_ctrl('s') => {
-                if let Some(page) = self.views.get(self.focused) {
-                    let url = page.url();
-                    match bookmarks::save(&url, &url) {
-                        Ok(()) => self.set_status(format!("Saved bookmark: {}", url)),
-                        Err(e) => return Err(error!("Save failed: {}", e)),
+                'h' => self.open("Help", "gopher://phetch/1/help")?,
+                'r' => {
+                    if let Some(page) = self.views.get(self.focused) {
+                        let url = page.url();
+                        let raw = page.raw();
+                        let mut text = Text::from(url, raw);
+                        text.wide = true;
+                        self.add_page(Box::new(text));
                     }
                 }
-            }
-            _ if action.key_or_ctrl('u') => {
-                if let Some(page) = self.views.get(self.focused) {
-                    let url = page.url();
-                    self.set_status(format!("Current URL: {}", url));
+                's' => {
+                    if let Some(page) = self.views.get(self.focused) {
+                        let url = page.url();
+                        match bookmarks::save(&url, &url) {
+                            Ok(()) => self.set_status(format!("Saved bookmark: {}", url)),
+                            Err(e) => return Err(error!("Save failed: {}", e)),
+                        }
+                    }
                 }
-            }
-            _ if action.key_or_ctrl('y') => {
-                if let Some(page) = self.views.get(self.focused) {
-                    let url = page.url();
-                    copy_to_clipboard(&url)?;
-                    self.set_status(format!("Copied {} to clipboard.", url));
+                'u' => {
+                    if let Some(page) = self.views.get(self.focused) {
+                        let url = page.url();
+                        self.set_status(format!("Current URL: {}", url));
+                    }
                 }
-            }
-            _ if action.key_or_ctrl('q') => self.running = false,
-            Action::Keypress(key) => {
-                return Err(error!("Unknown keypress: {:?}", key));
-            }
+                'y' => {
+                    if let Some(page) = self.views.get(self.focused) {
+                        let url = page.url();
+                        copy_to_clipboard(&url)?;
+                        self.set_status(format!("Copied {} to clipboard.", url));
+                    }
+                }
+                'q' => self.running = false,
+                c => return Err(error!("Unknown keypress: {}", c)),
+            },
             _ => (),
         }
         Ok(())
