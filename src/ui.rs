@@ -188,13 +188,15 @@ impl UI {
 
         let (tx, rx) = mpsc::channel();
         let label = label.to_string();
+        let rows = self.rows() as u16;
         thread::spawn(move || loop {
             for i in 0..=3 {
                 if rx.try_recv().is_ok() {
                     return;
                 }
                 print!(
-                    "\r{}{}{}{}{}{}",
+                    "{}{}{}{}{}{}{}",
+                    termion::cursor::Goto(1, rows),
                     termion::cursor::Hide,
                     label,
                     ".".repeat(i),
