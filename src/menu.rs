@@ -177,11 +177,10 @@ impl Menu {
 
     fn render_input(&self) -> String {
         format!(
-            "{}{}{}find:\x1b[0m {}{}",
+            "{}Find:\x1b[0m {}{}{}",
             termion::cursor::Goto(1, self.rows() as u16),
-            color::Bg(color::White),
-            color::Fg(color::Black),
             self.input,
+            termion::cursor::Show,
             termion::clear::AfterCursor,
         )
     }
@@ -190,7 +189,7 @@ impl Menu {
         if self.searching {
             print!("{}", self.render_input());
         } else {
-            print!("{}", termion::clear::CurrentLine);
+            print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
         }
         stdout().flush();
         Action::None
@@ -540,19 +539,13 @@ impl Menu {
                     Action::Keypress(key)
                 }
             }
-            Key::Esc => {
+            Key::Esc | Key::Ctrl('c') => {
                 if self.searching {
-                    self.searching = false;
-                    self.input.clear();
-                    self.redraw_input()
-                } else {
-                    Action::Keypress(key)
-                }
-            }
-            Key::Ctrl('c') => {
-                if self.searching {
-                    self.searching = false;
-                    self.input.clear();
+                    if self.input.is_empty() {
+                        self.searching = false;
+                    } else {
+                        self.input.clear();
+                    }
                     self.redraw_input()
                 } else {
                     Action::Keypress(key)
