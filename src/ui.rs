@@ -373,11 +373,12 @@ impl UI {
         };
 
         match action {
-            Action::Keypress(Key::Ctrl('c')) | Action::Keypress(Key::Esc) => {
+            Action::Keypress(Key::Ctrl('c')) => {
                 if !cleared {
                     self.running = false
                 }
             }
+            Action::Keypress(Key::Esc) => {}
             Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
             Action::Open(title, url) => self.open(&title, &url)?,
