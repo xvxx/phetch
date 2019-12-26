@@ -520,12 +520,10 @@ impl Menu {
 
         match key {
             Key::Char('\n') => self.action_open(),
-            Key::Up | Key::Ctrl('p') => self.action_up(),
-            Key::Down | Key::Ctrl('n') => self.action_down(),
-            Key::PageUp | Key::Ctrl('-') => self.action_page_up(),
-            Key::PageDown | Key::Ctrl(' ') => self.action_page_down(),
-            Key::Char('-') => self.action_page_up(),
-            Key::Char(' ') => self.action_page_down(),
+            Key::Up | Key::Ctrl('p') | Key::Char('p') => self.action_up(),
+            Key::Down | Key::Ctrl('n') | Key::Char('n') => self.action_down(),
+            Key::PageUp | Key::Ctrl('-') | Key::Char('-') => self.action_page_up(),
+            Key::PageDown | Key::Ctrl(' ') | Key::Char(' ') => self.action_page_down(),
             Key::Char('f') | Key::Char('i') | Key::Char('/') => {
                 self.searching = true;
                 Action::Redraw
