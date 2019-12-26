@@ -363,6 +363,7 @@ impl UI {
     }
 
     fn process_action(&mut self, action: Action) -> Result<()> {
+        // track if the status line was cleared in this update cycle
         let cleared = if !self.status.is_empty() {
             self.status.clear();
             self.dirty = true;
@@ -397,13 +398,11 @@ impl UI {
                     self.focused += 1;
                 }
             }
-            Action::Keypress(Key::Char('a')) => {
-                self.open("History", "gopher://phetch/1/history")?
-            }
-            Action::Keypress(Key::Char('b')) => {
+            _ if action.key_or_ctrl('a') => self.open("History", "gopher://phetch/1/history")?,
+            _ if action.key_or_ctrl('b') => {
                 self.open("Bookmarks", "gopher://phetch/1/bookmarks")?
             }
-            Action::Keypress(Key::Char('g')) => {
+            _ if action.key_or_ctrl('g') => {
                 if let Some(url) = self.prompt("Go to URL: ") {
                     if !url.contains("://") && !url.starts_with("gopher://") {
                         self.open(&url, &format!("gopher://{}", url))?;
@@ -412,8 +411,8 @@ impl UI {
                     }
                 }
             }
-            Action::Keypress(Key::Char('h')) => self.open("Help", "gopher://phetch/1/help")?,
-            Action::Keypress(Key::Char('r')) => {
+            _ if action.key_or_ctrl('h') => self.open("Help", "gopher://phetch/1/help")?,
+            _ if action.key_or_ctrl('r') => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     let raw = page.raw();
@@ -422,7 +421,7 @@ impl UI {
                     self.add_page(Box::new(text));
                 }
             }
-            Action::Keypress(Key::Char('s')) => {
+            _ if action.key_or_ctrl('s') => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     match bookmarks::save(&url, &url) {
@@ -431,20 +430,20 @@ impl UI {
                     }
                 }
             }
-            Action::Keypress(Key::Char('u')) => {
+            _ if action.key_or_ctrl('u') => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     self.set_status(format!("Current URL: {}", url));
                 }
             }
-            Action::Keypress(Key::Char('y')) => {
+            _ if action.key_or_ctrl('y') => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     copy_to_clipboard(&url)?;
                     self.set_status(format!("Copied {} to clipboard.", url));
                 }
             }
-            Action::Keypress(Key::Char('q')) => self.running = false,
+            _ if action.key_or_ctrl('q') => self.running = false,
             Action::Keypress(key) => {
                 return Err(error!("Unknown keypress: {:?}", key));
             }

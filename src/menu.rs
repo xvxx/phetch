@@ -4,6 +4,7 @@ use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::fmt;
 use std::io::stdout;
 use std::io::Write;
+use termion::color;
 
 pub struct Menu {
     pub url: String,          // gopher url
@@ -14,6 +15,7 @@ pub struct Menu {
     pub input: String,        // user's inputted value
     pub link: usize,          // selected link
     pub scroll: usize,        // scrolling offset
+    pub searching: bool,      // search mode?
     pub size: (usize, usize), // cols, rows
     pub wide: bool,           // in wide mode?
 }
@@ -167,22 +169,29 @@ impl Menu {
             }
             out.push('\n');
         }
-        out.push_str(&format!(
-            "{}{}{}",
-            termion::cursor::Goto(1, self.rows() as u16),
-            termion::clear::CurrentLine,
-            self.input
-        ));
+        if self.searching {
+            out.push_str(&self.render_input());
+        }
         out
     }
 
-    fn redraw_input(&self) -> Action {
-        print!(
-            "{}{}{}",
+    fn render_input(&self) -> String {
+        format!(
+            "{}{}{}Search:\x1b[0m {}{}",
             termion::cursor::Goto(1, self.rows() as u16),
-            termion::clear::CurrentLine,
-            self.input
-        );
+            color::Bg(color::White),
+            color::Fg(color::Black),
+            self.input,
+            termion::clear::AfterCursor,
+        )
+    }
+
+    fn redraw_input(&self) -> Action {
+        if self.searching {
+            print!("{}", self.render_input());
+        } else {
+            print!("{}", termion::clear::CurrentLine);
+        }
         stdout().flush();
         Action::None
     }
@@ -441,7 +450,6 @@ impl Menu {
     }
 
     fn action_follow_link(&mut self, link: usize) -> Action {
-        self.input.clear();
         self.action_select_link(link);
         self.action_open()
     }
@@ -461,7 +469,9 @@ impl Menu {
             }
         }
 
+        self.searching = false;
         self.input.clear();
+
         if let Some(line) = self.link(self.link) {
             let url = line.url.to_string();
             let (typ, _, _, _) = gopher::parse_url(&url);
@@ -487,26 +497,54 @@ impl Menu {
         }
     }
 
+    // self.searching == true
+    fn process_search_mode_char(&mut self, c: char) -> Action {
+        if c == '\n' {
+            return self.action_open();
+        }
+
+        self.input.push(c);
+        if let Some(pos) = self.link_matching(0, &self.input) {
+            self.action_select_link(pos)
+        } else {
+            self.redraw_input()
+        }
+    }
+
     fn process_key(&mut self, key: Key) -> Action {
+        if self.searching {
+            if let Key::Char(c) = key {
+                return self.process_search_mode_char(c);
+            }
+        }
+
         match key {
             Key::Char('\n') => self.action_open(),
-            Key::Char('\t') => Action::None,
             Key::Up | Key::Ctrl('p') => self.action_up(),
             Key::Down | Key::Ctrl('n') => self.action_down(),
+            Key::PageUp | Key::Ctrl('-') => self.action_page_up(),
+            Key::PageDown | Key::Ctrl(' ') => self.action_page_down(),
+            Key::Char('-') => self.action_page_up(),
+            Key::Char(' ') => self.action_page_down(),
+            Key::Char('i') | Key::Char('/') => {
+                self.searching = true;
+                Action::Redraw
+            }
             Key::Ctrl('w') => {
                 self.wide = !self.wide;
                 Action::Redraw
             }
             Key::Backspace | Key::Delete => {
-                if self.input.is_empty() {
-                    Action::Keypress(key)
-                } else {
+                if self.searching {
                     self.input.pop();
                     self.redraw_input()
+                } else {
+                    Action::Keypress(key)
                 }
             }
             Key::Esc => {
-                if !self.input.is_empty() {
+                if self.searching {
+                    self.searching = false;
                     self.input.clear();
                     self.redraw_input()
                 } else {
@@ -514,82 +552,37 @@ impl Menu {
                 }
             }
             Key::Ctrl('c') => {
-                if !self.input.is_empty() {
+                if self.searching {
+                    self.searching = false;
                     self.input.clear();
                     self.redraw_input()
                 } else {
                     Action::Keypress(key)
                 }
             }
-            Key::Char('-') => {
-                if self.input.is_empty() {
-                    self.action_page_up()
-                } else {
-                    self.input.push('-');
-                    self.redraw_input()
-                }
-            }
-            Key::PageUp | Key::Ctrl('-') => self.action_page_up(),
-            Key::PageDown | Key::Ctrl(' ') => self.action_page_down(),
-            Key::Char(' ') => {
-                if self.input.is_empty() {
-                    self.action_page_down()
-                } else {
-                    self.input.push(' ');
-                    self.redraw_input()
-                }
-            }
             Key::Char(c) => {
+                if !c.is_digit(10) {
+                    return Action::Keypress(key);
+                }
+
                 self.input.push(c);
-                let count = self.links.len();
-                let input = &self.input;
-
-                // jump to <10 number
-                if input.len() == 1 {
-                    if let Some(c) = input.chars().nth(0) {
-                        if c.is_digit(10) {
-                            let i = c.to_digit(10).unwrap() as usize;
-                            if i > 0 && i <= count {
-                                if count < (i * 10) {
-                                    return self.action_follow_link(i - 1);
-                                } else {
-                                    return self.action_select_link(i - 1);
-                                }
-                            }
-                        }
-                    }
-                } else if input.len() == 2 {
-                    // jump to >=10 number
-                    let s = input.chars().take(2).collect::<String>();
-                    if let Ok(num) = s.parse::<usize>() {
-                        if num > 0 && num <= count {
-                            if count < (num * 10) {
-                                return self.action_follow_link(num - 1);
-                            } else {
-                                return self.action_select_link(num - 1);
-                            }
-                        }
-                    }
-                } else if input.len() == 3 {
-                    // jump to >=100 number
-                    let s = input.chars().take(3).collect::<String>();
-                    if let Ok(num) = s.parse::<usize>() {
-                        if num > 0 && num <= count {
-                            if count < (num * 10) {
-                                return self.action_follow_link(num - 1);
-                            } else {
-                                return self.action_select_link(num - 1);
-                            }
+                // jump to number
+                let s = self
+                    .input
+                    .chars()
+                    .take(self.input.len())
+                    .collect::<String>();
+                if let Ok(num) = s.parse::<usize>() {
+                    if num > 0 && num <= self.links.len() {
+                        if self.links.len() < (num * 10) {
+                            return self.action_follow_link(num - 1);
+                        } else {
+                            return self.action_select_link(num - 1);
                         }
                     }
                 }
 
-                // name search
-                if let Some(pos) = self.link_matching(0, &self.input) {
-                    return self.action_select_link(pos);
-                }
-
-                self.redraw_input()
+                Action::None
             }
             _ => Action::Keypress(key),
         }
@@ -679,6 +672,7 @@ impl Menu {
             input: String::new(),
             link: 0,
             scroll: 0,
+            searching: false,
             size: (0, 0),
             wide: false,
         }
