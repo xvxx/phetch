@@ -32,11 +32,11 @@ impl View for Text {
 
     fn respond(&mut self, c: Key) -> Action {
         match c {
-            Key::Char('t') | Key::Char('g') => {
+            Key::Home => {
                 self.scroll = 0;
                 Action::Redraw
             }
-            Key::Char('b') | Key::Char('G') => {
+            Key::End => {
                 if self.lines >= SCROLL_LINES {
                     self.scroll = self.lines - SCROLL_LINES;
                     Action::Redraw
