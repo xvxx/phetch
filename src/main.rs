@@ -1,7 +1,6 @@
 extern crate phetch;
 
-use phetch::gopher;
-use phetch::ui::UI;
+use phetch::{gopher, ui::UI};
 use std::process::exit;
 
 fn main() {

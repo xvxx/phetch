@@ -1,5 +1,4 @@
-use crate::bookmarks;
-use crate::history;
+use crate::{bookmarks, history};
 
 pub fn lookup(name: &str) -> Option<String> {
     Some(match name {

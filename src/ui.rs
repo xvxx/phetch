@@ -3,24 +3,23 @@ mod view;
 pub use self::action::Action;
 pub use self::view::View;
 
-use crate::bookmarks;
-use crate::gopher;
-use crate::gopher::Type;
-use crate::help;
-use crate::history;
-use crate::menu::Menu;
-use crate::text::Text;
-use crate::utils;
-use std::io::{stdin, stdout, Result, Write};
-use std::process;
-use std::process::Stdio;
-use std::sync::mpsc;
-use std::thread;
-use std::time::Duration;
-use termion::color;
-use termion::input::TermRead;
-use termion::raw::IntoRawMode;
-use termion::terminal_size;
+use crate::{
+    bookmarks,
+    gopher::{self, Type},
+    help, history,
+    menu::Menu,
+    text::Text,
+    utils,
+};
+use std::{
+    io::{stdin, stdout, Result, Write},
+    process,
+    process::Stdio,
+    sync::mpsc,
+    thread,
+    time::Duration,
+};
+use termion::{color, input::TermRead, raw::IntoRawMode, terminal_size};
 
 pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;

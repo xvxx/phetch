@@ -1,8 +1,8 @@
 use crate::gopher;
-
-use std::fs::{File, OpenOptions};
-use std::io::prelude::*;
-use std::io::{BufReader, Result, Write};
+use std::{
+    fs::{File, OpenOptions},
+    io::{prelude::*, BufReader, Result, Write},
+};
 
 pub const DIR: &str = "~/.config/phetch/";
 

@@ -1,8 +1,10 @@
-use std::io::{Read, Result, Write};
-use std::net::TcpStream;
-use std::net::ToSocketAddrs;
-use std::os::unix::fs::OpenOptionsExt;
-use std::time::Duration;
+use std::{
+    io::{Read, Result, Write},
+    net::TcpStream,
+    net::ToSocketAddrs,
+    os::unix::fs::OpenOptionsExt,
+    time::Duration,
+};
 use termion::input::TermRead;
 
 // Some Gopher servers can be kind of slow, we may want to up this or
