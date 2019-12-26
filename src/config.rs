@@ -1,5 +1,7 @@
 use crate::gopher;
+
 use std::fs::{File, OpenOptions};
+use std::io::prelude::*;
 use std::io::{BufReader, Result, Write};
 
 pub const DIR: &str = "~/.config/phetch/";
@@ -20,11 +22,7 @@ pub fn load(filename: &str) -> Result<BufReader<File>> {
 pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
     path().and_then(|dotdir| {
         let path = dotdir.join(filename);
-        if let Ok(mut file) = std::fs::OpenOptions::new()
-            .append(true)
-            .create(true)
-            .open(path)
-        {
+        if let Ok(mut file) = OpenOptions::new().append(true).create(true).open(path) {
             let (t, host, port, sel) = gopher::parse_url(&url);
             file.write_all(
                 format!(
@@ -37,6 +35,39 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
                 )
                 .as_ref(),
             );
+            Ok(())
+        } else {
+            Err(error!("Can't open file for writing: {:?}", filename))
+        }
+    })
+}
+
+// Add a menu item as the first line in a file in the config dir.
+pub fn prepend(filename: &str, label: &str, url: &str) -> Result<()> {
+    path().and_then(|dotdir| {
+        let path = dotdir.join(filename);
+        if let Ok(mut file) = OpenOptions::new()
+            .write(true)
+            .read(true)
+            .create(true)
+            .open(path)
+        {
+            let (t, host, port, sel) = gopher::parse_url(&url);
+            let mut buf = vec![];
+            file.read_to_end(&mut buf);
+            file.seek(std::io::SeekFrom::Start(0));
+            file.write_all(
+                format!(
+                    "{}{}\t{}\t{}\t{}\r\n",
+                    t.to_char().unwrap_or('i'),
+                    label,
+                    sel,
+                    host,
+                    port
+                )
+                .as_ref(),
+            );
+            file.write_all(&buf);
             Ok(())
         } else {
             Err(error!("Can't open file for writing: {:?}", filename))
