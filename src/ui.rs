@@ -377,7 +377,6 @@ impl UI {
                     self.running = false
                 }
             }
-            Action::Keypress(Key::Ctrl('q')) => self.running = false,
             Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
             Action::Open(title, url) => self.open(&title, &url)?,
@@ -398,16 +397,13 @@ impl UI {
                     self.focused += 1;
                 }
             }
-            Action::Keypress(Key::Ctrl('r')) => {
-                if let Some(page) = self.views.get(self.focused) {
-                    let url = page.url();
-                    let raw = page.raw();
-                    let mut text = Text::from(url, raw);
-                    text.wide = true;
-                    self.add_page(Box::new(text));
-                }
+            Action::Keypress(Key::Char('a')) => {
+                self.open("History", "gopher://phetch/1/history")?
             }
-            Action::Keypress(Key::Ctrl('g')) => {
+            Action::Keypress(Key::Char('b')) => {
+                self.open("Bookmarks", "gopher://phetch/1/bookmarks")?
+            }
+            Action::Keypress(Key::Char('g')) => {
                 if let Some(url) = self.prompt("Go to URL: ") {
                     if !url.contains("://") && !url.starts_with("gopher://") {
                         self.open(&url, &format!("gopher://{}", url))?;
@@ -416,14 +412,17 @@ impl UI {
                     }
                 }
             }
-            Action::Keypress(Key::Ctrl('h')) => self.open("Help", "gopher://phetch/1/help")?,
-            Action::Keypress(Key::Ctrl('a')) => {
-                self.open("History", "gopher://phetch/1/history")?
+            Action::Keypress(Key::Char('h')) => self.open("Help", "gopher://phetch/1/help")?,
+            Action::Keypress(Key::Char('r')) => {
+                if let Some(page) = self.views.get(self.focused) {
+                    let url = page.url();
+                    let raw = page.raw();
+                    let mut text = Text::from(url, raw);
+                    text.wide = true;
+                    self.add_page(Box::new(text));
+                }
             }
-            Action::Keypress(Key::Ctrl('b')) => {
-                self.open("Bookmarks", "gopher://phetch/1/bookmarks")?
-            }
-            Action::Keypress(Key::Ctrl('s')) => {
+            Action::Keypress(Key::Char('s')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     match bookmarks::save(&url, &url) {
@@ -432,19 +431,20 @@ impl UI {
                     }
                 }
             }
-            Action::Keypress(Key::Ctrl('u')) => {
+            Action::Keypress(Key::Char('u')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     self.set_status(format!("Current URL: {}", url));
                 }
             }
-            Action::Keypress(Key::Ctrl('y')) => {
+            Action::Keypress(Key::Char('y')) => {
                 if let Some(page) = self.views.get(self.focused) {
                     let url = page.url();
                     copy_to_clipboard(&url)?;
                     self.set_status(format!("Copied {} to clipboard.", url));
                 }
             }
+            Action::Keypress(Key::Char('q')) => self.running = false,
             Action::Keypress(key) => {
                 return Err(error!("Unknown keypress: {:?}", key));
             }
