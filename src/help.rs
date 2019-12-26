@@ -65,27 +65,34 @@ ileft       back in history
 iright      next in history
 iup         select prev link
 idown       select next link
-ipage up    scroll page up
-ipage down  scroll page down
+ipg up/down scroll by many lines
+i- or space same as pg up/down
 i
 inum key    open/select link
 ienter      open current link
 iescape     cancel
+ictrl-c     cancel/quit
 i
-ictrl-g     go to gopher url
-ictrl-u     show gopher url
-ictrl-y     copy url
-ictrl-r     view raw source
-ictrl-w     toggle wide mode
+if or /     find link in page
+ip          select prev link
+in          select next link
 i
-ictrl-a     show history
-ictrl-b     show bookmarks
-ictrl-s     save bookmark
+ig          go to gopher url
+iu          show gopher url
+iy          copy url
 i
-ictrl-q     quit phetch
-ictrl-c     cancel / quit
-iescape     cancel / quit
+ib          show bookmarks
+is          save bookmark
+ia          show history
 i
+ir          view raw source
+iw          toggle wide mode
+iq          quit phetch
+ih          show help
+i
+iall single letter commands also
+iwork with the ctrl key.
+i     
 ";
 
 pub const NAV: &str = "
