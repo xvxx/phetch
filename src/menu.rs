@@ -177,7 +177,7 @@ impl Menu {
 
     fn render_input(&self) -> String {
         format!(
-            "{}{}{}Search:\x1b[0m {}{}",
+            "{}{}{}find:\x1b[0m {}{}",
             termion::cursor::Goto(1, self.rows() as u16),
             color::Bg(color::White),
             color::Fg(color::Black),
@@ -526,7 +526,7 @@ impl Menu {
             Key::PageDown | Key::Ctrl(' ') => self.action_page_down(),
             Key::Char('-') => self.action_page_up(),
             Key::Char(' ') => self.action_page_down(),
-            Key::Char('i') | Key::Char('/') => {
+            Key::Char('f') | Key::Char('i') | Key::Char('/') => {
                 self.searching = true;
                 Action::Redraw
             }
