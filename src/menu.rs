@@ -519,8 +519,8 @@ impl Menu {
 
         match key {
             Key::Char('\n') => self.action_open(),
-            Key::Up | Key::Ctrl('p') | Key::Char('p') => self.action_up(),
-            Key::Down | Key::Ctrl('n') | Key::Char('n') => self.action_down(),
+            Key::Up | Key::Ctrl('p') | Key::Char('p') | Key::Char('k') => self.action_up(),
+            Key::Down | Key::Ctrl('n') | Key::Char('n') | Key::Char('j') => self.action_down(),
             Key::PageUp | Key::Ctrl('-') | Key::Char('-') => self.action_page_up(),
             Key::PageDown | Key::Ctrl(' ') | Key::Char(' ') => self.action_page_down(),
             Key::Char('f') | Key::Char('i') | Key::Char('/') => {

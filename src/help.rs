@@ -74,8 +74,8 @@ iescape     cancel
 ictrl-c     cancel/quit
 i
 if or /     find link in page
-ip          select prev link
-in          select next link
+ip or k     select prev link
+in or j     select next link
 i
 ig          go to gopher url
 iu          show gopher url
