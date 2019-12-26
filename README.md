@@ -51,6 +51,12 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
+- [ ] activate search mode with / or i
+- [ ] de-activate search mode with ESC
+- [ ] ENTER on non-match is an error
+- [ ] show "SEARCH MODE" indicator in bottom right?
+- [ ] update help
+- [ ] add credits page
 - [ ] telnet: gopher://bitreich.org/1/lawn/bbs
 
 ## bugs

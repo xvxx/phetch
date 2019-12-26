@@ -1,6 +1,5 @@
 use crate::gopher;
 use crate::gopher::Type;
-use crate::ui;
 use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::fmt;
 use std::io::stdout;
@@ -468,14 +467,16 @@ impl Menu {
             let (typ, _, _, _) = gopher::parse_url(&url);
             match typ {
                 Type::Search => {
-                    if let Some(query) = ui::prompt(&format!("{}> ", line.name)) {
-                        Action::Open(
-                            format!("{}> {}", line.name, query),
-                            format!("{}?{}", url, query),
-                        )
-                    } else {
-                        Action::None
-                    }
+                    let prompt = format!("{}> ", line.name);
+                    Action::Prompt(
+                        prompt.clone(),
+                        Box::new(move |query| {
+                            Action::Open(
+                                format!("{}{}", prompt, query),
+                                format!("{}?{}", url, query),
+                            )
+                        }),
+                    )
                 }
                 Type::Error => Action::Error(line.name.to_string()),
                 Type::Telnet => Action::Error("Telnet support coming soon".into()),

@@ -94,7 +94,7 @@ impl UI {
         // non-gopher URL
         if url.contains("://") && !url.starts_with("gopher://") {
             self.dirty = true;
-            return if confirm(&format!("Open external URL? {}", url)) {
+            return if self.confirm(&format!("Open external URL? {}", url)) {
                 open_external(url)
             } else {
                 Ok(())
@@ -105,7 +105,7 @@ impl UI {
         let (typ, _, _, _) = gopher::parse_url(url);
         if typ.is_download() {
             self.dirty = true;
-            return if confirm(&format!("Download {}?", url)) {
+            return if self.confirm(&format!("Download {}?", url)) {
                 self.download(url)
             } else {
                 Ok(())
@@ -262,6 +262,90 @@ impl UI {
         }
     }
 
+    // Ask user to confirm action with ENTER or Y.
+    fn confirm(&self, question: &str) -> bool {
+        let rows = self.rows();
+
+        print!(
+            "{}{}{}{} [Y/n]: {}",
+            color::Fg(color::Reset),
+            termion::cursor::Goto(1, rows),
+            termion::clear::CurrentLine,
+            question,
+            termion::cursor::Show,
+        );
+        stdout().flush();
+
+        if let Some(Ok(key)) = stdin().keys().next() {
+            match key {
+                Key::Char('\n') => true,
+                Key::Char('y') | Key::Char('Y') => true,
+                _ => false,
+            }
+        } else {
+            false
+        }
+    }
+
+    // Prompt user for input and return what was entered, if anything.
+    fn prompt(&self, prompt: &str) -> Option<String> {
+        let rows = self.rows();
+
+        print!(
+            "{}{}{}{}{}",
+            color::Fg(color::Reset),
+            termion::cursor::Goto(1, rows),
+            termion::clear::CurrentLine,
+            prompt,
+            termion::cursor::Show,
+        );
+        stdout().flush();
+
+        let mut input = String::new();
+        for k in stdin().keys() {
+            if let Ok(key) = k {
+                match key {
+                    Key::Char('\n') => {
+                        print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
+                        stdout().flush();
+                        return Some(input);
+                    }
+                    Key::Char(c) => input.push(c),
+                    Key::Esc | Key::Ctrl('c') => {
+                        if input.is_empty() {
+                            print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
+                            stdout().flush();
+                            return None;
+                        } else {
+                            input.clear();
+                        }
+                    }
+                    Key::Backspace | Key::Delete => {
+                        input.pop();
+                    }
+                    _ => {}
+                }
+            } else {
+                break;
+            }
+
+            print!(
+                "{}{}{}{}",
+                termion::cursor::Goto(1, rows),
+                termion::clear::CurrentLine,
+                prompt,
+                input,
+            );
+            stdout().flush();
+        }
+
+        if !input.is_empty() {
+            Some(input)
+        } else {
+            None
+        }
+    }
+
     fn process_page_input(&mut self) -> Action {
         if let Some(page) = self.views.get_mut(self.focused) {
             if let Ok(key) = stdin()
@@ -297,6 +381,11 @@ impl UI {
             Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
             Action::Open(title, url) => self.open(&title, &url)?,
+            Action::Prompt(query, fun) => {
+                if let Some(response) = self.prompt(&query) {
+                    self.process_action(fun(response));
+                }
+            }
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
                 if self.focused > 0 {
                     self.dirty = true;
@@ -319,7 +408,7 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Ctrl('g')) => {
-                if let Some(url) = prompt("Go to URL: ") {
+                if let Some(url) = self.prompt("Go to URL: ") {
                     if !url.contains("://") && !url.starts_with("gopher://") {
                         self.open(&url, &format!("gopher://{}", url))?;
                     } else {
@@ -410,89 +499,5 @@ fn open_external(url: &str) -> Result<()> {
                 .unwrap_or_else(|_| "?".into())
                 .trim_end()
         ))
-    }
-}
-
-/// Ask user to confirm action with ENTER or Y.
-pub fn confirm(question: &str) -> bool {
-    let (_cols, rows) = terminal_size().unwrap();
-
-    print!(
-        "{}{}{}{} [Y/n]: {}",
-        color::Fg(color::Reset),
-        termion::cursor::Goto(1, rows),
-        termion::clear::CurrentLine,
-        question,
-        termion::cursor::Show,
-    );
-    stdout().flush();
-
-    if let Some(Ok(key)) = stdin().keys().next() {
-        match key {
-            Key::Char('\n') => true,
-            Key::Char('y') | Key::Char('Y') => true,
-            _ => false,
-        }
-    } else {
-        false
-    }
-}
-
-/// Prompt user for input and return what was entered, if anything.
-pub fn prompt(prompt: &str) -> Option<String> {
-    let (_cols, rows) = terminal_size().unwrap();
-
-    print!(
-        "{}{}{}{}{}",
-        color::Fg(color::Reset),
-        termion::cursor::Goto(1, rows),
-        termion::clear::CurrentLine,
-        prompt,
-        termion::cursor::Show,
-    );
-    stdout().flush();
-
-    let mut input = String::new();
-    for k in stdin().keys() {
-        if let Ok(key) = k {
-            match key {
-                Key::Char('\n') => {
-                    print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
-                    stdout().flush();
-                    return Some(input);
-                }
-                Key::Char(c) => input.push(c),
-                Key::Esc | Key::Ctrl('c') => {
-                    if input.is_empty() {
-                        print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
-                        stdout().flush();
-                        return None;
-                    } else {
-                        input.clear();
-                    }
-                }
-                Key::Backspace | Key::Delete => {
-                    input.pop();
-                }
-                _ => {}
-            }
-        } else {
-            break;
-        }
-
-        print!(
-            "{}{}{}{}",
-            termion::cursor::Goto(1, rows),
-            termion::clear::CurrentLine,
-            prompt,
-            input,
-        );
-        stdout().flush();
-    }
-
-    if !input.is_empty() {
-        Some(input)
-    } else {
-        None
     }
 }
