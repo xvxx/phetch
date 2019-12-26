@@ -528,8 +528,8 @@ impl Menu {
                     self.redraw_input()
                 }
             }
-            Key::PageUp => self.action_page_up(),
-            Key::PageDown => self.action_page_down(),
+            Key::PageUp | Key::Ctrl('-') => self.action_page_up(),
+            Key::PageDown | Key::Ctrl(' ') => self.action_page_down(),
             Key::Char(' ') => {
                 if self.input.is_empty() {
                     self.action_page_down()
