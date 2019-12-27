@@ -30,10 +30,9 @@ pub const START: &str = "
 i            ~ * ~
 i
 7search gopher	/v2/vs	gopher.floodgap.com
-7search gopherpedia	/lookup	gopherpedia.com	70
+1gopherpedia	/	gopherpedia.com	70
 1gopher lawn	/lawn	bitreich.org
 1welcome to gopherspace	/gopher	gopher.floodgap.com
-1the gopher project	/	gopherproject.org
 i
 i            ~ * ~
 i
