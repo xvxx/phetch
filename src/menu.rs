@@ -498,7 +498,14 @@ impl Menu {
     // self.searching == true
     fn process_search_mode_char(&mut self, c: char) -> Action {
         if c == '\n' {
-            return self.action_open();
+            if self.link_matching(0, &self.input).is_some() {
+                return self.action_open();
+            } else {
+                let input = self.input.clone();
+                self.searching = false;
+                self.input.clear();
+                return Action::Error(format!("No links match: {}", input));
+            }
         }
 
         self.input.push(c);

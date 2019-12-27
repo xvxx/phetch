@@ -51,7 +51,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
-- [ ] ENTER on non-match is an error
 - [ ] add credits page
 - [ ] fork+exec telnet: gopher://bitreich.org/1/lawn/bbs
 
