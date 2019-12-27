@@ -6,6 +6,7 @@ pub fn lookup(name: &str) -> Option<String> {
         "help" | "help/" => format!("{}{}", HEADER, HELP),
         "history" => history::as_raw_menu(),
         "bookmarks" => bookmarks::as_raw_menu(),
+        "about" => format!("{}{}", HEADER, ABOUT.replace("{version}", crate::VERSION)),
         "help/keys" => format!("{}{}", HEADER, KEYS),
         "help/nav" => format!("{}{}", HEADER, NAV),
         "help/types" => format!("{}{}", HEADER, TYPES),
@@ -29,9 +30,10 @@ pub const START: &str = "
 i            ~ * ~
 i
 7search gopher	/v2/vs	gopher.floodgap.com
+7search gopherpedia	/lookup	gopherpedia.com	70
+1gopher lawn	/lawn	bitreich.org
 1welcome to gopherspace	/gopher	gopher.floodgap.com
 1the gopher project	/	gopherproject.org
-1gopher lawn	/lawn	bitreich.org
 i
 i            ~ * ~
 i
@@ -53,6 +55,7 @@ i
 i            ~ * ~
 i
 1start screen	/home	phetch
+1about phetch	/about	phetch
 hphetch webpage	URL:https://github.com/dvkt/phetch
 i
 ";
@@ -199,4 +202,24 @@ i
 +Mirrors	/help/types	phetch
 TTelnet3270	/help/types	phetch
 i
+";
+
+pub const ABOUT: &str = "
+i     ~ version: v{version} ~
+i
+ispecial thanks to:
+i
+ikseistrup - major help with 
+i            design & testing
+i
+i  antirez - introduced me to 
+i            the world of gopher
+i
+i    lartu - inspired me to
+i            add some \x1b[95mcolor
+i
+i            ~ * ~
+i
+0phetch uses the MIT license	/MIT License	gopherpedia.com
+hwebpage: github.com/dvkt/phetch	URL:https://github.com/dvkt/phetch
 ";
