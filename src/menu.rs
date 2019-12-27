@@ -212,7 +212,7 @@ impl Menu {
         }
 
         let padding = self.padding_bottom();
-        if self.scroll <= padding {
+        if self.scroll < padding {
             self.scroll += SCROLL_LINES;
             if self.scroll > padding {
                 self.scroll = padding;
@@ -221,24 +221,26 @@ impl Menu {
                     return Action::Redraw;
                 }
             }
-            if let Some(dir) = self.link_visibility(self.link) {
-                match dir {
-                    LinkPos::Above => {
-                        let scroll = self.scroll;
-                        if let Some(&pos) =
-                            self.links.iter().skip(self.link).find(|&&i| i >= scroll)
-                        {
-                            self.link = self.lines.get(pos).unwrap().link;
-                        }
-                    }
-                    LinkPos::Below => {}
-                    LinkPos::Visible => {}
-                }
-            }
-            Action::Redraw
         } else {
-            Action::None
+            if !self.links.is_empty() {
+                self.link = self.links.len() - 1;
+                return Action::Redraw;
+            }
         }
+        if let Some(dir) = self.link_visibility(self.link) {
+            match dir {
+                LinkPos::Above => {
+                    let scroll = self.scroll;
+                    if let Some(&pos) = self.links.iter().skip(self.link).find(|&&i| i >= scroll) {
+                        self.link = self.lines.get(pos).unwrap().link;
+                        return Action::Redraw;
+                    }
+                }
+                LinkPos::Below => {}
+                LinkPos::Visible => {}
+            }
+        }
+        Action::None
     }
 
     fn action_page_up(&mut self) -> Action {
@@ -282,6 +284,10 @@ impl Menu {
         if self.link == 0 {
             return if self.scroll > 0 {
                 self.scroll -= 1;
+                Action::Redraw
+            } else if !self.links.is_empty() {
+                self.link = self.links.len() - 1;
+                self.scroll_to(self.link);
                 Action::Redraw
             } else {
                 Action::None
@@ -379,7 +385,10 @@ impl Menu {
                 self.scroll += 1;
                 return Action::Redraw;
             } else {
-                return Action::None;
+                // wrap around
+                self.link = 0;
+                self.scroll_to(self.link);
+                return Action::Redraw;
             }
         }
 
