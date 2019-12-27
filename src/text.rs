@@ -152,7 +152,7 @@ impl Text {
 
     // how many rows to pad with blank lines at the end of the page
     fn padding(&self) -> usize {
-        let padding = (self.size.1 as f64 * 0.75) as usize;
+        let padding = (self.size.1 as f64 * 0.9) as usize;
         if self.lines > padding {
             self.lines - padding
         } else {

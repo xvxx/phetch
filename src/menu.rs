@@ -333,7 +333,7 @@ impl Menu {
 
     // how many rows to pad with blank lines at the end of the page
     fn padding_bottom(&self) -> usize {
-        let padding = (self.rows() as f64 * 0.75) as usize;
+        let padding = (self.rows() as f64 * 0.9) as usize;
         if self.lines.len() > padding {
             self.lines.len() - padding
         } else {
