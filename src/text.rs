@@ -48,7 +48,7 @@ impl View for Text {
                 self.wide = !self.wide;
                 Action::Redraw
             }
-            Key::Down | Key::Ctrl('n') | Key::Char('j') => {
+            Key::Down | Key::Ctrl('n') | Key::Char('n') | Key::Ctrl('j') | Key::Char('j') => {
                 if self.scroll < self.padding() {
                     self.scroll += 1;
                     Action::Redraw
@@ -56,7 +56,7 @@ impl View for Text {
                     Action::None
                 }
             }
-            Key::Up | Key::Ctrl('p') | Key::Char('k') => {
+            Key::Up | Key::Ctrl('p') | Key::Char('p') | Key::Ctrl('k') | Key::Char('k') => {
                 if self.scroll > 0 {
                     self.scroll -= 1;
                     Action::Redraw
