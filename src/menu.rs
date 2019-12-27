@@ -83,7 +83,12 @@ impl Menu {
         }
     }
 
-    // is the given link visible on the screen right now?
+    /// Is the given link visible on screen?
+    fn is_visible(&self, link: usize) -> bool {
+        self.link_visibility(link) == Some(LinkPos::Visible)
+    }
+
+    /// Where is the given link relative to the screen?
     fn link_visibility(&self, i: usize) -> Option<LinkPos> {
         if let Some(&pos) = self.links.get(i) {
             Some(if pos < self.scroll {
@@ -301,10 +306,8 @@ impl Menu {
                         self.scroll -= 1;
                     }
                     // select it if it's visible now
-                    if let Some(dir) = self.link_visibility(new_link) {
-                        if dir == LinkPos::Visible {
-                            self.link = new_link;
-                        }
+                    if self.is_visible(new_link) {
+                        self.link = new_link;
                     }
                 }
                 LinkPos::Below => {
@@ -403,10 +406,8 @@ impl Menu {
                         // scroll down by 1
                         self.scroll += 1;
                         // select it if it's visible now
-                        if let Some(dir) = self.link_visibility(new_link) {
-                            if dir == LinkPos::Visible {
-                                self.link = new_link;
-                            }
+                        if self.is_visible(new_link) {
+                            self.link = new_link;
                         }
                     }
                     LinkPos::Visible => {
@@ -452,19 +453,24 @@ impl Menu {
         self.action_open()
     }
 
+    fn scroll_to(&mut self, link: usize) -> Action {
+        if self.link_visibility(self.link) != Some(LinkPos::Visible) {
+            if let Some(&pos) = self.links.get(link) {
+                if pos > 5 {
+                    self.scroll = pos - 5;
+                } else {
+                    self.scroll = 0;
+                }
+                return Action::Redraw;
+            }
+        }
+        Action::None
+    }
+
     fn action_open(&mut self) -> Action {
         // if the selected link isn't visible, jump to it:
-        if let Some(dir) = self.link_visibility(self.link) {
-            if dir != LinkPos::Visible {
-                if let Some(&pos) = self.links.get(self.link) {
-                    if pos > 5 {
-                        self.scroll = pos - 5;
-                    } else {
-                        self.scroll = 0;
-                    }
-                    return Action::Redraw;
-                }
-            }
+        if !self.is_visible(self.link) {
+            return self.scroll_to(self.link);
         }
 
         self.searching = false;
