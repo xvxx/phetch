@@ -667,10 +667,12 @@ impl Menu {
                 // selector
                 if parts.len() > 1 {
                     let mut sel = parts[1].to_string();
-                    if !sel.starts_with('/') {
-                        sel.insert(0, '/');
+                    if !sel.is_empty() {
+                        if !sel.starts_with('/') {
+                            sel.insert(0, '/');
+                        }
+                        url.push_str(&sel);
                     }
-                    url.push_str(&sel);
                 }
                 lines.push(Line {
                     name,
