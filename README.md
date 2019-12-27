@@ -2,7 +2,7 @@
     <img src="./img/logo.png">
 </p>
 
-`phetch` is a terminal client designed to help you quickly navigate the gophersphere: use arrow keys to move around, press a number to jump to a link, or just start typing - phetch is always in incremental search mode when viewing a gopher menu.
+`phetch` is a terminal client designed to help you quickly navigate the gophersphere.
 
 ## features
 
@@ -11,7 +11,7 @@
 - no nonsense keyboard navigation
 - supports gopher searches, text and menu pages, and downloads
 - save your favorite gopherholes with bookmarks
-- opt-in history tracking
+- opt-in history
 
 ## usage
 
@@ -51,13 +51,9 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
-- [ ] activate search mode with / or i
-- [ ] de-activate search mode with ESC
 - [ ] ENTER on non-match is an error
-- [ ] show "SEARCH MODE" indicator in bottom right?
-- [ ] update help
 - [ ] add credits page
-- [ ] telnet: gopher://bitreich.org/1/lawn/bbs
+- [ ] fork+exec telnet: gopher://bitreich.org/1/lawn/bbs
 
 ## bugs
 
@@ -65,7 +61,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## future features
 
-- [ ] Toggle bookmarks instead of just appending to the file
+- [ ] Toggle bookmarks instead of just prepending to the file
 - [ ] Bookmarks save the title of the current page
 - [ ] Incremental search in Text views
 - [ ] Linked gopher and http URLs in Text views
