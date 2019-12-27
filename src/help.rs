@@ -102,9 +102,9 @@ inavigate menus in phetch:
 i
 1up & down arrows	/help/nav	phetch
 i
-iuse the up and down arrows or
-ithe ctrl-p/ctrl-n combos to
-iselect menu items. phetch will
+iuse the up and down arrows,
+ij and k keys, or n and p keys
+ito select links. phetch will
 iscroll for you, or you can use
 ipage up & page down (or - and
 ispacebar) to scroll by many
@@ -121,11 +121,12 @@ ithe selected link.
 i
 1incremental search	/help/nav	phetch
 i
-ijust start typing. phetch will
-ilook for the first case-
-iinsensitive match and try to
-iselect it. use arrow keys or
-ictrl-p/n to cycle matches.
+ipress f or / to activate search
+imode, then just start typing.
+iphetch will look for the first
+icase-insensitive match and try
+ito select it. use arrow keys
+ior ctrl-p/n to cycle matches.
 i
 ";
 
@@ -135,14 +136,14 @@ i
 iphetch has two ways to save
 ithe url of the current page:
 i
-ictrl-y   copy url
-ictrl-s   save bookmark
+iy      copy url
+is      save bookmark
 i
 iif ~/.config/phetch/ exists,
 ibookmarks will be saved to
 i~/.config/phetch/bookmarks.gph
 i
-iuse ctrl-b to view them.
+ipress b to view them.
 i
 ithe clipboard function uses:
 i
@@ -162,7 +163,7 @@ inew urls are appended to the
 ibottom, but loaded in reverse
 iorder, so you'll see the most
 irecently visited pages first
-iwhen you use ctrl-a.
+iwhen you press the a key.
 i
 ifeel free to edit your history
 ifile directly, or share it
