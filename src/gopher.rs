@@ -53,6 +53,13 @@ impl Type {
 }
 
 impl Type {
+    pub fn is_supported(self) -> bool {
+        match self {
+            Type::CSOEntity | Type::Mirror | Type::Telnet3270 => false,
+            _ => true,
+        }
+    }
+
     pub fn to_char(self) -> Option<char> {
         Some(match self {
             Type::Text => '0',

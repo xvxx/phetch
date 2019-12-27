@@ -167,8 +167,8 @@ impl Menu {
                 Type::HTML => push!("92", name),
                 Type::Error => push!("91", name),
                 Type::Telnet => push!("4;97;90", name),
-                Type::Telnet3270 | Type::Mirror | Type::CSOEntity => push!("107;30", name),
                 typ if typ.is_download() => push!("4;97", name),
+                typ if !typ.is_supported() => push!("107;91", name),
                 _ => push!("0", name),
             }
             out.push('\n');
@@ -503,6 +503,7 @@ impl Menu {
                 }
                 Type::Error => Action::Error(line.name.to_string()),
                 Type::Telnet => Action::Error("Telnet support coming soon".into()),
+                t if !t.is_supported() => Action::Error(format!("{:?} not supported", t)),
                 _ => Action::Open(line.name.to_string(), url),
             }
         } else {
