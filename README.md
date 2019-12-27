@@ -47,8 +47,9 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## todo
 
-- [ ] add credits page
 - [ ] fork+exec telnet: gopher://bitreich.org/1/lawn/bbs
+- [ ] bookmarks: toggle instead of just prepending to the file
+- [ ] bookmarks: save the title of the current page
 
 ## bugs
 
@@ -56,8 +57,6 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## future features
 
-- [ ] Toggle bookmarks instead of just prepending to the file
-- [ ] Bookmarks save the title of the current page
 - [ ] Incremental search in Text views
 - [ ] Linked gopher and http URLs in Text views
 - [ ] TLS -- https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
