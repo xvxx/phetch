@@ -1,6 +1,10 @@
-<p align="center">
-    <img src="./img/logo.png">
-</p>
+<!--
+      /         /         /   
+ ___ (___  ___ (___  ___ (___ 
+|   )|   )|___)|    |    |   )
+|__/ |  / |__  |__  |__  |  / 
+|                             
+--> <p align="center"> <img src="./img/logo.png"> </p>
 
 `phetch` is a terminal client designed to help you quickly navigate the gophersphere.
 
