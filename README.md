@@ -48,12 +48,14 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ## todo
 
 - [ ] fork+exec telnet: gopher://bitreich.org/1/lawn/bbs
+- [ ] alternate screen support
 - [ ] bookmarks: toggle instead of just prepending to the file
 - [ ] bookmarks: save the title of the current page
 
 ## bugs
 
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by Nathaniel" weirdness)
+- [ ] screen flicker in win10 WSL 
 
 ## future features
 
