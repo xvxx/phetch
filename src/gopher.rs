@@ -184,7 +184,7 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
 
     // simple URLs, ex: "dog.com"
     if !url.contains(':') && !url.contains('/') {
-        return (Type::Menu, url, "70", "/");
+        return (Type::Menu, url, "70", "");
     }
 
     // non-gopher URLs, stick everything in selector
@@ -195,7 +195,7 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     let mut typ = Type::Menu;
     let mut host;
     let mut port = "70";
-    let mut sel = "/";
+    let mut sel = "";
 
     // check selector first
     if let Some(idx) = url.find('/') {
@@ -277,7 +277,7 @@ mod tests {
         assert_eq!(typ, Type::Menu);
         assert_eq!(host, "gopher.floodgap.org");
         assert_eq!(port, "70");
-        assert_eq!(sel, "/");
+        assert_eq!(sel, "");
 
         let (typ, host, port, sel) = parse_url(urls[3]);
         assert_eq!(typ, Type::Text);
@@ -295,7 +295,7 @@ mod tests {
         assert_eq!(typ, Type::Menu);
         assert_eq!(host, "dead:beef:1234:5678:9012:3456:feed:deed");
         assert_eq!(port, "70");
-        assert_eq!(sel, "/");
+        assert_eq!(sel, "");
 
         let (typ, host, port, sel) = parse_url(urls[6]);
         assert_eq!(typ, Type::Menu);
@@ -307,19 +307,19 @@ mod tests {
         assert_eq!(typ, Type::Menu);
         assert_eq!(host, "2001:cdba:0000:0000:0000:0000:3257:9121");
         assert_eq!(port, "70");
-        assert_eq!(sel, "/");
+        assert_eq!(sel, "");
 
         let (typ, host, port, sel) = parse_url(urls[8]);
         assert_eq!(typ, Type::Menu);
         assert_eq!(host, "2001:cdba::3257:9652");
         assert_eq!(port, "70");
-        assert_eq!(sel, "/");
+        assert_eq!(sel, "");
 
         let (typ, host, port, sel) = parse_url(urls[9]);
         assert_eq!(typ, Type::Menu);
         assert_eq!(host, "9999:aaaa::abab:baba:aaaa:9999");
         assert_eq!(port, "70");
-        assert_eq!(sel, "/");
+        assert_eq!(sel, "");
 
         let (typ, host, port, sel) = parse_url(urls[10]);
         assert_eq!(typ, Type::Error);
@@ -331,7 +331,7 @@ mod tests {
         assert_eq!(typ, Type::Menu);
         assert_eq!(host, "::1");
         assert_eq!(port, "70");
-        assert_eq!(sel, "/");
+        assert_eq!(sel, "");
 
         let (typ, host, port, sel) = parse_url(urls[12]);
         assert_eq!(typ, Type::HTML);
