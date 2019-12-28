@@ -44,7 +44,7 @@ impl View for Text {
                     Action::None
                 }
             }
-            Key::Ctrl('w') => {
+            Key::Char('w') | Key::Ctrl('w') => {
                 self.wide = !self.wide;
                 Action::Redraw
             }
