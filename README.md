@@ -6,7 +6,8 @@
 |
 --> <p align="center"> <img src="./img/logo.png"> </p>
 
-`phetch` is a terminal client designed to help you quickly navigate the gophersphere.
+`phetch` is a terminal client designed to help you quickly navigate 
+the gophersphere.
 
 ## features
 
@@ -20,22 +21,23 @@
 ## usage
 
     phetch                           launch and show start page
-    phetch <gopher-url>              open gopherhole at url
+    phetch <gopher-url>              open gopher url
     phetch -r, --raw <gopher-url>    print raw gopher response
     phetch -h, --help                show this screen
     phetch -v, --version             show phetch version
 
-    Once you've launched phetch, use `ctrl-h` to view the on-line help.
+    once you've launched phetch, use `ctrl-h` to view the on-line help.
 
 ## installation
 
-Binaries for Linux, Mac, and Raspberry Pi are available at https://github.com/dvkt/phetch/releases:
+binaries for linux, mac, and raspberry pi are available 
+at https://github.com/dvkt/phetch/releases:
 
-- [phetch-v0.1.4-linux-x86_64.tar.gz](https://github.com/dvkt/phetch/releases/download/v0.1.4/phetch-v0.1.4-linux-x86_64.tar.gz)
-- [phetch-v0.1.4-linux-armv7.tar.gz (RPi)](https://github.com/dvkt/phetch/releases/download/v0.1.4/phetch-v0.1.4-linux-armv7.tar.gz)
-- [phetch-v0.1.4-macos.zip](https://github.com/dvkt/phetch/releases/download/v0.1.4/phetch-v0.1.4-macos.zip)
+- [phetch-v0.1.4-linux-x86_64.tar.gz][0]
+- [phetch-v0.1.4-linux-armv7.tar.gz (RPi)][1]
+- [phetch-v0.1.4-macos.zip][2]
 
-Just unzip/untar the `phetch` program into your $PATH and get going!
+just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## development
 
@@ -69,3 +71,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 - [ ] Linked gopher and http URLs in Text views
 - [ ] TLS -- https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
 - [ ] Fuzzy Find incremental search
+
+[0]: https://github.com/dvkt/phetch/releases/download/v0.1.4/phetch-v0.1.4-linux-x86_64.tar.gz
+[1]: https://github.com/dvkt/phetch/releases/download/v0.1.4/phetch-v0.1.4-linux-armv7.tar.gz
+[2]: https://github.com/dvkt/phetch/releases/download/v0.1.4/phetch-v0.1.4-macos.zip
