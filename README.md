@@ -1,9 +1,9 @@
 <!--
-      /         /         /   
- ___ (___  ___ (___  ___ (___ 
+      /         /         /
+ ___ (___  ___ (___  ___ (___
 |   )|   )|___)|    |    |   )
-|__/ |  / |__  |__  |__  |  / 
-|                             
+|__/ |  / |__  |__  |__  |  /
+|
 --> <p align="center"> <img src="./img/logo.png"> </p>
 
 `phetch` is a terminal client designed to help you quickly navigate the gophersphere.
@@ -59,8 +59,9 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 ## bugs
 
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by Nathaniel" weirdness)
-- [ ] screen flicker in win10 WSL 
+- [ ] screen flicker in win10 WSL
 - [ ] NUM entry and Find entry shouldn't use same buffer
+- [ ] page down / spacebar when last link selected & there is more content
 
 ## future features
 
