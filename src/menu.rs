@@ -556,10 +556,14 @@ impl Menu {
             Key::PageDown | Key::Ctrl(' ') | Key::Char(' ') => self.action_page_down(),
             Key::Home => {
                 self.scroll = 0;
+                self.link = 0;
                 Action::Redraw
             }
             Key::End => {
                 self.scroll = self.final_scroll();
+                if !self.links.is_empty() {
+                    self.link = self.links.len() - 1;
+                }
                 Action::Redraw
             }
             Key::Char('f') | Key::Ctrl('f') | Key::Char('/') | Key::Char('i') | Key::Ctrl('i') => {
