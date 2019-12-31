@@ -37,19 +37,15 @@ impl View for Text {
                 Action::Redraw
             }
             Key::End => {
-                if self.lines >= SCROLL_LINES {
-                    self.scroll = self.lines - SCROLL_LINES;
-                    Action::Redraw
-                } else {
-                    Action::None
-                }
+                self.scroll = self.final_scroll();
+                Action::Redraw
             }
             Key::Char('w') | Key::Ctrl('w') => {
                 self.wide = !self.wide;
                 Action::Redraw
             }
             Key::Down | Key::Ctrl('n') | Key::Char('n') | Key::Ctrl('j') | Key::Char('j') => {
-                if self.scroll < self.padding() {
+                if self.scroll < self.final_scroll() {
                     self.scroll += 1;
                     Action::Redraw
                 } else {
@@ -77,16 +73,11 @@ impl View for Text {
                 }
             }
             Key::PageDown | Key::Char(' ') => {
-                let padding = self.padding();
-                if self.scroll < padding {
-                    self.scroll += SCROLL_LINES;
-                    if self.scroll >= padding {
-                        self.scroll = padding;
-                    }
-                    Action::Redraw
-                } else {
-                    Action::None
+                self.scroll += SCROLL_LINES;
+                if self.scroll > self.final_scroll() {
+                    self.scroll = self.final_scroll();
                 }
+                Action::Redraw
             }
             _ => Action::Keypress(c),
         }
@@ -150,8 +141,8 @@ impl Text {
         }
     }
 
-    // how many rows to pad with blank lines at the end of the page
-    fn padding(&self) -> usize {
+    /// Final `self.scroll` value.
+    fn final_scroll(&self) -> usize {
         let padding = (self.size.1 as f64 * 0.9) as usize;
         if self.lines > padding {
             self.lines - padding

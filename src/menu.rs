@@ -554,6 +554,14 @@ impl Menu {
             }
             Key::PageUp | Key::Ctrl('-') | Key::Char('-') => self.action_page_up(),
             Key::PageDown | Key::Ctrl(' ') | Key::Char(' ') => self.action_page_down(),
+            Key::Home => {
+                self.scroll = 0;
+                Action::Redraw
+            }
+            Key::End => {
+                self.scroll = self.final_scroll();
+                Action::Redraw
+            }
             Key::Char('f') | Key::Ctrl('f') | Key::Char('/') | Key::Char('i') | Key::Ctrl('i') => {
                 self.searching = true;
                 Action::Redraw
