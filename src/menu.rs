@@ -221,11 +221,9 @@ impl Menu {
                     return Action::Redraw;
                 }
             }
-        } else {
-            if !self.links.is_empty() {
-                self.link = self.links.len() - 1;
-                return Action::Redraw;
-            }
+        } else if !self.links.is_empty() {
+            self.link = self.links.len() - 1;
+            return Action::Redraw;
         }
         if let Some(dir) = self.link_visibility(self.link) {
             match dir {
