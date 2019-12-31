@@ -13,11 +13,11 @@ release: $(PHETCH_RELEASE)
 # Binary with debugging info
 debug: $(PHETCH_DEBUG)
 
-# Remove the release directory and its contens
+# Remove the release directory and its contents
 clean:
 	@rm -vrf target/release
 
-# Remove the debug directory and its contens
+# Remove the debug directory and its contents
 clean_debug:
 	@rm -vrf target/debug
 
