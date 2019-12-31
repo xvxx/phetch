@@ -445,7 +445,7 @@ impl Menu {
 
     fn action_select_link(&mut self, link: usize) -> Action {
         if let Some(&pos) = self.links.get(link) {
-            if self.link_visibility(link) != Some(LinkPos::Visible) {
+            if !self.is_visible(link) {
                 if pos > 5 {
                     self.scroll = pos - 5;
                 } else {
@@ -465,7 +465,7 @@ impl Menu {
     }
 
     fn scroll_to(&mut self, link: usize) -> Action {
-        if self.link_visibility(link) != Some(LinkPos::Visible) {
+        if !self.is_visible(link) {
             if let Some(&pos) = self.links.get(link) {
                 if pos > 5 {
                     self.scroll = pos - 5;
