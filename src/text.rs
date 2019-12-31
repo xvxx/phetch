@@ -122,7 +122,7 @@ impl View for Text {
                 out.push_str(&indent);
             }
             out.push_str(line);
-            out.push('\n');
+            out.push_str("\r\n");
         }
         out
     }

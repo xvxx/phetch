@@ -12,14 +12,20 @@ use crate::{
     utils,
 };
 use std::{
-    io::{stdin, stdout, Result, Write},
-    process,
-    process::Stdio,
+    cell::RefCell,
+    io::{self, stdin, stdout, Result, Write},
+    process::{self, Stdio},
     sync::mpsc,
     thread,
     time::Duration,
 };
-use termion::{color, input::TermRead, raw::IntoRawMode, terminal_size};
+use termion::{
+    color,
+    input::{MouseTerminal, TermRead},
+    raw::{IntoRawMode, RawTerminal},
+    screen::AlternateScreen,
+    terminal_size,
+};
 
 pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;
@@ -34,6 +40,7 @@ pub struct UI {
     running: bool,            // main ui loop running?
     pub size: (usize, usize), // cols, rows
     status: String,           // status message, if any
+    out: RefCell<MouseTerminal<AlternateScreen<RawTerminal<io::Stdout>>>>,
 }
 
 impl UI {
@@ -45,6 +52,9 @@ impl UI {
             running: true,
             size: (0, 0),
             status: String::new(),
+            out: RefCell::new(MouseTerminal::from(AlternateScreen::from(
+                stdout().into_raw_mode().unwrap(),
+            ))),
         }
     }
 
@@ -59,23 +69,24 @@ impl UI {
 
     pub fn draw(&mut self) {
         if self.dirty {
-            print!(
+            let screen = self.render();
+            let status = self.render_status().unwrap_or_else(|| "".into());
+            let mut out = self.out.borrow_mut();
+            write!(
+                out,
                 "{}{}{}{}{}",
                 termion::clear::All,
                 termion::cursor::Goto(1, 1),
                 termion::cursor::Hide,
-                self.render(),
-                self.render_status().unwrap_or_else(|| "".into()),
+                screen,
+                status,
             );
-
+            out.flush();
             self.dirty = false;
         }
     }
 
     pub fn update(&mut self) {
-        let mut stdout = stdout().into_raw_mode().unwrap();
-        stdout.flush().unwrap();
-
         let action = self.process_page_input();
         if let Err(e) = self.process_action(action) {
             self.set_status(format!("{}{}", color::Fg(color::LightRed), e));
@@ -267,7 +278,9 @@ impl UI {
     fn confirm(&self, question: &str) -> bool {
         let rows = self.rows();
 
-        print!(
+        let mut out = self.out.borrow_mut();
+        write!(
+            out,
             "{}{}{}{} [Y/n]: {}",
             color::Fg(color::Reset),
             termion::cursor::Goto(1, rows),
@@ -275,7 +288,7 @@ impl UI {
             question,
             termion::cursor::Show,
         );
-        stdout().flush();
+        out.flush();
 
         if let Some(Ok(key)) = stdin().keys().next() {
             match key {
@@ -292,7 +305,9 @@ impl UI {
     fn prompt(&self, prompt: &str) -> Option<String> {
         let rows = self.rows();
 
-        print!(
+        let mut out = self.out.borrow_mut();
+        write!(
+            out,
             "{}{}{}{}{}",
             color::Fg(color::Reset),
             termion::cursor::Goto(1, rows),
@@ -300,22 +315,32 @@ impl UI {
             prompt,
             termion::cursor::Show,
         );
-        stdout().flush();
+        out.flush();
 
         let mut input = String::new();
         for k in stdin().keys() {
             if let Ok(key) = k {
                 match key {
                     Key::Char('\n') => {
-                        print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
-                        stdout().flush();
+                        write!(
+                            out,
+                            "{}{}",
+                            termion::clear::CurrentLine,
+                            termion::cursor::Hide
+                        );
+                        out.flush();
                         return Some(input);
                     }
                     Key::Char(c) => input.push(c),
                     Key::Esc | Key::Ctrl('c') => {
                         if input.is_empty() {
-                            print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
-                            stdout().flush();
+                            write!(
+                                out,
+                                "{}{}",
+                                termion::clear::CurrentLine,
+                                termion::cursor::Hide
+                            );
+                            out.flush();
                             return None;
                         } else {
                             input.clear();
@@ -330,14 +355,15 @@ impl UI {
                 break;
             }
 
-            print!(
+            write!(
+                out,
                 "{}{}{}{}",
                 termion::cursor::Goto(1, rows),
                 termion::clear::CurrentLine,
                 prompt,
                 input,
             );
-            stdout().flush();
+            out.flush();
         }
 
         if !input.is_empty() {
@@ -461,8 +487,16 @@ impl Default for UI {
 
 impl Drop for UI {
     fn drop(&mut self) {
-        print!("\x1b[?25h"); // show cursor
-        stdout().flush();
+        let mut out = self.out.borrow_mut();
+        write!(
+            out,
+            "{}{}{}{}",
+            color::Fg(color::Reset),
+            color::Bg(color::Reset),
+            termion::cursor::Show,
+            termion::clear::All,
+        );
+        out.flush();
     }
 }
 

@@ -171,7 +171,7 @@ impl Menu {
                 typ if !typ.is_supported() => push!("107;91", name),
                 _ => push!("0", name),
             }
-            out.push('\n');
+            out.push_str("\r\n");
         }
         if self.searching {
             out.push_str(&self.render_input());
