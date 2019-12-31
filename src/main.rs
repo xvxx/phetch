@@ -2,6 +2,10 @@ use phetch::{gopher, ui::UI};
 use std::process::exit;
 
 fn main() {
+    exit(run())
+}
+
+fn run() -> i32 {
     let args: Vec<String> = std::env::args().collect();
     let url = if args.len() < 2 {
         "gopher://phetch/1/home"
@@ -13,35 +17,36 @@ fn main() {
         if args.len() > 2 {
             let url = args.get(2).unwrap();
             print_raw(url);
+            return 0;
         } else {
             eprintln!("--raw needs gopher-url");
-            exit(1);
+            return 1;
         }
-        return;
     }
 
     if url == "--version" || url == "-v" || url == "-version" {
         print_version();
-        return;
+        return 0;
     }
 
     if url == "--help" || url == "-h" || url == "-help" {
         print_usage();
-        return;
+        return 0;
     }
 
     if !url.is_empty() && url.starts_with('-') {
         eprintln!("unknown flag: {}\n", url);
         print_usage();
-        exit(1);
+        return 1;
     }
 
     let mut ui = UI::new();
     if let Err(e) = ui.open(url, url) {
         eprintln!("{}", e);
-        exit(1);
+        return 1;
     }
     ui.run();
+    return 0;
 }
 
 fn print_version() {
