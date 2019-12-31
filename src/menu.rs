@@ -199,11 +199,11 @@ impl Menu {
         Action::None
     }
 
+    /// Scroll down by SCROLL_LINES, if possible.
     fn action_page_down(&mut self) -> Action {
-        let lines = self.lines.len();
-
-        // fewer lines than visible rows, just select last link
-        if lines < self.rows() {
+        // If there are fewer menu items than screen lines, just
+        // select the final link and do nothing else.
+        if self.lines.len() < self.rows() {
             if !self.links.is_empty() {
                 self.link = self.links.len() - 1;
                 return Action::Redraw;
@@ -211,34 +211,38 @@ impl Menu {
             return Action::None;
         }
 
-        let padding = self.padding_bottom();
-        if self.scroll < padding {
-            self.scroll += SCROLL_LINES;
-            if self.scroll > padding {
-                self.scroll = padding;
-                if !self.links.is_empty() {
-                    self.link = self.links.len() - 1;
-                    return Action::Redraw;
-                }
-            }
-        } else if !self.links.is_empty() {
+        // If we've already scrolled too far, select the final link
+        // and do nothing.
+        if self.scroll >= self.final_scroll() {
+            self.scroll = self.final_scroll();
             self.link = self.links.len() - 1;
             return Action::Redraw;
         }
-        if let Some(dir) = self.link_visibility(self.link) {
-            match dir {
-                LinkPos::Above => {
-                    let scroll = self.scroll;
-                    if let Some(&pos) = self.links.iter().skip(self.link).find(|&&i| i >= scroll) {
-                        self.link = self.lines.get(pos).unwrap().link;
-                        return Action::Redraw;
-                    }
+
+        // Scroll...
+        self.scroll += SCROLL_LINES;
+
+        // ...but don't go past the final line.
+        if self.scroll > self.final_scroll() {
+            self.scroll = self.final_scroll();
+        }
+
+        // If the selected link isn't visible...
+        if Some(LinkPos::Above) == self.link_visibility(self.link) {
+            // ...find the next one that is.
+            if let Some(&next_link_pos) = self
+                .links
+                .iter()
+                .skip(self.link + 1)
+                .find(|&&i| i >= self.scroll)
+            {
+                if let Some(next_link_line) = self.lines.get(next_link_pos) {
+                    self.link = next_link_line.link;
                 }
-                LinkPos::Below => {}
-                LinkPos::Visible => {}
             }
         }
-        Action::None
+
+        Action::Redraw
     }
 
     fn action_page_up(&mut self) -> Action {
@@ -338,8 +342,8 @@ impl Menu {
         }
     }
 
-    // how many rows to pad with blank lines at the end of the page
-    fn padding_bottom(&self) -> usize {
+    /// Final `self.scroll` value.
+    fn final_scroll(&self) -> usize {
         let padding = (self.rows() as f64 * 0.9) as usize;
         if self.lines.len() > padding {
             self.lines.len() - padding
@@ -379,7 +383,7 @@ impl Menu {
         // no links or final link selected already
         if self.links.is_empty() || new_link >= self.links.len() {
             // if there are more rows, scroll down
-            if self.lines.len() >= self.rows() && self.scroll < self.padding_bottom() {
+            if self.lines.len() >= self.rows() && self.scroll < self.final_scroll() {
                 self.scroll += 1;
                 return Action::Redraw;
             } else {

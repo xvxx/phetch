@@ -63,7 +63,6 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by Nathaniel" weirdness)
 - [ ] screen flicker in win10 WSL
 - [ ] NUM entry and Find entry shouldn't use same buffer
-- [ ] page down / spacebar when last link selected & there is more content
 
 ## future features
 
