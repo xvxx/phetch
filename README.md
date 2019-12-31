@@ -6,7 +6,7 @@
 |
 --> <p align="center"> <img src="./img/logo.png"> </p>
 
-`phetch` is a terminal client designed to help you quickly navigate 
+`phetch` is a terminal client designed to help you quickly navigate
 the gophersphere.
 
 ## features
@@ -30,7 +30,7 @@ the gophersphere.
 
 ## installation
 
-binaries for linux, mac, and raspberry pi are available 
+binaries for linux, mac, and raspberry pi are available
 at https://github.com/dvkt/phetch/releases:
 
 - [phetch-v0.1.7-linux-x86_64.tar.gz][0]
@@ -71,10 +71,10 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 
 - [ ] download new releases over gopher
 - [ ] Changelog generation (for gopher and github)
-- [ ] GIF screencast 
+- [ ] GIF screencast
 - [ ] man page (small one)
 
-## future features 
+## future features
 
 - [ ] track binary size per release
 - [ ] fuzzy find incremental search

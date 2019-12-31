@@ -93,7 +93,7 @@ ih          show help
 i
 iall single letter commands also
 iwork with the ctrl key.
-i     
+i
 ";
 
 pub const NAV: &str = "
@@ -208,10 +208,10 @@ i     ~ version: v{version} ~
 i
 ispecial thanks to:
 i
-ikseistrup - major help with 
+ikseistrup - major help with
 i            design & testing
 i
-i  antirez - introduced me to 
+i  antirez - introduced me to
 i            the world of gopher
 i
 i    lartu - inspired me to
