@@ -389,7 +389,7 @@ impl Menu {
             } else {
                 // wrap around
                 self.link = 0;
-                self.scroll_to(self.link);
+                self.scroll = 0;
                 return Action::Redraw;
             }
         }
