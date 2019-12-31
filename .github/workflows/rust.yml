@@ -4,7 +4,7 @@ name: ci
 
 jobs:
   build_macos:
-    name: tests
+    name: build on macos
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
@@ -15,7 +15,8 @@ jobs:
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          command: test
+          command: build
+          args: --release
 
   check:
     name: check
