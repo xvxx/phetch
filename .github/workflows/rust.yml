@@ -24,10 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: check
-        run: cargo check --verbose
+        run: cargo check 
       - name: clippy
-        run: cargo clippy -- -D warnings
-      - name: build
-        run: cargo build --verbose
+        run: cargo clippy
       - name: test
-        run: cargo test --verbose
+        run: cargo test 
+      - name: build
+        run: cargo build --release
