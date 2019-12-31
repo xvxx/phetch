@@ -21,7 +21,7 @@ use std::{
 };
 use termion::{
     color,
-    input::{MouseTerminal, TermRead},
+    input::TermRead,
     raw::{IntoRawMode, RawTerminal},
     screen::AlternateScreen,
     terminal_size,
@@ -40,7 +40,7 @@ pub struct UI {
     running: bool,            // main ui loop running?
     pub size: (usize, usize), // cols, rows
     status: String,           // status message, if any
-    out: RefCell<MouseTerminal<AlternateScreen<RawTerminal<io::Stdout>>>>,
+    out: RefCell<AlternateScreen<RawTerminal<io::Stdout>>>,
 }
 
 impl UI {
@@ -52,9 +52,7 @@ impl UI {
             running: true,
             size: (0, 0),
             status: String::new(),
-            out: RefCell::new(MouseTerminal::from(AlternateScreen::from(
-                stdout().into_raw_mode().unwrap(),
-            ))),
+            out: RefCell::new(AlternateScreen::from(stdout().into_raw_mode().unwrap())),
         }
     }
 
