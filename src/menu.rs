@@ -472,6 +472,9 @@ impl Menu {
                 } else {
                     self.scroll = 0;
                 }
+                if self.scroll > self.final_scroll() {
+                    self.scroll = self.final_scroll();
+                }
                 return Action::Redraw;
             }
         }
