@@ -1,13 +1,14 @@
 [package]
 name = "phetch"
-version = "0.1.5-pre"
+version = "0.1.5"
 authors = ["dvkt <c@dvkt.io>"]
 license = "MIT"
 edition = "2018"
-description = "a terminal gopher client designed to help you quickly navigate the gophersphere"
+description = "quick lil gopher client"
 readme = "README.md"
 repository = "https://github.com/dvkt/phetch"
-keywords = ["gopher", "tui", "terminal"]
+keywords = ["gopher", "tui", "terminal", "cli"]
+categories = ["command-line-utilities"]
 exclude = [
     "img/*"
 ]
