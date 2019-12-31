@@ -1,5 +1,3 @@
-extern crate phetch;
-
 use phetch::{gopher, ui::UI};
 use std::process::exit;
 
