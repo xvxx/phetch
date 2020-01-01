@@ -19,5 +19,12 @@ codegen-units = 1
 panic = 'abort'
 opt-level = 'z'  # Optimize for size.
 
+[package.metadata.release]
+pre-release-replacements = [
+  {file="README.md", search="phetch-v\\d\\.\\d\\.\\d-", replace="{{crate_name}}-v{{version}}-"},
+  {file="README.md", search="/v\\d\\.\\d\\.\\d/", replace="/v{{version}}/"},
+]
+dev-version-ext = "dev"
+
 [dependencies]
 termion = "1.5.3"
