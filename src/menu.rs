@@ -245,8 +245,9 @@ impl Menu {
         }
         let &pos = self.links.get(self.link)?;
         Some(format!(
-            "{}\x1b[97;1m*\x1b[0m",
-            cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16)
+            "{}\x1b[97;1m*\x1b[0m{}",
+            cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16),
+            cursor::Hide
         ))
     }
 
