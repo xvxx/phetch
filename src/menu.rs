@@ -1,6 +1,7 @@
 use crate::gopher::{self, Type};
 use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::fmt;
+use termion::{clear, cursor};
 
 pub struct Menu {
     pub url: String,          // gopher url
@@ -232,7 +233,7 @@ impl Menu {
         let &pos = self.links.get(link)?;
         Some(format!(
             "{} ",
-            termion::cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16)
+            cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16)
         ))
     }
 
@@ -245,7 +246,7 @@ impl Menu {
         let &pos = self.links.get(self.link)?;
         Some(format!(
             "{}\x1b[97;1m*\x1b[0m",
-            termion::cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16)
+            cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16)
         ))
     }
 
@@ -253,10 +254,10 @@ impl Menu {
     fn render_input(&self) -> String {
         format!(
             "{}Find:\x1b[0m {}{}{}",
-            termion::cursor::Goto(1, self.rows() as u16),
+            cursor::Goto(1, self.rows() as u16),
             self.input,
-            termion::cursor::Show,
-            termion::clear::UntilNewline,
+            cursor::Show,
+            clear::UntilNewline,
         )
     }
 
@@ -266,9 +267,9 @@ impl Menu {
         } else {
             Action::Draw(format!(
                 "{}{}{}",
-                termion::cursor::Goto(1, self.rows() as u16),
-                termion::clear::CurrentLine,
-                termion::cursor::Hide
+                cursor::Goto(1, self.rows() as u16),
+                clear::CurrentLine,
+                cursor::Hide
             ))
         }
     }
