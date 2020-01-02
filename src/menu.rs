@@ -93,12 +93,10 @@ impl Menu {
         }
     }
 
+    /// Find a link by its link index.
     fn link(&self, i: usize) -> Option<&Line> {
-        if let Some(line) = self.links.get(i) {
-            self.lines.get(*line)
-        } else {
-            None
-        }
+        let line = self.links.get(i)?;
+        self.lines.get(*line)
     }
 
     /// Is the given link visible on screen?
@@ -108,17 +106,14 @@ impl Menu {
 
     /// Where is the given link relative to the screen?
     fn link_visibility(&self, i: usize) -> Option<LinkPos> {
-        if let Some(&pos) = self.links.get(i) {
-            Some(if pos < self.scroll {
-                LinkPos::Above
-            } else if pos >= self.scroll + self.rows() - 1 {
-                LinkPos::Below
-            } else {
-                LinkPos::Visible
-            })
+        let &pos = self.links.get(i)?;
+        Some(if pos < self.scroll {
+            LinkPos::Above
+        } else if pos >= self.scroll + self.rows() - 1 {
+            LinkPos::Below
         } else {
-            None
-        }
+            LinkPos::Visible
+        })
     }
 
     /// The x and y position of a given link on screen.
