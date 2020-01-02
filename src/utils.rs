@@ -7,6 +7,7 @@ macro_rules! log {
             .create(true)
             .open("phetch.log")
         {
+            use std::io::prelude::*;
             file.write($e.as_ref());
             file.write(b"\n");
         }
