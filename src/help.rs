@@ -72,7 +72,7 @@ i
 inum key    open/select link
 ienter      open current link
 iescape     cancel
-ictrl-c     cancel/quit
+ictrl-c     cancel
 i
 if or /     find link in page
 ip or k     select prev link

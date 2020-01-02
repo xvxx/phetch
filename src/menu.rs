@@ -1,9 +1,7 @@
 use crate::gopher::{self, Type};
 use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
-use std::{
-    fmt,
-    io::{stdout, Write},
-};
+use std::fmt;
+use termion::cursor;
 
 pub struct Menu {
     pub url: String,          // gopher url
@@ -67,7 +65,7 @@ impl Menu {
         Self::parse(url, response)
     }
 
-    fn _cols(&self) -> usize {
+    fn cols(&self) -> usize {
         self.size.0
     }
 
@@ -75,12 +73,30 @@ impl Menu {
         self.size.1
     }
 
-    fn link(&self, i: usize) -> Option<&Line> {
-        if let Some(line) = self.links.get(i) {
-            self.lines.get(*line)
+    /// Calculated size of left margin.
+    fn indent(&self) -> usize {
+        let cols = self.cols();
+        let longest = if self.longest > MAX_COLS {
+            MAX_COLS
         } else {
-            None
+            self.longest
+        };
+        if longest > cols {
+            0
+        } else {
+            let left = (cols - longest) / 2;
+            if left > 6 {
+                left - 6
+            } else {
+                0
+            }
         }
+    }
+
+    /// Find a link by its link index.
+    fn link(&self, i: usize) -> Option<&Line> {
+        let line = self.links.get(i)?;
+        self.lines.get(*line)
     }
 
     /// Is the given link visible on screen?
@@ -90,17 +106,30 @@ impl Menu {
 
     /// Where is the given link relative to the screen?
     fn link_visibility(&self, i: usize) -> Option<LinkPos> {
-        if let Some(&pos) = self.links.get(i) {
-            Some(if pos < self.scroll {
-                LinkPos::Above
-            } else if pos >= self.scroll + self.rows() - 1 {
-                LinkPos::Below
-            } else {
-                LinkPos::Visible
-            })
+        let &pos = self.links.get(i)?;
+        Some(if pos < self.scroll {
+            LinkPos::Above
+        } else if pos >= self.scroll + self.rows() - 1 {
+            LinkPos::Below
         } else {
-            None
+            LinkPos::Visible
+        })
+    }
+
+    /// The x and y position of a given link on screen.
+    fn screen_coords(&self, link: usize) -> Option<(u16, u16)> {
+        if !self.is_visible(link) {
+            return None;
         }
+        let &pos = self.links.get(link)?;
+        let x = self.indent() + 1;
+        let y = if self.scroll > pos {
+            pos + 1
+        } else {
+            pos + 1 - self.scroll
+        };
+
+        Some((x as u16, y as u16))
     }
 
     fn render_lines(&self) -> String {
@@ -118,42 +147,41 @@ impl Menu {
         }
 
         let iter = self.lines.iter().skip(self.scroll).take(rows - 1);
-        let longest = if self.longest > MAX_COLS {
-            MAX_COLS
-        } else {
-            self.longest
-        };
-        let indent = if longest > cols {
-            String::from("")
-        } else {
-            let left = (cols - longest) / 2;
-            if left > 6 {
-                " ".repeat(left - 6)
-            } else {
-                String::from("")
-            }
-        };
+        let indent = self.indent();
+        let left_margin = " ".repeat(indent);
 
+        let mut line_count = 0;
         for line in iter {
+            line_count += 1;
+            let mut line_size = 0;
             if !self.wide {
-                out.push_str(&indent);
+                out.push_str(&left_margin);
+                line_size += indent;
             }
             if line.typ == Type::Info {
                 out.push_str("      ");
+                line_size += 6;
             } else {
                 if line.link == self.link {
                     out.push_str("\x1b[97;1m*\x1b[0m")
                 } else {
                     out.push(' ');
                 }
+                line_size += 1;
                 out.push(' ');
+                line_size += 1;
                 out.push_str("\x1b[95m");
                 if line.link < 9 {
                     out.push(' ');
+                    line_size += 1;
                 }
-                out.push_str(&(line.link + 1).to_string());
+                let num = (line.link + 1).to_string();
+                out.push_str(&num);
+                line_size += num.len();
                 out.push_str(".\x1b[0m ");
+                line_size += 2;
             }
+
             // truncate long lines, instead of wrapping
             let name = if line.name.len() > MAX_COLS {
                 line.name.chars().take(MAX_COLS).collect::<String>()
@@ -171,32 +199,73 @@ impl Menu {
                 typ if !typ.is_supported() => push!("107;91", name),
                 _ => push!("0", name),
             }
+
+            // clear rest of line
+            line_size += name.len();
+            out.push_str(&" ".repeat(cols - line_size)); // fill line
+
             out.push_str("\r\n");
         }
-        if self.searching {
-            out.push_str(&self.render_input());
+
+        // clear remainder of screen
+        let blank_line = " ".repeat(cols);
+        for _ in 0..rows - line_count - 1 {
+            out.push_str(&blank_line);
+            out.push_str(&"\r\n");
         }
+
         out
     }
 
+    /// Clear and re-draw the cursor.
+    fn reset_cursor(&mut self, old_link: usize) -> Action {
+        if self.links.is_empty() {
+            return Action::None;
+        }
+        let mut out = String::new();
+        if let Some(clear) = self.clear_cursor(old_link) {
+            out.push_str(clear.as_ref());
+        }
+        if let Some(cursor) = self.draw_cursor() {
+            out.push_str(cursor.as_ref());
+        }
+        Action::Draw(out)
+    }
+
+    /// Clear the cursor, if it's on screen.
+    fn clear_cursor(&self, link: usize) -> Option<String> {
+        if self.links.is_empty() || !self.is_visible(link) {
+            return None;
+        }
+        let (x, y) = self.screen_coords(link)?;
+        Some(format!("{} {}", cursor::Goto(x, y), cursor::Hide))
+    }
+
+    /// Print this string to draw the cursor on screen.
+    /// Returns None if no is link selected.
+    fn draw_cursor(&self) -> Option<String> {
+        if self.links.is_empty() {
+            return None;
+        }
+        let (x, y) = self.screen_coords(self.link)?;
+        Some(format!(
+            "{}\x1b[97;1m*\x1b[0m{}",
+            cursor::Goto(x, y),
+            cursor::Hide
+        ))
+    }
+
+    /// User input field.
     fn render_input(&self) -> String {
-        format!(
-            "{}Find:\x1b[0m {}{}{}",
-            termion::cursor::Goto(1, self.rows() as u16),
-            self.input,
-            termion::cursor::Show,
-            termion::clear::AfterCursor,
-        )
+        format!("Find: {}{}", self.input, cursor::Show)
     }
 
     fn redraw_input(&self) -> Action {
         if self.searching {
-            print!("{}", self.render_input());
+            Action::Status(self.render_input())
         } else {
-            print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
+            Action::Status(format!("{}", cursor::Hide))
         }
-        stdout().flush();
-        Action::None
     }
 
     /// Scroll down by SCROLL_LINES, if possible.
@@ -283,6 +352,7 @@ impl Menu {
     }
 
     fn action_up(&mut self) -> Action {
+        // no links, just scroll up
         if self.link == 0 {
             return if self.scroll > 0 {
                 self.scroll -= 1;
@@ -297,7 +367,8 @@ impl Menu {
         }
 
         // if text is entered, find previous match
-        if !self.input.is_empty() {
+        // TODO fix number input like this
+        if self.searching && !self.input.is_empty() {
             if let Some(pos) = self.rlink_matching(self.link, &self.input) {
                 return self.action_select_link(pos);
             } else {
@@ -327,11 +398,15 @@ impl Menu {
                 }
                 LinkPos::Visible => {
                     // select next link up
+                    let old_link = self.link;
                     self.link = new_link;
                     // scroll if we are within 5 lines of the top
                     if let Some(&pos) = self.links.get(self.link) {
                         if self.scroll > 0 && pos < self.scroll + 5 {
                             self.scroll -= 1;
+                        } else {
+                            // otherwise redraw just the cursor
+                            return self.reset_cursor(old_link);
                         }
                     }
                 }
@@ -395,7 +470,7 @@ impl Menu {
         }
 
         // if text is entered, find next match
-        if !self.input.is_empty() {
+        if self.searching && !self.input.is_empty() {
             if let Some(pos) = self.link_matching(self.link + 1, &self.input) {
                 return self.action_select_link(pos);
             } else {
@@ -422,14 +497,19 @@ impl Menu {
                         }
                     }
                     LinkPos::Visible => {
-                        // select next link down
-                        self.link = new_link;
-                        // scroll if we are within 5 lines of the end
+                        // link is visible, so select it
                         if let Some(&pos) = self.links.get(self.link) {
+                            let old_link = self.link;
+                            self.link = new_link;
+
+                            // scroll if we are within 5 lines of the end
                             if self.lines.len() >= self.rows() // dont scroll if content too small
                                 && pos >= self.scroll + self.rows() - 6
                             {
                                 self.scroll += 1;
+                            } else {
+                                // otherwise try to just re-draw the cursor
+                                return self.reset_cursor(old_link);
                             }
                         }
                     }
@@ -443,17 +523,29 @@ impl Menu {
         }
     }
 
+    /// Select and optionally scroll to a link.
     fn action_select_link(&mut self, link: usize) -> Action {
         if let Some(&pos) = self.links.get(link) {
-            if !self.is_visible(link) {
+            let old_link = self.link;
+            self.link = link;
+            if self.is_visible(link) {
+                if !self.input.is_empty() {
+                    Action::List(vec![self.redraw_input(), self.reset_cursor(old_link)])
+                } else {
+                    self.reset_cursor(old_link)
+                }
+            } else {
                 if pos > 5 {
                     self.scroll = pos - 5;
                 } else {
                     self.scroll = 0;
                 }
+                if !self.input.is_empty() {
+                    Action::List(vec![self.redraw_input(), Action::Redraw])
+                } else {
+                    Action::Redraw
+                }
             }
-            self.link = link;
-            Action::Redraw
         } else {
             Action::None
         }
@@ -568,7 +660,7 @@ impl Menu {
             }
             Key::Char('f') | Key::Ctrl('f') | Key::Char('/') | Key::Char('i') | Key::Ctrl('i') => {
                 self.searching = true;
-                Action::Redraw
+                self.redraw_input()
             }
             Key::Char('w') | Key::Ctrl('w') => {
                 self.wide = !self.wide;

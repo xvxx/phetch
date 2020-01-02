@@ -66,14 +66,13 @@ impl UI {
     }
 
     pub fn draw(&mut self) {
+        let status = self.render_status();
         if self.dirty {
             let screen = self.render();
-            let status = self.render_status().unwrap_or_else(|| "".into());
             let mut out = self.out.borrow_mut();
             write!(
                 out,
-                "{}{}{}{}{}",
-                termion::clear::All,
+                "{}{}{}{}",
                 termion::cursor::Goto(1, 1),
                 termion::cursor::Hide,
                 screen,
@@ -81,13 +80,23 @@ impl UI {
             );
             out.flush();
             self.dirty = false;
+        } else {
+            let mut out = self.out.borrow_mut();
+            out.write_all(status.as_ref());
+            out.flush();
         }
     }
 
     pub fn update(&mut self) {
         let action = self.process_page_input();
+        self.status.clear();
         if let Err(e) = self.process_action(action) {
-            self.set_status(format!("{}{}", color::Fg(color::LightRed), e));
+            self.set_status(format!(
+                "{}{}{}",
+                color::Fg(color::LightRed),
+                e,
+                termion::cursor::Hide
+            ));
         }
     }
 
@@ -209,7 +218,7 @@ impl UI {
                     termion::cursor::Hide,
                     label,
                     ".".repeat(i),
-                    termion::clear::AfterCursor,
+                    termion::clear::UntilNewline,
                     color::Fg(color::Reset),
                     termion::cursor::Show,
                 );
@@ -244,21 +253,17 @@ impl UI {
 
     fn set_status(&mut self, status: String) {
         self.status = status;
-        self.dirty = true;
     }
 
-    fn render_status(&self) -> Option<String> {
-        if self.status.is_empty() {
-            None
-        } else {
-            Some(format!(
-                "{}{}{}{}",
-                termion::cursor::Goto(1, self.rows()),
-                termion::clear::CurrentLine,
-                self.status,
-                color::Fg(color::Reset)
-            ))
-        }
+    fn render_status(&self) -> String {
+        format!(
+            "{}{}{}{}{}",
+            termion::cursor::Hide,
+            termion::cursor::Goto(1, self.rows()),
+            termion::clear::CurrentLine,
+            self.status,
+            color::Fg(color::Reset)
+        )
     }
 
     fn add_page(&mut self, page: Page) {
@@ -388,24 +393,24 @@ impl UI {
     }
 
     fn process_action(&mut self, action: Action) -> Result<()> {
-        // track if the status line was cleared in this update cycle
-        let cleared = if !self.status.is_empty() {
-            self.status.clear();
-            self.dirty = true;
-            true
-        } else {
-            false
-        };
-
         match action {
-            Action::Keypress(Key::Ctrl('c')) => {
-                if !cleared {
-                    self.running = false
+            Action::List(actions) => {
+                for action in actions {
+                    self.process_action(action);
                 }
+            }
+            Action::Keypress(Key::Ctrl('c')) => {
+                self.status = "\x1b[90m(Use q to quit)\x1b[0m".into()
             }
             Action::Keypress(Key::Esc) => {}
             Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
+            Action::Draw(s) => {
+                let mut out = self.out.borrow_mut();
+                out.write_all(s.as_ref());
+                out.flush();
+            }
+            Action::Status(s) => self.set_status(s),
             Action::Open(title, url) => self.open(&title, &url)?,
             Action::Prompt(query, fun) => {
                 if let Some(response) = self.prompt(&query) {
