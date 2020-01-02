@@ -2,7 +2,7 @@ use crate::gopher::{self, Type};
 use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::{
     fmt,
-    io::{stdout, Write},
+    io::{self, stdout, Write},
 };
 
 pub struct Menu {
@@ -67,12 +67,32 @@ impl Menu {
         Self::parse(url, response)
     }
 
-    fn _cols(&self) -> usize {
+    fn cols(&self) -> usize {
         self.size.0
     }
 
     fn rows(&self) -> usize {
         self.size.1
+    }
+
+    /// Calculated size of left margin.
+    fn indent(&self) -> usize {
+        let cols = self.cols();
+        let longest = if self.longest > MAX_COLS {
+            MAX_COLS
+        } else {
+            self.longest
+        };
+        if longest > cols {
+            0
+        } else {
+            let left = (cols - longest) / 2;
+            if left > 6 {
+                left - 6
+            } else {
+                0
+            }
+        }
     }
 
     fn link(&self, i: usize) -> Option<&Line> {
@@ -118,29 +138,16 @@ impl Menu {
         }
 
         let iter = self.lines.iter().skip(self.scroll).take(rows - 1);
-        let longest = if self.longest > MAX_COLS {
-            MAX_COLS
-        } else {
-            self.longest
-        };
-        let indent = if longest > cols {
-            String::from("")
-        } else {
-            let left = (cols - longest) / 2;
-            if left > 6 {
-                " ".repeat(left - 6)
-            } else {
-                String::from("")
-            }
-        };
+        let indent = self.indent();
+        let left_margin = " ".repeat(indent);
 
         let mut line_count = 0;
         for line in iter {
             line_count += 1;
             let mut line_size = 0;
             if !self.wide {
-                out.push_str(&indent);
-                line_size += indent.len();
+                out.push_str(&left_margin);
+                line_size += indent;
             }
             if line.typ == Type::Info {
                 out.push_str("      ");
@@ -199,13 +206,56 @@ impl Menu {
         out
     }
 
+    /// Clear and re-draw the cursor.
+    fn reset_cursor(&mut self) -> io::Result<()> {
+        if self.links.is_empty() {
+            return Ok(());
+        }
+        let old_link = if self.link > 0 { self.link - 1 } else { 0 };
+        let mut out = stdout();
+        if let Some(clear) = self.clear_cursor(old_link) {
+            out.write_all(clear.as_ref())?;
+        }
+        if let Some(cursor) = self.draw_cursor() {
+            out.write_all(cursor.as_ref())?;
+        }
+        out.flush()?;
+        Ok(())
+    }
+
+    /// Clear the cursor, if it's on screen.
+    fn clear_cursor(&self, link: usize) -> Option<String> {
+        if self.links.is_empty() || !self.is_visible(link) {
+            return None;
+        }
+        let &pos = self.links.get(link)?;
+        Some(format!(
+            "{} ",
+            termion::cursor::Goto(self.indent() as u16, (pos + 1) as u16)
+        ))
+    }
+
+    /// Print this string to draw the cursor on screen.
+    /// Returns None if no is link selected.
+    fn draw_cursor(&self) -> Option<String> {
+        if self.links.is_empty() {
+            return None;
+        }
+        let &pos = self.links.get(self.link)?;
+        Some(format!(
+            "{}\x1b[0;1m*\x1b[0m",
+            termion::cursor::Goto(self.indent() as u16, (pos + 1) as u16)
+        ))
+    }
+
+    /// User input field.
     fn render_input(&self) -> String {
         format!(
             "{}Find:\x1b[0m {}{}{}",
             termion::cursor::Goto(1, self.rows() as u16),
             self.input,
             termion::cursor::Show,
-            termion::clear::AfterCursor,
+            termion::clear::UntilNewline,
         )
     }
 
@@ -303,6 +353,7 @@ impl Menu {
     }
 
     fn action_up(&mut self) -> Action {
+        // no links, just scroll up
         if self.link == 0 {
             return if self.scroll > 0 {
                 self.scroll -= 1;
@@ -317,7 +368,8 @@ impl Menu {
         }
 
         // if text is entered, find previous match
-        if !self.input.is_empty() {
+        // TODO fix number input like this
+        if self.searching && !self.input.is_empty() {
             if let Some(pos) = self.rlink_matching(self.link, &self.input) {
                 return self.action_select_link(pos);
             } else {
@@ -353,6 +405,9 @@ impl Menu {
                         if self.scroll > 0 && pos < self.scroll + 5 {
                             self.scroll -= 1;
                         }
+                    } else if self.reset_cursor().is_ok() {
+                        // otherwise redraw just the cursor
+                        return Action::None;
                     }
                 }
             }
@@ -442,14 +497,18 @@ impl Menu {
                         }
                     }
                     LinkPos::Visible => {
-                        // select next link down
-                        self.link = new_link;
-                        // scroll if we are within 5 lines of the end
+                        // link is visible, so select it
                         if let Some(&pos) = self.links.get(self.link) {
+                            self.link = new_link;
+
+                            // scroll if we are within 5 lines of the end
                             if self.lines.len() >= self.rows() // dont scroll if content too small
                                 && pos >= self.scroll + self.rows() - 6
                             {
                                 self.scroll += 1;
+                            } else if self.reset_cursor().is_ok() {
+                                // otherwise try to just re-draw the cursor
+                                return Action::None;
                             }
                         }
                     }
