@@ -413,6 +413,11 @@ impl UI {
             Action::Keypress(Key::Esc) => {}
             Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
+            Action::Draw(s) => {
+                let mut out = self.out.borrow_mut();
+                out.write_all(s.as_ref());
+                out.flush();
+            }
             Action::Open(title, url) => self.open(&title, &url)?,
             Action::Prompt(query, fun) => {
                 if let Some(response) = self.prompt(&query) {

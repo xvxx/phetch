@@ -5,6 +5,7 @@ pub enum Action {
     Open(String, String),                              // open(title, url)
     Keypress(Key),                                     // unknown keypress
     Redraw,                                            // redraw everything
+    Draw(String),                                      // draw something on screen
     Prompt(String, Box<dyn FnOnce(String) -> Action>), // query string, callback on success
     Error(String),                                     // error message
 }
