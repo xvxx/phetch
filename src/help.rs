@@ -55,7 +55,6 @@ i            ~ * ~
 i
 1start screen	/home	phetch
 1about phetch	/about	phetch
-hphetch webpage	URL:https://github.com/dvkt/phetch
 i
 ";
 
@@ -219,6 +218,7 @@ i            add some \x1b[95mcolor
 i
 i            ~ * ~
 i
+1phetch's gopherhole	/phetch	phkt.io
 0phetch uses the MIT license	/MIT License	gopherpedia.com
 hwebpage: github.com/dvkt/phetch	URL:https://github.com/dvkt/phetch
 ";
