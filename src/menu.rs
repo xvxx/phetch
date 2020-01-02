@@ -121,6 +121,22 @@ impl Menu {
         }
     }
 
+    /// The x and y position of a given link on screen.
+    fn screen_coords(&self, link: usize) -> Option<(u16, u16)> {
+        if !self.is_visible(link) {
+            return None;
+        }
+        let &pos = self.links.get(link)?;
+        let x = self.indent() + 1;
+        let y = if self.scroll > pos {
+            pos + 1
+        } else {
+            pos + 1 - self.scroll
+        };
+
+        Some((x as u16, y as u16))
+    }
+
     fn render_lines(&self) -> String {
         let mut out = String::new();
         let (cols, rows) = self.size;
@@ -230,12 +246,8 @@ impl Menu {
         if self.links.is_empty() || !self.is_visible(link) {
             return None;
         }
-        let &pos = self.links.get(link)?;
-        Some(format!(
-            "{} {}",
-            cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16),
-            cursor::Hide
-        ))
+        let (x, y) = self.screen_coords(link)?;
+        Some(format!("{} {}", cursor::Goto(x, y), cursor::Hide))
     }
 
     /// Print this string to draw the cursor on screen.
@@ -244,10 +256,10 @@ impl Menu {
         if self.links.is_empty() {
             return None;
         }
-        let &pos = self.links.get(self.link)?;
+        let (x, y) = self.screen_coords(self.link)?;
         Some(format!(
             "{}\x1b[97;1m*\x1b[0m{}",
-            cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16),
+            cursor::Goto(x, y),
             cursor::Hide
         ))
     }
