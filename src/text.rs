@@ -105,16 +105,34 @@ impl View for Text {
             .skip(self.scroll)
             .take(rows - 1);
 
+        let mut lines = 0;
+
         for line in iter {
+            lines += 1;
             if line == ".\r" {
                 continue;
             }
+            let mut line_size = 0;
             if !self.wide {
                 out.push_str(&indent);
+                line_size += indent.len();
             }
             out.push_str(line);
+            line_size += line.len();
+
+            // clear rest of line
+            out.push_str(&" ".repeat(cols - line_size)); // fill line
+
             out.push_str("\r\n");
         }
+
+        // clear remainder of screen
+        let blank_line = " ".repeat(cols);
+        for _ in 0..rows - lines - 1 {
+            out.push_str(&blank_line);
+            out.push_str(&"\r\n");
+        }
+
         out
     }
 }

@@ -72,13 +72,20 @@ impl UI {
             let mut out = self.out.borrow_mut();
             write!(
                 out,
-                "{}{}{}{}{}",
-                termion::clear::All,
+                "{}{}{}",
                 termion::cursor::Goto(1, 1),
                 termion::cursor::Hide,
                 screen,
-                status,
             );
+            if status.len() > 0 {
+                write!(
+                    out,
+                    "{}{}{}",
+                    termion::cursor::Goto(1, self.rows()),
+                    status,
+                    termion::cursor::Show,
+                );
+            }
             out.flush();
             self.dirty = false;
         }

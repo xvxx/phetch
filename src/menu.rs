@@ -134,9 +134,13 @@ impl Menu {
             }
         };
 
+        let mut line_count = 0;
         for line in iter {
+            line_count += 1;
+            let mut line_size = 0;
             if !self.wide {
                 out.push_str(&indent);
+                line_size += indent.len();
             }
             if line.typ == Type::Info {
                 out.push_str("      ");
@@ -154,6 +158,8 @@ impl Menu {
                 out.push_str(&(line.link + 1).to_string());
                 out.push_str(".\x1b[0m ");
             }
+            line_size += 6;
+
             // truncate long lines, instead of wrapping
             let name = if line.name.len() > MAX_COLS {
                 line.name.chars().take(MAX_COLS).collect::<String>()
@@ -171,11 +177,25 @@ impl Menu {
                 typ if !typ.is_supported() => push!("107;91", name),
                 _ => push!("0", name),
             }
+
+            // clear rest of line
+            line_size += name.len();
+            out.push_str(&" ".repeat(cols - line_size)); // fill line
+
             out.push_str("\r\n");
         }
+
         if self.searching {
             out.push_str(&self.render_input());
         }
+
+        // clear remainder of screen
+        let blank_line = " ".repeat(cols);
+        for _ in 0..rows - line_count - 1 {
+            out.push_str(&blank_line);
+            out.push_str(&"\r\n");
+        }
+
         out
     }
 
