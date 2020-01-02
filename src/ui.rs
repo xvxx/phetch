@@ -77,13 +77,22 @@ impl UI {
                 termion::cursor::Hide,
                 screen,
             );
-            if status.len() > 0 {
+            if status.is_empty() {
                 write!(
                     out,
                     "{}{}{}",
                     termion::cursor::Goto(1, self.rows()),
+                    termion::cursor::Hide,
+                    termion::clear::CurrentLine,
+                );
+            } else {
+                write!(
+                    out,
+                    "{}{}{}{}",
+                    termion::cursor::Goto(1, self.rows()),
                     status,
-                    termion::cursor::Show,
+                    termion::cursor::Hide,
+                    termion::clear::UntilNewline,
                 );
             }
             out.flush();
