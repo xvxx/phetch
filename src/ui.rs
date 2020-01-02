@@ -162,7 +162,12 @@ impl UI {
         thread::spawn(move || history::save(&hname, &hurl));
         // request thread
         let thread_url = url.to_string();
-        let res = self.spinner("", move || gopher::fetch_url(&thread_url))??;
+        // don't spin on first ever request
+        let res = if self.views.is_empty() {
+            gopher::fetch_url(&thread_url)?
+        } else {
+            self.spinner("", move || gopher::fetch_url(&thread_url))??
+        };
         let (typ, _, _, _) = gopher::parse_url(&url);
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
