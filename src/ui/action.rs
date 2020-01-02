@@ -9,6 +9,7 @@ pub enum Action {
     Draw(String),                                      // draw something on screen
     Status(String),                                    // set the "status" line to something
     Prompt(String, Box<dyn FnOnce(String) -> Action>), // query string, callback on success
+    List(Vec<Action>),                                 // do more than one action
     Error(String),                                     // error message
 }
 
