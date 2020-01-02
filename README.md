@@ -54,7 +54,6 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 ## todo
 
 - [ ] fork+exec telnet: gopher://bitreich.org/1/lawn/bbs
-- [ ] improve render() performance
 - [ ] text views are menus when URLs are present (one per line max)
 - [ ] Find Text in Text views
 - [ ] TLS -- https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
@@ -62,9 +61,9 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## bugs
 
-- [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by Nathaniel" weirdness)
-- [ ] screen flicker in win10 WSL
-- [ ] NUM entry and Find entry shouldn't use same input buffer
+- [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by
+  Nathaniel" weirdness) (kitty only)
+- [ ] gopherpedia 'recent entries' weirdness (also kitty only)
 - [ ] ctrl-z (suspend) doesn't work
 
 ## v1.0

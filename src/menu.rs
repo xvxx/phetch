@@ -367,7 +367,6 @@ impl Menu {
         }
 
         // if text is entered, find previous match
-        // TODO fix number input like this
         if self.searching && !self.input.is_empty() {
             if let Some(pos) = self.rlink_matching(self.link, &self.input) {
                 return self.action_select_link(pos);
@@ -660,6 +659,7 @@ impl Menu {
             }
             Key::Char('f') | Key::Ctrl('f') | Key::Char('/') | Key::Char('i') | Key::Ctrl('i') => {
                 self.searching = true;
+                self.input.clear();
                 self.redraw_input()
             }
             Key::Char('w') | Key::Ctrl('w') => {
