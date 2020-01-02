@@ -232,8 +232,9 @@ impl Menu {
         }
         let &pos = self.links.get(link)?;
         Some(format!(
-            "{} ",
-            cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16)
+            "{} {}",
+            cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16),
+            cursor::Hide
         ))
     }
 
