@@ -540,15 +540,18 @@ impl Menu {
 
     fn action_select_link(&mut self, link: usize) -> Action {
         if let Some(&pos) = self.links.get(link) {
-            if !self.is_visible(link) {
+            let old_link = self.link;
+            self.link = link;
+            if self.is_visible(link) {
+                self.reset_cursor(old_link)
+            } else {
                 if pos > 5 {
                     self.scroll = pos - 5;
                 } else {
                     self.scroll = 0;
                 }
+                Action::Redraw
             }
-            self.link = link;
-            Action::Redraw
         } else {
             Action::None
         }
