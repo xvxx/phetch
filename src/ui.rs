@@ -216,7 +216,7 @@ impl UI {
                     termion::cursor::Hide,
                     label,
                     ".".repeat(i),
-                    termion::clear::AfterCursor,
+                    termion::clear::UntilNewline,
                     color::Fg(color::Reset),
                     termion::cursor::Show,
                 );
