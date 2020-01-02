@@ -121,7 +121,9 @@ impl View for Text {
             line_size += line.len();
 
             // clear rest of line
-            out.push_str(&" ".repeat(cols - line_size)); // fill line
+            if cols > line_size {
+                out.push_str(&" ".repeat(cols - line_size)); // fill line
+            }
 
             out.push_str("\r\n");
         }
