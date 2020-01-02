@@ -151,21 +151,27 @@ impl Menu {
             }
             if line.typ == Type::Info {
                 out.push_str("      ");
+                line_size += 6;
             } else {
                 if line.link == self.link {
                     out.push_str("\x1b[97;1m*\x1b[0m")
                 } else {
                     out.push(' ');
                 }
+                line_size += 1;
                 out.push(' ');
+                line_size += 1;
                 out.push_str("\x1b[95m");
                 if line.link < 9 {
                     out.push(' ');
+                    line_size += 1;
                 }
-                out.push_str(&(line.link + 1).to_string());
+                let num = (line.link + 1).to_string();
+                out.push_str(&num);
+                line_size += num.len();
                 out.push_str(".\x1b[0m ");
+                line_size += 2;
             }
-            line_size += 6;
 
             // truncate long lines, instead of wrapping
             let name = if line.name.len() > MAX_COLS {
@@ -207,20 +213,18 @@ impl Menu {
     }
 
     /// Clear and re-draw the cursor.
-    fn reset_cursor(&mut self) -> io::Result<()> {
+    fn reset_cursor(&mut self, old_link: usize) -> Action {
         if self.links.is_empty() {
-            return Ok(());
+            return Action::None;
         }
-        let old_link = if self.link > 0 { self.link - 1 } else { 0 };
-        let mut out = stdout();
+        let mut out = String::new();
         if let Some(clear) = self.clear_cursor(old_link) {
-            out.write_all(clear.as_ref())?;
+            out.push_str(clear.as_ref());
         }
         if let Some(cursor) = self.draw_cursor() {
-            out.write_all(cursor.as_ref())?;
+            out.push_str(cursor.as_ref());
         }
-        out.flush()?;
-        Ok(())
+        Action::Draw(out)
     }
 
     /// Clear the cursor, if it's on screen.
@@ -231,7 +235,7 @@ impl Menu {
         let &pos = self.links.get(link)?;
         Some(format!(
             "{} ",
-            termion::cursor::Goto(self.indent() as u16, (pos + 1) as u16)
+            termion::cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16)
         ))
     }
 
@@ -243,8 +247,8 @@ impl Menu {
         }
         let &pos = self.links.get(self.link)?;
         Some(format!(
-            "{}\x1b[0;1m*\x1b[0m",
-            termion::cursor::Goto(self.indent() as u16, (pos + 1) as u16)
+            "{}\x1b[97;1m*\x1b[0m",
+            termion::cursor::Goto((self.indent() + 1) as u16, (pos + 1) as u16)
         ))
     }
 
@@ -261,12 +265,15 @@ impl Menu {
 
     fn redraw_input(&self) -> Action {
         if self.searching {
-            print!("{}", self.render_input());
+            Action::Draw(self.render_input())
         } else {
-            print!("{}{}", termion::clear::CurrentLine, termion::cursor::Hide);
+            Action::Draw(format!(
+                "{}{}{}",
+                termion::cursor::Goto(1, self.rows() as u16),
+                termion::clear::CurrentLine,
+                termion::cursor::Hide
+            ))
         }
-        stdout().flush();
-        Action::None
     }
 
     /// Scroll down by SCROLL_LINES, if possible.
@@ -399,15 +406,16 @@ impl Menu {
                 }
                 LinkPos::Visible => {
                     // select next link up
+                    let old_link = self.link;
                     self.link = new_link;
                     // scroll if we are within 5 lines of the top
                     if let Some(&pos) = self.links.get(self.link) {
                         if self.scroll > 0 && pos < self.scroll + 5 {
                             self.scroll -= 1;
+                        } else {
+                            // otherwise redraw just the cursor
+                            return self.reset_cursor(old_link);
                         }
-                    } else if self.reset_cursor().is_ok() {
-                        // otherwise redraw just the cursor
-                        return Action::None;
                     }
                 }
             }
@@ -499,6 +507,7 @@ impl Menu {
                     LinkPos::Visible => {
                         // link is visible, so select it
                         if let Some(&pos) = self.links.get(self.link) {
+                            let old_link = self.link;
                             self.link = new_link;
 
                             // scroll if we are within 5 lines of the end
@@ -506,9 +515,9 @@ impl Menu {
                                 && pos >= self.scroll + self.rows() - 6
                             {
                                 self.scroll += 1;
-                            } else if self.reset_cursor().is_ok() {
+                            } else {
                                 // otherwise try to just re-draw the cursor
-                                return Action::None;
+                                return self.reset_cursor(old_link);
                             }
                         }
                     }
