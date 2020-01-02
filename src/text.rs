@@ -94,8 +94,7 @@ impl View for Text {
         let indent = if cols >= longest && cols - longest <= 6 {
             String::from("")
         } else if cols >= longest {
-            let left = (cols - longest) / 2;
-            " ".repeat(left)
+            " ".repeat((cols - longest) / 2)
         } else {
             String::from("")
         };
@@ -117,6 +116,7 @@ impl View for Text {
                 out.push_str(&indent);
                 line_size += indent.len();
             }
+            let line = line.trim_end();
             out.push_str(line);
             line_size += line.len();
 
