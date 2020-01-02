@@ -6,11 +6,11 @@ const HISTORY_FILE: &str = "history.gph";
 
 macro_rules! file_missing_fmt {
     () => {
-        "i\ni
-i\ni\x1b[91m{error}\x1b[0m
-i\niHistory is only saved if {file} exists.
-i\niRun this in your terminal to activate automatic history saving:
-i\nimkdir -p {dir} && touch {file}"
+        "i\r\ni\r
+i\r\ni\x1b[91m{error}\x1b[0m\r
+i\r\niHistory is only saved if {file} exists.\r
+i\r\niRun this in your terminal to activate automatic history saving:\r
+i\r\nimkdir -p {dir} && touch {file}"
     };
 }
 

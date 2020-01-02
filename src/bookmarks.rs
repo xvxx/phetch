@@ -6,11 +6,11 @@ const BOOKMARKS_FILE: &str = "bookmarks.gph";
 
 macro_rules! dir_missing_fmt {
     () => {
-        "i\ni
-i\ni\x1b[91m{error}\x1b[0m
-i\niBookmarks can only be saved if {dir} exists.
-i\niRun this in your terminal to enable bookmarking:
-i\nimkdir -p {dir}"
+        "i\r\ni\r
+i\r\ni\x1b[91m{error}\x1b[0m\r
+i\r\niBookmarks can only be saved if {dir} exists.\r
+i\r\niRun this in your terminal to enable bookmarking:\r
+i\r\nimkdir -p {dir}"
     };
 }
 
@@ -24,7 +24,7 @@ pub fn as_raw_menu() -> String {
 
     let path = path.unwrap().join(BOOKMARKS_FILE);
     if !path.exists() {
-        out.push_str("iNo bookmarks yet.\ni\niUse <ctrl-s> to bookmark a page.\n");
+        out.push_str("iNo bookmarks yet.\r\ni\r\niUse <ctrl-s> to bookmark a page.\r\n");
         return out;
     }
 
