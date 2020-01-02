@@ -66,9 +66,9 @@ impl UI {
     }
 
     pub fn draw(&mut self) {
+        let status = self.render_status();
         if self.dirty {
             let screen = self.render();
-            let status = self.render_status();
             let mut out = self.out.borrow_mut();
             write!(
                 out,
@@ -81,7 +81,6 @@ impl UI {
             out.flush();
             self.dirty = false;
         } else {
-            let status = self.render_status();
             let mut out = self.out.borrow_mut();
             out.write_all(status.as_ref());
             out.flush();
@@ -91,7 +90,12 @@ impl UI {
     pub fn update(&mut self) {
         let action = self.process_page_input();
         if let Err(e) = self.process_action(action) {
-            self.set_status(format!("{}{}", color::Fg(color::LightRed), e));
+            self.set_status(format!(
+                "{}{}{}",
+                color::Fg(color::LightRed),
+                e,
+                termion::cursor::Hide
+            ));
         }
     }
 
@@ -252,7 +256,8 @@ impl UI {
 
     fn render_status(&self) -> String {
         format!(
-            "{}{}{}{}",
+            "{}{}{}{}{}",
+            termion::cursor::Hide,
             termion::cursor::Goto(1, self.rows()),
             termion::clear::CurrentLine,
             self.status,

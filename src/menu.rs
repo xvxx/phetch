@@ -207,10 +207,6 @@ impl Menu {
             out.push_str("\r\n");
         }
 
-        if self.searching {
-            out.push_str(&self.render_input());
-        }
-
         // clear remainder of screen
         let blank_line = " ".repeat(cols);
         for _ in 0..rows - line_count - 1 {
@@ -261,25 +257,14 @@ impl Menu {
 
     /// User input field.
     fn render_input(&self) -> String {
-        format!(
-            "{}Find:\x1b[0m {}{}{}",
-            cursor::Goto(1, self.rows() as u16),
-            self.input,
-            cursor::Show,
-            clear::UntilNewline,
-        )
+        format!("Find: {}{}", self.input, cursor::Show)
     }
 
     fn redraw_input(&self) -> Action {
         if self.searching {
-            Action::Draw(self.render_input())
+            Action::Status(self.render_input())
         } else {
-            Action::Draw(format!(
-                "{}{}{}",
-                cursor::Goto(1, self.rows() as u16),
-                clear::CurrentLine,
-                cursor::Hide
-            ))
+            Action::Status(format!("{}", cursor::Hide))
         }
     }
 
@@ -538,6 +523,7 @@ impl Menu {
         }
     }
 
+    /// Select and optionally scroll to a link.
     fn action_select_link(&mut self, link: usize) -> Action {
         if let Some(&pos) = self.links.get(link) {
             let old_link = self.link;
@@ -666,7 +652,7 @@ impl Menu {
             }
             Key::Char('f') | Key::Ctrl('f') | Key::Char('/') | Key::Char('i') | Key::Ctrl('i') => {
                 self.searching = true;
-                Action::Redraw
+                self.redraw_input()
             }
             Key::Char('w') | Key::Ctrl('w') => {
                 self.wide = !self.wide;
