@@ -68,35 +68,23 @@ impl UI {
     pub fn draw(&mut self) {
         if self.dirty {
             let screen = self.render();
-            let status = self.render_status().unwrap_or_else(|| "".into());
+            let status = self.render_status();
             let mut out = self.out.borrow_mut();
             write!(
                 out,
-                "{}{}{}",
+                "{}{}{}{}",
                 termion::cursor::Goto(1, 1),
                 termion::cursor::Hide,
                 screen,
+                status,
             );
-            if status.is_empty() {
-                write!(
-                    out,
-                    "{}{}{}",
-                    termion::cursor::Goto(1, self.rows()),
-                    termion::cursor::Hide,
-                    termion::clear::CurrentLine,
-                );
-            } else {
-                write!(
-                    out,
-                    "{}{}{}{}",
-                    termion::cursor::Goto(1, self.rows()),
-                    status,
-                    termion::cursor::Hide,
-                    termion::clear::UntilNewline,
-                );
-            }
             out.flush();
             self.dirty = false;
+        } else {
+            let status = self.render_status();
+            let mut out = self.out.borrow_mut();
+            out.write_all(status.as_ref());
+            out.flush();
         }
     }
 
@@ -260,21 +248,16 @@ impl UI {
 
     fn set_status(&mut self, status: String) {
         self.status = status;
-        self.dirty = true;
     }
 
-    fn render_status(&self) -> Option<String> {
-        if self.status.is_empty() {
-            None
-        } else {
-            Some(format!(
-                "{}{}{}{}",
-                termion::cursor::Goto(1, self.rows()),
-                termion::clear::CurrentLine,
-                self.status,
-                color::Fg(color::Reset)
-            ))
-        }
+    fn render_status(&self) -> String {
+        format!(
+            "{}{}{}{}",
+            termion::cursor::Goto(1, self.rows()),
+            termion::clear::CurrentLine,
+            self.status,
+            color::Fg(color::Reset)
+        )
     }
 
     fn add_page(&mut self, page: Page) {
@@ -407,7 +390,6 @@ impl UI {
         // track if the status line was cleared in this update cycle
         let cleared = if !self.status.is_empty() {
             self.status.clear();
-            self.dirty = true;
             true
         } else {
             false
@@ -427,6 +409,7 @@ impl UI {
                 out.write_all(s.as_ref());
                 out.flush();
             }
+            Action::Status(s) => self.set_status(s),
             Action::Open(title, url) => self.open(&title, &url)?,
             Action::Prompt(query, fun) => {
                 if let Some(response) = self.prompt(&query) {
