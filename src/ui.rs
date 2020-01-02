@@ -401,6 +401,11 @@ impl UI {
         };
 
         match action {
+            Action::List(actions) => {
+                for action in actions {
+                    self.process_action(action);
+                }
+            }
             Action::Keypress(Key::Ctrl('c')) => {
                 if !cleared {
                     self.running = false

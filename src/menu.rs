@@ -1,7 +1,7 @@
 use crate::gopher::{self, Type};
 use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::fmt;
-use termion::{clear, cursor};
+use termion::cursor;
 
 pub struct Menu {
     pub url: String,          // gopher url
@@ -529,14 +529,22 @@ impl Menu {
             let old_link = self.link;
             self.link = link;
             if self.is_visible(link) {
-                self.reset_cursor(old_link)
+                if !self.input.is_empty() {
+                    Action::List(vec![self.redraw_input(), self.reset_cursor(old_link)])
+                } else {
+                    self.reset_cursor(old_link)
+                }
             } else {
                 if pos > 5 {
                     self.scroll = pos - 5;
                 } else {
                     self.scroll = 0;
                 }
-                Action::Redraw
+                if !self.input.is_empty() {
+                    Action::List(vec![self.redraw_input(), Action::Redraw])
+                } else {
+                    Action::Redraw
+                }
             }
         } else {
             Action::None
