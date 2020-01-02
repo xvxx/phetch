@@ -89,6 +89,7 @@ impl UI {
 
     pub fn update(&mut self) {
         let action = self.process_page_input();
+        self.status.clear();
         if let Err(e) = self.process_action(action) {
             self.set_status(format!(
                 "{}{}{}",
@@ -392,14 +393,6 @@ impl UI {
     }
 
     fn process_action(&mut self, action: Action) -> Result<()> {
-        // track if the status line was cleared in this update cycle
-        let cleared = if !self.status.is_empty() {
-            self.status.clear();
-            true
-        } else {
-            false
-        };
-
         match action {
             Action::List(actions) => {
                 for action in actions {
@@ -407,9 +400,7 @@ impl UI {
                 }
             }
             Action::Keypress(Key::Ctrl('c')) => {
-                if !cleared {
-                    self.running = false
-                }
+                self.status = "\x1b[90m(Use q to quit)\x1b[0m".into()
             }
             Action::Keypress(Key::Esc) => {}
             Action::Error(e) => return Err(error!(e)),
