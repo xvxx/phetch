@@ -116,8 +116,8 @@ impl View for Text {
                 out.push_str(&indent);
                 line_size += indent.len();
             }
-            let line = line.trim_end();
-            out.push_str(line);
+            let line = line.trim_end_matches('\r').replace('\t', "    ");
+            out.push_str(&line);
             line_size += line.len();
 
             // clear rest of line
