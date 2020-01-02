@@ -7,9 +7,9 @@ const BOOKMARKS_FILE: &str = "bookmarks.gph";
 macro_rules! dir_missing_fmt {
     () => {
         "i\r\ni\r
-i\r\ni\x1b[91m{error}\x1b[0m\r
-i\r\niBookmarks can only be saved if {dir} exists.\r
-i\r\niRun this in your terminal to enable bookmarking:\r
+i\r\ni\x1b[91m{error}\x1b[0m
+i\r\niBookmarks can only be saved if {dir} exists.
+i\r\niRun this in your terminal to enable bookmarking:
 i\r\nimkdir -p {dir}"
     };
 }
