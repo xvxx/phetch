@@ -477,7 +477,7 @@ impl Menu {
         }
 
         // if text is entered, find next match
-        if !self.input.is_empty() {
+        if self.searching && !self.input.is_empty() {
             if let Some(pos) = self.link_matching(self.link + 1, &self.input) {
                 return self.action_select_link(pos);
             } else {
