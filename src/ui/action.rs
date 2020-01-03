@@ -13,6 +13,17 @@ pub enum Action {
     Error(String),                                     // error message
 }
 
+impl Action {
+    /// Is it Action::None?
+    pub fn is_none(&self) -> bool {
+        if let Action::None = self {
+            true
+        } else {
+            false
+        }
+    }
+}
+
 impl fmt::Debug for Action {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {

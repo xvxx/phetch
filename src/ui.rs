@@ -89,7 +89,9 @@ impl UI {
 
     pub fn update(&mut self) {
         let action = self.process_page_input();
-        self.status.clear();
+        if !action.is_none() {
+            self.status.clear();
+        }
         if let Err(e) = self.process_action(action) {
             self.set_status(format!(
                 "{}{}{}",
