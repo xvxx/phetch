@@ -394,7 +394,7 @@ impl UI {
             }
         }
 
-        Action::None
+        Action::Error("No Gopher page loaded.".into())
     }
 
     fn process_action(&mut self, action: Action) -> Result<()> {
