@@ -1,7 +1,7 @@
 use crate::gopher::{self, Type};
 use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::fmt;
-use termion::cursor;
+use termion::{clear, cursor};
 
 pub struct Menu {
     pub url: String,          // gopher url
@@ -150,36 +150,26 @@ impl Menu {
         let indent = self.indent();
         let left_margin = " ".repeat(indent);
 
-        let mut line_count = 0;
         for line in iter {
-            line_count += 1;
-            let mut line_size = 0;
             if !self.wide {
                 out.push_str(&left_margin);
-                line_size += indent;
             }
             if line.typ == Type::Info {
                 out.push_str("      ");
-                line_size += 6;
             } else {
                 if line.link == self.link {
                     out.push_str("\x1b[97;1m*\x1b[0m")
                 } else {
                     out.push(' ');
                 }
-                line_size += 1;
                 out.push(' ');
-                line_size += 1;
                 out.push_str("\x1b[95m");
                 if line.link < 9 {
                     out.push(' ');
-                    line_size += 1;
                 }
                 let num = (line.link + 1).to_string();
                 out.push_str(&num);
-                line_size += num.len();
                 out.push_str(".\x1b[0m ");
-                line_size += 2;
             }
 
             // truncate long lines, instead of wrapping
@@ -201,18 +191,12 @@ impl Menu {
             }
 
             // clear rest of line
-            line_size += name.len();
-            out.push_str(&" ".repeat(cols - line_size)); // fill line
-
+            out.push_str(&format!("{}", clear::UntilNewline));
             out.push_str("\r\n");
         }
 
         // clear remainder of screen
-        let blank_line = " ".repeat(cols);
-        for _ in 0..rows - line_count - 1 {
-            out.push_str(&blank_line);
-            out.push_str(&"\r\n");
-        }
+        out.push_str(&format!("{}", clear::AfterCursor));
 
         out
     }
