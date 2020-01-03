@@ -54,8 +54,6 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 ## todo
 
 - [ ] fork+exec telnet: gopher://bitreich.org/1/lawn/bbs
-- [ ] text views are menus when URLs are present (one per line max)
-- [ ] Find Text in Text views
 - [ ] TLS -- https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
 - [ ] ~/.config/phetch/phetch.conf
 
@@ -77,6 +75,8 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 ## future features
 
 - [ ] track binary size per release
+- [ ] text views are menus when URLs are present (one per line max)
+- [ ] Find Text in Text views
 - [ ] fuzzy find incremental search
 - [ ] persistent history
 - [ ] bookmarks: toggle instead of just prepending to the file
