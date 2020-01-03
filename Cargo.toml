@@ -1,6 +1,6 @@
 [package]
 name = "phetch"
-version = "0.1.9-dev"
+version = "0.1.9"
 authors = ["dvkt <c@dvkt.io>"]
 license = "MIT"
 edition = "2018"

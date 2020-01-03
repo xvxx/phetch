@@ -33,9 +33,9 @@ the gophersphere.
 binaries for linux, mac, and raspberry pi are available
 at https://github.com/dvkt/phetch/releases:
 
-- [phetch-v0.1.8-linux-x86_64.tar.gz][0]
-- [phetch-v0.1.8-linux-armv7.tar.gz (RPi)][1]
-- [phetch-v0.1.8-macos.zip][2]
+- [phetch-v0.1.9-linux-x86_64.tar.gz][0]
+- [phetch-v0.1.9-linux-armv7.tar.gz (RPi)][1]
+- [phetch-v0.1.9-macos.zip][2]
 
 just unzip/untar the `phetch` program into your $PATH and get going!
 
@@ -82,6 +82,6 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 - [ ] bookmarks: toggle instead of just prepending to the file
 - [ ] bookmarks: save the title of the current page
 
-[0]: https://github.com/dvkt/phetch/releases/download/v0.1.8/phetch-v0.1.8-linux-x86_64.tar.gz
-[1]: https://github.com/dvkt/phetch/releases/download/v0.1.8/phetch-v0.1.8-linux-armv7.tar.gz
-[2]: https://github.com/dvkt/phetch/releases/download/v0.1.8/phetch-v0.1.8-macos.zip
+[0]: https://github.com/dvkt/phetch/releases/download/v0.1.9/phetch-v0.1.9-linux-x86_64.tar.gz
+[1]: https://github.com/dvkt/phetch/releases/download/v0.1.9/phetch-v0.1.9-linux-armv7.tar.gz
+[2]: https://github.com/dvkt/phetch/releases/download/v0.1.9/phetch-v0.1.9-macos.zip
