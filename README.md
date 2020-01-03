@@ -65,10 +65,11 @@ just unzip/untar the `phetch` program into your $PATH and get going!
   Nathaniel" weirdness) (kitty only)
 - [ ] gopherpedia 'recent entries' weirdness (also kitty only)
 - [ ] ctrl-z (suspend) doesn't work
+- [ ] gopher://alexschroeder.ch/2020-01-02_This_Gopher_Hole/menu
 
 ## v1.0
 
-- [ ] download new releases over gopher
+- [ ] check for updates over gopher
 - [ ] Changelog generation (for gopher and github)
 - [ ] GIF screencast
 - [ ] man page (small one)
