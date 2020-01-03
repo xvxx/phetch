@@ -764,21 +764,14 @@ impl Menu {
                         url.push_str(parts[3].trim_end_matches('\r'));
                     }
                 }
-                // auto-prepend gopher type to selector
-                if let Some(first_char) = parts[0].chars().nth(0) {
-                    url.push_str("/");
-                    url.push(first_char);
-                    // add trailing / if the selector is blank
-                    if parts.is_empty() || parts.len() > 1 && parts[1].is_empty() {
-                        url.push('/');
-                    }
-                }
                 // selector
                 if parts.len() > 1 {
-                    let mut sel = parts[1].to_string();
+                    let sel = parts[1].to_string();
                     if !sel.is_empty() {
-                        if !sel.starts_with('/') {
-                            sel.insert(0, '/');
+                        // auto-prepend gopher type to selector
+                        if let Some(first_char) = parts[0].chars().nth(0) {
+                            url.push_str("/");
+                            url.push(first_char);
                         }
                         url.push_str(&sel);
                     }
@@ -828,20 +821,22 @@ mod tests {
 i---------------------------------------------------------
 1SDF PHLOGOSPHERE (297 phlogs)	/phlogs/	gopher.club	70
 1SDF GOPHERSPACE (1303 ACTIVE users)	/maps/	sdf.org	70
+1Geosphere	Geosphere	earth.rice.edu
 i---------------------------------------------------------
 "
         );
-        assert_eq!(menu.lines.len(), 4);
-        assert_eq!(menu.links.len(), 2);
+        assert_eq!(menu.lines.len(), 5);
+        assert_eq!(menu.links.len(), 3);
         assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
         assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
+        assert_eq!(menu.lines[3].url, "gopher://earth.rice.edu/1Geosphere");
     }
 
     #[test]
     fn test_no_path() {
         let menu = parse!("1Circumlunar Space		circumlunar.space	70");
         assert_eq!(menu.links.len(), 1);
-        assert_eq!(menu.lines[0].url, "gopher://circumlunar.space/1/");
+        assert_eq!(menu.lines[0].url, "gopher://circumlunar.space");
     }
 
     #[test]
