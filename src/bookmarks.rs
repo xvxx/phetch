@@ -39,7 +39,7 @@ pub fn as_raw_menu() -> String {
 
 // save a single bookmark entry
 pub fn save(label: &str, url: &str) -> Result<()> {
-    config::prepend(
+    config::append(
         BOOKMARKS_FILE,
         label
             .trim_start_matches("gopher://")
