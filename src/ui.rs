@@ -245,6 +245,7 @@ impl UI {
     }
 
     pub fn render(&mut self) -> String {
+        // TODO: only get size on SIGWINCH
         if let Ok((cols, rows)) = terminal_size() {
             self.term_size(cols as usize, rows as usize);
             if !self.views.is_empty() && self.focused < self.views.len() {
