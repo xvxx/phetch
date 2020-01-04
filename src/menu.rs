@@ -134,7 +134,6 @@ impl Menu {
 
     fn render_lines(&self) -> String {
         let mut out = String::new();
-        let (cols, rows) = self.size;
 
         macro_rules! push {
             ($c:expr, $e:expr) => {{
@@ -146,7 +145,7 @@ impl Menu {
             }};
         }
 
-        let iter = self.lines.iter().skip(self.scroll).take(rows - 1);
+        let iter = self.lines.iter().skip(self.scroll).take(self.rows() - 1);
         let indent = self.indent();
         let left_margin = " ".repeat(indent);
 
