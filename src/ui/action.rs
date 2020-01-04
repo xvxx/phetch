@@ -35,7 +35,7 @@ impl fmt::Debug for Action {
             Action::Status(s) => write!(f, "Status: {}", s),
             Action::Prompt(s, _) => write!(f, "Prompt: {}", s),
             Action::List(li) => {
-                write!(f, "List: \n");
+                writeln!(f, "List: ");
                 for a in li {
                     write!(f, "{:?}", a);
                 }

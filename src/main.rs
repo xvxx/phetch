@@ -46,7 +46,7 @@ fn run() -> i32 {
         return 1;
     }
     ui.run();
-    return 0;
+    0
 }
 
 fn print_version() {
