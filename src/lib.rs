@@ -12,4 +12,5 @@ pub mod text;
 pub mod ui;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const PLATFORM: &str = env!("PLATFORM");
 pub const BUG_URL: &str = "https://github.com/dvkt/phetch/issues/new";
