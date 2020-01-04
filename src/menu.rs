@@ -75,6 +75,9 @@ impl Menu {
 
     /// Calculated size of left margin.
     fn indent(&self) -> usize {
+        if self.wide {
+            return 0;
+        }
         let cols = self.cols();
         let longest = if self.longest > MAX_COLS {
             MAX_COLS
@@ -150,9 +153,8 @@ impl Menu {
         let left_margin = " ".repeat(indent);
 
         for line in iter {
-            if !self.wide {
-                out.push_str(&left_margin);
-            }
+            out.push_str(&left_margin);
+
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
