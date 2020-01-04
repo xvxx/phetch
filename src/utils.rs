@@ -1,3 +1,6 @@
+/// Debug macro that appends a line to `phetch.log`.
+/// Useful for printf-style debugging - add your `log!()` calls,
+/// and `tail -f phetch.log` while running phetch to peek inside.
 #[allow(unused_macros)]
 macro_rules! log {
     ($e:expr) => {{
@@ -19,7 +22,7 @@ macro_rules! log {
         }
     };
 }
-
+/// Creates an Other kind of io::Error.
 macro_rules! error {
     ($e:expr) => {
         std::io::Error::new(std::io::ErrorKind::Other, $e)
@@ -29,7 +32,7 @@ macro_rules! error {
     };
 }
 
-// Number of bytes in a human-ish readable format.
+/// Number of bytes in a human-ish readable format.
 pub fn human_bytes(bytes: usize) -> String {
     let (count, tag) = if bytes < 1000 {
         (bytes, " bytes")
