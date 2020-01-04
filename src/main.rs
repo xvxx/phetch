@@ -45,11 +45,10 @@ fn run() -> i32 {
     }
 
     let mut ui = UI::new();
-    if let Err(e) = ui.open(url, url) {
+    if let Err(e) = ui.open(url, url).and_then(|_| ui.run()) {
         eprintln!("{}", e);
         return 1;
     }
-    ui.run();
     0
 }
 

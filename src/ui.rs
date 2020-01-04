@@ -56,19 +56,20 @@ impl UI {
         }
     }
 
-    pub fn run(&mut self) {
+    pub fn run(&mut self) -> Result<()> {
         self.startup();
         while self.running {
-            self.draw();
+            self.draw()?;
             self.update();
         }
         self.shutdown();
+        Ok(())
     }
 
-    pub fn draw(&mut self) {
+    pub fn draw(&mut self) -> Result<()> {
         let status = self.render_status();
         if self.dirty {
-            let screen = self.render();
+            let screen = self.render()?;
             let mut out = self.out.borrow_mut();
             write!(
                 out,
@@ -85,6 +86,7 @@ impl UI {
             out.write_all(status.as_ref());
             out.flush();
         }
+        Ok(())
     }
 
     pub fn update(&mut self) {
@@ -244,22 +246,25 @@ impl UI {
         result.map_err(|e| error!("Spinner error: {:?}", e))
     }
 
-    pub fn render(&mut self) -> String {
+    pub fn render(&mut self) -> Result<String> {
         // TODO: only get size on SIGWINCH
         if let Ok((cols, rows)) = terminal_size() {
             self.term_size(cols as usize, rows as usize);
             if !self.views.is_empty() && self.focused < self.views.len() {
                 if let Some(page) = self.views.get_mut(self.focused) {
                     page.term_size(cols as usize, rows as usize);
-                    return page.render();
+                    return Ok(page.render());
                 }
             }
-            format!("Error: No focused View. Please file a bug: {}", BUG_URL)
-        } else {
-            format!(
-                "Error: Can't get terminal size. Please file a bug: {}",
+            Err(error!(
+                "fatal: No focused View. Please file a bug: {}",
                 BUG_URL
-            )
+            ))
+        } else {
+            Err(error!(
+                "fatal: Can't get terminal size. Please file a bug: {}",
+                BUG_URL
+            ))
         }
     }
 
