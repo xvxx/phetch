@@ -63,6 +63,7 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by
   Nathaniel" weirdness) (kitty only)
 - [ ] gopherpedia 'recent entries' weirdness (also kitty only)
+- [ ] "stream did not contain valid UTF-8"  sdf.org/maps/
 - [ ] ctrl-z (suspend) doesn't work
 - [ ] gopher://alexschroeder.ch/2020-01-02_This_Gopher_Hole/menu
 
