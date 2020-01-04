@@ -3,7 +3,6 @@ use crate::{bookmarks, history};
 pub fn lookup(name: &str) -> Option<String> {
     Some(match name {
         "" | "/" | "home" | "home/" => format!("{}{}", HEADER, START),
-        "help" | "help/" => format!("{}{}", HEADER, HELP),
         "history" => history::as_raw_menu(),
         "bookmarks" => bookmarks::as_raw_menu(),
         "about" => format!("{}{}", HEADER, ABOUT.replace("{version}", crate::VERSION)),
@@ -12,6 +11,12 @@ pub fn lookup(name: &str) -> Option<String> {
         "help/types" => format!("{}{}", HEADER, TYPES),
         "help/bookmarks" => format!("{}{}", HEADER, BOOKMARKS),
         "help/history" => format!("{}{}", HEADER, HISTORY),
+        "help" | "help/" => format!(
+            "{}{}",
+            HEADER,
+            HELP.replace("{platform}", crate::PLATFORM)
+                .replace("{version}", crate::VERSION)
+        ),
         _ => return None,
     })
 }
@@ -55,6 +60,7 @@ i            ~ * ~
 i
 1start screen	/home	phetch
 1about phetch	/about	phetch
+1check for updates	/phetch/latest?{platform}|v{version}	phkt.io
 i
 ";
 
