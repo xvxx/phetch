@@ -72,13 +72,11 @@ Once you've launched phetch, use `ctrl-h` to view the on-line help."
 }
 
 fn print_raw(url: &str) {
-    let _ = gopher::fetch_url(url)
-        .and_then(|x| {
-            println!("{}", x);
-            Ok(())
-        })
-        .map_err(|e| {
+    match gopher::fetch_url(url) {
+        Ok(response) => println!("{}", response),
+        Err(e) => {
             eprintln!("{}", e);
-            exit(1);
-        });
+            exit(0)
+        }
+    }
 }
