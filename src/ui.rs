@@ -194,7 +194,11 @@ impl UI {
         self.size.1 as u16
     }
 
-    fn startup(&mut self) {}
+    fn startup(&mut self) {
+        if let Ok((cols, rows)) = terminal_size() {
+            self.term_size(cols as usize, rows as usize);
+        }
+    }
 
     fn shutdown(&self) {}
 
