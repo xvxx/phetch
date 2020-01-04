@@ -23,6 +23,7 @@ the gophersphere.
     phetch                           launch and show start page
     phetch <gopher-url>              open gopher url
     phetch -r, --raw <gopher-url>    print raw gopher response
+    phetch -l, --local               connect to 127.0.0.1:7070
     phetch -h, --help                show this screen
     phetch -v, --version             show phetch version
 

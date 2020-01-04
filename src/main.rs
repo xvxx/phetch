@@ -7,7 +7,7 @@ fn main() {
 
 fn run() -> i32 {
     let args: Vec<String> = std::env::args().collect();
-    let url = if args.len() < 2 {
+    let mut url = if args.len() < 2 {
         "gopher://phetch/1/home"
     } else {
         args.get(1).unwrap()
@@ -22,6 +22,10 @@ fn run() -> i32 {
             eprintln!("--raw needs gopher-url");
             return 1;
         }
+    }
+
+    if url == "--local" || url == "-l" || url == "-local" {
+        url = "gopher://127.0.0.1:7070";
     }
 
     if url == "--version" || url == "-v" || url == "-version" {
@@ -59,6 +63,7 @@ fn print_usage() {
     phetch                           launch and show start page
     phetch <gopher-url>              open gopherhole at url
     phetch -r, --raw <gopher-url>    print raw gopher response
+    phetch -l, --local               connect to 127.0.0.1:7070
     phetch -h, --help                show this screen
     phetch -v, --version             show phetch version
 
