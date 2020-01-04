@@ -40,9 +40,19 @@ at https://github.com/dvkt/phetch/releases:
 
 just unzip/untar the `phetch` program into your $PATH and get going!
 
+## updates
+
+to check for new versions of `phetch`, you can use the on-line help
+system (`ctrl-h`) or visit:
+
+    gopher://phkt.io/1/phetch/latest
+
 ## development
 
     cargo run -- <gopher-url>
+
+*pro-tip:* run a local gopher server on `127.0.0.1:7070` and start
+phetch with `-l` or `--local` to quickly connect to it.
 
 ## screenies
 
