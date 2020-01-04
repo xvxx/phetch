@@ -9,7 +9,7 @@ use crate::{
     help, history,
     menu::Menu,
     text::Text,
-    utils,
+    utils, BUG_URL,
 };
 use std::{
     cell::RefCell,
@@ -249,11 +249,11 @@ impl UI {
                     return page.render();
                 }
             }
-            String::from("No content to display.")
+            format!("Error: No focused View. Please file a bug: {}", BUG_URL)
         } else {
             format!(
-                "Error getting terminal size. Please file a bug: {}",
-                "https://github.com/dvkt/phetch/issues/new"
+                "Error: Can't get terminal size. Please file a bug: {}",
+                BUG_URL
             )
         }
     }
