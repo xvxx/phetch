@@ -443,7 +443,7 @@ impl Menu {
             if self.lines.len() >= self.rows() && self.scroll < self.final_scroll() {
                 self.scroll += 1;
                 return Action::Redraw;
-            } else {
+            } else if !self.links.is_empty() {
                 // wrap around
                 self.link = 0;
                 self.scroll = 0;
