@@ -4,7 +4,11 @@
 |   )|   )|___)|    |    |   )
 |__/ |  / |__  |__  |__  |  /
 |
---> <p align="center"> <img src="./img/logo.png"> </p>
+--> <p align="center"> <img src="./img/logo.png"> <br> 
+<a href="https://github.com/dvkt/phetch/releases">
+<img src="https://img.shields.io/github/v/release/dvkt/phetch?include_prereleases">
+</a>
+</p>
 
 `phetch` is a terminal client designed to help you quickly navigate
 the gophersphere.
