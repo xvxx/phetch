@@ -83,7 +83,6 @@ phetch with `-l` or `--local` to quickly connect to it.
 
 ## v1.0
 
-- [ ] check for updates over gopher
 - [ ] Changelog generation (for gopher and github)
 - [ ] GIF screencast
 - [ ] man page (small one)
