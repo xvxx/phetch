@@ -1,4 +1,3 @@
-use native_tls::TlsConnector;
 use std::{
     io::{Read, Result, Write},
     net::TcpStream,
@@ -7,6 +6,9 @@ use std::{
     time::Duration,
 };
 use termion::input::TermRead;
+
+#[cfg(feature = "tls")]
+use native_tls::TlsConnector;
 
 mod r#type;
 pub use self::r#type::Type;

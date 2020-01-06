@@ -6,12 +6,20 @@ pub fn lookup(name: &str) -> Option<String> {
         "" | "/" | "home" | "home/" => format!("{}{}", HEADER, START),
         "history" => history::as_raw_menu(),
         "bookmarks" => bookmarks::as_raw_menu(),
-        "about" => format!("{}{}", HEADER, ABOUT.replace("{version}", crate::VERSION)),
         "help/keys" => format!("{}{}", HEADER, KEYS),
         "help/nav" => format!("{}{}", HEADER, NAV),
         "help/types" => format!("{}{}", HEADER, TYPES),
         "help/bookmarks" => format!("{}{}", HEADER, BOOKMARKS),
         "help/history" => format!("{}{}", HEADER, HISTORY),
+        "about" => format!(
+            "{}{}",
+            HEADER,
+            ABOUT
+                .replace("{build-date}", crate::BUILD_DATE)
+                .replace("{git-ref}", crate::GIT_REF)
+                .replace("{tls-support}", crate::TLS_SUPPORT)
+                .replace("{version}", crate::VERSION)
+        ),
         "help" | "help/" => format!(
             "{}{}",
             HEADER,
@@ -212,6 +220,12 @@ i
 const ABOUT: &str = "
 i     ~ version: v{version} ~
 i
+1phetch's gopherhole	/phetch	phkt.io
+hphetch's webpage	URL:https://github.com/dvkt/phetch
+0MIT license	/MIT License	gopherpedia.com
+i
+i            ~ * ~
+i
 ispecial thanks to:
 i
 ikseistrup - major help with
@@ -225,7 +239,8 @@ i            add some \x1b[95mcolor
 i
 i            ~ * ~
 i
-1phetch's gopherhole	/phetch	phkt.io
-0phetch uses the MIT license	/MIT License	gopherpedia.com
-hwebpage: github.com/dvkt/phetch	URL:https://github.com/dvkt/phetch
+itls: {tls-support}
+iref: {git-ref}
+ibuilt: {build-date}
+i
 ";
