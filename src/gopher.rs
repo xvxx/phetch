@@ -111,7 +111,7 @@ pub fn request(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<
         .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))?;
 
     // attempt tls connection
-    if try_tls {
+    if cfg!(feature = "tls") && try_tls {
         if let Ok(connector) = TlsConnector::new() {
             let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
             stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;

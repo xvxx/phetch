@@ -30,7 +30,13 @@ fn run() -> i32 {
                 }
             }
             "-l" | "--local" | "-local" => url = "gopher://127.0.0.1:7070",
-            "-t" | "--tls" | "-tls" => tls = true,
+            "-t" | "--tls" | "-tls" => {
+                tls = true;
+                if !cfg!(feature = "tls") {
+                    eprintln!("phetch was compiled without TLS support");
+                    return 1;
+                }
+            }
             arg => {
                 if arg.starts_with('-') {
                     eprintln!("unknown flag: {}\n", url);
