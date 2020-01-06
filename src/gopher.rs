@@ -1,3 +1,4 @@
+use native_tls::TlsConnector;
 use std::{
     io::{Read, Result, Write},
     net::TcpStream,
@@ -9,6 +10,30 @@ use termion::input::TermRead;
 
 mod r#type;
 pub use self::r#type::Type;
+
+trait ReadWrite: Read + Write {}
+impl<T: Read + Write> ReadWrite for T {}
+
+/// Wrapper for TLS and regular TCP streams.
+pub struct Stream {
+    io: Box<dyn ReadWrite>,
+}
+
+impl Read for Stream {
+    fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
+        self.io.read(buf)
+    }
+}
+
+impl Write for Stream {
+    fn write(&mut self, buf: &[u8]) -> Result<usize> {
+        self.io.write(buf)
+    }
+
+    fn flush(&mut self) -> Result<()> {
+        self.io.flush()
+    }
+}
 
 /// Some Gopher servers can be kind of slow, we may want to up this or
 /// make it configurable eventually.
@@ -68,17 +93,31 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
 }
 
 /// Make a Gopher request and return a TcpStream ready to be read()'d.
-pub fn request(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
+/// Will attempt a TLS connection first, then retry a regular
+/// connection if it fails.
+pub fn request(host: &str, port: &str, selector: &str) -> Result<Stream> {
     let selector = selector.replace('?', "\t"); // search queries
-    format!("{}:{}", host, port)
+    let sock = format!("{}:{}", host, port)
         .to_socket_addrs()
-        .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))
-        .and_then(|sock| TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION))
-        .and_then(|mut stream| {
-            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-            stream.write(format!("{}\r\n", selector).as_ref());
-            Ok(stream)
-        })
+        .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))?;
+
+    // attempt tls connection
+    if let Ok(connector) = TlsConnector::new() {
+        let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
+        stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
+        if let Ok(mut stream) = connector.connect(host, stream) {
+            stream.write(format!("{}\r\n", selector).as_ref())?;
+            return Ok(Stream {
+                io: Box::new(stream),
+            });
+        }
+    }
+
+    let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
+    stream.write(format!("{}\r\n", selector).as_ref())?;
+    Ok(Stream {
+        io: Box::new(stream),
+    })
 }
 
 /// Parses gopher URL into parts.

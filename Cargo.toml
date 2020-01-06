@@ -28,3 +28,4 @@ dev-version-ext = "dev"
 
 [dependencies]
 termion = "1.5.3"
+native-tls = "0.2"
