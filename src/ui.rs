@@ -284,12 +284,13 @@ impl UI {
         let page = self.views.get(self.focused)?;
         if page.is_tls() {
             return Some(format!(
-                "{}{}{}{}{}",
+                "{}{}{}{}{}{}",
                 termion::cursor::Goto(self.cols() - 4, self.rows()),
                 "\x1b[1m",
                 color::Fg(color::Black),
                 color::Bg(color::Green),
-                "TLS"
+                "TLS",
+                "\x1b[0m"
             ));
         }
         None
