@@ -196,6 +196,10 @@ impl UI {
         }
     }
 
+    fn cols(&self) -> u16 {
+        self.size.0 as u16
+    }
+
     fn rows(&self) -> u16 {
         self.size.1 as u16
     }
@@ -276,14 +280,31 @@ impl UI {
         self.status = status;
     }
 
+    fn render_tls_status(&self) -> Option<String> {
+        let page = self.views.get(self.focused)?;
+        if page.is_tls() {
+            return Some(format!(
+                "{}{}{}{}{}",
+                termion::cursor::Goto(self.cols() - 4, self.rows()),
+                "\x1b[1m",
+                color::Fg(color::Black),
+                color::Bg(color::Green),
+                "TLS"
+            ));
+        }
+        None
+    }
+
     fn render_status(&self) -> String {
         format!(
-            "{}{}{}{}{}",
+            "{}{}{}{}{}{}{}",
             termion::cursor::Hide,
             termion::cursor::Goto(1, self.rows()),
             termion::clear::CurrentLine,
             self.status,
-            color::Fg(color::Reset)
+            self.render_tls_status().unwrap_or_else(|| "".into()),
+            color::Fg(color::Reset),
+            color::Bg(color::Reset),
         )
     }
 
