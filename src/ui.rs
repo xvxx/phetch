@@ -40,11 +40,12 @@ pub struct UI {
     running: bool,            // main ui loop running?
     pub size: (usize, usize), // cols, rows
     status: String,           // status message, if any
+    tls: bool,                // tls mode?
     out: RefCell<AlternateScreen<RawTerminal<io::Stdout>>>,
 }
 
 impl UI {
-    pub fn new() -> UI {
+    pub fn new(tls: bool) -> UI {
         UI {
             views: vec![],
             focused: 0,
@@ -52,6 +53,7 @@ impl UI {
             running: true,
             size: (0, 0),
             status: String::new(),
+            tls,
             out: RefCell::new(AlternateScreen::from(stdout().into_raw_mode().unwrap())),
         }
     }
@@ -141,8 +143,9 @@ impl UI {
 
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
+        let tls = self.tls;
         self.spinner(&format!("Downloading {}", url), move || {
-            gopher::download_url(&url)
+            gopher::download_url(&url, tls)
         })
         .and_then(|res| res)
         .and_then(|(path, bytes)| {
@@ -166,11 +169,12 @@ impl UI {
         thread::spawn(move || history::save(&hname, &hurl));
         // request thread
         let thread_url = url.to_string();
+        let try_tls = self.tls;
         // don't spin on first ever request
         let res = if self.views.is_empty() {
-            gopher::fetch_url(&thread_url)?
+            gopher::fetch_url(&thread_url, try_tls)?
         } else {
-            self.spinner("", move || gopher::fetch_url(&thread_url))??
+            self.spinner("", move || gopher::fetch_url(&thread_url, try_tls))??
         };
         let (typ, _, _, _) = gopher::parse_url(&url);
         match typ {
@@ -501,7 +505,7 @@ impl UI {
 
 impl Default for UI {
     fn default() -> Self {
-        UI::new()
+        UI::new(false)
     }
 }
 

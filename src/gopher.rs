@@ -41,15 +41,15 @@ pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
 pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
 /// Fetches a gopher URL and returns a raw Gopher response.
-pub fn fetch_url(url: &str) -> Result<String> {
+pub fn fetch_url(url: &str, try_tls: bool) -> Result<String> {
     let (_, host, port, sel) = parse_url(url);
-    fetch(host, port, sel)
+    fetch(host, port, sel, try_tls)
 }
 
 /// Fetches a gopher URL by its component parts and returns a raw
 /// Gopher response.
-pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
-    let mut stream = request(host, port, selector)?;
+pub fn fetch(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<String> {
+    let mut stream = request(host, port, selector, try_tls)?;
     let mut body = String::new();
     stream.read_to_string(&mut body)?;
     Ok(body)
@@ -57,7 +57,7 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
 
 /// Downloads a binary to disk. Allows canceling with Ctrl-c.
 /// Returns the path it was saved to and the size in bytes.
-pub fn download_url(url: &str) -> Result<(String, usize)> {
+pub fn download_url(url: &str, try_tls: bool) -> Result<(String, usize)> {
     let (_, host, port, sel) = parse_url(url);
     let filename = sel
         .split_terminator('/')
@@ -69,7 +69,7 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
     let stdin = termion::async_stdin();
     let mut keys = stdin.keys();
 
-    let mut stream = request(host, port, sel)?;
+    let mut stream = request(host, port, sel, try_tls)?;
     let mut file = std::fs::OpenOptions::new()
         .write(true)
         .create(true)
@@ -95,21 +95,23 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
 /// Make a Gopher request and return a TcpStream ready to be read()'d.
 /// Will attempt a TLS connection first, then retry a regular
 /// connection if it fails.
-pub fn request(host: &str, port: &str, selector: &str) -> Result<Stream> {
+pub fn request(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<Stream> {
     let selector = selector.replace('?', "\t"); // search queries
     let sock = format!("{}:{}", host, port)
         .to_socket_addrs()
         .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))?;
 
     // attempt tls connection
-    if let Ok(connector) = TlsConnector::new() {
-        let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
-        stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-        if let Ok(mut stream) = connector.connect(host, stream) {
-            stream.write(format!("{}\r\n", selector).as_ref())?;
-            return Ok(Stream {
-                io: Box::new(stream),
-            });
+    if try_tls {
+        if let Ok(connector) = TlsConnector::new() {
+            let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
+            stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
+            if let Ok(mut stream) = connector.connect(host, stream) {
+                stream.write(format!("{}\r\n", selector).as_ref())?;
+                return Ok(Stream {
+                    io: Box::new(stream),
+                });
+            }
         }
     }
 

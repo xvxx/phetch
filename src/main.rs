@@ -8,6 +8,7 @@ fn main() {
 fn run() -> i32 {
     let args: Vec<String> = std::env::args().collect();
     let mut url = "gopher://phetch/1/home";
+    let mut praw = false;
     let mut tls = false;
     let mut iter = args.iter();
     while let Some(arg) = iter.next() {
@@ -22,9 +23,7 @@ fn run() -> i32 {
             }
             "-r" | "--raw" | "-raw" => {
                 if args.len() > 2 {
-                    let url = args.get(2).unwrap();
-                    print_raw(url);
-                    return 0;
+                    praw = true;
                 } else {
                     eprintln!("--raw needs gopher-url");
                     return 1;
@@ -44,7 +43,12 @@ fn run() -> i32 {
         }
     }
 
-    let mut ui = UI::new();
+    if praw {
+        print_raw(url, tls);
+        return 0;
+    }
+
+    let mut ui = UI::new(tls);
     if let Err(e) = ui.open(url, url).and_then(|_| ui.run()) {
         eprintln!("{}", e);
         return 1;
@@ -71,8 +75,8 @@ Once you've launched phetch, use `ctrl-h` to view the on-line help."
     );
 }
 
-fn print_raw(url: &str) {
-    match gopher::fetch_url(url) {
+fn print_raw(url: &str, try_tls: bool) {
+    match gopher::fetch_url(url, try_tls) {
         Ok(response) => println!("{}", response),
         Err(e) => {
             eprintln!("{}", e);
