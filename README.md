@@ -39,9 +39,9 @@ the gophersphere.
 binaries for linux, mac, and raspberry pi are available
 at https://github.com/dvkt/phetch/releases:
 
-- [phetch-v0.1.10-linux-x86_64.tar.gz][0]
-- [phetch-v0.1.10-linux-armv7.tar.gz (RPi)][1]
-- [phetch-v0.1.10-macos.zip][2]
+- [phetch-v0.1.11-linux-x86_64.tar.gz][0]
+- [phetch-v0.1.11-linux-armv7.tar.gz (RPi)][1]
+- [phetch-v0.1.11-macos.zip][2]
 
 just unzip/untar the `phetch` program into your $PATH and get going!
 
@@ -102,6 +102,6 @@ to build with TLS support on **linux**, you need `openssl` and
 - [ ] bookmarks: toggle instead of just prepending to the file
 - [ ] bookmarks: save the title of the current page
 
-[0]: https://github.com/dvkt/phetch/releases/download/v0.1.10/phetch-v0.1.10-linux-x86_64.tar.gz
-[1]: https://github.com/dvkt/phetch/releases/download/v0.1.10/phetch-v0.1.10-linux-armv7.tar.gz
-[2]: https://github.com/dvkt/phetch/releases/download/v0.1.10/phetch-v0.1.10-macos.zip
+[0]: https://github.com/dvkt/phetch/releases/download/v0.1.11/phetch-v0.1.11-linux-x86_64.tar.gz
+[1]: https://github.com/dvkt/phetch/releases/download/v0.1.11/phetch-v0.1.11-linux-armv7.tar.gz
+[2]: https://github.com/dvkt/phetch/releases/download/v0.1.11/phetch-v0.1.11-macos.zip
