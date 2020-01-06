@@ -25,7 +25,7 @@ fn run() -> i32 {
             "-r" | "--raw" | "-raw" => {
                 if args.len() > 1 {
                     praw = true;
-                } else if !got_url {
+                } else {
                     eprintln!("--raw needs gopher-url");
                     return 1;
                 }
