@@ -2,7 +2,7 @@ use std::{env, process};
 
 fn main() {
     println!("cargo:rustc-env=PLATFORM={}", env::var("TARGET").unwrap());
-    println!("cargo:rustc-env=BUILD_DATE={}", sh("date"));
+    println!("cargo:rustc-env=BUILD_DATE={}", sh("date +%Y-%m-%d"));
     println!(
         "cargo:rustc-env=GIT_REF={}",
         sh("git rev-parse --short HEAD")
