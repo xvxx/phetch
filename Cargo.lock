@@ -137,7 +137,7 @@ dependencies = [
 
 [[package]]
 name = "phetch"
-version = "0.1.11"
+version = "0.1.12-dev"
 dependencies = [
  "native-tls 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "termion 1.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
