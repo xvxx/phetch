@@ -284,9 +284,8 @@ impl UI {
         let page = self.views.get(self.focused)?;
         if page.is_tls() {
             return Some(format!(
-                "{}{}{}{}{}{}",
-                termion::cursor::Goto(self.cols() - 4, self.rows()),
-                "\x1b[1m",
+                "{}{}{}{}{}",
+                termion::cursor::Goto(self.cols() - 3, self.rows()),
                 color::Fg(color::Black),
                 color::Bg(color::Green),
                 "TLS",
