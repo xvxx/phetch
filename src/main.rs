@@ -11,6 +11,7 @@ fn run() -> i32 {
     let mut praw = false;
     let mut tls = false;
     let mut iter = args.iter();
+    let mut got_url = false;
     while let Some(arg) = iter.next() {
         match arg.as_ref() {
             "-v" | "--version" | "-version" => {
@@ -22,9 +23,9 @@ fn run() -> i32 {
                 return 0;
             }
             "-r" | "--raw" | "-raw" => {
-                if args.len() > 2 {
+                if args.len() > 1 {
                     praw = true;
-                } else {
+                } else if !got_url {
                     eprintln!("--raw needs gopher-url");
                     return 1;
                 }
@@ -42,7 +43,12 @@ fn run() -> i32 {
                     eprintln!("unknown flag: {}\n", url);
                     print_usage();
                     return 1;
+                } else if got_url {
+                    eprintln!("unknown argument: {}\n", url);
+                    print_usage();
+                    return 1;
                 } else {
+                    got_url = true;
                     url = arg;
                 }
             }
