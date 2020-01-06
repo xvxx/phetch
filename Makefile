@@ -19,9 +19,9 @@ clean:
 
 # Build and strip the release version
 $(PHETCH_RELEASE): $(RSFILES)
-	cargo build --release --feature tls
+	cargo build --release --features tls
 	strip $@
 
 # Build the debug version
 $(PHETCH_DEBUG): $(RSFILES)
-	cargo build --feature tls
+	cargo build --features tls
