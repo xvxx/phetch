@@ -7,41 +7,41 @@ fn main() {
 
 fn run() -> i32 {
     let args: Vec<String> = std::env::args().collect();
-    let mut url = if args.len() < 2 {
-        "gopher://phetch/1/home"
-    } else {
-        args.get(1).unwrap()
-    };
-
-    if url == "--raw" || url == "-r" || url == "-raw" {
-        if args.len() > 2 {
-            let url = args.get(2).unwrap();
-            print_raw(url);
-            return 0;
-        } else {
-            eprintln!("--raw needs gopher-url");
-            return 1;
+    let mut url = "gopher://phetch/1/home";
+    let mut tls = false;
+    let mut iter = args.iter();
+    while let Some(arg) = iter.next() {
+        match arg.as_ref() {
+            "-v" | "--version" | "-version" => {
+                print_version();
+                return 0;
+            }
+            "-h" | "--help" | "-help" => {
+                print_usage();
+                return 0;
+            }
+            "-r" | "--raw" | "-raw" => {
+                if args.len() > 2 {
+                    let url = args.get(2).unwrap();
+                    print_raw(url);
+                    return 0;
+                } else {
+                    eprintln!("--raw needs gopher-url");
+                    return 1;
+                }
+            }
+            "-l" | "--local" | "-local" => url = "gopher://127.0.0.1:7070",
+            "-t" | "--tls" | "-tls" => tls = true,
+            arg => {
+                if arg.starts_with('-') {
+                    eprintln!("unknown flag: {}\n", url);
+                    print_usage();
+                    return 1;
+                } else {
+                    url = arg;
+                }
+            }
         }
-    }
-
-    if url == "--local" || url == "-l" || url == "-local" {
-        url = "gopher://127.0.0.1:7070";
-    }
-
-    if url == "--version" || url == "-v" || url == "-version" {
-        print_version();
-        return 0;
-    }
-
-    if url == "--help" || url == "-h" || url == "-help" {
-        print_usage();
-        return 0;
-    }
-
-    if !url.is_empty() && url.starts_with('-') {
-        eprintln!("unknown flag: {}\n", url);
-        print_usage();
-        return 1;
     }
 
     let mut ui = UI::new();
@@ -61,6 +61,7 @@ fn print_usage() {
         "Usage:
     phetch                           launch and show start page
     phetch <gopher-url>              open gopherhole at url
+    phetch -t, --tls <gopher-url>    attempt to open w/ tls
     phetch -r, --raw <gopher-url>    print raw gopher response
     phetch -l, --local               connect to 127.0.0.1:7070
     phetch -h, --help                show this screen
