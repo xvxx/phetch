@@ -95,7 +95,7 @@ pub fn download_url(url: &str, try_tls: bool) -> Result<(String, usize)> {
         bytes += count;
         file.write(&buf[..count]);
         if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
-            return Err(error!("Download canceled"));
+            return Err(error!("Download cancelled"));
         }
     }
     Ok((filename.to_string(), bytes))

@@ -4,7 +4,7 @@
 |   )|   )|___)|    |    |   )
 |__/ |  / |__  |__  |__  |  /
 |
---> <p align="center"> <img src="./img/logo.png"> <br> 
+--> <p align="center"> <img src="./img/logo.png"> <br>
 <a href="https://github.com/dvkt/phetch/releases">
 <img src="https://img.shields.io/github/v/release/dvkt/phetch?include_prereleases">
 </a>
@@ -69,7 +69,6 @@ phetch with `-l` or `--local` to quickly connect to it.
 ## todo
 
 - [ ] fork+exec telnet: gopher://bitreich.org/1/lawn/bbs
-- [ ] TLS -- https://dataswamp.org/~solene/2019-03-07-gopher-server-tls.html
 - [ ] ~/.config/phetch/phetch.conf
 
 ## bugs
