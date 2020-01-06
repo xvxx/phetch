@@ -59,6 +59,11 @@ the app (`ctrl-h`) or visit:
 *pro-tip:* run a local gopher server on `127.0.0.1:7070` and start
 phetch with `-l` or `--local` to quickly connect to it.
 
+to build with TLS support on **linux**, you need `openssl` and
+`pkg-config`:
+
+    sudo apt install -y pkg-config libssl-dev
+
 ## screenies
 
 ![DOS Archive](./img/dos.png)
