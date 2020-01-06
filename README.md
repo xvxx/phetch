@@ -67,7 +67,11 @@ to build with TLS support on **linux**, you need `openssl` and
 
 to build without TLS support, build with the `no-tls` feature:
 
-    
+    cargo build --features disable-tls
+
+you can check whether TLS is enabled by visiting the About page:
+
+    cargo run --features disable-tls -- gopher://phetch/about
 
 ## screenies
 
