@@ -21,14 +21,13 @@ pub fn fetch_url(url: &str) -> Result<String> {
     fetch(host, port, sel)
 }
 
-/// Fetches a gopher URL by its comeponent parts and returns a raw
+/// Fetches a gopher URL by its component parts and returns a raw
 /// Gopher response.
 pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
-    get(host, port, selector).and_then(|mut stream| {
-        let mut body = String::new();
-        stream.read_to_string(&mut body)?;
-        Ok(body)
-    })
+    let mut stream = request(host, port, selector)?;
+    let mut body = String::new();
+    stream.read_to_string(&mut body)?;
+    Ok(body)
 }
 
 /// Downloads a binary to disk. Allows canceling with Ctrl-c.
@@ -45,32 +44,31 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
     let stdin = termion::async_stdin();
     let mut keys = stdin.keys();
 
-    get(host, port, sel).and_then(|mut stream| {
-        let mut file = std::fs::OpenOptions::new()
-            .write(true)
-            .create(true)
-            .truncate(true)
-            .mode(0o770)
-            .open(path)?;
+    let mut stream = request(host, port, sel)?;
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .mode(0o770)
+        .open(path)?;
 
-        let mut buf = [0; 1024];
-        let mut bytes = 0;
-        while let Ok(count) = stream.read(&mut buf) {
-            if count == 0 {
-                break;
-            }
-            bytes += count;
-            file.write(&buf[..count]);
-            if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
-                return Err(error!("Download canceled"));
-            }
+    let mut buf = [0; 1024];
+    let mut bytes = 0;
+    while let Ok(count) = stream.read(&mut buf) {
+        if count == 0 {
+            break;
         }
-        Ok((filename.to_string(), bytes))
-    })
+        bytes += count;
+        file.write(&buf[..count]);
+        if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
+            return Err(error!("Download canceled"));
+        }
+    }
+    Ok((filename.to_string(), bytes))
 }
 
 /// Make a Gopher request and return a TcpStream ready to be read()'d.
-pub fn get(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
+pub fn request(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
     let selector = selector.replace('?', "\t"); // search queries
     format!("{}:{}", host, port)
         .to_socket_addrs()
