@@ -7,108 +7,13 @@ use std::{
 };
 use termion::input::TermRead;
 
+mod r#type;
+pub use self::r#type::Type;
+
 // Some Gopher servers can be kind of slow, we may want to up this or
 // make it configurable eventually.
 pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
 pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
-
-#[derive(Copy, Clone, PartialEq, Debug)]
-pub enum Type {
-    Text,       // 0 | 96 | cyan
-    Menu,       // 1 | 94 | blue
-    CSOEntity,  // 2 |    | white background
-    Error,      // 3 | 91 | red
-    Binhex,     // 4 |  4 | white underline
-    DOSFile,    // 5 |  4 | white underline
-    UUEncoded,  // 6 |  4 | white underline
-    Search,     // 7 |  0 | white
-    Telnet,     // 8 | 90 | gray underline
-    Binary,     // 9 |  4 | white underline
-    Mirror,     // + |    | white background
-    GIF,        // g |  4 | white underline
-    Telnet3270, // T |    | white background
-    HTML,       // h | 92 | green
-    Image,      // I |  4 | white underline
-    PNG,        // p |  4 | white underline
-    Info,       // i | 93 | yellow
-    Sound,      // s |  4 | white underline
-    Document,   // d |  4 | white underline
-}
-
-impl Type {
-    pub fn is_download(self) -> bool {
-        match self {
-            Type::Binhex
-            | Type::DOSFile
-            | Type::UUEncoded
-            | Type::Binary
-            | Type::GIF
-            | Type::Image
-            | Type::PNG
-            | Type::Sound
-            | Type::Document => true,
-            _ => false,
-        }
-    }
-}
-
-impl Type {
-    pub fn is_supported(self) -> bool {
-        match self {
-            Type::CSOEntity | Type::Mirror | Type::Telnet3270 => false,
-            _ => true,
-        }
-    }
-
-    pub fn to_char(self) -> Option<char> {
-        Some(match self {
-            Type::Text => '0',
-            Type::Menu => '1',
-            Type::CSOEntity => '2',
-            Type::Error => '3',
-            Type::Binhex => '4',
-            Type::DOSFile => '5',
-            Type::UUEncoded => '6',
-            Type::Search => '7',
-            Type::Telnet => '8',
-            Type::Binary => '9',
-            Type::Mirror => '+',
-            Type::GIF => 'g',
-            Type::Telnet3270 => 'T',
-            Type::HTML => 'h',
-            Type::Image => 'I',
-            Type::PNG => 'p',
-            Type::Info => 'i',
-            Type::Sound => 's',
-            Type::Document => 'd',
-        })
-    }
-
-    pub fn from(c: char) -> Option<Type> {
-        Some(match c {
-            '0' => Type::Text,
-            '1' => Type::Menu,
-            '2' => Type::CSOEntity,
-            '3' => Type::Error,
-            '4' => Type::Binhex,
-            '5' => Type::DOSFile,
-            '6' => Type::UUEncoded,
-            '7' => Type::Search,
-            '8' => Type::Telnet,
-            '9' => Type::Binary,
-            '+' => Type::Mirror,
-            'g' => Type::GIF,
-            'T' => Type::Telnet3270,
-            'h' => Type::HTML,
-            'I' => Type::Image,
-            'p' => Type::PNG,
-            'i' => Type::Info,
-            's' => Type::Sound,
-            'd' => Type::Document,
-            _ => return None,
-        })
-    }
-}
 
 // Fetches a gopher URL and returns a raw Gopher response.
 pub fn fetch_url(url: &str) -> Result<String> {
