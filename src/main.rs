@@ -6,7 +6,7 @@ fn main() {
 }
 
 fn run() -> i32 {
-    let args: Vec<String> = std::env::args().collect();
+    let args: Vec<String> = std::env::args().skip(1).collect();
     let mut url = "gopher://phetch/1/home";
     let mut praw = false;
     let mut tls = false;
