@@ -15,12 +15,13 @@ the gophersphere.
 
 ## features
 
-- <1MB executable for linux and mac
+- <1MB executable for linux* and mac (* without TLS support)
 - technicolor design (based on [GILD](https://github.com/dvkt/gild))
 - no-nonsense keyboard navigation
 - supports gopher searches, text and menu pages, and downloads
 - save your favorite gopherholes with bookmarks
 - opt-in history
+- secure gopher support (TLS)
 
 ## usage
 
@@ -46,8 +47,8 @@ just unzip/untar the `phetch` program into your $PATH and get going!
 
 ## updates
 
-to check for new versions of `phetch`, you can use the on-line help
-system (`ctrl-h`) or visit:
+to check for new versions of `phetch`, use the on-line help system in
+the app (`ctrl-h`) or visit: 
 
     gopher://phkt.io/1/phetch/latest
 
