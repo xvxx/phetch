@@ -40,12 +40,10 @@ fn run() -> i32 {
             }
             arg => {
                 if arg.starts_with('-') {
-                    eprintln!("unknown flag: {}\n", url);
-                    print_usage();
+                    eprintln!("unknown flag: {}", url);
                     return 1;
                 } else if got_url {
-                    eprintln!("unknown argument: {}\n", url);
-                    print_usage();
+                    eprintln!("unknown argument: {}", url);
                     return 1;
                 } else {
                     got_url = true;
