@@ -14,8 +14,8 @@ exclude = [
 ]
 
 [features]
-tls = []
-default =["tls"]
+disable-tls = []
+default =[]
 
 [profile.release]
 lto = true

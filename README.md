@@ -65,6 +65,10 @@ to build with TLS support on **linux**, you need `openssl` and
 
     sudo apt install -y pkg-config libssl-dev
 
+to build without TLS support, build with the `no-tls` feature:
+
+    
+
 ## screenies
 
 ![DOS Archive](./img/dos.png)
