@@ -15,7 +15,7 @@ the gophersphere.
 
 ## features
 
-- <1MB executable for linux* and mac (* without TLS support)
+- <1MB executable for linux and mac
 - technicolor design (based on [GILD](https://github.com/dvkt/gild))
 - no-nonsense keyboard navigation
 - supports gopher searches, text and menu pages, and downloads
