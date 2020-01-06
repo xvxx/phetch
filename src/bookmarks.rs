@@ -14,6 +14,7 @@ i\r\nimkdir -p {dir}"
     };
 }
 
+/// Get all bookmarks in Gophermap format.
 pub fn as_raw_menu() -> String {
     let path = config::path();
     if let Err(e) = path {
@@ -37,7 +38,7 @@ pub fn as_raw_menu() -> String {
     out
 }
 
-// save a single bookmark entry
+/// Save a single bookmark entry.
 pub fn save(label: &str, url: &str) -> Result<()> {
     config::append(
         BOOKMARKS_FILE,

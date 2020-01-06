@@ -1,7 +1,7 @@
 use crate::config;
 use std::io::{BufRead, Result};
 
-// History only works if you've created ~/.config/phetch/history.gph manually.
+/// History only works if you've created ~/.config/phetch/history.gph manually.
 const HISTORY_FILE: &str = "history.gph";
 
 macro_rules! file_missing_fmt {
@@ -14,6 +14,7 @@ i\r\nimkdir -p {dir} && touch {file}"
     };
 }
 
+/// Returns history as a Gophermap.
 pub fn as_raw_menu() -> String {
     let homepath = format!("{}{}", config::DIR, HISTORY_FILE);
     let path = config::path();
@@ -56,7 +57,7 @@ pub fn as_raw_menu() -> String {
     out.join("\r\n")
 }
 
-// save a single history entry if the history file exists
+/// Save a single history entry if the history file exists.
 pub fn save(label: &str, url: &str) -> Result<()> {
     if let Err(e) = config::path() {
         return Err(error!("History file doesn't exist: {}", e));

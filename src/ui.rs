@@ -180,7 +180,7 @@ impl UI {
         }
     }
 
-    // get Menu for on-line help, home page, etc, ex: gopher://home/1/help/types
+    /// Get Menu for on-line help, home page, etc, ex: gopher://home/1/help/types
     fn fetch_internal(&mut self, url: &str) -> Result<Page> {
         if let Some(source) = help::lookup(
             &url.trim_start_matches("gopher://phetch/")
@@ -208,8 +208,8 @@ impl UI {
         self.size = (cols, rows);
     }
 
-    // Show a spinner while running a thread. Used to make gopher requests or
-    // download files.
+    /// Show a spinner while running a thread. Used to make gopher requests or
+    /// download files.
     fn spinner<T: Send + 'static, F: 'static + Send + FnOnce() -> T>(
         &mut self,
         label: &str,
@@ -294,7 +294,7 @@ impl UI {
         }
     }
 
-    // Ask user to confirm action with ENTER or Y.
+    /// Ask user to confirm action with ENTER or Y.
     fn confirm(&self, question: &str) -> bool {
         let rows = self.rows();
 
@@ -321,7 +321,7 @@ impl UI {
         }
     }
 
-    // Prompt user for input and return what was entered, if anything.
+    /// Prompt user for input and return what was entered, if anything.
     fn prompt(&self, prompt: &str) -> Option<String> {
         let rows = self.rows();
 

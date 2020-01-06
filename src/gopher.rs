@@ -10,18 +10,19 @@ use termion::input::TermRead;
 mod r#type;
 pub use self::r#type::Type;
 
-// Some Gopher servers can be kind of slow, we may want to up this or
-// make it configurable eventually.
+/// Some Gopher servers can be kind of slow, we may want to up this or
+/// make it configurable eventually.
 pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
 pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
-// Fetches a gopher URL and returns a raw Gopher response.
+/// Fetches a gopher URL and returns a raw Gopher response.
 pub fn fetch_url(url: &str) -> Result<String> {
     let (_, host, port, sel) = parse_url(url);
     fetch(host, port, sel)
 }
 
-// Fetches a gopher URL by its component parts and returns a raw Gopher response.
+/// Fetches a gopher URL by its comeponent parts and returns a raw
+/// Gopher response.
 pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
     get(host, port, selector).and_then(|mut stream| {
         let mut body = String::new();
@@ -30,8 +31,8 @@ pub fn fetch(host: &str, port: &str, selector: &str) -> Result<String> {
     })
 }
 
-// Downloads a binary to disk. Allows canceling with Ctrl-c.
-// Returns the path it was saved to and the size in bytes.
+/// Downloads a binary to disk. Allows canceling with Ctrl-c.
+/// Returns the path it was saved to and the size in bytes.
 pub fn download_url(url: &str) -> Result<(String, usize)> {
     let (_, host, port, sel) = parse_url(url);
     let filename = sel
@@ -68,7 +69,7 @@ pub fn download_url(url: &str) -> Result<(String, usize)> {
     })
 }
 
-// Make a Gopher request and return a TcpStream ready to be read()'d.
+/// Make a Gopher request and return a TcpStream ready to be read()'d.
 pub fn get(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
     let selector = selector.replace('?', "\t"); // search queries
     format!("{}:{}", host, port)
@@ -82,8 +83,8 @@ pub fn get(host: &str, port: &str, selector: &str) -> Result<TcpStream> {
         })
 }
 
-// Parses gopher URL into parts.
-// Return (Type, host, port, sel)
+/// Parses gopher URL into parts.
+/// Returns (Type, host, port, sel)
 pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     let url = url.trim_start_matches("gopher://");
 

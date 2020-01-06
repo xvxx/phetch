@@ -24,7 +24,7 @@ pub struct Line {
     pub link: usize, // link #, if any
 }
 
-// direction of a given link relative to the visible screen
+/// Direction of a given link relative to the visible screen.
 #[derive(PartialEq)]
 enum LinkPos {
     Above,
@@ -411,13 +411,13 @@ impl Menu {
         }
     }
 
-    // search through links to find a match based on the pattern,
-    // starting at link position `start`. returns the link position.
+    /// Search through links to find a match based on the pattern,
+    /// starting at link position `start`. returns the link position.
     fn link_matching(&self, start: usize, pattern: &str) -> Option<usize> {
         self.link_match_with_iter(pattern, &mut self.links.iter().skip(start))
     }
 
-    // search backwards
+    /// Search backwards through all links.
     fn rlink_matching(&self, start: usize, pattern: &str) -> Option<usize> {
         self.link_match_with_iter(pattern, &mut self.links.iter().take(start).rev())
     }
@@ -535,11 +535,13 @@ impl Menu {
         }
     }
 
+    /// Select and open link.
     fn action_follow_link(&mut self, link: usize) -> Action {
         self.action_select_link(link);
         self.action_open()
     }
 
+    /// Scroll to a link if it's not visible.
     fn scroll_to(&mut self, link: usize) -> Action {
         if !self.is_visible(link) {
             if let Some(&pos) = self.links.get(link) {
@@ -557,6 +559,7 @@ impl Menu {
         Action::None
     }
 
+    /// Open the currently selected link.
     fn action_open(&mut self) -> Action {
         // if the selected link isn't visible, jump to it:
         if !self.is_visible(self.link) {
@@ -592,7 +595,7 @@ impl Menu {
         }
     }
 
-    // self.searching == true
+    /// self.searching == true
     fn process_search_mode_char(&mut self, c: char) -> Action {
         if c == '\n' {
             if self.link_matching(0, &self.input).is_some() {
@@ -613,6 +616,7 @@ impl Menu {
         }
     }
 
+    /// Respond to user input.
     fn process_key(&mut self, key: Key) -> Action {
         if self.searching {
             if let Key::Char(c) = key {
@@ -699,7 +703,7 @@ impl Menu {
         }
     }
 
-    // parse gopher response into a Menu object
+    /// Parse gopher response into a Menu object.
     pub fn parse(url: String, raw: String) -> Menu {
         let mut lines = vec![];
         let mut links = vec![];

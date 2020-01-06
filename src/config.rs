@@ -6,7 +6,7 @@ use std::{
 
 pub const DIR: &str = "~/.config/phetch/";
 
-// Loads a file in the config directory for reading.
+/// Loads a file in the config directory for reading.
 pub fn load(filename: &str) -> Result<BufReader<File>> {
     path().and_then(|dotdir| {
         let path = dotdir.join(filename);
@@ -18,7 +18,7 @@ pub fn load(filename: &str) -> Result<BufReader<File>> {
     })
 }
 
-// Append a menu item as a line to a file in the config dir.
+/// Append a menu item as a line to a file in the config dir.
 pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
     path().and_then(|dotdir| {
         let path = dotdir.join(filename);
@@ -42,7 +42,7 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
     })
 }
 
-// Add a menu item as the first line in a file in the config dir.
+/// Add a menu item as the first line in a file in the config dir.
 pub fn prepend(filename: &str, label: &str, url: &str) -> Result<()> {
     path().and_then(|dotdir| {
         let path = dotdir.join(filename);
@@ -75,8 +75,8 @@ pub fn prepend(filename: &str, label: &str, url: &str) -> Result<()> {
     })
 }
 
-// PathBuf to expanded config dir if it exists.
-// None if the config dir doesn't exist.
+/// PathBuf to expanded config dir if it exists.
+/// None if the config dir doesn't exist.
 pub fn path() -> Result<std::path::PathBuf> {
     let homevar = std::env::var("HOME");
     if homevar.is_err() {

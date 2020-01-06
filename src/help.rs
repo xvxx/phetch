@@ -1,5 +1,6 @@
 use crate::{bookmarks, history};
 
+/// Find a help file/page. If found, gives the raw Gophermap.
 pub fn lookup(name: &str) -> Option<String> {
     Some(match name {
         "" | "/" | "home" | "home/" => format!("{}{}", HEADER, START),
@@ -21,7 +22,7 @@ pub fn lookup(name: &str) -> Option<String> {
     })
 }
 
-pub const HEADER: &str = "
+const HEADER: &str = "
 i
 i      /         /         /
 i ___ (___  ___ (___  ___ (___
@@ -31,7 +32,7 @@ i|
 i
 ";
 
-pub const START: &str = "
+const START: &str = "
 i            ~ * ~
 i
 7search gopher	/v2/vs	gopher.floodgap.com
@@ -47,7 +48,7 @@ i
 i
 ";
 
-pub const HELP: &str = "
+const HELP: &str = "
 i      ** help topics **
 i
 1keyboard shortcuts	/help/keys	phetch
@@ -64,7 +65,7 @@ i
 i
 ";
 
-pub const KEYS: &str = "
+const KEYS: &str = "
 i   ** keyboard shortcuts **
 i
 ileft       back in history
@@ -101,7 +102,7 @@ iwork with the ctrl key.
 i
 ";
 
-pub const NAV: &str = "
+const NAV: &str = "
 i    ** menu navigation **
 i
 ithere are three ways to
@@ -137,7 +138,7 @@ ior ctrl-p/n to cycle matches.
 i
 ";
 
-pub const BOOKMARKS: &str = "
+const BOOKMARKS: &str = "
 i       ** bookmarks **
 i
 iphetch has two ways to save
@@ -158,7 +159,7 @@ i- `pbcopy` on macos
 i- `xclip -sel clip` on linux
 i";
 
-pub const HISTORY: &str = "
+const HISTORY: &str = "
 i        ** history **
 i
 iif you create a history.gph
@@ -177,7 +178,7 @@ ifile directly, or share it
 iwith your friends!
 ";
 
-pub const TYPES: &str = "
+const TYPES: &str = "
 i     ** gopher types **
 i
 iphetch supports these links:
@@ -208,7 +209,7 @@ TTelnet3270	/help/types	phetch
 i
 ";
 
-pub const ABOUT: &str = "
+const ABOUT: &str = "
 i     ~ version: v{version} ~
 i
 ispecial thanks to:
