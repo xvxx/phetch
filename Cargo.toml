@@ -15,7 +15,7 @@ exclude = [
 
 [features]
 tls = []
-default =[]
+default =["tls"]
 
 [profile.release]
 lto = true
