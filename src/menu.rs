@@ -13,6 +13,7 @@ pub struct Menu {
     pub link: usize,          // selected link
     pub scroll: usize,        // scrolling offset
     pub searching: bool,      // search mode?
+    pub tls: bool,            // retrieved via tls?
     pub size: (usize, usize), // cols, rows
     pub wide: bool,           // in wide mode?
 }
@@ -39,6 +40,10 @@ impl fmt::Display for Menu {
 }
 
 impl View for Menu {
+    fn is_tls(&self) -> bool {
+        self.tls
+    }
+
     fn raw(&self) -> String {
         self.raw.to_string()
     }
@@ -61,8 +66,10 @@ impl View for Menu {
 }
 
 impl Menu {
-    pub fn from(url: String, response: String) -> Menu {
-        Self::parse(url, response)
+    pub fn from(url: String, response: String, tls: bool) -> Menu {
+        let mut menu = Self::parse(url, response);
+        menu.tls = tls;
+        menu
     }
 
     fn cols(&self) -> usize {
@@ -788,6 +795,7 @@ impl Menu {
             scroll: 0,
             searching: false,
             size: (0, 0),
+            tls: false,
             wide: false,
         }
     }

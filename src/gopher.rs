@@ -17,6 +17,13 @@ impl<T: Read + Write> ReadWrite for T {}
 /// Wrapper for TLS and regular TCP streams.
 pub struct Stream {
     io: Box<dyn ReadWrite>,
+    tls: bool,
+}
+
+impl Stream {
+    fn is_tls(&self) -> bool {
+        self.tls
+    }
 }
 
 impl Read for Stream {
@@ -40,23 +47,25 @@ impl Write for Stream {
 pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
 pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
-/// Fetches a gopher URL and returns a raw Gopher response.
-pub fn fetch_url(url: &str, try_tls: bool) -> Result<String> {
+/// Fetches a gopher URL and returns a tuple of:
+///   (did tls work?, raw Gopher response)
+pub fn fetch_url(url: &str, try_tls: bool) -> Result<(bool, String)> {
     let (_, host, port, sel) = parse_url(url);
     fetch(host, port, sel, try_tls)
 }
 
-/// Fetches a gopher URL by its component parts and returns a raw
-/// Gopher response.
-pub fn fetch(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<String> {
+/// Fetches a gopher URL by its component parts and returns a tuple of:
+///   (did tls work?, raw Gopher response)
+pub fn fetch(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<(bool, String)> {
     let mut stream = request(host, port, selector, try_tls)?;
     let mut body = String::new();
     stream.read_to_string(&mut body)?;
-    Ok(body)
+    Ok((stream.is_tls(), body))
 }
 
 /// Downloads a binary to disk. Allows canceling with Ctrl-c.
-/// Returns the path it was saved to and the size in bytes.
+/// Returns a tuple of:
+///   (path it was saved to, the size in bytes)
 pub fn download_url(url: &str, try_tls: bool) -> Result<(String, usize)> {
     let (_, host, port, sel) = parse_url(url);
     let filename = sel
@@ -110,6 +119,7 @@ pub fn request(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<
                 stream.write(format!("{}\r\n", selector).as_ref())?;
                 return Ok(Stream {
                     io: Box::new(stream),
+                    tls: true,
                 });
             }
         }
@@ -119,6 +129,7 @@ pub fn request(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<
     stream.write(format!("{}\r\n", selector).as_ref())?;
     Ok(Stream {
         io: Box::new(stream),
+        tls: false,
     })
 }
 

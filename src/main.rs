@@ -77,7 +77,7 @@ Once you've launched phetch, use `ctrl-h` to view the on-line help."
 
 fn print_raw(url: &str, try_tls: bool) {
     match gopher::fetch_url(url, try_tls) {
-        Ok(response) => println!("{}", response),
+        Ok((_, response)) => println!("{}", response),
         Err(e) => {
             eprintln!("{}", e);
             exit(0)

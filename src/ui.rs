@@ -171,15 +171,15 @@ impl UI {
         let thread_url = url.to_string();
         let try_tls = self.tls;
         // don't spin on first ever request
-        let res = if self.views.is_empty() {
+        let (tls, res) = if self.views.is_empty() {
             gopher::fetch_url(&thread_url, try_tls)?
         } else {
             self.spinner("", move || gopher::fetch_url(&thread_url, try_tls))??
         };
         let (typ, _, _, _) = gopher::parse_url(&url);
         match typ {
-            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res))),
-            Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res))),
+            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res, tls))),
+            Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res, tls))),
             _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
     }
@@ -190,7 +190,7 @@ impl UI {
             &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
         ) {
-            Ok(Box::new(Menu::from(url.to_string(), source)))
+            Ok(Box::new(Menu::from(url.to_string(), source, false)))
         } else {
             Err(error!("phetch URL not found: {}", url))
         }
@@ -467,7 +467,7 @@ impl UI {
                     if let Some(page) = self.views.get(self.focused) {
                         let url = page.url();
                         let raw = page.raw();
-                        let mut text = Text::from(url, raw);
+                        let mut text = Text::from(url, raw, page.is_tls());
                         text.wide = true;
                         self.add_page(Box::new(text));
                     }
