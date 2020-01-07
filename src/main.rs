@@ -109,7 +109,7 @@ fn print_usage() {
     print_version();
     println!(
         "
-Usage: 
+Usage:
 
 \tphetch [options]		launch phetch in interactive mode
 \tphetch [options] [url]		open gopher url in interactive mode
@@ -122,8 +122,8 @@ Options:
 	-l, --local			connect to 127.0.0.1:7070
 
 	-h, --help			show this screen
-	-v, --version			show phetch version
-    
+	-v, --version		show phetch version
+
 Once you've launched phetch, use `ctrl-h` to view the on-line help. "
     );
 }
