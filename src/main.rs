@@ -50,10 +50,12 @@ fn run() -> i32 {
             }
             arg => {
                 if arg.starts_with('-') {
-                    eprintln!("unknown flag: {}", url);
+                    print_version();
+                    eprintln!("unknown flag: {}", arg);
                     return 1;
                 } else if got_url {
-                    eprintln!("unknown argument: {}", url);
+                    print_version();
+                    eprintln!("unknown argument: {}", arg);
                     return 1;
                 } else {
                     got_url = true;
@@ -96,22 +98,33 @@ fn run() -> i32 {
 }
 
 fn print_version() {
-    println!("phetch v{}", phetch::VERSION);
+    println!(
+        "phetch - quick lil gopher client (v{version} - {built})",
+        built = phetch::BUILD_DATE,
+        version = phetch::VERSION
+    );
 }
 
 fn print_usage() {
+    print_version();
     println!(
-        "Usage:
-    phetch                           launch and show start page
-    phetch <gopher-url>              open gopherhole at url
-    phetch -t, --tls <gopher-url>    try to open all pages w/ tls
-    phetch -r, --raw <gopher-url>    print raw gopher response
-    phetch -p, --print <gopher-url>  print rendered gopher response
-    phetch -l, --local               connect to 127.0.0.1:7070
-    phetch -h, --help                show this screen
-    phetch -v, --version             show phetch version
+        "
+Usage: 
 
-Once you've launched phetch, use `ctrl-h` to view the on-line help."
+\tphetch [options]		launch phetch in interactive mode
+\tphetch [options] [url]		open gopher url in interactive mode
+
+Options:
+
+	-t, --tls			try to open all pages w/ tls
+	-r, --raw			print raw gopher response only
+	-p, --print			print rendered gopher response only
+	-l, --local			connect to 127.0.0.1:7070
+
+	-h, --help			show this screen
+	-v, --version			show phetch version
+    
+Once you've launched phetch, use `ctrl-h` to view the on-line help. "
     );
 }
 

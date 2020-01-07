@@ -25,16 +25,23 @@ the gophersphere.
 
 ## usage
 
-    phetch                           launch and show start page
-    phetch <gopher-url>              open gopher url
-    phetch -t, --tls <gopher-url>    try to open all pages w/ tls
-    phetch -r, --raw <gopher-url>    print raw gopher response
-    phetch -p, --print <gopher-url>  print rendered gopher response
-    phetch -l, --local               connect to 127.0.0.1:7070
-    phetch -h, --help                show this screen
-    phetch -v, --version             show phetch version
+    Usage: 
 
-    once you've launched phetch, use `ctrl-h` to view the on-line help.
+        phetch [options]		launch phetch in interactive mode
+        phetch [options] [url]		open gopher url in interactive mode
+
+    Options:
+
+        -t, --tls			try to open all pages w/ tls
+        -r, --raw			print raw gopher response only
+        -p, --print			print rendered gopher response only
+        -l, --local			connect to 127.0.0.1:7070
+
+        -h, --help			show this screen
+        -v, --version			show phetch version
+        
+    Once you've launched phetch, use `ctrl-h` to view the on-line help. 
+
 
 ## installation
 
