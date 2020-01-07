@@ -1,6 +1,13 @@
 use phetch::{gopher, ui::UI};
 use std::process::exit;
 
+#[derive(PartialEq)]
+enum Mode {
+    Run,
+    Print,
+    Raw,
+}
+
 fn main() {
     exit(run())
 }
@@ -8,7 +15,7 @@ fn main() {
 fn run() -> i32 {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let mut url = "gopher://phetch/1/home";
-    let mut praw = false;
+    let mut mode = Mode::Run;
     let mut tls = false;
     let mut iter = args.iter();
     let mut got_url = false;
@@ -24,11 +31,14 @@ fn run() -> i32 {
             }
             "-r" | "--raw" | "-raw" => {
                 if args.len() > 1 {
-                    praw = true;
+                    mode = Mode::Raw;
                 } else {
                     eprintln!("--raw needs gopher-url");
                     return 1;
                 }
+            }
+            "-p" | "--print" | "-print" => {
+                mode = Mode::Print;
             }
             "-l" | "--local" | "-local" => url = "gopher://127.0.0.1:7070",
             "-t" | "--tls" | "-tls" => {
@@ -53,16 +63,35 @@ fn run() -> i32 {
         }
     }
 
-    if praw {
+    if mode == Mode::Raw {
         print_raw(url, tls);
         return 0;
     }
 
     let mut ui = UI::new(tls);
-    if let Err(e) = ui.open(url, url).and_then(|_| ui.run()) {
+    if let Err(e) = ui.open(url, url) {
         eprintln!("{}", e);
         return 1;
     }
+
+    if mode == Mode::Print {
+        return match ui.render() {
+            Ok(screen) => {
+                println!("{}", screen);
+                0
+            }
+            Err(e) => {
+                eprintln!("{}", e);
+                1
+            }
+        };
+    }
+
+    if let Err(e) = ui.run() {
+        eprintln!("{}", e);
+        return 1;
+    }
+
     0
 }
 
@@ -77,6 +106,7 @@ fn print_usage() {
     phetch <gopher-url>              open gopherhole at url
     phetch -t, --tls <gopher-url>    try to open all pages w/ tls
     phetch -r, --raw <gopher-url>    print raw gopher response
+    phetch -p, --print <gopher-url>  print rendered gopher response
     phetch -l, --local               connect to 127.0.0.1:7070
     phetch -h, --help                show this screen
     phetch -v, --version             show phetch version
