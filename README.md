@@ -88,11 +88,13 @@ you can check whether TLS is enabled by visiting the About page:
 
 ## bugs
 
+- [ ] "stream did not contain valid UTF-8"  sdf.org/maps/
+- [ ] ctrl-z (suspend) doesn't work
+- [ ] unknown keypress: \n needs escaping
+- [ ] unknown keypress: [ during status messages
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by
   Nathaniel" weirdness) (kitty only)
 - [ ] gopherpedia 'recent entries' weirdness (also kitty only)
-- [ ] "stream did not contain valid UTF-8"  sdf.org/maps/
-- [ ] ctrl-z (suspend) doesn't work
 - [ ] gopher://alexschroeder.ch/2020-01-02_This_Gopher_Hole/menu
 
 ## v1.0
