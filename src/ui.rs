@@ -13,19 +13,13 @@ use crate::{
 };
 use std::{
     cell::RefCell,
-    io::{self, stdin, stdout, Result, Write},
+    io::{stdin, stdout, Result, Write},
     process::{self, Stdio},
     sync::mpsc,
     thread,
     time::Duration,
 };
-use termion::{
-    color,
-    input::TermRead,
-    raw::{IntoRawMode, RawTerminal},
-    screen::AlternateScreen,
-    terminal_size,
-};
+use termion::{color, input::TermRead, raw::IntoRawMode, screen::AlternateScreen, terminal_size};
 
 pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;
