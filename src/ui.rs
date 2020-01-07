@@ -41,21 +41,34 @@ pub struct UI {
     pub size: (usize, usize), // cols, rows
     status: String,           // status message, if any
     tls: bool,                // tls mode?
-    out: RefCell<AlternateScreen<RawTerminal<io::Stdout>>>,
+    out: RefCell<Box<dyn Write>>,
 }
 
 impl UI {
     pub fn new(tls: bool) -> UI {
+        let mut size = (0, 0);
+        if let Ok((cols, rows)) = terminal_size() {
+            size = (cols as usize, rows as usize);
+        };
+
         UI {
             views: vec![],
             focused: 0,
             dirty: true,
             running: true,
-            size: (0, 0),
+            size,
             status: String::new(),
             tls,
-            out: RefCell::new(AlternateScreen::from(stdout().into_raw_mode().unwrap())),
+            out: RefCell::new(Box::new(stdout())),
         }
+    }
+
+    /// Prepare stdout for writing. Should be used in interactive
+    /// mode, eg inside run()
+    pub fn startup(&mut self) {
+        self.out = RefCell::new(Box::new(AlternateScreen::from(
+            stdout().into_raw_mode().unwrap(),
+        )));
     }
 
     pub fn run(&mut self) -> Result<()> {
@@ -64,7 +77,6 @@ impl UI {
             self.draw()?;
             self.update();
         }
-        self.shutdown();
         Ok(())
     }
 
@@ -203,14 +215,6 @@ impl UI {
     fn rows(&self) -> u16 {
         self.size.1 as u16
     }
-
-    fn startup(&mut self) {
-        if let Ok((cols, rows)) = terminal_size() {
-            self.term_size(cols as usize, rows as usize);
-        }
-    }
-
-    fn shutdown(&self) {}
 
     fn term_size(&mut self, cols: usize, rows: usize) {
         self.size = (cols, rows);
@@ -535,11 +539,10 @@ impl Drop for UI {
         let mut out = self.out.borrow_mut();
         write!(
             out,
-            "{}{}{}{}",
+            "{}{}{}",
             color::Fg(color::Reset),
             color::Bg(color::Reset),
             termion::cursor::Show,
-            termion::clear::All,
         );
         out.flush();
     }
