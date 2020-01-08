@@ -49,18 +49,18 @@ and *Ctrl-h* are synonyms.
 *q*
 	Quit *phetch*.
 
-*←*, *left arrow*
+*left arrow*
 	Go back in history.
-*→*, *right arrow*
+*right arrow*
 	Go forward in history.
-*↑*, *up arrow*, *p*, *k*
+*up arrow*, *p*, *k*
 	Select previous link.
-*↓*, *down arrow*, *n*, *j*
+*down arrow*, *n*, *j*
 	Select next link.
-*PgUp*, *PgDn*
-	Scroll up or down by many lines.
-*-*, *SPACE*
-	Same as *PgUp* and *PgDn*.
+*PgUp*, *-*
+	Scroll up by many lines.
+*PgDn*, *SPACE*
+	Scroll down by many lines.
 
 *Number key*
 	Open/select link.
@@ -84,7 +84,7 @@ and *Ctrl-h* are synonyms.
 *s*
 	Save bookmark.
 *a*
-	Show history.
+	Show history. (Mnemonic: *All* pages/history)
 
 *r*
 	View raw source.
@@ -107,8 +107,8 @@ Number keys
 Incremental search
 	Press *f* or */* to activate search mode, then just start
 	typing. Phetch will look for the first case-insensitive match
-	and try to select it. Use arrow keys or *p*/*n* to cycle
-	matches.
+	and try to select it. Use arrow keys or *Ctrl-p*/*Ctrl-n* to cycle
+	through matches.
 
 # BOOKMARKS
 
@@ -134,8 +134,8 @@ If you create a _history.gph_ file in _~/.config/phetch/_, each gopher
 URL you open will be stored there.
 
 New URLs are appended to the bottom, but loaded in reverse order, so
-you'll see the most recently visited pages first when you press the
-*a* key.
+you'll see all the most recently visited pages first when you press 
+the *a* key.
 
 Feel free to edit your history file directly, or share it with your
 friends!

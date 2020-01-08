@@ -71,29 +71,29 @@ Go to builtin help page.
 Quit \fBphetch\fR.
 .P
 .RE
-\fB←\fR, \fBleft arrow\fR
+\fBleft arrow\fR
 .RS 4
 Go back in history.
 .RE
-\fB→\fR, \fBright arrow\fR
+\fBright arrow\fR
 .RS 4
 Go forward in history.
 .RE
-\fB↑\fR, \fBup arrow\fR, \fBp\fR, \fBk\fR
+\fBup arrow\fR, \fBp\fR, \fBk\fR
 .RS 4
 Select previous link.
 .RE
-\fB↓\fR, \fBdown arrow\fR, \fBn\fR, \fBj\fR
+\fBdown arrow\fR, \fBn\fR, \fBj\fR
 .RS 4
 Select next link.
 .RE
-\fBPgUp\fR, \fBPgDn\fR
+\fBPgUp\fR, \fB-\fR
 .RS 4
-Scroll up or down by many lines.
+Scroll up by many lines.
 .RE
-\fB-\fR, \fBSPACE\fR
+\fBPgDn\fR, \fBSPACE\fR
 .RS 4
-Same as \fBPgUp\fR and \fBPgDn\fR.
+Scroll down by many lines.
 .P
 .RE
 \fBNumber key\fR
@@ -137,7 +137,7 @@ Save bookmark.
 .RE
 \fBa\fR
 .RS 4
-Show history.
+Show history. (Mnemonic: \fBAll\fR pages/history)
 .P
 .RE
 \fBr\fR
@@ -170,8 +170,8 @@ Incremental search
 .RS 4
 Press \fBf\fR or \fB/\fR to activate search mode, then just start
 typing. Phetch will look for the first case-insensitive match
-and try to select it. Use arrow keys or \fBp\fR/\fBn\fR to cycle
-matches.
+and try to select it. Use arrow keys or \fBCtrl-p\fR/\fBCtrl-n\fR to cycle
+through matches.
 .P
 .RE
 .SH BOOKMARKS
@@ -204,8 +204,8 @@ If you create a \fIhistory.gph\fR file in \fI~/.config/phetch/\fR, each gopher
 URL you open will be stored there.
 .P
 New URLs are appended to the bottom, but loaded in reverse order, so
-you'll see the most recently visited pages first when you press the
-\fBa\fR key.
+you'll see all the most recently visited pages first when you press 
+the \fBa\fR key.
 .P
 Feel free to edit your history file directly, or share it with your
 friends!
