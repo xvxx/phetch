@@ -15,46 +15,44 @@ the gophersphere.
 
 ## features
 
-- <1MB executable for linux and mac
-- technicolor design (based on [GILD](https://github.com/dvkt/gild))
-- no-nonsense keyboard navigation
-- supports gopher searches, text and menu pages, and downloads
-- save your favorite gopherholes with bookmarks
-- opt-in history
-- secure gopher support (TLS)
+- <1MB executable for Linux and Mac
+- Technicolor design (based on [GILD](https://github.com/dvkt/gild))
+- No-nonsense keyboard navigation
+- Supports Gopher searches, text and menu pages, and downloads
+- Save your favorite Gopher sites with bookmarks
+- Opt-in history tracking
+- Secure Gopher support (TLS)
 
 ## usage
 
-    Usage: 
-
-        phetch [options]          launch phetch in interactive mode
-        phetch [options] [url]    open gopher url in interactive mode
+        phetch [options]          Launch phetch in interactive mode
+        phetch [options] [url]    Open Gopher URL in interactive mode
 
     Options:
 
-        -t, --tls                 try to open all pages w/ tls
-        -r, --raw                 print raw gopher response only
-        -p, --print               print rendered gopher response only
-        -l, --local               connect to 127.0.0.1:7070
+        -t, --tls                 Try to open all pages w/ TLS
+        -r, --raw                 Print raw Gopher response only
+        -p, --print               Print rendered Gopher response only
+        -l, --local               Connect to 127.0.0.1:7070
       
-        -h, --help                show this screen
-        -v, --version             show phetch version
+        -h, --help                Show this screen
+        -v, --version             Show phetch version
         
     Once you've launched phetch, use `ctrl-h` to view the on-line help. 
 
 
 ## installation
 
-binaries for linux, mac, and raspberry pi are available
+Binaries for linux, mac, and raspberry pi are available
 at https://github.com/dvkt/phetch/releases:
 
 - [phetch-v0.1.11-linux-x86_64.tgz][0]
 - [phetch-v0.1.11-linux-armv7.tgz (RPi)][1]
 - [phetch-v0.1.11-macos.zip][2]
 
-just unzip/untar the `phetch` program into your $PATH and get going!
+Just unzip/untar the `phetch` program into your $PATH and get going!
 
-you can also build and install from source:
+You can also build and install from source:
 
     git clone https://github.com/dvkt/phetch
     cd phetch
@@ -62,7 +60,7 @@ you can also build and install from source:
 
 ## updates
 
-to check for new versions of `phetch`, use the on-line help system in
+To check for new versions of `phetch`, use the on-line help system in
 the app (`ctrl-h`) or visit:
 
     gopher://phkt.io/1/phetch/latest
@@ -71,19 +69,19 @@ the app (`ctrl-h`) or visit:
 
     cargo run -- <gopher-url>
 
-*pro-tip:* run a local gopher server on `127.0.0.1:7070` and start
+💡 *pro-tip:* Run a local gopher server on `127.0.0.1:7070` and start
 phetch with `-l` or `--local` to quickly connect to it.
 
-to build with TLS support on **linux**, you need `openssl` and
+To build with TLS support on **Linux**, you need `openssl` and
 `pkg-config`:
 
     sudo apt install -y pkg-config libssl-dev
 
-to build without TLS support, build with the `no-tls` feature:
+To build without TLS support, build with the `no-tls` feature:
 
     cargo build --features disable-tls
 
-you can check whether TLS is enabled by visiting the About page:
+You can check whether TLS is enabled by visiting the About page:
 
     cargo run --features disable-tls -- gopher://phetch/about
 
