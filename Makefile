@@ -1,14 +1,22 @@
 # Simple, stupid makefile to make phetch
 
+PREFIX ?= /usr/local
+_INSTDIR = $(DESTDIR)$(PREFIX)
+BINDIR ?= $(_INSTDIR)/bin
+MANDIR ?= $(_INSTDIR)/share/man
+
 PHETCH_RELEASE = target/release/phetch
 PHETCH_DEBUG = target/debug/phetch
 
 RSFILES = $(wildcard src/*.rs src/**/*.rs)
 
-.PHONY: release debug clean
+.PHONY: all release debug clean install manual scdoc
 
 # Default target
-release: manual $(PHETCH_RELEASE)
+all: release manual
+
+# Release build for distribution
+release: $(PHETCH_RELEASE)
 
 # Binary with debugging info
 debug: $(PHETCH_DEBUG)
@@ -24,7 +32,17 @@ $(PHETCH_RELEASE): $(RSFILES)
 
 # Build the debug version
 $(PHETCH_DEBUG): $(RSFILES)
-	cargo build 
+	cargo build
+
+# Install phetch and its manual.
+install: all
+	mkdir -p $(BINDIR) $(MANDIR)/man1
+	install -m755 $(PHETCH_RELEASE) $(BINDIR)/phetch
+	install -m644 doc/phetch.1 $(MANDIR)/man1/phetch.1
+
+# Undo
+uninstall:
+	rm -f $(BINDIR)/phetch $(MANDIR)/man1/phetch.1
 
 # Build manual
 manual: doc/phetch.1
