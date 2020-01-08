@@ -54,6 +54,12 @@ at https://github.com/dvkt/phetch/releases:
 
 just unzip/untar the `phetch` program into your $PATH and get going!
 
+you can also build and install from source:
+
+    git clone https://github.com/dvkt/phetch
+    cd phetch
+    env PREFIX=/usr/local make install
+
 ## updates
 
 to check for new versions of `phetch`, use the on-line help system in
