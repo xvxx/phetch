@@ -111,20 +111,20 @@ fn print_usage() {
         "
 Usage: 
 
-        phetch [options]          launch phetch in interactive mode
-        phetch [options] [url]    open gopher url in interactive mode
+    phetch [options]          Launch phetch in interactive mode
+    phetch [options] [url]    Open Gopher URL in interactive mode
 
-    Options:
+Options:
 
-        -t, --tls                 try to open all pages w/ tls
-        -r, --raw                 print raw gopher response only
-        -p, --print               print rendered gopher response only
-        -l, --local               connect to 127.0.0.1:7070
-      
-        -h, --help                show this screen
-        -v, --version             show phetch version
-        
-    Once you've launched phetch, use `ctrl-h` to view the on-line help. "
+    -t, --tls                 Try to open all pages w/ TLS
+    -r, --raw                 Print raw Gopher response only
+    -p, --print               Print rendered Gopher response only
+    -l, --local               Connect to 127.0.0.1:7070
+
+    -h, --help                Show this screen
+    -v, --version             Show phetch version
+
+Once you've launched phetch, use `ctrl-h` to view the on-line help."
     );
 }
 
