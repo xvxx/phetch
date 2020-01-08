@@ -69,7 +69,7 @@ the app (`ctrl-h`) or visit:
 
     cargo run -- <gopher-url>
 
-💡 *pro-tip:* Run a local gopher server on `127.0.0.1:7070` and start
+*Pro-tip:* Run a local gopher server on `127.0.0.1:7070` and start
 phetch with `-l` or `--local` to quickly connect to it.
 
 To build with TLS support on **Linux**, you need `openssl` and
