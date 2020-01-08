@@ -5,7 +5,7 @@
 |__/ |  / |__  |__  |__  |  /
 |
 --> <p align="center"> <img src="./img/logo.png"> <br>
-<a href="https://github.com/dvkt/phetch/releases">
+<a href="https://git.io/JveQo">
 <img src="https://img.shields.io/github/v/release/dvkt/phetch?include_prereleases">
 </a>
 </p>
