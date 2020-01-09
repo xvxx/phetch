@@ -727,7 +727,7 @@ impl Menu {
 
                 let mut name = String::from("");
                 if !parts[0].is_empty() {
-                    name.push_str(&parts[0][1..]);
+                    name.push_str(&parts[0][1..].trim_end_matches('\r'));
                 }
                 if name.len() > longest {
                     longest = name.len();
