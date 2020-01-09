@@ -43,8 +43,12 @@ the gophersphere.
 
 ## installation
 
-Binaries for linux, mac, and raspberry pi are available
-at https://github.com/dvkt/phetch/releases:
+On macOS you can install with [Homebrew](https://brew.sh/):
+
+    brew install dvkt/code/phetch
+
+Binaries for Linux, Raspberry Pi, and Mac are available at 
+https://github.com/dvkt/phetch/releases:
 
 - [phetch-v0.1.12-linux-x86_64.tgz][0]
 - [phetch-v0.1.12-linux-armv7.tgz (RPi)][1]
