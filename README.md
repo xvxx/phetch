@@ -115,7 +115,6 @@ You can check whether TLS is enabled by visiting the About page:
 
 - [ ] Changelog generation (for gopher and github)
 - [ ] GIF screencast
-- [ ] man page (small one)
 
 ## future features
 
