@@ -1,4 +1,4 @@
-use crate::config;
+use crate::phetchdir;
 use std::io::{Read, Result};
 
 // Bookmarks only work if you've created a ~/.config/phetch/ manually.
@@ -16,12 +16,12 @@ i\r\nimkdir -p {dir}"
 
 /// Get all bookmarks in Gophermap format.
 pub fn as_raw_menu() -> String {
-    let path = config::path();
+    let path = phetchdir::path();
     if let Err(e) = path {
-        return format!(dir_missing_fmt!(), error = e, dir = config::DIR);
+        return format!(dir_missing_fmt!(), error = e, dir = phetchdir::DIR);
     }
 
-    let mut out = format!("i{}{}:\r\ni\r\n", config::DIR, BOOKMARKS_FILE);
+    let mut out = format!("i{}{}:\r\ni\r\n", phetchdir::DIR, BOOKMARKS_FILE);
 
     let path = path.unwrap().join(BOOKMARKS_FILE);
     if !path.exists() {
@@ -29,7 +29,7 @@ pub fn as_raw_menu() -> String {
         return out;
     }
 
-    config::load(BOOKMARKS_FILE)
+    phetchdir::load(BOOKMARKS_FILE)
         .and_then(|mut reader| reader.read_to_string(&mut out))
         .map_err(|e| {
             out = format!("3{}", e);
@@ -40,7 +40,7 @@ pub fn as_raw_menu() -> String {
 
 /// Save a single bookmark entry.
 pub fn save(label: &str, url: &str) -> Result<()> {
-    config::append(
+    phetchdir::append(
         BOOKMARKS_FILE,
         label
             .trim_start_matches("gopher://")

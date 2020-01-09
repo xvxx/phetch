@@ -3,11 +3,11 @@
 #[macro_use]
 pub mod utils;
 pub mod bookmarks;
-pub mod config;
 pub mod gopher;
 pub mod help;
 pub mod history;
 pub mod menu;
+pub mod phetchdir;
 pub mod text;
 pub mod ui;
 

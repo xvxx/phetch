@@ -1,4 +1,4 @@
-use crate::config;
+use crate::phetchdir;
 use std::io::{BufRead, Result};
 
 /// History only works if you've created ~/.config/phetch/history.gph manually.
@@ -16,13 +16,13 @@ i\r\nimkdir -p {dir} && touch {file}"
 
 /// Returns history as a Gophermap.
 pub fn as_raw_menu() -> String {
-    let homepath = format!("{}{}", config::DIR, HISTORY_FILE);
-    let path = config::path();
+    let homepath = format!("{}{}", phetchdir::DIR, HISTORY_FILE);
+    let path = phetchdir::path();
     if let Err(error) = path {
         return format!(
             file_missing_fmt!(),
             file = homepath,
-            dir = config::DIR,
+            dir = phetchdir::DIR,
             error = error
         );
     }
@@ -32,13 +32,13 @@ pub fn as_raw_menu() -> String {
         return format!(
             file_missing_fmt!(),
             file = homepath,
-            dir = config::DIR,
+            dir = phetchdir::DIR,
             error = "No history file found."
         );
     }
 
     let mut out = vec![format!("i{}:\r\ni", homepath)];
-    config::load(HISTORY_FILE)
+    phetchdir::load(HISTORY_FILE)
         .and_then(|reader| {
             let mut lines = reader.lines();
             while let Some(Ok(line)) = lines.next() {
@@ -59,9 +59,9 @@ pub fn as_raw_menu() -> String {
 
 /// Save a single history entry if the history file exists.
 pub fn save(label: &str, url: &str) -> Result<()> {
-    if let Err(e) = config::path() {
+    if let Err(e) = phetchdir::path() {
         return Err(error!("History file doesn't exist: {}", e));
     }
 
-    config::append(HISTORY_FILE, label, url)
+    phetchdir::append(HISTORY_FILE, label, url)
 }
