@@ -111,7 +111,8 @@ impl View for Text {
             .take(rows - 1);
 
         for line in iter {
-            if line == ".\r" {
+            // Check for Gopher's weird "end of response" line.
+            if line == ".\r" || line == "." {
                 continue;
             }
             if !self.wide {

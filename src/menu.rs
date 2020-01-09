@@ -715,6 +715,10 @@ impl Menu {
         let mut links = vec![];
         let mut longest = 0;
         for line in raw.split_terminator('\n') {
+            // Check for Gopher's weird "end of response" message.
+            if line == ".\r" || line == "." {
+                continue;
+            }
             if let Some(c) = line.chars().nth(0) {
                 let typ = match Type::from(c) {
                     Some(t) => t,
