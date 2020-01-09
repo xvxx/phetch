@@ -87,11 +87,9 @@ You can check whether TLS is enabled by visiting the About page:
 
 ## screenies
 
-![DOS Archive](./img/dos.png)
-
-![Menu View](./img/menu-view.png)
-
-![Text View](./img/text-view.png)
+|![DOS Archive](./img/dos.png)|![Floodgap](./img/menu-view.png)|
+|:-:|:-:|
+| DOS Archive | Floodgap |
 
 ## todo
 
