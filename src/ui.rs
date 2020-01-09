@@ -345,22 +345,23 @@ impl UI {
     }
 
     /// Prompt user for input and return what was entered, if anything.
-    fn prompt(&self, prompt: &str) -> Option<String> {
+    fn prompt(&self, prompt: &str, value: &str) -> Option<String> {
         let rows = self.rows();
+        let mut input = value.to_string();
 
         let mut out = self.out.borrow_mut();
         write!(
             out,
-            "{}{}{}{}{}",
+            "{}{}{}{}{}{}",
             color::Fg(color::Reset),
             termion::cursor::Goto(1, rows),
             termion::clear::CurrentLine,
             prompt,
+            input,
             termion::cursor::Show,
         );
         out.flush();
 
-        let mut input = String::new();
         for k in stdin().keys() {
             if let Ok(key) = k {
                 match key {
@@ -453,7 +454,7 @@ impl UI {
             Action::Status(s) => self.set_status(s),
             Action::Open(title, url) => self.open(&title, &url)?,
             Action::Prompt(query, fun) => {
-                if let Some(response) = self.prompt(&query) {
+                if let Some(response) = self.prompt(&query, "") {
                     self.process_action(fun(response));
                 }
             }
@@ -473,12 +474,8 @@ impl UI {
                 'a' => self.open("History", "gopher://phetch/1/history")?,
                 'b' => self.open("Bookmarks", "gopher://phetch/1/bookmarks")?,
                 'g' => {
-                    if let Some(url) = self.prompt("Go to URL: ") {
-                        if !url.contains("://") && !url.starts_with("gopher://") {
-                            self.open(&url, &format!("gopher://{}", url))?;
-                        } else {
-                            self.open(&url, &url)?;
-                        }
+                    if let Some(url) = self.prompt("Go to URL: ", "") {
+                        self.open(&url, &url)?;
                     }
                 }
                 'h' => self.open("Help", "gopher://phetch/1/help")?,
@@ -502,8 +499,12 @@ impl UI {
                 }
                 'u' => {
                     if let Some(page) = self.views.get(self.focused) {
-                        let url = page.url();
-                        self.set_status(format!("Current URL: {}", url));
+                        let current_url = page.url();
+                        if let Some(url) = self.prompt("Current URL: ", &current_url) {
+                            if url != current_url {
+                                self.open(&url, &url);
+                            }
+                        }
                     }
                 }
                 'y' => {
