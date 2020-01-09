@@ -13,13 +13,19 @@ use crate::{
 };
 use std::{
     cell::RefCell,
-    io::{stdin, stdout, Result, Write},
+    io::{stdin, stdout, Result, Stdout, Write},
     process::{self, Stdio},
     sync::mpsc,
     thread,
     time::Duration,
 };
-use termion::{color, input::TermRead, raw::IntoRawMode, screen::AlternateScreen, terminal_size};
+use termion::{
+    color,
+    input::TermRead,
+    raw::{IntoRawMode, RawTerminal},
+    screen::AlternateScreen,
+    terminal_size,
+};
 
 pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;
@@ -35,7 +41,7 @@ pub struct UI {
     pub size: (usize, usize), // cols, rows
     status: String,           // status message, if any
     tls: bool,                // tls mode?
-    out: RefCell<Box<dyn Write>>,
+    out: RefCell<AlternateScreen<RawTerminal<Stdout>>>,
 }
 
 impl UI {
@@ -45,6 +51,16 @@ impl UI {
             size = (cols as usize, rows as usize);
         };
 
+        // Store raw terminal but don't enable it yet or switch the
+        // screen. We don't want to stare at a fully blank screen
+        // while waiting for a slow page to load.
+        let out = AlternateScreen::from(
+            stdout()
+                .into_raw_mode()
+                .expect("Failed to initialize raw mode."),
+        );
+        out.suspend_raw_mode();
+
         UI {
             views: vec![],
             focused: 0,
@@ -53,16 +69,15 @@ impl UI {
             size,
             status: String::new(),
             tls,
-            out: RefCell::new(Box::new(stdout())),
+            out: RefCell::new(out),
         }
     }
 
     /// Prepare stdout for writing. Should be used in interactive
     /// mode, eg inside run()
     pub fn startup(&mut self) {
-        self.out = RefCell::new(Box::new(AlternateScreen::from(
-            stdout().into_raw_mode().unwrap(),
-        )));
+        let out = self.out.borrow_mut();
+        out.activate_raw_mode();
     }
 
     pub fn run(&mut self) -> Result<()> {
@@ -118,6 +133,11 @@ impl UI {
             if page.url() == url {
                 return Ok(());
             }
+        }
+
+        // telnet
+        if url.starts_with("telnet://") {
+            return self.telnet(url);
         }
 
         // non-gopher URL
@@ -411,6 +431,23 @@ impl UI {
         } else {
             None
         }
+    }
+
+    /// Opens an interactive telnet session.
+    fn telnet(&mut self, url: &str) -> Result<()> {
+        let (_, host, port, _) = gopher::parse_url(url);
+        let out = self.out.borrow_mut();
+        out.suspend_raw_mode();
+        let mut cmd = process::Command::new("telnet")
+            .arg(host)
+            .arg(port)
+            .stdin(Stdio::inherit())
+            .stdout(Stdio::inherit())
+            .spawn()?;
+        cmd.wait();
+        out.activate_raw_mode();
+        self.dirty = true; // redraw when finished with session
+        Ok(())
     }
 
     fn process_page_input(&mut self) -> Action {

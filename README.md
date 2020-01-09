@@ -93,7 +93,6 @@ You can check whether TLS is enabled by visiting the About page:
 
 ## todo
 
-- [ ] fork+exec telnet: gopher://bitreich.org/1/lawn/bbs
 - [ ] ~/.config/phetch/phetch.conf
 
 ## bugs

@@ -593,7 +593,6 @@ impl Menu {
                     )
                 }
                 Type::Error => Action::Error(line.name.to_string()),
-                Type::Telnet => Action::Error("Telnet support coming soon".into()),
                 t if !t.is_supported() => Action::Error(format!("{:?} not supported", t)),
                 _ => Action::Open(line.name.to_string(), url),
             }
