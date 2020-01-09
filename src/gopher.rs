@@ -62,7 +62,20 @@ pub fn fetch(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<(b
     let mut stream = request(host, port, selector, try_tls)?;
     let mut body = Vec::new();
     stream.read_to_end(&mut body)?;
-    Ok((stream.is_tls(), String::from_utf8_lossy(&body).into()))
+    let out = clean_response(&String::from_utf8_lossy(&body));
+    Ok((stream.is_tls(), out))
+}
+
+/// Removes unprintable characters from Gopher response.
+/// https://en.wikipedia.org/wiki/Control_character#In_Unicode
+fn clean_response(res: &str) -> String {
+    res.chars()
+        .map(|c| match c {
+            '\u{007F}' => '?',
+            _ if c >= '\u{0080}' && c <= '\u{009F}' => '?',
+            c => c,
+        })
+        .collect()
 }
 
 /// Downloads a binary to disk. Allows canceling with Ctrl-c.
