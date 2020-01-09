@@ -377,18 +377,14 @@ impl UI {
                     }
                     Key::Char(c) => input.push(c),
                     Key::Esc | Key::Ctrl('c') => {
-                        if input.is_empty() {
-                            write!(
-                                out,
-                                "{}{}",
-                                termion::clear::CurrentLine,
-                                termion::cursor::Hide
-                            );
-                            out.flush();
-                            return None;
-                        } else {
-                            input.clear();
-                        }
+                        write!(
+                            out,
+                            "{}{}",
+                            termion::clear::CurrentLine,
+                            termion::cursor::Hide
+                        );
+                        out.flush();
+                        return None;
                     }
                     Key::Backspace | Key::Delete => {
                         input.pop();
