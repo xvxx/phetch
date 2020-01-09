@@ -141,22 +141,25 @@ pub fn request(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<
 /// Parses gopher URL into parts.
 /// Returns (Type, host, port, sel)
 pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
-    let url = url.trim_start_matches("gopher://");
+    let mut url = url.trim_start_matches("gopher://");
+    let mut typ = Type::Menu;
+    let mut host;
+    let mut port = "70";
+    let mut sel = "";
 
     // simple URLs, ex: "dog.com"
     if !url.contains(':') && !url.contains('/') {
         return (Type::Menu, url, "70", "");
     }
 
-    // non-gopher URLs, stick everything in selector
-    if url.contains("://") {
+    // telnet urls
+    if url.starts_with("telnet://") {
+        typ = Type::Telnet;
+        url = url.trim_start_matches("telnet://");
+    } else if url.contains("://") {
+        // non-gopher URLs, stick everything in selector
         return (Type::HTML, "", "", url);
     }
-
-    let mut typ = Type::Menu;
-    let mut host;
-    let mut port = "70";
-    let mut sel = "";
 
     // check selector first
     if let Some(idx) = url.find('/') {
@@ -188,11 +191,13 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
     }
 
     // ignore type prefix on selector
-    let mut chars = sel.chars();
-    if let (Some('/'), Some(c), Some('/')) = (chars.nth(0), chars.nth(0), chars.nth(0)) {
-        if let Some(t) = Type::from(c) {
-            typ = t;
-            sel = &sel[2..];
+    if typ != Type::Telnet {
+        let mut chars = sel.chars();
+        if let (Some('/'), Some(c)) = (chars.nth(0), chars.nth(0)) {
+            if let Some(t) = Type::from(c) {
+                typ = t;
+                sel = &sel[2..];
+            }
         }
     }
 
@@ -220,6 +225,7 @@ mod tests {
             "::1",
             "ssh://kiosk@bitreich.org",
             "https://github.com/dvkt/phetch",
+            "telnet://bbs.impakt.net:6502/",
         ];
 
         let (typ, host, port, sel) = parse_url(urls[0]);
@@ -305,5 +311,11 @@ mod tests {
         assert_eq!(host, "");
         assert_eq!(port, "");
         assert_eq!(sel, "https://github.com/dvkt/phetch");
+
+        let (typ, host, port, sel) = parse_url(urls[14]);
+        assert_eq!(typ, Type::Telnet);
+        assert_eq!(host, "bbs.impakt.net");
+        assert_eq!(port, "6502");
+        assert_eq!(sel, "/");
     }
 }

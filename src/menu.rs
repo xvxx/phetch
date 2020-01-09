@@ -149,7 +149,7 @@ impl Menu {
             ($c:expr, $e:expr) => {{
                 out.push_str("\x1b[");
                 out.push_str($c);
-                out.push_str("m");
+                out.push('m');
                 out.push_str(&$e);
                 out.push_str("\x1b[0m");
             }};
@@ -725,6 +725,7 @@ impl Menu {
                 // assemble line info
                 let parts: Vec<&str> = line.split_terminator('\t').collect();
 
+                // first set item description
                 let mut name = String::from("");
                 if !parts[0].is_empty() {
                     name.push_str(&parts[0][1..].trim_end_matches('\r'));
@@ -732,6 +733,7 @@ impl Menu {
                 if name.len() > longest {
                     longest = name.len();
                 }
+
                 // check for URL:<url> syntax
                 if parts.len() > 1 && parts[1].starts_with("URL:") {
                     lines.push(Line {
@@ -747,7 +749,12 @@ impl Menu {
                 }
 
                 // assemble regular, gopher-style URL
-                let mut url = String::from("gopher://");
+                let mut url = if typ == Type::Telnet {
+                    String::from("telnet://")
+                } else {
+                    String::from("gopher://")
+                };
+
                 // host
                 if parts.len() > 2 {
                     url.push_str(parts[2]);
@@ -761,7 +768,7 @@ impl Menu {
                     }
                 }
                 // selector
-                if parts.len() > 1 {
+                if parts.len() > 1 && typ != Type::Telnet {
                     let sel = parts[1].to_string();
                     if !sel.is_empty() {
                         // auto-prepend gopher type to selector
@@ -819,14 +826,16 @@ i---------------------------------------------------------
 1SDF PHLOGOSPHERE (297 phlogs)	/phlogs/	gopher.club	70
 1SDF GOPHERSPACE (1303 ACTIVE users)	/maps/	sdf.org	70
 1Geosphere	Geosphere	earth.rice.edu
+8DJ's place	a	bbs.impakt.net	6502
 i---------------------------------------------------------
 "
         );
-        assert_eq!(menu.lines.len(), 5);
-        assert_eq!(menu.links.len(), 3);
+        assert_eq!(menu.lines.len(), 6);
+        assert_eq!(menu.links.len(), 4);
         assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
         assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
         assert_eq!(menu.lines[3].url, "gopher://earth.rice.edu/1Geosphere");
+        assert_eq!(menu.lines[4].url, "telnet://bbs.impakt.net:6502");
     }
 
     #[test]
