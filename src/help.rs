@@ -226,16 +226,19 @@ hphetch's webpage	URL:https://github.com/dvkt/phetch
 i
 i            ~ * ~
 i
-ispecial thanks to:
+i        special thanks
 i
-ikseistrup - major help with
-i            design & testing
+ikseistrup: 
+i    major design, testing,
+i    documentation help
 i
-i  antirez - introduced me to
-i            the world of gopher
+iantirez: 
+i    added gopher to redis
+i    and opened the door
 i
-i    lartu - inspired me to
-i            add some \x1b[95mcolor
+ilartu: 
+i    inspired me to add some
+i    \x1b[95mcolor\x1b[0m
 i
 i            ~ * ~
 i
