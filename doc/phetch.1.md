@@ -75,7 +75,7 @@ and *Ctrl-h* are synonyms.
 *g*
 	Go to Gopher URL.
 *u*
-	Show Gopher URL.
+	Edit URL.
 *y*
 	Copy URL.
 

@@ -93,7 +93,7 @@ ip or k     select prev link
 in or j     select next link
 i
 ig          go to gopher url
-iu          show gopher url
+iu          edit url
 iy          copy url
 i
 ib          show bookmarks
