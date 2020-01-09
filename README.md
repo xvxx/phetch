@@ -100,7 +100,6 @@ You can check whether TLS is enabled by visiting the About page:
 
 ## bugs
 
-- [ ] "stream did not contain valid UTF-8"  sdf.org/maps/
 - [ ] ctrl-z (suspend) doesn't work
 - [ ] unknown keypress: \n needs escaping
 - [ ] unknown keypress: [ during status messages

@@ -60,9 +60,9 @@ pub fn fetch_url(url: &str, try_tls: bool) -> Result<(bool, String)> {
 ///   (did tls work?, raw Gopher response)
 pub fn fetch(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<(bool, String)> {
     let mut stream = request(host, port, selector, try_tls)?;
-    let mut body = String::new();
-    stream.read_to_string(&mut body)?;
-    Ok((stream.is_tls(), body))
+    let mut body = Vec::new();
+    stream.read_to_end(&mut body)?;
+    Ok((stream.is_tls(), String::from_utf8_lossy(&body).into()))
 }
 
 /// Downloads a binary to disk. Allows canceling with Ctrl-c.
