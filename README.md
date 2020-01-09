@@ -97,7 +97,6 @@ You can check whether TLS is enabled by visiting the About page:
 
 ## bugs
 
-- [ ] ctrl-z (suspend) doesn't work
 - [ ] unknown keypress: \n needs escaping
 - [ ] unknown keypress: [ during status messages
 - [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by

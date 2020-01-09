@@ -466,6 +466,17 @@ impl UI {
         Action::Error("No Gopher page loaded.".into())
     }
 
+    /// Ctrl-Z: Suspend Unix process w/ SIGTSTP.
+    fn suspend(&mut self) {
+        let mut out = self.out.borrow_mut();
+        write!(out, "{}", termion::screen::ToMainScreen);
+        out.flush();
+        unsafe { libc::raise(libc::SIGTSTP) };
+        write!(out, "{}", termion::screen::ToAlternateScreen);
+        out.flush();
+        self.dirty = true;
+    }
+
     fn process_action(&mut self, action: Action) -> Result<()> {
         match action {
             Action::List(actions) => {
@@ -476,6 +487,7 @@ impl UI {
             Action::Keypress(Key::Ctrl('c')) => {
                 self.status = "\x1b[90m(Use q to quit)\x1b[0m".into()
             }
+            Action::Keypress(Key::Ctrl('z')) => self.suspend(),
             Action::Keypress(Key::Esc) => {}
             Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
