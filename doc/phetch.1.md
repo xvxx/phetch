@@ -11,13 +11,13 @@ phetch - quick lil gopher client
 # OPTIONS
 
 *-l*, *--local*
-	Connect to the local gopher server at URL _127.0.0.1:7070_.
+	Connect to the local Gopher server at URL _127.0.0.1:7070_.
 
 *-p* _URL_, *--print* _URL_
-	Print a rendered gopher server response of _URL_ and exit.
+	Print a rendered Gopher server response of _URL_ and exit.
 
 *-r* _URL_, *--raw* _URL_
-	Print the raw gopher server response of _URL_ and exit.
+	Print the raw Gopher server response of _URL_ and exit.
 
 *-t*, *--tls*
 	Attempt to fetch all pages over TLS.
@@ -30,7 +30,7 @@ phetch - quick lil gopher client
 
 # NOTES
 
-When given a _URL_, *phetch* will show the requested gopher page and
+When given a _URL_, *phetch* will show the requested Gopher page and
 enter interactive mode.
 
 Without a _URL_, *phetch* will show a builtin dashboard with easy
@@ -73,9 +73,9 @@ and *Ctrl-h* are synonyms.
 	Find link in page.
 
 *g*
-	Go to gopher URL.
+	Go to Gopher URL.
 *u*
-	Show gopher URL.
+	Show Gopher URL.
 *y*
 	Copy URL.
 
@@ -130,7 +130,7 @@ on Linux.
 
 # HISTORY
 
-If you create a _history.gph_ file in _~/.config/phetch/_, each gopher
+If you create a _history.gph_ file in _~/.config/phetch/_, each Gopher
 URL you open will be stored there.
 
 New URLs are appended to the bottom, but loaded in reverse order, so
@@ -144,7 +144,7 @@ friends!
 
 Phetch is maintained by dvkt, and released under the MIT license.
 
-Phetch's gopher hole:
+Phetch's Gopher hole:
 	_gopher://phkt.io/1/phetch_
 Phetch's webpage:
 	_https://github.com/dvkt/phetch_
