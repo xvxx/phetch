@@ -95,10 +95,6 @@ You can check whether TLS is enabled by visiting the About page:
 |:-:|:-:|
 | DOS Archive | Floodgap |
 
-## todo
-
-- [ ] ~/.config/phetch/phetch.conf
-
 ## bugs
 
 - [ ] unknown keypress: \n needs escaping
@@ -116,6 +112,7 @@ You can check whether TLS is enabled by visiting the About page:
 
 - [ ] Changelog generation (for gopher and github)
 - [ ] GIF screencast
+- [ ] document ~/.config/phetch/phetch.conf
 
 ## future features
 
