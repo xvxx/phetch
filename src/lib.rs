@@ -3,6 +3,7 @@
 #[macro_use]
 pub mod utils;
 pub mod bookmarks;
+pub mod color;
 pub mod config;
 pub mod gopher;
 pub mod help;

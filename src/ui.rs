@@ -4,7 +4,7 @@ pub use self::action::Action;
 pub use self::view::View;
 
 use crate::{
-    bookmarks,
+    bookmarks, color,
     gopher::{self, Type},
     help, history,
     menu::Menu,
@@ -20,7 +20,6 @@ use std::{
     time::Duration,
 };
 use termion::{
-    color,
     input::TermRead,
     raw::{IntoRawMode, RawTerminal},
     screen::AlternateScreen,
@@ -118,12 +117,7 @@ impl UI {
             self.status.clear();
         }
         if let Err(e) = self.process_action(action) {
-            self.set_status(format!(
-                "{}{}{}",
-                color::Fg(color::LightRed),
-                e,
-                termion::cursor::Hide
-            ));
+            self.set_status(format!("{}{}{}", color::Red, e, termion::cursor::Hide));
         }
     }
 
@@ -258,7 +252,7 @@ impl UI {
                     label,
                     ".".repeat(i),
                     termion::clear::UntilNewline,
-                    color::Fg(color::Reset),
+                    color::Reset,
                     termion::cursor::Show,
                 );
                 stdout().flush();
@@ -304,8 +298,8 @@ impl UI {
             return Some(format!(
                 "{}{}{}{}{}",
                 termion::cursor::Goto(self.cols() - 3, self.rows()),
-                color::Fg(color::Black),
-                color::Bg(color::Green),
+                color::Black,
+                color::GreenBG,
                 "TLS",
                 "\x1b[0m"
             ));
@@ -315,14 +309,13 @@ impl UI {
 
     fn render_status(&self) -> String {
         format!(
-            "{}{}{}{}{}{}{}",
+            "{}{}{}{}{}{}",
             termion::cursor::Hide,
             termion::cursor::Goto(1, self.rows()),
             termion::clear::CurrentLine,
             self.status,
             self.render_tls_status().unwrap_or_else(|| "".into()),
-            color::Fg(color::Reset),
-            color::Bg(color::Reset),
+            color::Reset,
         )
     }
 
@@ -345,7 +338,7 @@ impl UI {
         write!(
             out,
             "{}{}{}{} [Y/n]: {}",
-            color::Fg(color::Reset),
+            color::Reset,
             termion::cursor::Goto(1, rows),
             termion::clear::CurrentLine,
             question,
@@ -373,7 +366,7 @@ impl UI {
         write!(
             out,
             "{}{}{}{}{}{}",
-            color::Fg(color::Reset),
+            color::Reset,
             termion::cursor::Goto(1, rows),
             termion::clear::CurrentLine,
             prompt,
@@ -577,13 +570,7 @@ impl Default for UI {
 impl Drop for UI {
     fn drop(&mut self) {
         let mut out = self.out.borrow_mut();
-        write!(
-            out,
-            "{}{}{}",
-            color::Fg(color::Reset),
-            color::Bg(color::Reset),
-            termion::cursor::Show,
-        );
+        write!(out, "{}{}", color::Reset, termion::cursor::Show,);
         out.flush();
     }
 }
