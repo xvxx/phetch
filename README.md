@@ -99,9 +99,6 @@ You can check whether TLS is enabled by visiting the About page:
 
 - [ ] unknown keypress: \n needs escaping
 - [ ] unknown keypress: [ during status messages
-- [ ] gopher://1436.ninja/1/twit.cgi ("iWritten and performed by
-  Nathaniel" weirdness) (kitty only)
-- [ ] gopherpedia 'recent entries' weirdness (also kitty only)
 - [ ] selectors that don't start with /
     - [ ] gopher://alexschroeder.ch/2020-01-02_This_Gopher_Hole/menu
     - [ ] gopher://gopher.conman.org/0About:Server
