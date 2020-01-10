@@ -1,4 +1,4 @@
-use phetch::{gopher, ui::UI};
+use phetch::{config, gopher, ui::UI};
 use std::process::exit;
 
 #[derive(PartialEq)]
@@ -13,10 +13,20 @@ fn main() {
 }
 
 fn run() -> i32 {
+    let mut cfg = if config::exists() {
+        match config::load() {
+            Err(e) => {
+                eprintln!("Config error: {}", e.into_inner().unwrap());
+                return 1;
+            }
+            Ok(c) => c,
+        }
+    } else {
+        config::default()
+    };
+
     let args: Vec<String> = std::env::args().skip(1).collect();
-    let mut url = "gopher://phetch/1/home";
     let mut mode = Mode::Run;
-    let mut tls = false;
     let mut iter = args.iter();
     let mut got_url = false;
     while let Some(arg) = iter.next() {
@@ -40,9 +50,9 @@ fn run() -> i32 {
             "-p" | "--print" | "-print" => {
                 mode = Mode::Print;
             }
-            "-l" | "--local" | "-local" => url = "gopher://127.0.0.1:7070",
+            "-l" | "--local" | "-local" => cfg.start = "gopher://127.0.0.1:7070".into(),
             "-t" | "--tls" | "-tls" => {
-                tls = true;
+                cfg.tls = true;
                 if cfg!(feature = "disable-tls") {
                     eprintln!("phetch was compiled without TLS support");
                     return 1;
@@ -59,19 +69,19 @@ fn run() -> i32 {
                     return 1;
                 } else {
                     got_url = true;
-                    url = arg;
+                    cfg.start = arg.into();
                 }
             }
         }
     }
 
     if mode == Mode::Raw {
-        print_raw(url, tls);
+        print_raw(&cfg.start, cfg.tls);
         return 0;
     }
 
-    let mut ui = UI::new(tls);
-    if let Err(e) = ui.open(url, url) {
+    let mut ui = UI::new(cfg.tls);
+    if let Err(e) = ui.open(&cfg.start, &cfg.start) {
         eprintln!("{}", e);
         return 1;
     }
