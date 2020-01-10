@@ -1,7 +1,7 @@
 use crate::phetchdir;
 use std::io::{Read, Result};
 
-// Bookmarks only work if you've created a ~/.config/phetch/ manually.
+/// Bookmarks only work if you've created a ~/.config/phetch/ manually.
 const BOOKMARKS_FILE: &str = "bookmarks.gph";
 
 macro_rules! dir_missing_fmt {

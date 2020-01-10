@@ -1,5 +1,13 @@
-use std::{collections::HashMap, io::Result};
+use crate::phetchdir;
+use std::{
+    collections::HashMap,
+    io::{Read, Result},
+};
 
+/// phetch will look for this file on load.
+const CONFIG_FILE: &str = "phetch.conf";
+
+/// Default config. Currently only used internally.
 const DEFAULT_CONFIG: &str = "
 ## config file for the phetch gopher client
 ## gopher://phkt.io/1/phetch
@@ -23,8 +31,27 @@ pub struct Config {
 
 impl Default for Config {
     fn default() -> Self {
-        parse(DEFAULT_CONFIG).expect("Syntax error in internal default config")
+        parse(DEFAULT_CONFIG).expect("Syntax error in config file")
     }
+}
+
+/// Returns the config phetch uses when launched with no flags or
+/// config file modification.
+pub fn default() -> Config {
+    Default::default()
+}
+
+/// Attempt to load config from disk, specifically `CONFIG_FILE`.
+pub fn load() -> Result<Config> {
+    let mut reader = phetchdir::load(CONFIG_FILE)?;
+    let mut file = String::new();
+    reader.read_to_string(&mut file)?;
+    parse(&file)
+}
+
+/// Does the config file exist?
+pub fn exists() -> bool {
+    phetchdir::exists(CONFIG_FILE)
 }
 
 /// Parses a phetch config file into a Config struct.

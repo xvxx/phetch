@@ -8,6 +8,15 @@ use std::{
 /// If you want the full, expanded path, use `path()`.
 pub const DIR: &str = "~/.config/phetch/";
 
+/// Check if a file exists within the phetchdir.
+pub fn exists(filename: &str) -> bool {
+    if let Ok(path) = path() {
+        path.join(filename).exists()
+    } else {
+        false
+    }
+}
+
 /// Loads a file from the phetchdir for reading.
 pub fn load(filename: &str) -> Result<BufReader<File>> {
     path().and_then(|dotdir| {
