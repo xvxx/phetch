@@ -31,15 +31,14 @@ the gophersphere.
 
     Options:
 
-        -t, --tls                 Try to open all pages w/ TLS
-        -T, --tor                 Try to open all pages w/ Tor
+        -s, --tls                 Try to open Gopher URLs securely w/ TLS
+        -o, --tor                 Use local Tor proxy to open all pages
                                   Set the TOR_PROXY env variable to use
                                   an address other than the default :9050
         -r, --raw                 Print raw Gopher response only
         -p, --print               Print rendered Gopher response only
         -l, --local               Connect to 127.0.0.1:7070
 
-        --emoji                   Show TLS/Tor status as emoji.
         -h, --help                Show this screen
         -v, --version             Show phetch version
 

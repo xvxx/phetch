@@ -51,15 +51,14 @@ fn run() -> i32 {
                 mode = Mode::Print;
             }
             "-l" | "--local" | "-local" => cfg.start = "gopher://127.0.0.1:7070".into(),
-            "--emoji" | "-emoji" => cfg.emoji = true,
-            "-t" | "--tls" | "-tls" => {
+            "-s" | "--tls" | "-tls" => {
                 cfg.tls = true;
                 if cfg!(feature = "disable-tls") {
                     eprintln!("phetch was compiled without TLS support");
                     return 1;
                 }
             }
-            "-T" | "--tor" | "-tor" => cfg.tor = true,
+            "-o" | "--tor" | "-tor" => cfg.tor = true,
             arg => {
                 if arg.starts_with('-') {
                     print_version();
@@ -134,8 +133,8 @@ Usage:
 
 Options:
 
-    -t, --tls                 Try to open all pages w/ TLS
-    -T, --tor                 Try to open all pages w/ Tor
+    -s, --tls                 Try to open Gopher URLs securely w/ TLS
+    -o, --tor                 Use local Tor proxy to open all pages
                               Set the TOR_PROXY env variable to use
                               an address other than the default :9050
     -r, --raw                 Print raw Gopher response only
