@@ -276,7 +276,7 @@ impl UI {
             if !self.views.is_empty() && self.focused < self.views.len() {
                 if let Some(page) = self.views.get_mut(self.focused) {
                     page.term_size(cols as usize, rows as usize);
-                    return Ok(page.render());
+                    return Ok(page.render(&self.config));
                 }
             }
             Err(error!(
@@ -559,6 +559,10 @@ impl UI {
                         copy_to_clipboard(&url)?;
                         self.set_status(format!("Copied {} to clipboard.", url));
                     }
+                }
+                'w' => {
+                    self.config.wide = !self.config.wide;
+                    self.dirty = true;
                 }
                 'q' => self.running = false,
                 '\n' => (),

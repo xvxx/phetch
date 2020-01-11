@@ -1,9 +1,9 @@
-use crate::ui;
+use crate::{config::Config, ui};
 use std::fmt;
 
 pub trait View: fmt::Display {
     fn respond(&mut self, key: ui::Key) -> ui::Action;
-    fn render(&self) -> String;
+    fn render(&mut self, cfg: &Config) -> String;
     fn is_tls(&self) -> bool;
     fn is_tor(&self) -> bool;
     fn url(&self) -> String;

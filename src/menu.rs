@@ -1,5 +1,8 @@
-use crate::gopher::{self, Type};
 use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
+use crate::{
+    config::Config,
+    gopher::{self, Type},
+};
 use std::fmt;
 use termion::{clear, cursor};
 
@@ -53,8 +56,8 @@ impl View for Menu {
         self.raw.to_string()
     }
 
-    fn render(&self) -> String {
-        self.render_lines()
+    fn render(&mut self, cfg: &Config) -> String {
+        self.render_lines(cfg)
     }
 
     fn respond(&mut self, key: Key) -> Action {
@@ -149,7 +152,8 @@ impl Menu {
         Some((x as u16, y as u16))
     }
 
-    fn render_lines(&self) -> String {
+    fn render_lines(&mut self, cfg: &Config) -> String {
+        self.wide = cfg.wide;
         let mut out = String::new();
         let iter = self.lines.iter().skip(self.scroll).take(self.rows() - 1);
         let indent = self.indent();
@@ -654,10 +658,6 @@ impl Menu {
                 self.searching = true;
                 self.input.clear();
                 self.redraw_input()
-            }
-            Key::Char('w') | Key::Ctrl('w') => {
-                self.wide = !self.wide;
-                Action::Redraw
             }
             Key::Backspace | Key::Delete => {
                 if self.searching {

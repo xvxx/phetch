@@ -1,4 +1,7 @@
-use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
+use crate::{
+    config::Config,
+    ui::{Action, Key, View, MAX_COLS, SCROLL_LINES},
+};
 use std::fmt;
 use termion::clear;
 
@@ -51,10 +54,6 @@ impl View for Text {
                 self.scroll = self.final_scroll();
                 Action::Redraw
             }
-            Key::Char('w') | Key::Ctrl('w') => {
-                self.wide = !self.wide;
-                Action::Redraw
-            }
             Key::Down | Key::Ctrl('n') | Key::Char('n') | Key::Ctrl('j') | Key::Char('j') => {
                 if self.scroll < self.final_scroll() {
                     self.scroll += 1;
@@ -94,7 +93,8 @@ impl View for Text {
         }
     }
 
-    fn render(&self) -> String {
+    fn render(&mut self, cfg: &Config) -> String {
+        self.wide = cfg.wide;
         let (cols, rows) = self.size;
         let mut out = String::new();
         let longest = if self.longest > MAX_COLS {
