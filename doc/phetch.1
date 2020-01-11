@@ -4,7 +4,7 @@
 .nh
 .ad l
 .\" Begin generated content:
-.TH "PHETCH" "1" "2020-01-09"
+.TH "PHETCH" "1" "2020-01-11"
 .P
 .SH NAME
 .P
@@ -34,6 +34,13 @@ Print the raw Gopher server response of \fIURL\fR and exit.
 \fB-t\fR, \fB--tls\fR
 .RS 4
 Attempt to fetch all pages over TLS.
+.P
+.RE
+\fB-T\fR, \fB--tor\fR
+.RS 4
+Make all connections using a local Tor proxy.
+Set the TOR_PROXY env variable to use an address other than the
+Tor default of 127.0.0.1:9050.
 .P
 .RE
 \fB-h\fR, \fB--help\fR

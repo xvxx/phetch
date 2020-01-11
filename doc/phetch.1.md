@@ -22,6 +22,11 @@ phetch - quick lil gopher client
 *-t*, *--tls*
 	Attempt to fetch all pages over TLS.
 
+*-T*, *--tor*
+	Make all connections using a local Tor proxy.
+	Set the TOR_PROXY env variable to use an address other than the
+	Tor default of 127.0.0.1:9050.
+
 *-h*, *--help*
 	Print a help summary and exit.
 
