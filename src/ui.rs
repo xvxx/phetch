@@ -300,7 +300,7 @@ impl UI {
             return Some(format!(
                 "{}{}",
                 termion::cursor::Goto(self.cols() - 3, self.rows()),
-                if self.config.emoji { "🔒" } else { &status },
+                if self.config.emoji { "🔐" } else { &status },
             ));
         } else if page.is_tor() {
             let status = color!("TOR", Bold, White, MagentaBG);
