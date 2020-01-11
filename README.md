@@ -102,8 +102,6 @@ You can check whether TLS is enabled by visiting the About page:
 
 - [ ] unknown keypress: [ during status messages
 - [ ] new status doesn't replace old (download complete -> copy url)
-- [ ] url selectors that do start with /
-    - [ ] gopher://quux.org/1/devel/gopher/pygopherd
 
 ## v1.0
 

@@ -736,10 +736,15 @@ impl Menu {
                 }
 
                 // check for URL:<url> syntax
-                if parts.len() > 1 && parts[1].starts_with("URL:") {
+                if parts.len() > 1
+                    && (parts[1].starts_with("URL:") || parts[1].starts_with("/URL:"))
+                {
                     lines.push(Line {
                         name,
-                        url: parts[1].trim_start_matches("URL:").to_string(),
+                        url: parts[1]
+                            .trim_start_matches("/")
+                            .trim_start_matches("URL:")
+                            .to_string(),
                         typ,
                         link: links.len(),
                     });
@@ -829,15 +834,17 @@ i---------------------------------------------------------
 1SDF GOPHERSPACE (1303 ACTIVE users)	/maps/	sdf.org	70
 1Geosphere	Geosphere	earth.rice.edu
 8DJ's place	a	bbs.impakt.net	6502
+1git tree	/URL:https://github.com/my/code	(null)	70
 i---------------------------------------------------------
 "
         );
-        assert_eq!(menu.lines.len(), 6);
-        assert_eq!(menu.links.len(), 4);
+        assert_eq!(menu.lines.len(), 7);
+        assert_eq!(menu.links.len(), 5);
         assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
         assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
         assert_eq!(menu.lines[3].url, "gopher://earth.rice.edu/1Geosphere");
         assert_eq!(menu.lines[4].url, "telnet://bbs.impakt.net:6502");
+        assert_eq!(menu.lines[5].url, "https://github.com/my/code");
     }
 
     #[test]
@@ -870,7 +877,8 @@ i	Err	bitreich.org	70
 iBest viewed using:	Err	bitreich.org	70
 1sacc	/scm/sacc	bitreich.org	70
 1clic	/scm/clic	bitreich.org	70
-i	Err	bitreich.org	70"
+i	Err	bitreich.org	70
+"
         );
         menu.term_size(80, 40);
 
