@@ -26,9 +26,6 @@ macro_rules! color {
 ///   println!("{}Error: {}{}", color::Red, msg, color::Reset);
 macro_rules! define_color {
     ($color:ident, $code:literal) => {
-        /// Can be used with `format!`:
-        /// ```
-        /// println!("{}Error: {}{}", color::Red, msg, color::Reset);
         pub struct $color;
         impl fmt::Display for $color {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -36,7 +33,8 @@ macro_rules! define_color {
             }
         }
         impl AsRef<str> for $color {
-            fn as_ref(&self) -> &str {
+            #[inline]
+            fn as_ref(&self) -> &'static str {
                 concat!($code)
             }
         }
