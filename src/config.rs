@@ -18,6 +18,9 @@ start gopher://phetch/1/home
 # Always use TLS mode. (--tls)
 tls no
 
+# Connect using local TOR proxy. (--tor)
+tor no
+
 # Always start in wide mode. (--wide)
 wide no
 ";
@@ -26,6 +29,7 @@ wide no
 pub struct Config {
     pub start: String,
     pub tls: bool,
+    pub tor: bool,
     pub wide: bool,
 }
 
@@ -60,6 +64,7 @@ pub fn parse(text: &str) -> Result<Config> {
     let mut cfg = Config {
         start: String::new(),
         tls: false,
+        tor: false,
         wide: false,
     };
 
@@ -89,6 +94,7 @@ pub fn parse(text: &str) -> Result<Config> {
         match key {
             "start" => cfg.start.push_str(val),
             "tls" => cfg.tls = to_bool(val)?,
+            "tor" => cfg.tor = to_bool(val)?,
             "wide" => cfg.wide = to_bool(val)?,
             _ => return Err(error!("Unknown key on line {}: {}", linenum, key)),
         }
@@ -116,6 +122,7 @@ mod tests {
     fn test_parse_default() {
         let config = parse(DEFAULT_CONFIG).expect("Couldn't parse config");
         assert_eq!(config.tls, false);
+        assert_eq!(config.tor, false);
         assert_eq!(config.wide, false);
         assert_eq!(config.start, "gopher://phetch/1/home");
     }
@@ -148,8 +155,9 @@ mod tests {
 
     #[test]
     fn test_no_or_false() {
-        let cfg = parse("tls false\nwide no").unwrap();
+        let cfg = parse("tls false\nwide no\ntor n").unwrap();
         assert_eq!(cfg.tls, false);
+        assert_eq!(cfg.tor, false);
         assert_eq!(cfg.wide, false);
     }
     #[test]

@@ -14,6 +14,7 @@ pub struct Menu {
     pub scroll: usize,        // scrolling offset
     pub searching: bool,      // search mode?
     pub tls: bool,            // retrieved via tls?
+    pub tor: bool,            // retrieved via tor?
     pub size: (usize, usize), // cols, rows
     pub wide: bool,           // in wide mode?
 }
@@ -44,6 +45,10 @@ impl View for Menu {
         self.tls
     }
 
+    fn is_tor(&self) -> bool {
+        self.tor
+    }
+
     fn raw(&self) -> String {
         self.raw.to_string()
     }
@@ -66,10 +71,12 @@ impl View for Menu {
 }
 
 impl Menu {
-    pub fn from(url: String, response: String, tls: bool) -> Menu {
-        let mut menu = Self::parse(url, response);
-        menu.tls = tls;
-        menu
+    pub fn from(url: String, response: String, tls: bool, tor: bool) -> Menu {
+        Menu {
+            tls,
+            tor,
+            ..Self::parse(url, response)
+        }
     }
 
     fn cols(&self) -> usize {
@@ -797,6 +804,7 @@ impl Menu {
             searching: false,
             size: (0, 0),
             tls: false,
+            tor: false,
             wide: false,
         }
     }

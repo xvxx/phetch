@@ -1,4 +1,5 @@
 use std::{
+    env,
     io::{Read, Result, Write},
     net::TcpStream,
     net::ToSocketAddrs,
@@ -6,6 +7,7 @@ use std::{
     time::Duration,
 };
 use termion::input::TermRead;
+use tor_stream::TorStream;
 
 #[cfg(not(feature = "disable-tls"))]
 use native_tls::TlsConnector;
@@ -51,15 +53,21 @@ pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SE
 
 /// Fetches a gopher URL and returns a tuple of:
 ///   (did tls work?, raw Gopher response)
-pub fn fetch_url(url: &str, try_tls: bool) -> Result<(bool, String)> {
+pub fn fetch_url(url: &str, tls: bool, tor: bool) -> Result<(bool, String)> {
     let (_, host, port, sel) = parse_url(url);
-    fetch(host, port, sel, try_tls)
+    fetch(host, port, sel, tls, tor)
 }
 
 /// Fetches a gopher URL by its component parts and returns a tuple of:
 ///   (did tls work?, raw Gopher response)
-pub fn fetch(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<(bool, String)> {
-    let mut stream = request(host, port, selector, try_tls)?;
+pub fn fetch(
+    host: &str,
+    port: &str,
+    selector: &str,
+    tls: bool,
+    tor: bool,
+) -> Result<(bool, String)> {
+    let mut stream = request(host, port, selector, tls, tor)?;
     let mut body = Vec::new();
     stream.read_to_end(&mut body)?;
     let out = clean_response(&String::from_utf8_lossy(&body));
@@ -81,7 +89,7 @@ fn clean_response(res: &str) -> String {
 /// Downloads a binary to disk. Allows canceling with Ctrl-c.
 /// Returns a tuple of:
 ///   (path it was saved to, the size in bytes)
-pub fn download_url(url: &str, try_tls: bool) -> Result<(String, usize)> {
+pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> {
     let (_, host, port, sel) = parse_url(url);
     let filename = sel
         .split_terminator('/')
@@ -93,7 +101,7 @@ pub fn download_url(url: &str, try_tls: bool) -> Result<(String, usize)> {
     let stdin = termion::async_stdin();
     let mut keys = stdin.keys();
 
-    let mut stream = request(host, port, sel, try_tls)?;
+    let mut stream = request(host, port, sel, tls, tor)?;
     let mut file = std::fs::OpenOptions::new()
         .write(true)
         .create(true)
@@ -119,36 +127,54 @@ pub fn download_url(url: &str, try_tls: bool) -> Result<(String, usize)> {
 /// Make a Gopher request and return a TcpStream ready to be read()'d.
 /// Will attempt a TLS connection first, then retry a regular
 /// connection if it fails.
-pub fn request(host: &str, port: &str, selector: &str, try_tls: bool) -> Result<Stream> {
+pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> Result<Stream> {
     let selector = selector.replace('?', "\t"); // search queries
     let sock = format!("{}:{}", host, port)
         .to_socket_addrs()
         .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))?;
 
     // attempt tls connection
-    #[cfg(not(feature = "disable-tls"))]
-    {
-        if try_tls {
-            if let Ok(connector) = TlsConnector::new() {
-                let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
-                stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-                if let Ok(mut stream) = connector.connect(host, stream) {
-                    stream.write(format!("{}\r\n", selector).as_ref())?;
-                    return Ok(Stream {
-                        io: Box::new(stream),
-                        tls: true,
-                    });
+    if tls {
+        #[cfg(not(feature = "disable-tls"))]
+        {
+            {
+                if let Ok(connector) = TlsConnector::new() {
+                    let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
+                    stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
+                    if let Ok(mut stream) = connector.connect(host, stream) {
+                        stream.write(format!("{}\r\n", selector).as_ref())?;
+                        return Ok(Stream {
+                            io: Box::new(stream),
+                            tls: true,
+                        });
+                    }
                 }
             }
         }
     }
 
-    let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
-    stream.write(format!("{}\r\n", selector).as_ref())?;
-    Ok(Stream {
-        io: Box::new(stream),
-        tls: false,
-    })
+    // tls didn't work, try regular
+    if tor {
+        let proxy = env::var("TOR_PROXY")
+            .unwrap_or("127.0.0.1:9050".into())
+            .to_socket_addrs()?
+            .nth(0)
+            .unwrap();
+        let mut stream = TorStream::connect_with_address(proxy, sock)?;
+        stream.write(format!("{}\r\n", selector).as_ref())?;
+        Ok(Stream {
+            io: Box::new(stream),
+            tls: false,
+        })
+    } else {
+        let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
+        stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
+        stream.write(format!("{}\r\n", selector).as_ref())?;
+        Ok(Stream {
+            io: Box::new(stream),
+            tls: false,
+        })
+    }
 }
 
 /// Parses gopher URL into parts.

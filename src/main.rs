@@ -58,6 +58,7 @@ fn run() -> i32 {
                     return 1;
                 }
             }
+            "-T" | "--tor" | "-tor" => cfg.tor = true,
             arg => {
                 if arg.starts_with('-') {
                     print_version();
@@ -75,13 +76,19 @@ fn run() -> i32 {
         }
     }
 
+    if cfg.tor && cfg.tls {
+        eprintln!("Can't set both --tor and --tls.");
+        return 1;
+    }
+
     if mode == Mode::Raw {
-        print_raw(&cfg.start, cfg.tls);
+        print_raw(&cfg.start, cfg.tls, cfg.tor);
         return 0;
     }
 
-    let mut ui = UI::new(cfg.tls);
-    if let Err(e) = ui.open(&cfg.start, &cfg.start) {
+    let start = cfg.start.clone();
+    let mut ui = UI::new(cfg);
+    if let Err(e) = ui.open(&start, &start) {
         eprintln!("{}", e);
         return 1;
     }
@@ -127,6 +134,9 @@ Usage:
 Options:
 
     -t, --tls                 Try to open all pages w/ TLS
+    -T, --tor                 Try to open all pages w/ Tor
+                              Set the TOR_PROXY env variable to use
+                              an address other than the default :9050
     -r, --raw                 Print raw Gopher response only
     -p, --print               Print rendered Gopher response only
     -l, --local               Connect to 127.0.0.1:7070
@@ -138,8 +148,8 @@ Once you've launched phetch, use `ctrl-h` to view the on-line help."
     );
 }
 
-fn print_raw(url: &str, try_tls: bool) {
-    match gopher::fetch_url(url, try_tls) {
+fn print_raw(url: &str, tls: bool, tor: bool) {
+    match gopher::fetch_url(url, tls, tor) {
         Ok((_, response)) => println!("{}", response),
         Err(e) => {
             eprintln!("{}", e);

@@ -5,6 +5,7 @@ pub use self::view::View;
 
 use crate::{
     bookmarks, color,
+    config::Config,
     gopher::{self, Type},
     help, history,
     menu::Menu,
@@ -39,12 +40,12 @@ pub struct UI {
     running: bool,            // main ui loop running?
     pub size: (usize, usize), // cols, rows
     status: String,           // status message, if any
-    tls: bool,                // tls mode?
+    config: Config,           // user config
     out: RefCell<AlternateScreen<RawTerminal<Stdout>>>,
 }
 
 impl UI {
-    pub fn new(tls: bool) -> UI {
+    pub fn new(config: Config) -> UI {
         let mut size = (0, 0);
         if let Ok((cols, rows)) = terminal_size() {
             size = (cols as usize, rows as usize);
@@ -66,8 +67,8 @@ impl UI {
             dirty: true,
             running: true,
             size,
+            config,
             status: String::new(),
-            tls,
             out: RefCell::new(out),
         }
     }
@@ -163,9 +164,9 @@ impl UI {
 
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
-        let tls = self.tls;
+        let (tls, tor) = (self.config.tls, self.config.tor);
         self.spinner(&format!("Downloading {}", url), move || {
-            gopher::download_url(&url, tls)
+            gopher::download_url(&url, tls, tor)
         })
         .and_then(|res| res)
         .and_then(|(path, bytes)| {
@@ -189,17 +190,17 @@ impl UI {
         thread::spawn(move || history::save(&hname, &hurl));
         // request thread
         let thread_url = url.to_string();
-        let try_tls = self.tls;
+        let (tls, tor) = (self.config.tls, self.config.tor);
         // don't spin on first ever request
         let (tls, res) = if self.views.is_empty() {
-            gopher::fetch_url(&thread_url, try_tls)?
+            gopher::fetch_url(&thread_url, tls, tor)?
         } else {
-            self.spinner("", move || gopher::fetch_url(&thread_url, try_tls))??
+            self.spinner("", move || gopher::fetch_url(&thread_url, tls, tor))??
         };
         let (typ, _, _, _) = gopher::parse_url(&url);
         match typ {
-            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res, tls))),
-            Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res, tls))),
+            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res, tls, tor))),
+            Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res, tls, tor))),
             _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
     }
@@ -210,7 +211,7 @@ impl UI {
             &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
         ) {
-            Ok(Box::new(Menu::from(url.to_string(), source, false)))
+            Ok(Box::new(Menu::from(url.to_string(), source, false, false)))
         } else {
             Err(error!("phetch URL not found: {}", url))
         }
@@ -296,12 +297,15 @@ impl UI {
         let page = self.views.get(self.focused)?;
         if page.is_tls() {
             return Some(format!(
-                "{}{}{}{}{}",
+                "{}{}",
                 termion::cursor::Goto(self.cols() - 3, self.rows()),
-                color::Black,
-                color::GreenBG,
-                "TLS",
-                "\x1b[0m"
+                color!("TLS", Black, GreenBG),
+            ));
+        } else if page.is_tor() {
+            return Some(format!(
+                "{}{}",
+                termion::cursor::Goto(self.cols() - 3, self.rows()),
+                color!("TOR", Bold, White, MagentaBG),
             ));
         }
         None
@@ -521,7 +525,7 @@ impl UI {
                     if let Some(page) = self.views.get(self.focused) {
                         let url = page.url();
                         let raw = page.raw();
-                        let mut text = Text::from(url, raw, page.is_tls());
+                        let mut text = Text::from(url, raw, page.is_tls(), page.is_tor());
                         text.wide = true;
                         self.add_page(Box::new(text));
                     }
@@ -558,12 +562,6 @@ impl UI {
             _ => (),
         }
         Ok(())
-    }
-}
-
-impl Default for UI {
-    fn default() -> Self {
-        UI::new(false)
     }
 }
 

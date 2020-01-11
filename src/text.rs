@@ -10,6 +10,7 @@ pub struct Text {
     longest: usize,       // longest line
     size: (usize, usize), // cols, rows
     pub tls: bool,        // retrieved via tls?
+    pub tor: bool,        // retrieved via tor?
     pub wide: bool,       // in wide mode? turns off margins
 }
 
@@ -22,6 +23,10 @@ impl fmt::Display for Text {
 impl View for Text {
     fn is_tls(&self) -> bool {
         self.tls
+    }
+
+    fn is_tor(&self) -> bool {
+        self.tor
     }
 
     fn url(&self) -> String {
@@ -135,7 +140,7 @@ impl View for Text {
 }
 
 impl Text {
-    pub fn from(url: String, response: String, tls: bool) -> Text {
+    pub fn from(url: String, response: String, tls: bool, tor: bool) -> Text {
         let mut lines = 0;
         let mut longest = 0;
         for line in response.split_terminator('\n') {
@@ -153,6 +158,7 @@ impl Text {
             longest,
             size: (0, 0),
             tls,
+            tor,
             wide: false,
         }
     }
