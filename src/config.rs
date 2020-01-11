@@ -7,7 +7,11 @@ use std::{
 /// phetch will look for this file on load.
 const CONFIG_FILE: &str = "phetch.conf";
 
+/// Default start page.
+const DEFAULT_START: &str = "gopher://phetch/1/home";
+
 /// Default config. Currently only used internally.
+#[allow(dead_code)]
 const DEFAULT_CONFIG: &str = "
 ## config file for the phetch gopher client
 ## gopher://phkt.io/1/phetch
@@ -35,7 +39,12 @@ pub struct Config {
 
 impl Default for Config {
     fn default() -> Self {
-        parse(DEFAULT_CONFIG).expect("Syntax error in config file")
+        Config {
+            start: String::from(DEFAULT_START),
+            tls: false,
+            tor: false,
+            wide: false,
+        }
     }
 }
 
@@ -61,14 +70,9 @@ pub fn exists() -> bool {
 /// Parses a phetch config file into a Config struct.
 pub fn parse(text: &str) -> Result<Config> {
     let mut linenum = 0;
-    let mut cfg = Config {
-        start: String::new(),
-        tls: false,
-        tor: false,
-        wide: false,
-    };
-
+    let mut cfg = default();
     let mut keys: HashMap<&str, bool> = HashMap::new();
+
     for line in text.split_terminator('\n') {
         linenum += 1;
 
