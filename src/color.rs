@@ -1,5 +1,14 @@
 use std::fmt;
 
+/// Shortcut to produce a String of a certain color that resets.
+/// Example:
+///   let s = color!(Red, "Red string");
+macro_rules! color {
+    ($color:ident, $s:expr) => {
+        format!("{}{}{}", color::$color, $s, color::Reset)
+    };
+}
+
 // Create a color:: struct that can be used with format!.
 macro_rules! define_color {
     ($name:ident, $code:literal) => {

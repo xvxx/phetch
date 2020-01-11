@@ -1,5 +1,8 @@
 use crate::gopher::{self, Type};
-use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
+use crate::{
+    color,
+    ui::{Action, Key, View, MAX_COLS, SCROLL_LINES},
+};
 use std::fmt;
 use termion::{clear, cursor};
 
@@ -144,17 +147,6 @@ impl Menu {
 
     fn render_lines(&self) -> String {
         let mut out = String::new();
-
-        macro_rules! push {
-            ($c:expr, $e:expr) => {{
-                out.push_str("\x1b[");
-                out.push_str($c);
-                out.push('m');
-                out.push_str(&$e);
-                out.push_str("\x1b[0m");
-            }};
-        }
-
         let iter = self.lines.iter().skip(self.scroll).take(self.rows() - 1);
         let indent = self.indent();
         let left_margin = " ".repeat(indent);
@@ -186,17 +178,19 @@ impl Menu {
             } else {
                 line.name.to_string()
             };
-            match line.typ {
-                Type::Text => push!("96", name),
-                Type::Menu => push!("94", name),
-                Type::Info => push!("93", name),
-                Type::HTML => push!("92", name),
-                Type::Error => push!("91", name),
-                Type::Telnet => push!("4;97;90", name),
-                typ if typ.is_download() => push!("4;97", name),
-                typ if !typ.is_supported() => push!("107;91", name),
-                _ => push!("0", name),
-            }
+
+            // color the line
+            out.push_str(&match line.typ {
+                Type::Text => color!(White, name),
+                Type::Menu => color!(Blue, name),
+                Type::Info => color!(Yellow, name),
+                Type::HTML => color!(Green, name),
+                Type::Error => color!(Red, name),
+                Type::Telnet => color!(Grey, name),
+                typ if typ.is_download() => color!(Underline, color!(White, name)),
+                typ if !typ.is_supported() => color!(Red, color!(WhiteBG, name)),
+                _ => name,
+            });
 
             // clear rest of line
             out.push_str(&format!("{}", clear::UntilNewline));
