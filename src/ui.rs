@@ -1,6 +1,8 @@
 mod action;
+mod mode;
 mod view;
 pub use self::action::Action;
+pub use self::mode::Mode;
 pub use self::view::View;
 
 use crate::{
@@ -28,22 +30,6 @@ use termion::{
 
 pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;
-
-/// The mode our text UI is in. Run mode is the default while
-/// printing doesn't show the cursor, among other things.
-#[derive(Debug, PartialEq, Copy, Clone)]
-pub enum Mode {
-    Run,
-    Print,
-    NoTTY,
-    Raw,
-}
-
-impl Default for Mode {
-    fn default() -> Self {
-        Mode::Run
-    }
-}
 
 pub const SCROLL_LINES: usize = 15;
 pub const MAX_COLS: usize = 77;
