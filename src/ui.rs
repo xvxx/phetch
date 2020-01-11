@@ -557,6 +557,7 @@ impl UI {
                     }
                 }
                 'q' => self.running = false,
+                '\n' => (),
                 c => return Err(error!("Unknown keypress: {}", c)),
             },
             _ => (),
