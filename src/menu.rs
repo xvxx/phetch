@@ -13,6 +13,7 @@ pub struct Menu {
     pub longest: usize,       // size of the longest line
     pub raw: String,          // raw response
     pub input: String,        // user's inputted value
+    pub cursor: bool,         // show the cursor? usually true
     pub link: usize,          // selected link
     pub scroll: usize,        // scrolling offset
     pub searching: bool,      // search mode?
@@ -154,6 +155,7 @@ impl Menu {
 
     fn render_lines(&mut self, cfg: &Config) -> String {
         self.wide = cfg.wide;
+        self.cursor = cfg.cursor;
         let mut out = String::new();
         let iter = self.lines.iter().skip(self.scroll).take(self.rows() - 1);
         let indent = self.indent();
@@ -165,7 +167,7 @@ impl Menu {
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
-                if line.link == self.link {
+                if line.link == self.link && self.cursor {
                     out.push_str("\x1b[97;1m*\x1b[0m")
                 } else {
                     out.push(' ');
@@ -238,7 +240,7 @@ impl Menu {
     /// Print this string to draw the cursor on screen.
     /// Returns None if no is link selected.
     fn draw_cursor(&self) -> Option<String> {
-        if self.links.is_empty() {
+        if self.links.is_empty() || !self.cursor {
             return None;
         }
         let (x, y) = self.screen_coords(self.link)?;
@@ -806,6 +808,7 @@ impl Menu {
             input: String::new(),
             link: 0,
             scroll: 0,
+            cursor: true,
             searching: false,
             size: (0, 0),
             tls: false,

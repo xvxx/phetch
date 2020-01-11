@@ -39,6 +39,7 @@ pub struct Config {
     pub tor: bool,
     pub wide: bool,
     pub emoji: bool,
+    pub cursor: bool,
 }
 
 impl Default for Config {
@@ -49,6 +50,7 @@ impl Default for Config {
             tor: false,
             wide: false,
             emoji: false,
+            cursor: true,
         }
     }
 }

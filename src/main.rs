@@ -86,6 +86,11 @@ fn run() -> i32 {
         return 0;
     }
 
+    if mode == Mode::Print {
+        cfg.cursor = false;
+        cfg.wide = true;
+    }
+
     let start = cfg.start.clone();
     let mut ui = UI::new(cfg);
     if let Err(e) = ui.open(&start, &start) {
