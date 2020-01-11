@@ -1,12 +1,12 @@
 [package]
 name = "phetch"
 version = "0.1.13-dev"
-authors = ["dvkt <c@dvkt.io>"]
+authors = ["chris west <c@xvxx.io>"]
 license = "MIT"
 edition = "2018"
 description = "quick lil gopher client"
 readme = "README.md"
-repository = "https://github.com/dvkt/phetch"
+repository = "https://github.com/xvxx/phetch"
 keywords = ["gopher", "tui", "terminal", "cli"]
 categories = ["command-line-utilities"]
 exclude = [

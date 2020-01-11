@@ -256,7 +256,7 @@ const ABOUT: &str = "
 i     ~ version: v{version} ~
 i
 1phetch's gopherhole	/phetch	phkt.io
-hphetch's webpage	URL:https://github.com/dvkt/phetch
+hphetch's webpage	URL:https://github.com/xvxx/phetch
 0MIT license	/MIT License	gopherpedia.com
 i
 i            ~ * ~

@@ -191,9 +191,9 @@ emoji no
 
 # ABOUT
 
-*phetch* is maintained by dvkt, and released under the MIT license.
+*phetch* is maintained by chris west, and released under the MIT license.
 
 phetch's Gopher hole:
 	_gopher://phkt.io/1/phetch_
 phetch's webpage:
-	_https://github.com/dvkt/phetch_
+	_https://github.com/xvxx/phetch_

@@ -18,7 +18,7 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const PLATFORM: &str = env!("PLATFORM");
 pub const GIT_REF: &str = env!("GIT_REF");
 pub const BUILD_DATE: &str = env!("BUILD_DATE");
-pub const BUG_URL: &str = "https://github.com/dvkt/phetch/issues/new";
+pub const BUG_URL: &str = "https://github.com/xvxx/phetch/issues/new";
 
 #[cfg(not(feature = "disable-tls"))]
 pub const TLS_SUPPORT: &str = "enabled";

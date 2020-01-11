@@ -266,7 +266,7 @@ mod tests {
             "[2001:2099:dead:beef:0000",
             "::1",
             "ssh://kiosk@bitreich.org",
-            "https://github.com/dvkt/phetch",
+            "https://github.com/xvxx/phetch",
             "telnet://bbs.impakt.net:6502/",
         ];
 
@@ -352,7 +352,7 @@ mod tests {
         assert_eq!(typ, Type::HTML);
         assert_eq!(host, "");
         assert_eq!(port, "");
-        assert_eq!(sel, "https://github.com/dvkt/phetch");
+        assert_eq!(sel, "https://github.com/xvxx/phetch");
 
         let (typ, host, port, sel) = parse_url(urls[14]);
         assert_eq!(typ, Type::Telnet);
