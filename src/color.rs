@@ -4,18 +4,24 @@ use std::fmt;
 /// Example:
 ///   let s = color!(Red, "Red string");
 macro_rules! color {
-    ($color:ident, $s:expr) => {
+    ($color:ident, $s:expr) => {{
+        use crate::color;
         format!("{}{}{}", color::$color, $s, color::Reset)
-    };
+    }};
 }
 
 // Create a color:: struct that can be used with format!.
 macro_rules! define_color {
-    ($name:ident, $code:literal) => {
-        pub struct $name;
-        impl fmt::Display for $name {
+    ($color:ident, $code:literal) => {
+        pub struct $color;
+        impl fmt::Display for $color {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                write!(f, "\x1b[{}m", $code)
+                write!(f, "{}", self.as_ref())
+            }
+        }
+        impl AsRef<str> for $color {
+            fn as_ref(&self) -> &str {
+                concat!("\x1b[", $code, "m")
             }
         }
     };
@@ -51,3 +57,17 @@ define_color!(BlueBG, 44);
 define_color!(MagentaBG, 45);
 define_color!(CyanBG, 46);
 define_color!(WhiteBG, 47);
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_colors() {
+        assert_eq!(color!(Red, "Error"), "\x1b[91mError\x1b[0m");
+        assert_eq!(
+            color!(Blue, color!(Underline, "Fancy Pants")),
+            "\x1b[94m\x1b[4mFancy Pants\x1b[0m\x1b[0m"
+        );
+    }
+}
