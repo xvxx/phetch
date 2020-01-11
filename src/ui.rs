@@ -23,7 +23,6 @@ use std::{
 use termion::{
     input::TermRead,
     raw::{IntoRawMode, RawTerminal},
-    screen::AlternateScreen,
     terminal_size,
 };
 
@@ -41,7 +40,7 @@ pub struct UI {
     pub size: (usize, usize), // cols, rows
     status: String,           // status message, if any
     config: Config,           // user config
-    out: RefCell<AlternateScreen<RawTerminal<Stdout>>>,
+    out: RefCell<RawTerminal<Stdout>>,
 }
 
 impl UI {
@@ -54,13 +53,10 @@ impl UI {
         // Store raw terminal but don't enable it yet or switch the
         // screen. We don't want to stare at a fully blank screen
         // while waiting for a slow page to load.
-        let mut out = AlternateScreen::from(
-            stdout()
-                .into_raw_mode()
-                .expect("Failed to initialize raw mode."),
-        );
+        let out = stdout()
+            .into_raw_mode()
+            .expect("Failed to initialize raw mode.");
         out.suspend_raw_mode();
-        write!(out, "{}", termion::screen::ToMainScreen);
 
         UI {
             views: vec![],
@@ -82,12 +78,20 @@ impl UI {
         write!(out, "{}", termion::screen::ToAlternateScreen);
     }
 
+    /// Clean up after ourselves. Should only be used after running in
+    /// interactive mode.
+    pub fn shutdown(&mut self) {
+        let mut out = self.out.borrow_mut();
+        write!(out, "{}", termion::screen::ToMainScreen);
+    }
+
     pub fn run(&mut self) -> Result<()> {
         self.startup();
         while self.running {
             self.draw()?;
             self.update();
         }
+        self.shutdown();
         Ok(())
     }
 
