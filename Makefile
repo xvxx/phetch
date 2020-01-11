@@ -25,10 +25,9 @@ debug: $(PHETCH_DEBUG)
 clean:
 	@rm -rf target
 
-# Build and strip the release version
+# Build the release version
 $(PHETCH_RELEASE): $(RSFILES)
 	cargo build --release
-	strip $@
 
 # Build the debug version
 $(PHETCH_DEBUG): $(RSFILES)
