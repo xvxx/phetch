@@ -27,6 +27,9 @@ phetch - quick lil gopher client
 	Set the TOR_PROXY env variable to use an address other than the
 	Tor default of 127.0.0.1:9050.
 
+*--emoji*
+	Show TLS/Tor status as emoji.
+
 *-h*, *--help*
 	Print a help summary and exit.
 

@@ -27,6 +27,9 @@ tor no
 
 # Always start in wide mode. (--wide)
 wide no
+
+# Use emoji indicators for TLS & Tor. (--emoji)
+emoji no
 ";
 
 #[derive(Debug)]
@@ -35,6 +38,7 @@ pub struct Config {
     pub tls: bool,
     pub tor: bool,
     pub wide: bool,
+    pub emoji: bool,
 }
 
 impl Default for Config {
@@ -44,6 +48,7 @@ impl Default for Config {
             tls: false,
             tor: false,
             wide: false,
+            emoji: false,
         }
     }
 }
@@ -97,6 +102,7 @@ pub fn parse(text: &str) -> Result<Config> {
         }
         match key {
             "start" => cfg.start = val.into(),
+            "emoji" => cfg.emoji = to_bool(val)?,
             "tls" => cfg.tls = to_bool(val)?,
             "tor" => cfg.tor = to_bool(val)?,
             "wide" => cfg.wide = to_bool(val)?,
@@ -128,6 +134,7 @@ mod tests {
         assert_eq!(config.tls, false);
         assert_eq!(config.tor, false);
         assert_eq!(config.wide, false);
+        assert_eq!(config.emoji, false);
         assert_eq!(config.start, "gopher://phetch/1/home");
     }
 
@@ -166,7 +173,7 @@ mod tests {
     }
     #[test]
     fn test_no_dupe_keys() {
-        let res = parse("tls false\nwide no\ntls yes");
+        let res = parse("tls false\nwide no\nemoji yes\ntls yes");
         assert_eq!(res.is_err(), true);
         let e = res.unwrap_err();
         assert_eq!(format!("{}", e), "Duplicate key on line 3: tls");

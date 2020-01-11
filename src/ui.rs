@@ -293,19 +293,21 @@ impl UI {
         self.status = status;
     }
 
-    fn render_tls_status(&self) -> Option<String> {
+    fn render_conn_status(&self) -> Option<String> {
         let page = self.views.get(self.focused)?;
         if page.is_tls() {
+            let status = color!("TLS", Black, GreenBG);
             return Some(format!(
                 "{}{}",
                 termion::cursor::Goto(self.cols() - 3, self.rows()),
-                color!("TLS", Black, GreenBG),
+                if self.config.emoji { "🔒" } else { &status },
             ));
         } else if page.is_tor() {
+            let status = color!("TOR", Bold, White, MagentaBG);
             return Some(format!(
                 "{}{}",
                 termion::cursor::Goto(self.cols() - 3, self.rows()),
-                color!("TOR", Bold, White, MagentaBG),
+                if self.config.emoji { "🧅" } else { &status },
             ));
         }
         None
@@ -318,7 +320,7 @@ impl UI {
             termion::cursor::Goto(1, self.rows()),
             termion::clear::CurrentLine,
             self.status,
-            self.render_tls_status().unwrap_or_else(|| "".into()),
+            self.render_conn_status().unwrap_or_else(|| "".into()),
             color::Reset,
         )
     }

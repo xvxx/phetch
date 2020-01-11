@@ -51,6 +51,7 @@ fn run() -> i32 {
                 mode = Mode::Print;
             }
             "-l" | "--local" | "-local" => cfg.start = "gopher://127.0.0.1:7070".into(),
+            "--emoji" | "-emoji" => cfg.emoji = true,
             "-t" | "--tls" | "-tls" => {
                 cfg.tls = true;
                 if cfg!(feature = "disable-tls") {
@@ -126,7 +127,7 @@ fn print_usage() {
     print_version();
     println!(
         "
-Usage: 
+Usage:
 
     phetch [options]          Launch phetch in interactive mode
     phetch [options] [url]    Open Gopher URL in interactive mode
@@ -141,6 +142,7 @@ Options:
     -p, --print               Print rendered Gopher response only
     -l, --local               Connect to 127.0.0.1:7070
 
+    --emoji                   Show TLS/Tor status as emoji.
     -h, --help                Show this screen
     -v, --version             Show phetch version
 

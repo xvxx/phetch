@@ -39,6 +39,7 @@ the gophersphere.
         -p, --print               Print rendered Gopher response only
         -l, --local               Connect to 127.0.0.1:7070
 
+        --emoji                   Show TLS/Tor status as emoji.
         -h, --help                Show this screen
         -v, --version             Show phetch version
 
