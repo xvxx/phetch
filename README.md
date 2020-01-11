@@ -33,14 +33,16 @@ the gophersphere.
 
         -s, --tls                 Try to open Gopher URLs securely w/ TLS
         -o, --tor                 Use local Tor proxy to open all pages
-                                  Set the TOR_PROXY env variable to use
-                                  an address other than the default :9050
+        -S, -O                    Disable TLS or Tor
+                                
         -r, --raw                 Print raw Gopher response only
         -p, --print               Print rendered Gopher response only
         -l, --local               Connect to 127.0.0.1:7070
 
         -h, --help                Show this screen
         -v, --version             Show phetch version
+
+    Commandline options always override options set in phetch.conf.
 
     Once you've launched phetch, use `ctrl-h` to view the on-line help.
 

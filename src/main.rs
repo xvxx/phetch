@@ -29,6 +29,10 @@ fn run() -> i32 {
     let mut mode = Mode::Run;
     let mut iter = args.iter();
     let mut got_url = false;
+    let mut set_tls = false;
+    let mut set_notls = false;
+    let mut set_tor = false;
+    let mut set_notor = false;
     while let Some(arg) = iter.next() {
         match arg.as_ref() {
             "-v" | "--version" | "-version" => {
@@ -52,13 +56,41 @@ fn run() -> i32 {
             }
             "-l" | "--local" | "-local" => cfg.start = "gopher://127.0.0.1:7070".into(),
             "-s" | "--tls" | "-tls" => {
+                if set_notls {
+                    eprintln!("can't set both --tls and --no-tls");
+                    return 1;
+                }
+                set_tls = true;
                 cfg.tls = true;
                 if cfg!(feature = "disable-tls") {
                     eprintln!("phetch was compiled without TLS support");
                     return 1;
                 }
             }
-            "-o" | "--tor" | "-tor" => cfg.tor = true,
+            "-S" | "--no-tls" | "-no-tls" => {
+                if set_tls {
+                    eprintln!("can't set both --tls and --no-tls");
+                    return 1;
+                }
+                set_notls = true;
+                cfg.tls = false;
+            }
+            "-o" | "--tor" | "-tor" => {
+                if set_notor {
+                    eprintln!("can't set both --tor and --no-tor");
+                    return 1;
+                }
+                set_tor = true;
+                cfg.tor = true;
+            }
+            "-O" | "--no-tor" | "-no-tor" => {
+                if set_tor {
+                    eprintln!("can't set both --tor and --no-tor");
+                    return 1;
+                }
+                set_notor = true;
+                cfg.tor = false;
+            }
             arg => {
                 if arg.starts_with('-') {
                     print_version();
@@ -77,7 +109,7 @@ fn run() -> i32 {
     }
 
     if cfg.tor && cfg.tls {
-        eprintln!("Can't set both --tor and --tls.");
+        eprintln!("can't set both --tor and --tls.");
         return 1;
     }
 
@@ -140,14 +172,16 @@ Options:
 
     -s, --tls                 Try to open Gopher URLs securely w/ TLS
     -o, --tor                 Use local Tor proxy to open all pages
-                              Set the TOR_PROXY env variable to use
-                              an address other than the default :9050
+    -S, -O                    Disable TLS or Tor
+                              
     -r, --raw                 Print raw Gopher response only
     -p, --print               Print rendered Gopher response only
     -l, --local               Connect to 127.0.0.1:7070
 
     -h, --help                Show this screen
     -v, --version             Show phetch version
+
+Commandline options always override options set in phetch.conf.
 
 Once you've launched phetch, use `ctrl-h` to view the on-line help."
     );
