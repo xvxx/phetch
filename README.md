@@ -45,7 +45,7 @@ the gophersphere.
         -h, --help                Show this screen
         -v, --version             Show phetch version
 
-    Commandline options always override options set in phetch.conf.
+    Command line options always override options set in phetch.conf.
 
     Once you've launched phetch, use `ctrl-h` to view the on-line help.
 

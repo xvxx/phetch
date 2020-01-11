@@ -52,12 +52,33 @@ Print the raw Gopher server response of \fIURL\fR and exit.
 Attempt to fetch all pages securely over TLS.
 .P
 .RE
+\fB-S\fR, \fB--no-tls\fR
+.RS 4
+Do not use TLS for connections. This can be used to cancel out an
+option set in the config file, for instance.
+.P
+.RE
 \fB-o\fR, \fB--tor\fR
 .RS 4
 Make all connections using a local Tor proxy.
-Tor is the Onion Router.
+Tor is The Onion Router.
 Set the TOR_PROXY env variable to use an address other than the
 Tor default of 127.0.0.1:9050.
+.P
+.RE
+\fB-O\fR, \fB--no-tor\fR
+.RS 4
+Disable Tor.
+.P
+.RE
+\fB-c\fR, \fB--config\fR \fIFILE\fR
+.RS 4
+Use \fIFILE\fR instead of \fI~/.config/phetch/phetch.conf\fR
+.P
+.RE
+\fB-C\fR, \fB--no-config\fR
+.RS 4
+Do not use any config file.
 .P
 .RE
 \fB-h\fR, \fB--help\fR
@@ -78,6 +99,8 @@ enter interactive mode.
 Without a \fIURL\fR, \fBphetch\fR will show a builtin dashboard with easy
 access to online help, bookmarks and history, and enter interactive
 mode.
+.P
+Command line options always override options set in phetch.conf.
 .P
 .SH NAVIGATION
 .P

@@ -36,11 +36,24 @@ If no URL is given, however, *phetch* will launch and open its default
 *-s*, *--tls*
 	Attempt to fetch all pages securely over TLS.
 
+*-S*, *--no-tls*
+	Do not use TLS for connections. This can be used to cancel out an
+	option set in the config file, for instance.
+
 *-o*, *--tor*
 	Make all connections using a local Tor proxy.
-	Tor is the Onion Router.
+	Tor is The Onion Router.
 	Set the TOR_PROXY env variable to use an address other than the
 	Tor default of 127.0.0.1:9050.
+
+*-O*, *--no-tor*
+	Disable Tor.
+
+*-c*, *--config* _FILE_
+	Use _FILE_ instead of _~/.config/phetch/phetch.conf_
+
+*-C*, *--no-config*
+	Do not use any config file.
 
 *-h*, *--help*
 	Print a help summary and exit.
@@ -56,6 +69,8 @@ enter interactive mode.
 Without a _URL_, *phetch* will show a builtin dashboard with easy
 access to online help, bookmarks and history, and enter interactive
 mode.
+
+Command line options always override options set in phetch.conf.
 
 # NAVIGATION
 
