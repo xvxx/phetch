@@ -22,6 +22,7 @@ the gophersphere.
 - Save your favorite Gopher sites with bookmarks
 - Opt-in history tracking
 - Secure Gopher support (TLS)
+- Tor support
 
 ## usage
 
@@ -37,11 +38,11 @@ the gophersphere.
         -r, --raw                 Print raw Gopher response only
         -p, --print               Print rendered Gopher response only
         -l, --local               Connect to 127.0.0.1:7070
-      
+
         -h, --help                Show this screen
         -v, --version             Show phetch version
-        
-    Once you've launched phetch, use `ctrl-h` to view the on-line help. 
+
+    Once you've launched phetch, use `ctrl-h` to view the on-line help.
 
 
 ## installation
@@ -50,7 +51,7 @@ On macOS you can install with [Homebrew](https://brew.sh/):
 
     brew install dvkt/code/phetch
 
-Binaries for Linux, Raspberry Pi, and Mac are available at 
+Binaries for Linux, Raspberry Pi, and Mac are available at
 https://github.com/dvkt/phetch/releases:
 
 - [phetch-v0.1.12-linux-x86_64.tgz][0]
