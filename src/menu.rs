@@ -178,7 +178,7 @@ impl Menu {
 
             // color the line
             out.push_str(&match line.typ {
-                Type::Text => color!(name, White),
+                Type::Text => color!(name, Cyan),
                 Type::Menu => color!(name, Blue),
                 Type::Info => color!(name, Yellow),
                 Type::HTML => color!(name, Green),
