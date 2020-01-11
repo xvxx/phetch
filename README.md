@@ -15,7 +15,7 @@ the gophersphere.
 
 ## features
 
-- <1MB executable for Linux and Mac
+- <1MB executable for Linux, Raspberry Pi, & Mac
 - Technicolor design (based on [GILD](https://github.com/dvkt/gild))
 - No-nonsense keyboard navigation
 - Supports Gopher searches, text and menu pages, and downloads
@@ -54,7 +54,7 @@ Binaries for Linux, Raspberry Pi, and Mac are available at
 https://github.com/dvkt/phetch/releases:
 
 - [phetch-v0.1.12-linux-x86_64.tgz][0]
-- [phetch-v0.1.12-linux-armv7.tgz (RPi)][1]
+- [phetch-v0.1.12-linux-armv7.tgz (Raspberry Pi)][1]
 - [phetch-v0.1.12-macos.zip][2]
 
 Just unzip/untar the `phetch` program into your $PATH and get going!
