@@ -1,8 +1,5 @@
 use crate::gopher::{self, Type};
-use crate::{
-    color,
-    ui::{Action, Key, View, MAX_COLS, SCROLL_LINES},
-};
+use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
 use std::fmt;
 use termion::{clear, cursor};
 
@@ -181,14 +178,14 @@ impl Menu {
 
             // color the line
             out.push_str(&match line.typ {
-                Type::Text => color!(White, name),
-                Type::Menu => color!(Blue, name),
-                Type::Info => color!(Yellow, name),
-                Type::HTML => color!(Green, name),
-                Type::Error => color!(Red, name),
-                Type::Telnet => color!(Grey, name),
-                typ if typ.is_download() => color!(Underline, color!(White, name)),
-                typ if !typ.is_supported() => color!(Red, color!(WhiteBG, name)),
+                Type::Text => color!(name, White),
+                Type::Menu => color!(name, Blue),
+                Type::Info => color!(name, Yellow),
+                Type::HTML => color!(name, Green),
+                Type::Error => color!(name, Red),
+                Type::Telnet => color!(name, Grey),
+                typ if typ.is_download() => color!(name, Underline, White),
+                typ if !typ.is_supported() => color!(name, Red, WhiteBG),
                 _ => name,
             });
 

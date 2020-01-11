@@ -1,27 +1,43 @@
 use std::fmt;
 
-/// Shortcut to produce a String of a certain color that resets.
+/// Shortcut to produce a String colored with one or more colors.
 /// Example:
-///   let s = color!(Red, "Red string");
+/// ```
+///   let s = color!("Red string", Red);
+///   let x = color!("Hyperlink-ish", Blue, Underline);
 macro_rules! color {
-    ($color:ident, $s:expr) => {{
+    ($s:expr, $( $color:ident ),+) => {{
         use crate::color;
-        format!("{}{}{}", color::$color, $s, color::Reset)
+        let codes = [$( color::$color.as_ref() ),+];
+        if codes.len() > 1 {
+            format!("\x1b[{}m{}{}", codes.join(";"), $s, color::Reset)
+        } else {
+            format!("\x1b[{}m{}{}", codes[0], $s, color::Reset)
+        }
     }};
 }
 
-// Create a color:: struct that can be used with format!.
+/// Create a color:: struct that can be used with format!.
+/// Example:
+/// ```
+///   define_color(Red, 91);
+///   define_color(Reset, 0);
+///
+///   println!("{}Error: {}{}", color::Red, msg, color::Reset);
 macro_rules! define_color {
     ($color:ident, $code:literal) => {
+        /// Can be used with `format!`:
+        /// ```
+        /// println!("{}Error: {}{}", color::Red, msg, color::Reset);
         pub struct $color;
         impl fmt::Display for $color {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                write!(f, "{}", self.as_ref())
+                write!(f, "\x1b[{}m", self.as_ref())
             }
         }
         impl AsRef<str> for $color {
             fn as_ref(&self) -> &str {
-                concat!("\x1b[", $code, "m")
+                concat!($code)
             }
         }
     };
@@ -60,14 +76,16 @@ define_color!(WhiteBG, 47);
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test_colors() {
-        assert_eq!(color!(Red, "Error"), "\x1b[91mError\x1b[0m");
+        assert_eq!(color!("Error", Red), "\x1b[91mError\x1b[0m");
         assert_eq!(
-            color!(Blue, color!(Underline, "Fancy Pants")),
-            "\x1b[94m\x1b[4mFancy Pants\x1b[0m\x1b[0m"
+            color!("Fancy Pants", Blue, Underline),
+            "\x1b[94;4mFancy Pants\x1b[0m"
         );
+        assert_eq!(
+            color!("Super-duper-fancy-pants", Magenta, Underline, Bold, BlueBG),
+            "\x1b[95;4;1;44mSuper-duper-fancy-pants\x1b[0m"
+        )
     }
 }
