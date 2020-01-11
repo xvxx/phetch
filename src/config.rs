@@ -22,7 +22,7 @@ start gopher://phetch/1/home
 # Always use TLS mode. (--tls)
 tls no
 
-# Connect using local TOR proxy. (--tor)
+# Connect using local Tor proxy. (--tor)
 tor no
 
 # Always start in wide mode. (--wide)

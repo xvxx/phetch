@@ -14,6 +14,22 @@ phetch - quick lil gopher client
 .P
 \fBphetch\fR [\fIOPTIONS\fR] [\fIURL\fR]
 .P
+.SH DESCRIPTION
+.P
+\fBphetch\fR is a terminal client designed to help you quickly navigate
+the gophersphere. It features non-nonsense keyboard navigation,
+support for most Gopher features, easy-to-use TLS and Tor support, as
+well as bookmarking and history features.
+.P
+Usually \fBphetch\fR is started with a Gopher URL:
+.P
+.RS 4
+phetch gopher://some-gopher-url.com
+.P
+.RE
+If no URL is given, however, \fBphetch\fR will launch and open its default
+"start page". This can be configured to be any URL. (See \fBCONFIG\fR.)
+.P
 .SH OPTIONS
 .P
 \fB-l\fR, \fB--local\fR
@@ -41,6 +57,11 @@ Attempt to fetch all pages over TLS.
 Make all connections using a local Tor proxy.
 Set the TOR_PROXY env variable to use an address other than the
 Tor default of 127.0.0.1:9050.
+.P
+.RE
+\fB--emoji\fR
+.RS 4
+Show TLS/Tor status as emoji.
 .P
 .RE
 \fB-h\fR, \fB--help\fR
@@ -161,7 +182,7 @@ Toggle wide mode.
 Up and down arrows
 .RS 4
 Use the up and down arrows, \fBj\fR and \fBk\fR keys, or \fBn\fR and \fBp\fR
-keys to select links. Phetch will scroll for you, or you can
+keys to select links. \fBphetch\fR will scroll for you, or you can
 use page up and page down (or \fB-\fR and spacebar) to scroll by
 many lines at once.
 .P
@@ -176,7 +197,7 @@ selected. Use \fBEnter\fR to open the selected link.
 Incremental search
 .RS 4
 Press \fBf\fR or \fB/\fR to activate search mode, then just start
-typing. Phetch will look for the first case-insensitive match
+typing. \fBphetch\fR will look for the first case-insensitive match
 and try to select it. Use arrow keys or \fBCtrl-p\fR/\fBCtrl-n\fR to cycle
 through matches.
 .P
@@ -217,14 +238,43 @@ the \fBa\fR key.
 Feel free to edit your history file directly, or share it with your
 friends!
 .P
+.SH CONFIG
+.P
+If you create a \fIphetch.conf\fR file in \fI~/.config/phetch/\fR, it will be
+automatically loaded when \fBphetch\fR starts. The config file supports
+most command line options, for your convenience. For example,
+\fBphetch\fR will always launch in TLS mode if `tls yes` appears in the
+config file -- no need to pass `--tls` or `-t` on startup.
+.P
+Here is an example config with all options:
+.P
+.nf
+.RS 4
+# Page to load when launched with no URL argument\&.
+start gopher://phetch/1/home
+
+# Always use TLS mode\&. (--tls)
+tls no
+
+# Connect using local TOR proxy\&. (--tor)
+tor no
+
+# Always start in wide mode\&. (--wide)
+wide no
+
+# Use emoji indicators for TLS & Tor\&. (--emoji)
+emoji no
+.fi
+.RE
+.P
 .SH ABOUT
 .P
-Phetch is maintained by dvkt, and released under the MIT license.
+\fBphetch\fR is maintained by dvkt, and released under the MIT license.
 .P
-Phetch's Gopher hole:
+phetch's Gopher hole:
 .RS 4
 \fIgopher://phkt.io/1/phetch\fR
 .RE
-Phetch's webpage:
+phetch's webpage:
 .RS 4
 \fIhttps://github.com/dvkt/phetch\fR

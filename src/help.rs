@@ -6,6 +6,7 @@ pub fn lookup(name: &str) -> Option<String> {
         "" | "/" | "home" | "home/" => format!("{}{}", HEADER, START),
         "history" => history::as_raw_menu(),
         "bookmarks" => bookmarks::as_raw_menu(),
+        "help/config" => format!("{}{}", HEADER, CONFIG),
         "help/keys" => format!("{}{}", HEADER, KEYS),
         "help/nav" => format!("{}{}", HEADER, NAV),
         "help/types" => format!("{}{}", HEADER, TYPES),
@@ -64,6 +65,7 @@ i
 1gopher types	/help/types	phetch
 1bookmarks	/help/bookmarks	phetch
 1history	/help/history	phetch
+1phetch.conf	/help/config	phetch
 i
 i            ~ * ~
 i
@@ -184,6 +186,39 @@ i
 ifeel free to edit your history
 ifile directly, or share it
 iwith your friends!
+";
+
+const CONFIG: &str = "
+i         ** config **
+i
+iif you create a phetch.conf
+ifile in ~/.config/phetch/ it
+iwill be automatically loaded 
+iwhen phetch starts. the config
+ifile supports most command line
+ioptions, for your convenience.
+i
+ifor example, phetch will always
+ilaunch in TLS mode if `tls yes`
+iappears in the config file. 
+i
+ihere is an example phetch.conf
+iwith all possible keys:
+i
+i# page to load when launched
+istart gopher://phetch/1/home
+i
+i# always use TLS mode
+itls no
+i
+i# connect over tor proxy
+itor no
+i
+i# start in wide mode
+iwide no
+i
+i# show emoji status indicators
+iemoji no
 ";
 
 const TYPES: &str = "

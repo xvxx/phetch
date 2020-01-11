@@ -8,6 +8,20 @@ phetch - quick lil gopher client
 
 *phetch* [_OPTIONS_] [_URL_]
 
+# DESCRIPTION
+
+*phetch* is a terminal client designed to help you quickly navigate
+the gophersphere. It features non-nonsense keyboard navigation,
+support for most Gopher features, easy-to-use TLS and Tor support, as
+well as bookmarking and history features.
+
+Usually *phetch* is started with a Gopher URL:
+
+	phetch gopher://some-gopher-url.com
+
+If no URL is given, however, *phetch* will launch and open its default
+"start page". This can be configured to be any URL. (See *CONFIG*.)
+
 # OPTIONS
 
 *-l*, *--local*
@@ -103,7 +117,7 @@ and *Ctrl-h* are synonyms.
 
 Up and down arrows
 	Use the up and down arrows, *j* and *k* keys, or *n* and *p*
-	keys to select links. Phetch will scroll for you, or you can
+	keys to select links. *phetch* will scroll for you, or you can
 	use page up and page down (or *-* and spacebar) to scroll by
 	many lines at once.
 
@@ -114,7 +128,7 @@ Number keys
 
 Incremental search
 	Press *f* or */* to activate search mode, then just start
-	typing. Phetch will look for the first case-insensitive match
+	typing. *phetch* will look for the first case-insensitive match
 	and try to select it. Use arrow keys or *Ctrl-p*/*Ctrl-n* to cycle
 	through matches.
 
@@ -148,11 +162,38 @@ the *a* key.
 Feel free to edit your history file directly, or share it with your
 friends!
 
+# CONFIG
+
+If you create a _phetch.conf_ file in _~/.config/phetch/_, it will be
+automatically loaded when *phetch* starts. The config file supports
+most command line options, for your convenience. For example,
+*phetch* will always launch in TLS mode if `tls yes` appears in the
+config file -- no need to pass `--tls` or `-t` on startup.
+
+Here is an example config with all options:
+
+```
+# Page to load when launched with no URL argument.
+start gopher://phetch/1/home
+
+# Always use TLS mode. (--tls)
+tls no
+
+# Connect using local TOR proxy. (--tor)
+tor no
+
+# Always start in wide mode. (--wide)
+wide no
+
+# Use emoji indicators for TLS & Tor. (--emoji)
+emoji no
+```
+
 # ABOUT
 
-Phetch is maintained by dvkt, and released under the MIT license.
+*phetch* is maintained by dvkt, and released under the MIT license.
 
-Phetch's Gopher hole:
+phetch's Gopher hole:
 	_gopher://phkt.io/1/phetch_
-Phetch's webpage:
+phetch's webpage:
 	_https://github.com/dvkt/phetch_
