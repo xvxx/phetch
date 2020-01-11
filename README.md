@@ -39,6 +39,9 @@ the gophersphere.
         -p, --print               Print rendered Gopher response only
         -l, --local               Connect to 127.0.0.1:7070
 
+        -c, --config FILE         Use instead of ~/.config/phetch/phetch.conf
+        -C, --no-config           Don't use any config file   
+        
         -h, --help                Show this screen
         -v, --version             Show phetch version
 

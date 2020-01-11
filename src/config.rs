@@ -1,6 +1,7 @@
 use crate::phetchdir;
 use std::{
     collections::HashMap,
+    fs::OpenOptions,
     io::{Read, Result},
 };
 
@@ -10,10 +11,8 @@ const CONFIG_FILE: &str = "phetch.conf";
 /// Default start page.
 const DEFAULT_START: &str = "gopher://phetch/1/home";
 
-/// Default config. Currently only used internally.
-#[allow(dead_code)]
-const DEFAULT_CONFIG: &str = "
-## config file for the phetch gopher client
+/// Default config
+pub const DEFAULT_CONFIG: &str = "## default config file for the phetch gopher client
 ## gopher://phkt.io/1/phetch
 
 # Page to load when launched with no URL argument.
@@ -61,9 +60,17 @@ pub fn default() -> Config {
     Default::default()
 }
 
-/// Attempt to load config from disk, specifically `CONFIG_FILE`.
+/// Attempt to load ~/.config/phetch/phetch.conf from disk.
 pub fn load() -> Result<Config> {
     let mut reader = phetchdir::load(CONFIG_FILE)?;
+    let mut file = String::new();
+    reader.read_to_string(&mut file)?;
+    parse(&file)
+}
+
+/// Attempt to load a config from disk.
+pub fn load_file(path: &str) -> Result<Config> {
+    let mut reader = OpenOptions::new().read(true).open(&path)?;
     let mut file = String::new();
     reader.read_to_string(&mut file)?;
     parse(&file)

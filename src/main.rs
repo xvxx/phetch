@@ -33,6 +33,8 @@ fn run() -> i32 {
     let mut set_notls = false;
     let mut set_tor = false;
     let mut set_notor = false;
+    let mut set_cfg = false;
+    let mut set_nocfg = false;
     while let Some(arg) = iter.next() {
         match arg.as_ref() {
             "-v" | "--version" | "-version" => {
@@ -55,6 +57,53 @@ fn run() -> i32 {
                 mode = Mode::Print;
             }
             "-l" | "--local" | "-local" => cfg.start = "gopher://127.0.0.1:7070".into(),
+            "-C" => {
+                if set_cfg {
+                    eprintln!("can't mix --config and --no-config");
+                    return 1;
+                }
+                set_nocfg = true;
+                cfg = config::default();
+            }
+            "-c" | "--config" | "-config" => {
+                if set_nocfg {
+                    eprintln!("can't mix --config and --no-config");
+                    return 1;
+                }
+                set_cfg = true;
+                if let Some(arg) = iter.next() {
+                    cfg = match config::load_file(arg) {
+                        Ok(c) => c,
+                        Err(e) => {
+                            eprintln!("error loading config: {}", e);
+                            return 1;
+                        }
+                    };
+                } else {
+                    eprintln!("need a config file");
+                    return 1;
+                }
+            }
+            arg if arg.starts_with("--config=") || arg.starts_with("-config=") => {
+                if set_nocfg {
+                    eprintln!("can't mix --config and --no-config");
+                    return 1;
+                }
+                set_cfg = true;
+                let mut parts = arg.splitn(2, '=');
+                if let Some(file) = parts.nth(1) {
+                    cfg = match config::load_file(file) {
+                        Ok(c) => c,
+                        Err(e) => {
+                            eprintln!("error loading config: {}", e);
+                            return 1;
+                        }
+                    };
+                } else {
+                    eprintln!("need a config file");
+                    return 1;
+                }
+            }
             "-s" | "--tls" | "-tls" => {
                 if set_notls {
                     eprintln!("can't set both --tls and --no-tls");
@@ -178,6 +227,9 @@ Options:
     -p, --print               Print rendered Gopher response only
     -l, --local               Connect to 127.0.0.1:7070
 
+    -c, --config FILE         Use instead of ~/.config/phetch/phetch.conf
+    -C, --no-config           Don't use any config file            
+    
     -h, --help                Show this screen
     -v, --version             Show phetch version
 
