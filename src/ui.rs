@@ -54,12 +54,13 @@ impl UI {
         // Store raw terminal but don't enable it yet or switch the
         // screen. We don't want to stare at a fully blank screen
         // while waiting for a slow page to load.
-        let out = AlternateScreen::from(
+        let mut out = AlternateScreen::from(
             stdout()
                 .into_raw_mode()
                 .expect("Failed to initialize raw mode."),
         );
         out.suspend_raw_mode();
+        write!(out, "{}", termion::screen::ToMainScreen);
 
         UI {
             views: vec![],
@@ -76,8 +77,9 @@ impl UI {
     /// Prepare stdout for writing. Should be used in interactive
     /// mode, eg inside run()
     pub fn startup(&mut self) {
-        let out = self.out.borrow_mut();
+        let mut out = self.out.borrow_mut();
         out.activate_raw_mode();
+        write!(out, "{}", termion::screen::ToAlternateScreen);
     }
 
     pub fn run(&mut self) -> Result<()> {
