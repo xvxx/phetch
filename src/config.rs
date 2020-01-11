@@ -176,6 +176,6 @@ mod tests {
         let res = parse("tls false\nwide no\nemoji yes\ntls yes");
         assert_eq!(res.is_err(), true);
         let e = res.unwrap_err();
-        assert_eq!(format!("{}", e), "Duplicate key on line 3: tls");
+        assert_eq!(format!("{}", e), "Duplicate key on line 4: tls");
     }
 }
