@@ -44,7 +44,6 @@ the gophersphere.
 
     Once you've launched phetch, use `ctrl-h` to view the on-line help.
 
-
 ## installation
 
 On macOS you can install with [Homebrew](https://brew.sh/):
@@ -85,7 +84,7 @@ To build with TLS support on **Linux**, you need `openssl` and
 
     sudo apt install -y pkg-config libssl-dev
 
-To build without TLS support, build with the `no-tls` feature:
+To build without TLS support, build with the `disable-tls` feature:
 
     cargo build --features disable-tls
 
