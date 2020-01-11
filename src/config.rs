@@ -96,7 +96,7 @@ pub fn parse(text: &str) -> Result<Config> {
             return Err(error!("Duplicate key on line {}: {}", linenum, key));
         }
         match key {
-            "start" => cfg.start.push_str(val),
+            "start" => cfg.start = val.into(),
             "tls" => cfg.tls = to_bool(val)?,
             "tor" => cfg.tor = to_bool(val)?,
             "wide" => cfg.wide = to_bool(val)?,
