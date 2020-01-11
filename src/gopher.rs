@@ -153,14 +153,17 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
         }
     }
 
-    // tls didn't work, try regular
+    // tls didn't work or wasn't selected, try Tor or default
     if tor {
         let proxy = env::var("TOR_PROXY")
             .unwrap_or("127.0.0.1:9050".into())
             .to_socket_addrs()?
             .nth(0)
             .unwrap();
-        let mut stream = TorStream::connect_with_address(proxy, sock)?;
+        let mut stream = match TorStream::connect_with_address(proxy, sock) {
+            Ok(s) => s,
+            Err(e) => return Err(error!("Tor error: {}", e)),
+        };
         stream.write(format!("{}\r\n", selector).as_ref())?;
         Ok(Stream {
             io: Box::new(stream),
