@@ -1,4 +1,4 @@
-use crate::phetchdir;
+use crate::{phetchdir, ui};
 use std::{
     collections::HashMap,
     fs::OpenOptions,
@@ -39,6 +39,7 @@ pub struct Config {
     pub wide: bool,
     pub emoji: bool,
     pub cursor: bool,
+    pub mode: ui::Mode, // can't be set in conf file
 }
 
 impl Default for Config {
@@ -50,6 +51,7 @@ impl Default for Config {
             wide: false,
             emoji: false,
             cursor: true,
+            mode: ui::Mode::default(),
         }
     }
 }

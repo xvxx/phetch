@@ -1,4 +1,4 @@
-use crate::ui::{Action, Key, View, MAX_COLS, SCROLL_LINES};
+use crate::ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES};
 use crate::{
     config::Config,
     gopher::{self, Type},
@@ -13,7 +13,7 @@ pub struct Menu {
     pub longest: usize,       // size of the longest line
     pub raw: String,          // raw response
     pub input: String,        // user's inputted value
-    pub cursor: bool,         // show the cursor? usually true
+    pub mode: ui::Mode,       // interactive or print mode?
     pub link: usize,          // selected link
     pub scroll: usize,        // scrolling offset
     pub searching: bool,      // search mode?
@@ -155,9 +155,16 @@ impl Menu {
 
     fn render_lines(&mut self, cfg: &Config) -> String {
         self.wide = cfg.wide;
-        self.cursor = cfg.cursor;
+        self.mode = cfg.mode;
         let mut out = String::new();
-        let iter = self.lines.iter().skip(self.scroll).take(self.rows() - 1);
+        let iter = if self.mode == ui::Mode::Run {
+            // only show as many lines as screen rows minus one
+            // (status bar is always last line)
+            self.lines.iter().skip(self.scroll).take(self.rows() - 1)
+        } else {
+            // show all lines in print mode
+            self.lines.iter().skip(self.scroll).take(self.lines.len())
+        };
         let indent = self.indent();
         let left_margin = " ".repeat(indent);
 
@@ -167,7 +174,7 @@ impl Menu {
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
-                if line.link == self.link && self.cursor {
+                if line.link == self.link && self.show_cursor() {
                     out.push_str("\x1b[97;1m*\x1b[0m")
                 } else {
                     out.push(' ');
@@ -240,7 +247,7 @@ impl Menu {
     /// Print this string to draw the cursor on screen.
     /// Returns None if no is link selected.
     fn draw_cursor(&self) -> Option<String> {
-        if self.links.is_empty() || !self.cursor {
+        if self.links.is_empty() || !self.show_cursor() {
             return None;
         }
         let (x, y) = self.screen_coords(self.link)?;
@@ -249,6 +256,11 @@ impl Menu {
             cursor::Goto(x, y),
             cursor::Hide
         ))
+    }
+
+    /// Should we show the cursor? Not when printing.
+    fn show_cursor(&self) -> bool {
+        self.mode == ui::Mode::Run
     }
 
     /// User input field.
@@ -807,8 +819,8 @@ impl Menu {
             raw,
             input: String::new(),
             link: 0,
+            mode: Default::default(),
             scroll: 0,
-            cursor: true,
             searching: false,
             size: (0, 0),
             tls: false,

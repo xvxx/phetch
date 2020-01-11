@@ -1,12 +1,8 @@
-use phetch::{config, gopher, ui::UI};
+use phetch::{
+    config, gopher,
+    ui::{Mode, UI},
+};
 use std::process::exit;
-
-#[derive(PartialEq)]
-enum Mode {
-    Run,
-    Print,
-    Raw,
-}
 
 fn main() {
     exit(run())
@@ -173,6 +169,7 @@ fn run() -> i32 {
     }
 
     let start = cfg.start.clone();
+    cfg.mode = mode;
     let mut ui = UI::new(cfg);
     if let Err(e) = ui.open(&start, &start) {
         eprintln!("{}", e);
