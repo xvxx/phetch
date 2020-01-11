@@ -6,7 +6,7 @@
 |
 --> <p align="center"> <img src="./img/logo.png"> <br>
 <a href="https://git.io/JveQo">
-<img src="https://img.shields.io/github/v/release/dvkt/phetch?include_prereleases">
+<img src="https://img.shields.io/github/v/release/xvxx/phetch?include_prereleases">
 </a>
 </p>
 
@@ -16,7 +16,7 @@ the gophersphere.
 ## features
 
 - <1MB executable for Linux and Mac
-- Technicolor design (based on [GILD](https://github.com/dvkt/gild))
+- Technicolor design (based on [GILD](https://github.com/xvxx/gild))
 - No-nonsense keyboard navigation
 - Supports Gopher searches, text and menu pages, and downloads
 - Save your favorite Gopher sites with bookmarks
@@ -49,10 +49,10 @@ the gophersphere.
 
 On macOS you can install with [Homebrew](https://brew.sh/):
 
-    brew install dvkt/code/phetch
+    brew install xvxx/code/phetch
 
 Binaries for Linux, Raspberry Pi, and Mac are available at
-https://github.com/dvkt/phetch/releases:
+https://github.com/xvxx/phetch/releases:
 
 - [phetch-v0.1.12-linux-x86_64.tgz][0]
 - [phetch-v0.1.12-linux-armv7.tgz (Raspberry Pi)][1]
@@ -62,7 +62,7 @@ Just unzip/untar the `phetch` program into your $PATH and get going!
 
 You can also build and install from source:
 
-    git clone https://github.com/dvkt/phetch
+    git clone https://github.com/xvxx/phetch
     cd phetch
     env PREFIX=/usr/local make install
 
@@ -119,6 +119,6 @@ You can check whether TLS is enabled by visiting the About page:
 - [ ] bookmarks: toggle instead of just prepending to the file
 - [ ] bookmarks: save the title of the current page
 
-[0]: https://github.com/dvkt/phetch/releases/download/v0.1.12/phetch-v0.1.12-linux-x86_64.tgz
-[1]: https://github.com/dvkt/phetch/releases/download/v0.1.12/phetch-v0.1.12-linux-armv7.tgz
-[2]: https://github.com/dvkt/phetch/releases/download/v0.1.12/phetch-v0.1.12-macos.zip
+[0]: https://github.com/xvxx/phetch/releases/download/v0.1.12/phetch-v0.1.12-linux-x86_64.tgz
+[1]: https://github.com/xvxx/phetch/releases/download/v0.1.12/phetch-v0.1.12-linux-armv7.tgz
+[2]: https://github.com/xvxx/phetch/releases/download/v0.1.12/phetch-v0.1.12-macos.zip
