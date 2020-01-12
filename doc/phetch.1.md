@@ -179,9 +179,10 @@ friends!
 
 If you create a _phetch.conf_ file in _~/.config/phetch/_, it will be
 automatically loaded when *phetch* starts. The config file supports
-most command line options, for your convenience. For example,
-*phetch* will always launch in TLS mode if `tls yes` appears in the
-config file -- no need to pass `--tls` or `-t` on startup.
+most command line options, for your convenience, as well as a few ways
+to customize your browsing experience. For example, *phetch* will
+always launch in TLS mode if `tls yes` appears in the  config file --
+no need to pass `--tls` or `-t` on startup.
 
 Here is an example config with all options:
 
@@ -195,10 +196,10 @@ tls no
 # Connect using local TOR proxy. (--tor)
 tor no
 
-# Always start in wide mode. (--wide)
+# Always start in wide mode.
 wide no
 
-# Use emoji indicators for TLS & Tor. (--emoji)
+# Use emoji indicators for TLS & Tor.
 emoji no
 ```
 

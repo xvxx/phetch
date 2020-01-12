@@ -4,7 +4,7 @@
 .nh
 .ad l
 .\" Begin generated content:
-.TH "PHETCH" "1" "2020-01-11"
+.TH "PHETCH" "1" "2020-01-12"
 .P
 .SH NAME
 .P
@@ -261,9 +261,10 @@ friends!
 .P
 If you create a \fIphetch.conf\fR file in \fI~/.config/phetch/\fR, it will be
 automatically loaded when \fBphetch\fR starts. The config file supports
-most command line options, for your convenience. For example,
-\fBphetch\fR will always launch in TLS mode if `tls yes` appears in the
-config file -- no need to pass `--tls` or `-t` on startup.
+most command line options, for your convenience, as well as a few ways
+to customize your browsing experience. For example, \fBphetch\fR will
+always launch in TLS mode if `tls yes` appears in the  config file --
+no need to pass `--tls` or `-t` on startup.
 .P
 Here is an example config with all options:
 .P
@@ -278,10 +279,10 @@ tls no
 # Connect using local TOR proxy\&. (--tor)
 tor no
 
-# Always start in wide mode\&. (--wide)
+# Always start in wide mode\&.
 wide no
 
-# Use emoji indicators for TLS & Tor\&. (--emoji)
+# Use emoji indicators for TLS & Tor\&.
 emoji no
 .fi
 .RE
