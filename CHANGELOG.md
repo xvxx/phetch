@@ -1,4 +1,4 @@
-## v0.1.13
+## v0.1.13-dev
 
 This release fixes some longstanding display bugs and introduces Tor
 support to help you easily browse Gopher more anonymously.
