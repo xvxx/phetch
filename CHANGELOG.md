@@ -1,5 +1,12 @@
 ## v0.1.13
 
+This release fixes some longstanding display bugs and introduces Tor
+support to help you easily browse Gopher more anonymously.
+
+The next release will be `v0.9.0`, the first release candidate for
+`phetch v1.0`. We do not anticipate adding any more large features
+before the 1.0 release.
+
 ### Added
 
 - phetch now supports [Tor][tor]! 
