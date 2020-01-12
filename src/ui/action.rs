@@ -4,15 +4,30 @@ use std::fmt;
 /// Views generate Actions in response to user input, which are
 /// processed by the UI.
 pub enum Action {
-    None,                                              // do nothing
-    Open(String, String),                              // open(title, url)
-    Keypress(Key),                                     // unknown keypress
-    Redraw,                                            // redraw everything
-    Draw(String),                                      // draw something on screen
-    Status(String),                                    // set the "status" line to something
-    Prompt(String, Box<dyn FnOnce(String) -> Action>), // query string, callback on success
-    List(Vec<Action>),                                 // do more than one action
-    Error(String),                                     // error message
+    /// Do nothing. Eg: Hit the down arrow but can't go down.
+    None,
+    /// Open a URL: open(title, url)
+    Open(String, String),
+    /// If the View doesn't know how to react, it returns the keypress.
+    Keypress(Key),
+    /// Redraw the screen. Can cause a flicker
+    Redraw,
+    /// Draw something on screen. This assumes you're using Goto(X,Y)
+    /// to control where exactly you're drawing it. Nothing else will
+    /// be redrawn.
+    Draw(String),
+    /// Set the "status" line to some text.
+    Status(String),
+    /// Show a prompt and ask for the user to input text.
+    /// The callback is passed what the user entered, if they type
+    /// something in and hit enter. If they cancel, the callback is
+    /// not run.
+    /// Prompt(Prompt Query, Callback)
+    Prompt(String, Box<dyn FnOnce(String) -> Action>),
+    /// Do more than one action.
+    List(Vec<Action>),
+    /// Display an error message.
+    Error(String),
 }
 
 impl Action {

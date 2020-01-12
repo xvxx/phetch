@@ -2,12 +2,25 @@
 /// Print doesn't show the cursor, among other things.
 #[derive(Debug, PartialEq, Copy, Clone)]
 pub enum Mode {
-    Run,     // url
-    Print,   // --print url
-    NoTTY,   // --print url | cat
-    Raw,     // --raw
-    Version, // --version
-    Help,    // --help
+    /// Default, interactive mode.
+    ///   phetch URL
+    Run,
+
+    /// Just print a rendered version of a URL.
+    ///   phetch --print URL
+    Print,
+    /// NoTTY, ie in a UNIX pipeline.
+    ///   phetch --print URL | cat
+    NoTTY,
+    /// Just print raw Gopher response.
+    ///   phetch --raw URL
+    Raw,
+    /// Show version info.
+    ///   phetch --version
+    Version,
+    /// Show command line help.
+    ///   phetch --help
+    Help,
 }
 
 impl Default for Mode {

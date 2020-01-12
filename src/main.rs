@@ -25,10 +25,7 @@ fn run() -> i32 {
         Mode::Version => return print_version(),
         Mode::Help => return print_usage(),
         Mode::NoTTY => return print_plain(&cfg.start, cfg.tls, cfg.tor),
-        Mode::Print => {
-            cfg.cursor = false;
-            cfg.wide = true;
-        }
+        Mode::Print => cfg.wide = true,
         _ => {}
     }
 

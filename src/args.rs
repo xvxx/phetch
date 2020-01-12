@@ -10,6 +10,8 @@ use std::{error::Error, fmt, result::Result};
 #[cfg(not(test))]
 use atty;
 
+/// The error returned if something goes awry while parsing the
+/// command line arguments.
 #[derive(Debug)]
 pub struct ArgError {
     details: String,

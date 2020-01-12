@@ -16,7 +16,7 @@ const CONFIG_FILE: &str = "phetch.conf";
 /// Default start page.
 const DEFAULT_START: &str = "gopher://phetch/1/home";
 
-/// Default config
+/// Example of what a default phetch.conf would be.
 pub const DEFAULT_CONFIG: &str = "## default config file for the phetch gopher client
 ## gopher://phkt.io/1/phetch
 
@@ -36,6 +36,9 @@ wide no
 emoji no
 ";
 
+/// Not all the config options are available in the phetch.conf. We
+/// also use this struct to keep track of our session's overall state,
+/// such as the UI mode (Print, Run, Raw, etc).
 #[derive(Debug)]
 pub struct Config {
     pub start: String,
@@ -43,7 +46,6 @@ pub struct Config {
     pub tor: bool,
     pub wide: bool,
     pub emoji: bool,
-    pub cursor: bool,
     pub mode: ui::Mode, // can't be set in conf file
 }
 
@@ -55,7 +57,6 @@ impl Default for Config {
             tor: false,
             wide: false,
             emoji: false,
-            cursor: true,
             mode: ui::Mode::default(),
         }
     }

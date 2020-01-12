@@ -9,6 +9,8 @@ use crate::{
 use std::fmt;
 use termion::clear;
 
+/// The Text View holds the raw Gopher response as well as information
+/// about which lines should currently be displayed on screen.
 pub struct Text {
     url: String,
     raw_response: String,

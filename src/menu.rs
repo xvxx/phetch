@@ -14,6 +14,12 @@ use crate::{
 use std::fmt;
 use termion::{clear, cursor};
 
+/// The Menu holds our Gopher Lines, a list of links, and maintains
+/// both where the cursor is on screen and which lines need to be
+/// drawn on screen. While the main UI can be used to prompt the user
+/// for input, the Menu maintains its own `input` for the "quick
+/// navigation" feature using number entry and the "incremental search"
+/// (over menu links) feature using text entry.
 pub struct Menu {
     pub url: String,          // gopher url
     pub lines: Vec<Line>,     // lines

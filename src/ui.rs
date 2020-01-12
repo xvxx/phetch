@@ -44,9 +44,15 @@ use termion::{
 pub type Key = termion::event::Key;
 pub type Page = Box<dyn View>;
 
+/// How many lines to jump by when using page up/down.
 pub const SCROLL_LINES: usize = 15;
+/// How big the longest line can be, for the purposes of calculating
+/// margin sizes. We often draw longer lines than this and allow
+/// wrapping in text views.
 pub const MAX_COLS: usize = 77;
 
+/// UI is mainly concerned with drawing to the screen, managing the
+/// active Views/pages, and responding to user input.
 pub struct UI {
     views: Vec<Page>,         // loaded views
     focused: usize,           // currently focused view
