@@ -68,7 +68,7 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
             }
             "-p" | "--print" | "-print" => cfg.mode = Mode::Print,
             "-l" | "--local" | "-local" => cfg.start = "gopher://127.0.0.1:7070".into(),
-            "-C" => {
+            "-C" | "--no-config" | "-no-config" => {
                 if set_cfg {
                     return Err(ArgError::new("can't mix --config and --no-config"));
                 }
