@@ -2,8 +2,10 @@ use crate::{
     config::{self, Config},
     ui::Mode,
 };
-use atty;
 use std::{error::Error, fmt, result::Result};
+
+#[cfg(not(test))]
+use atty;
 
 #[derive(Debug)]
 pub struct ArgError {
@@ -167,8 +169,11 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
         return Err(ArgError::new("can't set both --tor and --tls"));
     }
 
-    if !atty::is(atty::Stream::Stdout) {
-        cfg.mode = Mode::NoTTY;
+    #[cfg(not(test))]
+    {
+        if !atty::is(atty::Stream::Stdout) {
+            cfg.mode = Mode::NoTTY;
+        }
     }
 
     Ok(cfg)
