@@ -1,3 +1,11 @@
+//! The Menu is a View representing a Gopher menu. It renders the
+//! colorful representation, manages the cursor and selection state,
+//! and responds to input like the UP and DOWN arrows or other key
+//! combinations.
+//!
+//! The Menu doesn't draw or perform any actions on its own, instead
+//! it returns an Action to the UI representing its intent.
+
 use crate::ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES};
 use crate::{
     config::Config,
@@ -23,6 +31,9 @@ pub struct Menu {
     pub wide: bool,           // in wide mode?
 }
 
+/// The Line represents a single line in a Gopher menu.
+/// It must exist in the context of a Menu struct, and its `link`
+/// field will point to its index in the Menu's `links` Vec.
 pub struct Line {
     pub name: String,
     pub url: String,

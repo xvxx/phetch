@@ -1,3 +1,6 @@
+//! args::parse() is used to parse command line arguments into a
+//! Config structure.
+
 use crate::{
     config::{self, Config},
     ui::Mode,

@@ -1,3 +1,16 @@
+//! The UI is what drives the interactive phetch application: it
+//! spawns threads to fetch Gopher pages and download binary files, it
+//! manages the opened pages (Views), it asks the focused View to
+//! respond to user input, and it performs actions based on what the
+//! View returns - like opening a telnet client, or displaying an
+//! error on the status line.
+//!
+//! The UI also directly responds to user input on its own, such as
+//! ctrl-q to quit the app or keyboard entry during an input prompt.
+//!
+//! Finally, the UI is what prints to the screen - each View just
+//! renders its content to a String. The UI is what draws it.
+
 mod action;
 mod mode;
 mod view;
@@ -87,6 +100,7 @@ impl UI {
         write!(out, "{}", termion::screen::ToMainScreen);
     }
 
+    /// Main loop.
     pub fn run(&mut self) -> Result<()> {
         self.startup();
         while self.running {
@@ -97,6 +111,7 @@ impl UI {
         Ok(())
     }
 
+    /// Print the current view to the screen in rendered form.
     pub fn draw(&mut self) -> Result<()> {
         let status = self.render_status();
         if self.dirty {
@@ -120,6 +135,7 @@ impl UI {
         Ok(())
     }
 
+    /// Accept user input and update data.
     pub fn update(&mut self) {
         let action = self.process_page_input();
         if !action.is_none() {
@@ -130,6 +146,7 @@ impl UI {
         }
     }
 
+    /// Open a URL - Gopher, internal, telnet, or something else.
     pub fn open(&mut self, title: &str, url: &str) -> Result<()> {
         // no open loops
         if let Some(page) = self.views.get(self.focused) {
@@ -170,6 +187,7 @@ impl UI {
         })
     }
 
+    /// Download a binary file. Used by `open()` internally.
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
         let (tls, tor) = (self.config.tls, self.config.tor);
@@ -187,6 +205,7 @@ impl UI {
         })
     }
 
+    /// Fetches a URL and returns a View for its content.
     fn fetch(&mut self, title: &str, url: &str) -> Result<Page> {
         // on-line help
         if url.starts_with("gopher://phetch/") {
@@ -225,14 +244,17 @@ impl UI {
         }
     }
 
+    /// # of visible columns
     fn cols(&self) -> u16 {
         self.size.0 as u16
     }
 
+    /// # of visible row
     fn rows(&self) -> u16 {
         self.size.1 as u16
     }
 
+    /// Set the current columns and rows.
     fn term_size(&mut self, cols: usize, rows: usize) {
         self.size = (cols, rows);
     }
@@ -275,6 +297,7 @@ impl UI {
         result.map_err(|e| error!("Spinner error: {:?}", e))
     }
 
+    /// Create a rendered String for the current View in its current state.
     pub fn render(&mut self) -> Result<String> {
         // TODO: only get size on SIGWINCH
         if let Ok((cols, rows)) = terminal_size() {
@@ -297,10 +320,12 @@ impl UI {
         }
     }
 
+    /// Set the status line's content.
     fn set_status(&mut self, status: String) {
         self.status = status;
     }
 
+    /// Render the connection status (TLS or Tor).
     fn render_conn_status(&self) -> Option<String> {
         let page = self.views.get(self.focused)?;
         if page.is_tls() {
@@ -321,6 +346,7 @@ impl UI {
         None
     }
 
+    /// Render the status line.
     fn render_status(&self) -> String {
         format!(
             "{}{}{}{}{}{}",
@@ -333,6 +359,7 @@ impl UI {
         )
     }
 
+    /// Add a View to the app's currently opened Views.
     fn add_page(&mut self, page: Page) {
         self.dirty = true;
         if !self.views.is_empty() && self.focused < self.views.len() - 1 {
@@ -457,6 +484,7 @@ impl UI {
         Ok(())
     }
 
+    /// Asks the current View to process user input and produce an Action.
     fn process_page_input(&mut self) -> Action {
         if let Some(page) = self.views.get_mut(self.focused) {
             if let Ok(key) = stdin()
@@ -484,6 +512,8 @@ impl UI {
         self.dirty = true;
     }
 
+    /// Given an Action from a View in response to user input, do the
+    /// action.
     fn process_action(&mut self, action: Action) -> Result<()> {
         match action {
             Action::List(actions) => {

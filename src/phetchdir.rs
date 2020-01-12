@@ -1,3 +1,11 @@
+//! The phetchdir is `DIR`, or `~/.config/phetch` by default. There is
+//! currently no way to change it. Bookmarks, user history, and the
+//! `phetch.conf` all live in this directory in a fully loaded
+//! installation of phetch.
+//!
+//! This module provides helpers for working with the phetchdir:
+//! checking its existence, saving to files inside it, and the sort.
+
 use crate::gopher;
 use std::{
     fs::{File, OpenOptions},

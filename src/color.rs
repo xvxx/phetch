@@ -1,3 +1,7 @@
+//! Terminal colors.
+//! Provides a macro to color text as well as sturcts to get their
+//! raw ansi codes.
+
 use std::fmt;
 
 /// Shortcut to produce a String colored with one or more colors.

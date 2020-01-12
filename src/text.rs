@@ -1,3 +1,7 @@
+//! A View representing a Gopher text entry.
+//! Responds to user input by producing an Action which is then handed
+//! to the main UI to perform.
+
 use crate::{
     config::Config,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},

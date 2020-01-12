@@ -2,10 +2,10 @@ use phetch::{
     args, gopher,
     ui::{Mode, UI},
 };
-use std::{env, process::exit};
+use std::{env, process};
 
 fn main() {
-    exit(run())
+    process::exit(run())
 }
 
 /// Start the app. Returns UNIX exit code.

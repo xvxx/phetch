@@ -1,3 +1,7 @@
+//! phetch will append every URL visited to a Gophermap if a
+//! `HISTORY_FILE` in `~/.config/phetch/` exists. This file must be
+//! manually created by the user for history tracking to engage.
+
 use crate::phetchdir;
 use std::io::{BufRead, Result};
 

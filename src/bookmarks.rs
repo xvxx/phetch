@@ -1,3 +1,7 @@
+//! Bookmarks are enabled if you create a ~/.config/phetch/ directory
+//! manually. They are stored as a simple Gophermap, `BOOKMARKS_FILE`,
+//! in that directory.
+
 use crate::phetchdir;
 use std::io::{Read, Result};
 

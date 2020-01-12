@@ -1,3 +1,8 @@
+//! phetch will load `~/.config/phetch/phetch.conf` or a file you
+//! specify with the `--config` command line option when it starts.
+//!
+//! An example default config is provided but unused by this module.
+
 use crate::{phetchdir, ui};
 use std::{
     collections::HashMap,

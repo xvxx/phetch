@@ -1,3 +1,6 @@
+//! The `help` module manages all internal Gopher pages, from the help
+//! system itself to the Start and "About Phetch" pages.
+
 use crate::{bookmarks, history};
 
 /// Find a help file/page. If found, gives the raw Gophermap.

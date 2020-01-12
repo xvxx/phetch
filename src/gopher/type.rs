@@ -1,24 +1,25 @@
+/// Gopher types are defined according to RFC 1436.
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum Type {
-    Text,       // 0 | 96 | cyan
-    Menu,       // 1 | 94 | blue
-    CSOEntity,  // 2 |    | white background
-    Error,      // 3 | 91 | red
-    Binhex,     // 4 |  4 | white underline
-    DOSFile,    // 5 |  4 | white underline
-    UUEncoded,  // 6 |  4 | white underline
-    Search,     // 7 |  0 | white
-    Telnet,     // 8 | 90 | gray underline
-    Binary,     // 9 |  4 | white underline
-    Mirror,     // + |    | white background
-    GIF,        // g |  4 | white underline
-    Telnet3270, // T |    | white background
-    HTML,       // h | 92 | green
-    Image,      // I |  4 | white underline
-    PNG,        // p |  4 | white underline
-    Info,       // i | 93 | yellow
-    Sound,      // s |  4 | white underline
-    Document,   // d |  4 | white underline
+    Text,       // 0 | cyan
+    Menu,       // 1 | blue
+    CSOEntity,  // 2 | unsupported
+    Error,      // 3 | red
+    Binhex,     // 4 | download
+    DOSFile,    // 5 | download
+    UUEncoded,  // 6 | download
+    Search,     // 7 | white
+    Telnet,     // 8 | gray underline
+    Binary,     // 9 | download
+    Mirror,     // + | unsupported
+    GIF,        // g | download
+    Telnet3270, // T | unsupported
+    HTML,       // h | green
+    Image,      // I | download
+    PNG,        // p | download
+    Info,       // i | yellow
+    Sound,      // s | download
+    Document,   // d | download
 }
 
 impl Type {

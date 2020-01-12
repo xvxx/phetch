@@ -1,6 +1,8 @@
 use crate::ui::Key;
 use std::fmt;
 
+/// Views generate Actions in response to user input, which are
+/// processed by the UI.
 pub enum Action {
     None,                                              // do nothing
     Open(String, String),                              // open(title, url)

@@ -1,3 +1,5 @@
+//! Helper functions and macros.
+
 /// Debug macro that appends a line to `phetch.log`.
 /// Useful for printf-style debugging - add your `log!()` calls,
 /// and `tail -f phetch.log` while running phetch to peek inside.
@@ -22,6 +24,7 @@ macro_rules! log {
         }
     };
 }
+
 /// Creates an Other kind of io::Error.
 macro_rules! error {
     ($e:expr) => {

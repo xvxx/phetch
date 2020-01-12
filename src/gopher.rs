@@ -1,3 +1,9 @@
+//! phetch's Gopher library contains a few phetch-specific features:
+//! the ability to make requests or downloads over TLS or Tor,
+//! cleaning Unicode control characters from Gopher responses, and
+//! URL parsing that recognizes different protocols like telnet and
+//! IPv6 addresses.
+
 use std::{
     env,
     io::{Read, Result, Write},
@@ -14,6 +20,11 @@ use native_tls::TlsConnector;
 
 mod r#type;
 pub use self::r#type::Type;
+
+/// Some Gopher servers can be kind of slow, we may want to up this or
+/// make it configurable eventually.
+pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
+pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
 trait ReadWrite: Read + Write {}
 impl<T: Read + Write> ReadWrite for T {}
@@ -45,11 +56,6 @@ impl Write for Stream {
         self.io.flush()
     }
 }
-
-/// Some Gopher servers can be kind of slow, we may want to up this or
-/// make it configurable eventually.
-pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
-pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
 /// Fetches a gopher URL and returns a tuple of:
 ///   (did tls work?, raw Gopher response)

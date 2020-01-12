@@ -1,6 +1,7 @@
 use crate::{config::Config, ui};
 use std::fmt;
 
+/// Views represent what's on screen, a Gopher Menu/Text/etc item.
 pub trait View: fmt::Display {
     fn respond(&mut self, key: ui::Key) -> ui::Action;
     fn render(&mut self, cfg: &Config) -> String;
