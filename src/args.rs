@@ -32,14 +32,64 @@ impl Error for ArgError {
 
 /// Parse command line arguments into a Config structure.
 pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
-    let mut cfg = if config::exists() {
+    let mut set_nocfg = false;
+    let mut set_cfg = false;
+    let mut cfg = config::default();
+
+    // check for config to load / not load first
+    let mut iter = args.iter();
+    while let Some(arg) = iter.next() {
+        match arg.as_ref() {
+            "-C" | "--no-config" | "-no-config" => {
+                if set_cfg {
+                    return Err(ArgError::new("can't mix --config and --no-config"));
+                }
+                set_nocfg = true
+            }
+            "-c" | "--config" | "-config" => {
+                if set_nocfg {
+                    return Err(ArgError::new("can't mix --config and --no-config"));
+                }
+                set_cfg = true;
+                if let Some(arg) = iter.next() {
+                    cfg = match config::load_file(arg.as_ref()) {
+                        Ok(c) => c,
+                        Err(e) => {
+                            return Err(ArgError::new(format!("error loading config: {}", e)));
+                        }
+                    };
+                } else {
+                    return Err(ArgError::new("need a config file"));
+                }
+            }
+            a if a.starts_with("--config=") || a.starts_with("-config=") => {
+                if set_nocfg {
+                    return Err(ArgError::new("can't mix --config and --no-config"));
+                }
+                set_cfg = true;
+                let mut parts = arg.as_ref().splitn(2, '=');
+                if let Some(file) = parts.nth(1) {
+                    cfg = match config::load_file(file) {
+                        Ok(c) => c,
+                        Err(e) => {
+                            return Err(ArgError::new(format!("error loading config: {}", e)));
+                        }
+                    };
+                } else {
+                    return Err(ArgError::new("need a config file"));
+                }
+            }
+            _ => {}
+        }
+    }
+
+    // load phetch.conf from disk if they didn't pass -c or -C
+    if !set_cfg && !set_nocfg {
         match config::load() {
             Err(e) => return Err(ArgError::new(e)),
-            Ok(c) => c,
+            Ok(c) => cfg = c,
         }
-    } else {
-        config::default()
-    };
+    }
 
     let mut iter = args.iter();
     let mut got_url = false;
@@ -47,8 +97,6 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
     let mut set_notls = false;
     let mut set_tor = false;
     let mut set_notor = false;
-    let mut set_cfg = false;
-    let mut set_nocfg = false;
     while let Some(arg) = iter.next() {
         match arg.as_ref() {
             "-v" | "--version" | "-version" => {
@@ -68,46 +116,9 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
             }
             "-p" | "--print" | "-print" => cfg.mode = Mode::Print,
             "-l" | "--local" | "-local" => cfg.start = "gopher://127.0.0.1:7070".into(),
-            "-C" | "--no-config" | "-no-config" => {
-                if set_cfg {
-                    return Err(ArgError::new("can't mix --config and --no-config"));
-                }
-                set_nocfg = true;
-                cfg = config::default();
-            }
-            "-c" | "--config" | "-config" => {
-                if set_nocfg {
-                    return Err(ArgError::new("can't mix --config and --no-config"));
-                }
-                set_cfg = true;
-                if let Some(arg) = iter.next() {
-                    cfg = match config::load_file(arg.as_ref()) {
-                        Ok(c) => c,
-                        Err(e) => {
-                            return Err(ArgError::new(format!("error loading config: {}", e)));
-                        }
-                    };
-                } else {
-                    return Err(ArgError::new("need a config file"));
-                }
-            }
-            arg if arg.starts_with("--config=") || arg.starts_with("-config=") => {
-                if set_nocfg {
-                    return Err(ArgError::new("can't mix --config and --no-config"));
-                }
-                set_cfg = true;
-                let mut parts = arg.splitn(2, '=');
-                if let Some(file) = parts.nth(1) {
-                    cfg = match config::load_file(file) {
-                        Ok(c) => c,
-                        Err(e) => {
-                            return Err(ArgError::new(format!("error loading config: {}", e)));
-                        }
-                    };
-                } else {
-                    return Err(ArgError::new("need a config file"));
-                }
-            }
+            "-C" | "--no-config" | "-no-config" => {}
+            "-c" | "--config" | "-config" => {}
+            arg if arg.starts_with("--config=") || arg.starts_with("-config=") => {}
             "-s" | "--tls" | "-tls" => {
                 if set_notls {
                     return Err(ArgError::new("can't set both --tls and --no-tls"));
@@ -240,6 +251,13 @@ mod tests {
         let cfg = parse(&["--tor", "--no-tls"]).expect("should work");
         assert_eq!(cfg.tor, true);
         assert_eq!(cfg.tls, false);
+    }
+
+    #[test]
+    fn test_mix_and_match() {
+        let cfg = parse(&["-r", "-s", "-C"]).expect("should work");
+        assert_eq!(cfg.mode, Mode::Raw);
+        assert_eq!(cfg.tls, true);
     }
 
     #[test]
