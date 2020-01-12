@@ -217,24 +217,24 @@ fn print_usage() {
         "
 Usage:
 
-    phetch [options]          Launch phetch in interactive mode
-    phetch [options] [url]    Open Gopher URL in interactive mode
+    phetch [options]       Launch phetch in interactive mode
+    phetch [options] url   Open Gopher URL in interactive mode
 
 Options:
 
-    -s, --tls                 Try to open Gopher URLs securely w/ TLS
-    -o, --tor                 Use local Tor proxy to open all pages
-    -S, -O                    Disable TLS or Tor
+    -s, --tls              Try to open Gopher URLs securely w/ TLS
+    -o, --tor              Use local Tor proxy to open all pages
+    -S, -O                 Disable TLS or Tor
                               
-    -r, --raw                 Print raw Gopher response only
-    -p, --print               Print rendered Gopher response only
-    -l, --local               Connect to 127.0.0.1:7070
+    -r, --raw              Print raw Gopher response only
+    -p, --print            Print rendered Gopher response only
+    -l, --local            Connect to 127.0.0.1:7070
 
-    -c, --config FILE         Use instead of ~/.config/phetch/phetch.conf
-    -C, --no-config           Don't use any config file            
+    -c, --config FILE      Use instead of ~/.config/phetch/phetch.conf
+    -C, --no-config        Don't use any config file            
     
-    -h, --help                Show this screen
-    -v, --version             Show phetch version
+    -h, --help             Show this screen
+    -v, --version          Show phetch version
 
 Command line options always override options set in phetch.conf.
 
