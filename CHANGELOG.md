@@ -1,4 +1,4 @@
-## v0.1.13-dev
+## v0.1.13
 
 This release fixes some longstanding display bugs and introduces Tor
 support to help you easily browse Gopher more anonymously.
@@ -9,8 +9,8 @@ before the 1.0 release.
 
 ### Added
 
-- phetch now supports [Tor][tor]! 
-- phetch now supports a `~/.config/phetch/phetch.conf` config file! 
+- phetch now supports [Tor][tor]!
+- phetch now supports a `~/.config/phetch/phetch.conf` config file!
 - Specify your own config file with `--config FILE`. Or disable with `-C`/`--no-config`.
 - Emoji can be used as status indicators. Put `emoji yes` in your config file. 🧅🔐
 - `phetch --print URL` will just print a rendered version of the page.
