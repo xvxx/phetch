@@ -157,14 +157,14 @@ impl Menu {
         self.wide = cfg.wide;
         self.mode = cfg.mode;
         let mut out = String::new();
-        let iter = if self.mode == ui::Mode::Run {
+        let limit = if self.mode == ui::Mode::Run {
             // only show as many lines as screen rows minus one
             // (status bar is always last line)
-            self.lines.iter().skip(self.scroll).take(self.rows() - 1)
+            self.rows() - 1
         } else {
-            // show all lines in print mode
-            self.lines.iter().skip(self.scroll).take(self.lines.len())
+            self.lines.len()
         };
+        let iter = self.lines.iter().skip(self.scroll).take(limit);
         let indent = self.indent();
         let left_margin = " ".repeat(indent);
 

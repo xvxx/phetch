@@ -1,6 +1,6 @@
 use crate::{
     config::Config,
-    ui::{Action, Key, View, MAX_COLS, SCROLL_LINES},
+    ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
 };
 use std::fmt;
 use termion::clear;
@@ -109,11 +109,16 @@ impl View for Text {
         } else {
             String::from("")
         };
+        let limit = if cfg.mode == ui::Mode::Run {
+            rows - 1
+        } else {
+            self.lines
+        };
         let iter = self
             .raw_response
             .split_terminator('\n')
             .skip(self.scroll)
-            .take(rows - 1);
+            .take(limit);
 
         for line in iter {
             // Check for Gopher's weird "end of response" line.
