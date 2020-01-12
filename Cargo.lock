@@ -160,7 +160,7 @@ dependencies = [
 
 [[package]]
 name = "phetch"
-version = "0.1.13-dev"
+version = "0.1.13"
 dependencies = [
  "atty 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.66 (registry+https://github.com/rust-lang/crates.io-index)",
