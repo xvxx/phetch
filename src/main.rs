@@ -1,3 +1,4 @@
+use atty;
 use phetch::{
     config, gopher,
     ui::{Mode, UI},
@@ -163,6 +164,11 @@ fn run() -> i32 {
         return 0;
     }
 
+    if mode == Mode::Print && !atty::is(atty::Stream::Stdout) {
+        // not a tty so print an almost-raw version of the response
+        return print_plain(&cfg.start, cfg.tls, cfg.tor);
+    }
+
     if mode == Mode::Print {
         cfg.cursor = false;
         cfg.wide = true;
@@ -241,7 +247,40 @@ fn print_raw(url: &str, tls: bool, tor: bool) {
         Ok((_, response)) => println!("{}", response),
         Err(e) => {
             eprintln!("{}", e);
-            exit(0)
+            exit(1)
         }
     }
+}
+
+/// Print a colorless, plain version of the response for a non-tty
+/// (like a pipe).
+fn print_plain(url: &str, tls: bool, tor: bool) -> i32 {
+    let mut out = String::new();
+    let (typ, _, _, _) = gopher::parse_url(url);
+    match gopher::fetch_url(url, tls, tor) {
+        Ok((_, response)) => match typ {
+            gopher::Type::Menu => {
+                // TODO use parse_line()
+                for line in response.trim_end_matches(".\r\n").lines() {
+                    let line = line.trim_end_matches('\r');
+                    if let Some(desc) = line.splitn(2, "\t").nth(0) {
+                        let desc = desc.trim();
+                        out.push_str(&desc.chars().skip(1).collect::<String>());
+                        out.push('\n');
+                    }
+                }
+            }
+            gopher::Type::Text => println!("{}", response.trim_end_matches(".\r\n")),
+            _ => {
+                eprintln!("can't print gopher type: {:?}", typ);
+                return 1;
+            }
+        },
+        Err(e) => {
+            eprintln!("{}", e);
+            return 1;
+        }
+    }
+    print!("{}", out);
+    0
 }

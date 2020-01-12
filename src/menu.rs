@@ -175,7 +175,7 @@ impl Menu {
                 out.push_str("      ");
             } else {
                 if line.link == self.link && self.show_cursor() {
-                    out.push_str("\x1b[97;1m*\x1b[0m")
+                    out.push_str(&color!("*", Bold))
                 } else {
                     out.push(' ');
                 }
