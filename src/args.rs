@@ -176,7 +176,7 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
 
     #[cfg(not(test))]
     {
-        if !atty::is(atty::Stream::Stdout) {
+        if !atty::is(atty::Stream::Stdout) && cfg.mode != Mode::Raw {
             cfg.mode = Mode::NoTTY;
         }
     }
