@@ -17,7 +17,7 @@ fn sh(args: &str) -> String {
     if let Ok(output) = process::Command::new(cmd).args(&args).output() {
         if !output.status.success() {
             eprintln!("Error running {} {:?}", cmd, args);
-            process::exit(1);
+            return "???".to_string();
         }
         String::from_utf8(output.stdout).unwrap()
     } else {
