@@ -328,7 +328,7 @@ impl UI {
 
     /// Set the status line's content.
     fn set_status(&mut self, status: String) {
-        self.status = status;
+        self.status = status.replace('\n', "\\n").replace('\r', "\\r");
     }
 
     /// Render the connection status (TLS or Tor).
@@ -607,7 +607,6 @@ impl UI {
                     self.dirty = true;
                 }
                 'q' => self.running = false,
-                '\n' => (),
                 c => return Err(error!("Unknown keypress: {}", c)),
             },
             _ => (),
