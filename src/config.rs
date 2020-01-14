@@ -100,7 +100,8 @@ pub fn parse(text: &str) -> Result<Config> {
     let mut cfg = default();
     let mut keys: HashMap<&str, bool> = HashMap::new();
 
-    for (linenum, line) in text.split_terminator('\n').enumerate() {
+    for (mut linenum, line) in text.split_terminator('\n').enumerate() {
+        linenum += 1;
         // skip empty lines
         if line.trim().is_empty() {
             continue;
