@@ -1,4 +1,5 @@
 /// Gopher types are defined according to RFC 1436.
+#[allow(missing_docs)]
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum Type {
     Text,       // 0 | cyan

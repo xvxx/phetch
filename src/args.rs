@@ -18,6 +18,8 @@ pub struct ArgError {
 }
 
 impl ArgError {
+    /// An ArgError represents an error in the user-supplied command
+    /// line arguments.
     pub fn new(err: impl fmt::Display) -> ArgError {
         ArgError {
             details: format!("{}", err),

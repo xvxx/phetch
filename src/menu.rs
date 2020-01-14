@@ -21,20 +21,34 @@ use termion::{clear, cursor};
 /// navigation" feature using number entry and the "incremental search"
 /// (over menu links) feature using text entry.
 pub struct Menu {
-    pub url: String,          // gopher url
-    pub lines: Vec<Line>,     // lines
-    pub links: Vec<usize>,    // links (index of line in lines vec)
-    pub longest: usize,       // size of the longest line
-    pub raw: String,          // raw response
-    pub input: String,        // user's inputted value
-    pub mode: ui::Mode,       // interactive or print mode?
-    pub link: usize,          // selected link
-    pub scroll: usize,        // scrolling offset
-    pub searching: bool,      // search mode?
-    pub tls: bool,            // retrieved via tls?
-    pub tor: bool,            // retrieved via tor?
-    pub size: (usize, usize), // cols, rows
-    pub wide: bool,           // in wide mode?
+    /// Gopher URL
+    pub url: String,
+    /// Lines in the menu. Not all are links.
+    pub lines: Vec<Line>,
+    /// Indexes of links in the `lines` vector. Pauper's pointers.
+    pub links: Vec<usize>,
+    /// Currently selected link. Index of the `links` vec.
+    pub link: usize,
+    /// Size of the longest line, for wrapping purposes
+    pub longest: usize,
+    /// Actual Gopher response
+    pub raw: String,
+    /// User input on a prompt() line
+    pub input: String,
+    /// UI mode. Interactive (Run), Printing, Raw mode...
+    pub mode: ui::Mode,
+    /// Scrolling offset, in rows.
+    pub scroll: usize,
+    /// Incremental search mode?
+    pub searching: bool,
+    /// Was this menu retrieved via TLS?
+    pub tls: bool,
+    /// Retrieved via Tor?
+    pub tor: bool,
+    /// Size of the screen currently, cols and rows
+    pub size: (usize, usize),
+    /// Wide mode?
+    pub wide: bool,
 }
 
 /// The Line represents a single line in a Gopher menu.

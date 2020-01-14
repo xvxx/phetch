@@ -30,6 +30,7 @@ macro_rules! color {
 ///   println!("{}Error: {}{}", color::Red, msg, color::Reset);
 macro_rules! define_color {
     ($color:ident, $code:literal) => {
+        #[allow(missing_docs)]
         pub struct $color;
         impl fmt::Display for $color {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

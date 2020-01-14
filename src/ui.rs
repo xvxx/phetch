@@ -41,7 +41,10 @@ use termion::{
     terminal_size,
 };
 
+/// Alias for a termion Key event.
 pub type Key = termion::event::Key;
+
+/// Alias for either a Menu or Text View.
 pub type Page = Box<dyn View>;
 
 /// How many lines to jump by when using page up/down.
@@ -54,17 +57,25 @@ pub const MAX_COLS: usize = 77;
 /// UI is mainly concerned with drawing to the screen, managing the
 /// active Views/pages, and responding to user input.
 pub struct UI {
-    views: Vec<Page>,         // loaded views
-    focused: usize,           // currently focused view
-    dirty: bool,              // redraw?
-    running: bool,            // main ui loop running?
-    pub size: (usize, usize), // cols, rows
-    status: String,           // status message, if any
-    config: Config,           // user config
+    /// Current loaded Gopher views. Menu or Text
+    views: Vec<Page>,
+    /// Index of currently focused View
+    focused: usize,
+    /// Does the UI need to be entirely redrawn?
+    dirty: bool,
+    /// Is the UI running?
+    running: bool,
+    /// Size of screen (cols, rows)
+    pub size: (usize, usize),
+    /// Status message to display on screen, if any
+    status: String,
+    /// User config. Command line options + phetch.conf
+    config: Config,
     out: RefCell<RawTerminal<Stdout>>,
 }
 
 impl UI {
+    /// Create a new phetch application from a user provided config.
     pub fn new(config: Config) -> UI {
         let mut size = (0, 0);
         if let Ok((cols, rows)) = terminal_size() {

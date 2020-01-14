@@ -25,6 +25,7 @@ pub use self::r#type::Type;
 /// Some Gopher servers can be kind of slow, we may want to up this or
 /// make it configurable eventually.
 pub const TCP_TIMEOUT_IN_SECS: u64 = 8;
+/// Based on `TCP_TIMEOUT_IN_SECS` but a `Duration` type.
 pub const TCP_TIMEOUT_DURATION: Duration = Duration::from_secs(TCP_TIMEOUT_IN_SECS);
 
 trait ReadWrite: Read + Write {}

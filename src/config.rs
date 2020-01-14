@@ -41,12 +41,18 @@ emoji no
 /// such as the UI mode (Print, Run, Raw, etc).
 #[derive(Debug)]
 pub struct Config {
+    /// Gopher URL to open on bare launch
     pub start: String,
+    /// Whether to use TLS or not
     pub tls: bool,
+    /// Using Tor proxy?
     pub tor: bool,
+    /// Wide mode
     pub wide: bool,
+    /// Render connection status as emoji
     pub emoji: bool,
-    pub mode: ui::Mode, // can't be set in conf file
+    /// UI mode. Can't be set in conf file.
+    pub mode: ui::Mode,
 }
 
 impl Default for Config {

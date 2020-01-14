@@ -12,15 +12,24 @@ use termion::clear;
 /// The Text View holds the raw Gopher response as well as information
 /// about which lines should currently be displayed on screen.
 pub struct Text {
+    /// Gopher URL
     url: String,
+    /// Gopher response
     raw_response: String,
-    scroll: usize,        // offset
-    lines: usize,         // # of lines
-    longest: usize,       // longest line
-    size: (usize, usize), // cols, rows
-    pub tls: bool,        // retrieved via tls?
-    pub tor: bool,        // retrieved via tor?
-    pub wide: bool,       // in wide mode? turns off margins
+    /// Current scroll offset, in rows
+    scroll: usize,
+    /// Number of lines
+    lines: usize,
+    /// Size of longest line
+    longest: usize,
+    /// Current screen size, cols and rows
+    size: (usize, usize),
+    /// Was this page retrieved view TLS?
+    pub tls: bool,
+    /// Retrieved via Tor?
+    pub tor: bool,
+    /// Currently in wide mode?
+    pub wide: bool,
 }
 
 impl fmt::Display for Text {
@@ -151,6 +160,7 @@ impl View for Text {
 }
 
 impl Text {
+    /// Create a Text View from a raw Gopher response and a few options.
     pub fn from(url: String, response: String, tls: bool, tor: bool) -> Text {
         let mut lines = 0;
         let mut longest = 0;
