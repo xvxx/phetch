@@ -91,13 +91,10 @@ pub fn exists() -> bool {
 
 /// Parses a phetch config file into a Config struct.
 pub fn parse(text: &str) -> Result<Config> {
-    let mut linenum = 0;
     let mut cfg = default();
     let mut keys: HashMap<&str, bool> = HashMap::new();
 
-    for line in text.split_terminator('\n') {
-        linenum += 1;
-
+    for (linenum, line) in text.split_terminator('\n').enumerate() {
         // skip empty lines
         if line.trim().is_empty() {
             continue;

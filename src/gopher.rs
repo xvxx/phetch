@@ -123,7 +123,7 @@ pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> 
             break;
         }
         bytes += count;
-        file.write(&buf[..count]);
+        file.write_all(&buf[..count])?;
         if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
             return Err(error!("Download cancelled"));
         }
@@ -149,7 +149,7 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
                     let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
                     stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
                     if let Ok(mut stream) = connector.connect(host, stream) {
-                        stream.write(format!("{}\r\n", selector).as_ref())?;
+                        stream.write_all(format!("{}\r\n", selector).as_ref())?;
                         return Ok(Stream {
                             io: Box::new(stream),
                             tls: true,
@@ -165,7 +165,7 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
         #[cfg(feature = "tor")]
         {
             let proxy = std::env::var("TOR_PROXY")
-                .unwrap_or("127.0.0.1:9050".into())
+                .unwrap_or_else(|_| "127.0.0.1:9050".into())
                 .to_socket_addrs()?
                 .nth(0)
                 .unwrap();
@@ -173,7 +173,7 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
                 Ok(s) => s,
                 Err(e) => return Err(error!("Tor error: {}", e)),
             };
-            stream.write(format!("{}\r\n", selector).as_ref())?;
+            stream.write_all(format!("{}\r\n", selector).as_ref())?;
             return Ok(Stream {
                 io: Box::new(stream),
                 tls: false,
@@ -184,7 +184,7 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
     // no tls or tor, try regular connection
     let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
     stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-    stream.write(format!("{}\r\n", selector).as_ref())?;
+    stream.write_all(format!("{}\r\n", selector).as_ref())?;
     Ok(Stream {
         io: Box::new(stream),
         tls: false,

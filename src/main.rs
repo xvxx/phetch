@@ -130,7 +130,7 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> i32 {
                 // TODO use parse_line()
                 for line in response.trim_end_matches(".\r\n").lines() {
                     let line = line.trim_end_matches('\r');
-                    if let Some(desc) = line.splitn(2, "\t").nth(0) {
+                    if let Some(desc) = line.splitn(2, '\t').nth(0) {
                         let desc = desc.trim();
                         out.push_str(&desc.chars().skip(1).collect::<String>());
                         out.push('\n');

@@ -773,7 +773,7 @@ impl Menu {
                     lines.push(Line {
                         name,
                         url: parts[1]
-                            .trim_start_matches("/")
+                            .trim_start_matches('/')
                             .trim_start_matches("URL:")
                             .to_string(),
                         typ,

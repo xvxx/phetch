@@ -1,4 +1,5 @@
 #![allow(unused_must_use)]
+#![allow(clippy::while_let_on_iterator)]
 
 #[macro_use]
 pub mod utils;
