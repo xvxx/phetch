@@ -55,10 +55,15 @@ pub struct Menu {
 /// It must exist in the context of a Menu struct, and its `link`
 /// field will point to its index in the Menu's `links` Vec.
 pub struct Line {
+    /// Text of the line.
     pub name: String,
+    /// URL, if it's a link.
     pub url: String,
+    /// Gopher Item Type.
     pub typ: Type,
-    pub link: usize, // link #, if any
+    /// Index of this link in the Menu::links vector, if it's a
+    /// `gopher::Type.is_link()`
+    pub link: usize,
 }
 
 /// Direction of a given link relative to the visible screen.
@@ -106,6 +111,8 @@ impl View for Menu {
 }
 
 impl Menu {
+    /// Create a representation of a Gopher Menu from a raw Gopher
+    /// response and a few options.
     pub fn from(url: String, response: String, tls: bool, tor: bool) -> Menu {
         Menu {
             tls,
