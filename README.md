@@ -89,13 +89,19 @@ To build with TLS support on **Linux**, you need `openssl` and
 
     sudo apt install -y pkg-config libssl-dev
 
-To build without TLS support, build with the `disable-tls` feature:
+phetch builds with TLS and Tor support by default. To disable these
+features, or to enable only one of them, use the
+`--no-default-features` flag:
 
-    cargo build --features disable-tls
+    cargo build --no-default-features
 
 You can check whether TLS is enabled by visiting the About page:
 
-    cargo run --features disable-tls -- gopher://phetch/about
+    cargo run --no-default-features -- gopher://phetch/about
+
+To enable just TLS support, or just Tor support, use `--features`:
+
+    cargo run --no-default-features --features tor -- gopher://phetch/about
 
 ## screenies
 

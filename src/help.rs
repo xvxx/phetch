@@ -15,20 +15,35 @@ pub fn lookup(name: &str) -> Option<String> {
         "help/types" => format!("{}{}", HEADER, TYPES),
         "help/bookmarks" => format!("{}{}", HEADER, BOOKMARKS),
         "help/history" => format!("{}{}", HEADER, HISTORY),
+        "help" | "help/" => format!(
+            "{}{}",
+            HEADER,
+            HELP.replace("{platform}", crate::PLATFORM)
+                .replace("{version}", crate::VERSION)
+        ),
         "about" => format!(
             "{}{}",
             HEADER,
             ABOUT
                 .replace("{build-date}", crate::BUILD_DATE)
                 .replace("{git-ref}", crate::GIT_REF)
-                .replace("{tls-support}", crate::TLS_SUPPORT)
                 .replace("{version}", crate::VERSION)
-        ),
-        "help" | "help/" => format!(
-            "{}{}",
-            HEADER,
-            HELP.replace("{platform}", crate::PLATFORM)
-                .replace("{version}", crate::VERSION)
+                .replace(
+                    "{tls-support}",
+                    if crate::TLS_SUPPORT {
+                        "supported"
+                    } else {
+                        "not supported"
+                    }
+                )
+                .replace(
+                    "{tor-support}",
+                    if crate::TOR_SUPPORT {
+                        "supported"
+                    } else {
+                        "not supported"
+                    }
+                )
         ),
         _ => return None,
     })
@@ -281,7 +296,8 @@ i
 i            ~ * ~
 i
 itls: {tls-support}
-iref: {git-ref}
-ibuilt: {build-date}
+itor: {tor-support}
+igit ref: {git-ref}
+ibuilt on: {build-date}
 i
 ";

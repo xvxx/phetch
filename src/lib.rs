@@ -28,7 +28,13 @@ pub const BUILD_DATE: &str = env!("BUILD_DATE");
 pub const BUG_URL: &str = "https://github.com/xvxx/phetch/issues/new";
 
 /// Whether we compiled with TLS support.
-#[cfg(not(feature = "disable-tls"))]
-pub const TLS_SUPPORT: &str = "enabled";
-#[cfg(feature = "disable-tls")]
-pub const TLS_SUPPORT: &str = "not enabled";
+#[cfg(feature = "tls")]
+pub const TLS_SUPPORT: bool = true;
+#[cfg(not(feature = "tls"))]
+pub const TLS_SUPPORT: bool = false;
+
+/// Whether we compiled with Tor support.
+#[cfg(feature = "tor")]
+pub const TOR_SUPPORT: bool = true;
+#[cfg(not(feature = "tor"))]
+pub const TOR_SUPPORT: bool = false;

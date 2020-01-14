@@ -5,7 +5,6 @@
 //! IPv6 addresses.
 
 use std::{
-    env,
     io::{Read, Result, Write},
     net::TcpStream,
     net::ToSocketAddrs,
@@ -13,9 +12,11 @@ use std::{
     time::Duration,
 };
 use termion::input::TermRead;
+
+#[cfg(feature = "tor")]
 use tor_stream::TorStream;
 
-#[cfg(not(feature = "disable-tls"))]
+#[cfg(feature = "tls")]
 use native_tls::TlsConnector;
 
 mod r#type;
@@ -141,7 +142,7 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
 
     // attempt tls connection
     if tls {
-        #[cfg(not(feature = "disable-tls"))]
+        #[cfg(feature = "tls")]
         {
             {
                 if let Ok(connector) = TlsConnector::new() {
@@ -161,29 +162,33 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
 
     // tls didn't work or wasn't selected, try Tor or default
     if tor {
-        let proxy = env::var("TOR_PROXY")
-            .unwrap_or("127.0.0.1:9050".into())
-            .to_socket_addrs()?
-            .nth(0)
-            .unwrap();
-        let mut stream = match TorStream::connect_with_address(proxy, sock) {
-            Ok(s) => s,
-            Err(e) => return Err(error!("Tor error: {}", e)),
-        };
-        stream.write(format!("{}\r\n", selector).as_ref())?;
-        Ok(Stream {
-            io: Box::new(stream),
-            tls: false,
-        })
-    } else {
-        let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
-        stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-        stream.write(format!("{}\r\n", selector).as_ref())?;
-        Ok(Stream {
-            io: Box::new(stream),
-            tls: false,
-        })
+        #[cfg(feature = "tor")]
+        {
+            let proxy = std::env::var("TOR_PROXY")
+                .unwrap_or("127.0.0.1:9050".into())
+                .to_socket_addrs()?
+                .nth(0)
+                .unwrap();
+            let mut stream = match TorStream::connect_with_address(proxy, sock) {
+                Ok(s) => s,
+                Err(e) => return Err(error!("Tor error: {}", e)),
+            };
+            stream.write(format!("{}\r\n", selector).as_ref())?;
+            return Ok(Stream {
+                io: Box::new(stream),
+                tls: false,
+            });
+        }
     }
+
+    // no tls or tor, try regular connection
+    let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
+    stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
+    stream.write(format!("{}\r\n", selector).as_ref())?;
+    Ok(Stream {
+        io: Box::new(stream),
+        tls: false,
+    })
 }
 
 /// Parses gopher URL into parts.

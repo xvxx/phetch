@@ -132,7 +132,7 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
                 }
                 set_tls = true;
                 cfg.tls = true;
-                if cfg!(feature = "disable-tls") {
+                if cfg!(not(feature = "tls")) {
                     return Err(ArgError::new("phetch was compiled without TLS support"));
                 }
             }
@@ -146,6 +146,9 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
             "-o" | "--tor" | "-tor" => {
                 if set_notor {
                     return Err(ArgError::new("can't set both --tor and --no-tor"));
+                }
+                if cfg!(not(feature = "tor")) {
+                    return Err(ArgError::new("phetch was compiled without Tor support"));
                 }
                 set_tor = true;
                 cfg.tor = true;
