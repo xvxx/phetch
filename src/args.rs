@@ -93,7 +93,7 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
     }
 
     // load phetch.conf from disk if they didn't pass -c or -C
-    if !set_cfg && !set_nocfg && config::exists() {
+    if cfg!(not(test)) && !set_cfg && !set_nocfg && config::exists() {
         match config::load() {
             Err(e) => return Err(ArgError::new(e)),
             Ok(c) => cfg = c,
