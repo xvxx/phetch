@@ -764,88 +764,22 @@ impl Menu {
         let mut lines = vec![];
         let mut links = vec![];
         let mut longest = 0;
+
         for line in raw.split_terminator('\n') {
             // Check for Gopher's weird "end of response" message.
             if line == ".\r" || line == "." {
-                continue;
+                break;
             }
-            if let Some(c) = line.chars().nth(0) {
-                let typ = match Type::from(c) {
-                    Some(t) => t,
-                    None => continue,
-                };
 
-                // assemble line info
-                let parts: Vec<&str> = line.split_terminator('\t').collect();
-
-                // first set item description
-                let mut name = String::from("");
-                if !parts[0].is_empty() {
-                    name.push_str(&parts[0][1..].trim_end_matches('\r'));
+            if let Some(mut line) = parse_line(line) {
+                if line.name.len() > longest {
+                    longest = line.name.len();
                 }
-                if name.len() > longest {
-                    longest = name.len();
+                if line.typ.is_link() {
+                    line.link = links.len();
+                    links.push(lines.len());
                 }
-
-                // check for URL:<url> syntax
-                if parts.len() > 1
-                    && (parts[1].starts_with("URL:") || parts[1].starts_with("/URL:"))
-                {
-                    lines.push(Line {
-                        name,
-                        url: parts[1]
-                            .trim_start_matches('/')
-                            .trim_start_matches("URL:")
-                            .to_string(),
-                        typ,
-                        link: links.len(),
-                    });
-                    if typ != Type::Info {
-                        links.push(lines.len() - 1);
-                    }
-                    continue;
-                }
-
-                // assemble regular, gopher-style URL
-                let mut url = if typ == Type::Telnet {
-                    String::from("telnet://")
-                } else {
-                    String::from("gopher://")
-                };
-
-                // host
-                if parts.len() > 2 {
-                    url.push_str(parts[2]);
-                }
-                // port
-                if parts.len() > 3 {
-                    let port = parts[3].trim_end_matches('\r');
-                    if port != "70" {
-                        url.push(':');
-                        url.push_str(parts[3].trim_end_matches('\r'));
-                    }
-                }
-                // selector
-                if parts.len() > 1 && typ != Type::Telnet {
-                    let sel = parts[1].to_string();
-                    if !sel.is_empty() {
-                        // auto-prepend gopher type to selector
-                        if let Some(first_char) = parts[0].chars().nth(0) {
-                            url.push_str("/");
-                            url.push(first_char);
-                        }
-                        url.push_str(&sel);
-                    }
-                }
-                lines.push(Line {
-                    name,
-                    url,
-                    typ,
-                    link: links.len(),
-                });
-                if typ != Type::Info {
-                    links.push(lines.len() - 1);
-                }
+                lines.push(line);
             }
         }
 
@@ -868,6 +802,64 @@ impl Menu {
     }
 }
 
+/// Parses a single line from a Gopher menu into a `Line` struct.
+pub fn parse_line(line: &str) -> Option<Line> {
+    if line.is_empty() {
+        return None;
+    }
+
+    let typ = Type::from(line.chars().nth(0)?)?;
+
+    if !typ.is_link() {
+        return Some(Line {
+            name: line[1..].into(),
+            url: "".to_string(),
+            typ,
+            link: 0,
+        });
+    }
+
+    let mut name = "n/a";
+    let mut sel = "(null)";
+    let mut host = "localhost";
+    let mut port = "70";
+    for (i, chunk) in line[1..].trim_end_matches('\r').split('\t').enumerate() {
+        match i {
+            0 => name = chunk,
+            1 => sel = chunk,
+            2 => host = chunk,
+            3 => port = chunk,
+            _ => break,
+        }
+    }
+
+    let url = if typ.is_html() {
+        sel.trim_start_matches('/')
+            .trim_start_matches("URL:")
+            .to_string()
+    } else if typ.is_telnet() {
+        format!("telnet://{}:{}", host, port)
+    } else {
+        let mut path = format!("/{}{}", typ, sel);
+        if sel.is_empty() || sel == "/" {
+            path.clear();
+        }
+
+        if port == "70" {
+            format!("gopher://{}{}", host, path)
+        } else {
+            format!("gopher://{}:{}{}", host, port, path)
+        }
+    };
+
+    Some(Line {
+        name: name.into(),
+        url,
+        typ,
+        link: 0,
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -887,7 +879,7 @@ i---------------------------------------------------------
 1SDF GOPHERSPACE (1303 ACTIVE users)	/maps/	sdf.org	70
 1Geosphere	Geosphere	earth.rice.edu
 8DJ's place	a	bbs.impakt.net	6502
-1git tree	/URL:https://github.com/my/code	(null)	70
+hgit tree	/URL:https://github.com/my/code	(null)	70
 i---------------------------------------------------------
 "
         );
