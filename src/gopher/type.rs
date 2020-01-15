@@ -31,6 +31,11 @@ impl Type {
         self == Type::Info
     }
 
+    /// Text document?
+    pub fn is_text(self) -> bool {
+        self == Type::Text
+    }
+
     /// HTML link?
     pub fn is_html(self) -> bool {
         self == Type::HTML
