@@ -188,7 +188,7 @@ impl UI {
         }
 
         // binary downloads
-        let gopher::Url { typ, .. } = gopher::parse_url(url);
+        let typ = gopher::type_for_url(url);
         if typ.is_download() {
             self.dirty = true;
             return if self.confirm(&format!("Download {}?", url)) {
@@ -244,7 +244,7 @@ impl UI {
         } else {
             self.spinner("", move || gopher::fetch_url(&thread_url, tls, tor))??
         };
-        let gopher::Url { typ, .. } = gopher::parse_url(&url);
+        let typ = gopher::type_for_url(&url);
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url, res, tls, tor))),
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, tls, tor))),

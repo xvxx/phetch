@@ -632,7 +632,7 @@ impl Menu {
 
         if let Some(line) = self.link(self.link) {
             let url = line.url.to_string();
-            let gopher::Url { typ, .. } = gopher::parse_url(&url);
+            let typ = gopher::type_for_url(&url);
             match typ {
                 Type::Search => {
                     let prompt = format!("{}> ", line.text);

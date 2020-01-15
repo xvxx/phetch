@@ -123,7 +123,7 @@ fn print_raw(url: &str, tls: bool, tor: bool) -> i32 {
 /// (like a pipe).
 fn print_plain(url: &str, tls: bool, tor: bool) -> i32 {
     let mut out = String::new();
-    let gopher::Url { typ, .. } = gopher::parse_url(url);
+    let typ = gopher::type_for_url(url);
     match gopher::fetch_url(url, tls, tor) {
         Ok((_, response)) => match typ {
             gopher::Type::Menu => {

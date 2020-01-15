@@ -217,6 +217,27 @@ impl<'a> Url<'a> {
     }
 }
 
+/// Given a Gopher URL, returns a gopher::Type.
+pub fn type_for_url(url: &str) -> Type {
+    if url.starts_with("telnet://") {
+        return Type::Telnet;
+    }
+
+    if url.starts_with("URL:") || url.starts_with("/URL:") {
+        return Type::HTML;
+    }
+
+    if let Some(idx) = url.find('/') {
+        if url.len() > idx {
+            if let Some(t) = url.chars().nth(idx + 1) {
+                return Type::from(t).unwrap_or(Type::Menu);
+            }
+        }
+    }
+
+    Type::Menu
+}
+
 /// Parses gopher URL into parts.
 /// Returns (Type, host, port, sel)
 pub fn parse_url<'a>(url: &'a str) -> Url<'a> {
@@ -396,5 +417,18 @@ mod tests {
         assert_eq!(url.host, "bbs.impakt.net");
         assert_eq!(url.port, "6502");
         assert_eq!(url.sel, "/");
+    }
+
+    #[test]
+    fn test_type_for_url() {
+        assert_eq!(type_for_url("phkt.io"), Type::Menu);
+        assert_eq!(type_for_url("phkt.io/1"), Type::Menu);
+        assert_eq!(type_for_url("phkt.io/1/"), Type::Menu);
+        assert_eq!(type_for_url("phkt.io/0/info.txt"), Type::Text);
+        assert_eq!(type_for_url("URL:https://google.com"), Type::HTML);
+        assert_eq!(
+            type_for_url("telnet://bbs.inter.net:6502/connect"),
+            Type::Telnet
+        );
     }
 }
