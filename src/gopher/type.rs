@@ -1,3 +1,5 @@
+use std::fmt;
+
 /// Gopher types are defined according to RFC 1436.
 #[allow(missing_docs)]
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -27,6 +29,16 @@ impl Type {
     /// Is this an info line?
     pub fn is_info(self) -> bool {
         self == Type::Info
+    }
+
+    /// HTML link?
+    pub fn is_html(self) -> bool {
+        self == Type::HTML
+    }
+
+    /// Telnet link?
+    pub fn is_telnet(self) -> bool {
+        self == Type::Telnet
     }
 
     /// Is this a link, ie something we can navigate to or open?
@@ -111,5 +123,15 @@ impl Type {
             'd' => Type::Document,
             _ => return None,
         })
+    }
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if let Some(c) = self.to_char() {
+            write!(f, "{}", c)
+        } else {
+            write!(f, "{}", '?')
+        }
     }
 }
