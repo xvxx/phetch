@@ -132,7 +132,7 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> i32 {
                     let line = line.trim_end_matches('\r');
                     if let Some(desc) = line.splitn(2, '\t').nth(0) {
                         let desc = desc.trim();
-                        out.push_str(&desc.chars().skip(1).collect::<String>());
+                        out.push_str(&desc[1..]);
                         out.push('\n');
                     }
                 }
