@@ -228,10 +228,8 @@ pub fn type_for_url(url: &str) -> Type {
     }
 
     if let Some(idx) = url.find('/') {
-        if url.len() > idx {
-            if let Some(t) = url.chars().nth(idx + 1) {
-                return Type::from(t).unwrap_or(Type::Menu);
-            }
+        if let Some(t) = url.chars().nth(idx + 1) {
+            return Type::from(t).unwrap_or(Type::Menu);
         }
     }
 
