@@ -811,8 +811,13 @@ pub fn parse_line(line: &str) -> Option<Line> {
     let typ = Type::from(line.chars().nth(0)?)?;
 
     if !typ.is_link() {
+        let end = if let Some(idx) = line.find('\t') {
+            idx
+        } else {
+            line.len()
+        };
         return Some(Line {
-            name: line[1..].into(),
+            name: line[1..end].into(),
             url: "".to_string(),
             typ,
             link: 0,
@@ -878,18 +883,24 @@ i---------------------------------------------------------
 1SDF PHLOGOSPHERE (297 phlogs)	/phlogs/	gopher.club	70
 1SDF GOPHERSPACE (1303 ACTIVE users)	/maps/	sdf.org	70
 1Geosphere	Geosphere	earth.rice.edu
+iwacky links
+i-----------	spacer
 8DJ's place	a	bbs.impakt.net	6502
 hgit tree	/URL:https://github.com/my/code	(null)	70
+i-----------	spacer	localhost	70
 i---------------------------------------------------------
 "
         );
-        assert_eq!(menu.lines.len(), 7);
+        assert_eq!(menu.lines.len(), 10);
         assert_eq!(menu.links.len(), 5);
         assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
         assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
         assert_eq!(menu.lines[3].url, "gopher://earth.rice.edu/1Geosphere");
-        assert_eq!(menu.lines[4].url, "telnet://bbs.impakt.net:6502");
-        assert_eq!(menu.lines[5].url, "https://github.com/my/code");
+        assert_eq!(menu.lines[4].name, "wacky links");
+        assert_eq!(menu.lines[5].name, "-----------");
+        assert_eq!(menu.lines[6].url, "telnet://bbs.impakt.net:6502");
+        assert_eq!(menu.lines[7].url, "https://github.com/my/code");
+        assert_eq!(menu.lines[8].name, "-----------");
     }
 
     #[test]
