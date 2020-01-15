@@ -89,8 +89,8 @@ impl View for Menu {
         self.tor
     }
 
-    fn raw(&self) -> String {
-        self.raw.to_string()
+    fn raw(&self) -> &str {
+        self.raw.as_ref()
     }
 
     fn render(&mut self, cfg: &Config) -> String {
@@ -105,15 +105,15 @@ impl View for Menu {
         self.size = (cols, rows);
     }
 
-    fn url(&self) -> String {
-        self.url.to_string()
+    fn url(&self) -> &str {
+        self.url.as_ref()
     }
 }
 
 impl Menu {
     /// Create a representation of a Gopher Menu from a raw Gopher
     /// response and a few options.
-    pub fn from(url: String, response: String, tls: bool, tor: bool) -> Menu {
+    pub fn from(url: &str, response: &str, tls: bool, tor: bool) -> Menu {
         Menu {
             tls,
             tor,
@@ -760,7 +760,7 @@ impl Menu {
     }
 
     /// Parse gopher response into a Menu object.
-    pub fn parse(url: String, raw: String) -> Menu {
+    pub fn parse(url: &str, raw: &str) -> Menu {
         let mut lines = vec![];
         let mut links = vec![];
         let mut longest = 0;
@@ -850,11 +850,11 @@ impl Menu {
         }
 
         Menu {
-            url,
+            url: url.into(),
             lines,
             links,
             longest,
-            raw,
+            raw: url.into(),
             input: String::new(),
             link: 0,
             mode: Default::default(),
@@ -874,7 +874,7 @@ mod tests {
 
     macro_rules! parse {
         ($s:literal) => {
-            Menu::parse("test".to_string(), $s.to_string());
+            Menu::parse("test", $s);
         };
     }
 

@@ -14,9 +14,9 @@ pub trait View: fmt::Display {
     /// Was this View's content fetched over Tor?
     fn is_tor(&self) -> bool;
     /// The Gopher URL this View represents.
-    fn url(&self) -> String;
+    fn url(&self) -> &str;
     /// The raw Gopher representation of this View.
-    fn raw(&self) -> String;
+    fn raw(&self) -> &str;
     /// Set the current screen size.
     fn term_size(&mut self, cols: usize, rows: usize);
 }

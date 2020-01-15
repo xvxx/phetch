@@ -47,12 +47,12 @@ impl View for Text {
         self.tor
     }
 
-    fn url(&self) -> String {
-        self.url.to_string()
+    fn url(&self) -> &str {
+        self.url.as_ref()
     }
 
-    fn raw(&self) -> String {
-        self.raw_response.to_string()
+    fn raw(&self) -> &str {
+        self.raw_response.as_ref()
     }
 
     fn term_size(&mut self, cols: usize, rows: usize) {
@@ -161,7 +161,7 @@ impl View for Text {
 
 impl Text {
     /// Create a Text View from a raw Gopher response and a few options.
-    pub fn from(url: String, response: String, tls: bool, tor: bool) -> Text {
+    pub fn from(url: &str, response: &str, tls: bool, tor: bool) -> Text {
         let mut lines = 0;
         let mut longest = 0;
         for line in response.split_terminator('\n') {
@@ -172,8 +172,8 @@ impl Text {
         }
 
         Text {
-            url,
-            raw_response: response,
+            url: url.into(),
+            raw_response: response.into(),
             scroll: 0,
             lines,
             longest,

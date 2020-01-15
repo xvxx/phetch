@@ -159,7 +159,7 @@ impl UI {
             self.status.clear();
         }
         if let Err(e) = self.process_action(action) {
-            self.set_status(format!("{}{}{}", color::Red, e, termion::cursor::Hide));
+            self.set_status(&format!("{}{}{}", color::Red, e, termion::cursor::Hide));
         }
     }
 
@@ -213,11 +213,14 @@ impl UI {
         })
         .and_then(|res| res)
         .and_then(|(path, bytes)| {
-            self.set_status(format!(
-                "Download complete! {} saved to {}",
-                utils::human_bytes(bytes),
-                path
-            ));
+            self.set_status(
+                format!(
+                    "Download complete! {} saved to {}",
+                    utils::human_bytes(bytes),
+                    path
+                )
+                .as_ref(),
+            );
             Ok(())
         })
     }
@@ -243,8 +246,8 @@ impl UI {
         };
         let (typ, _, _, _) = gopher::parse_url(&url);
         match typ {
-            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url.to_string(), res, tls, tor))),
-            Type::Text | Type::HTML => Ok(Box::new(Text::from(url.to_string(), res, tls, tor))),
+            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url, &res, tls, tor))),
+            Type::Text | Type::HTML => Ok(Box::new(Text::from(url, &res, tls, tor))),
             _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
     }
@@ -255,7 +258,7 @@ impl UI {
             &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
         ) {
-            Ok(Box::new(Menu::from(url.to_string(), source, false, false)))
+            Ok(Box::new(Menu::from(url, &source, false, false)))
         } else {
             Err(error!("phetch URL not found: {}", url))
         }
@@ -338,7 +341,7 @@ impl UI {
     }
 
     /// Set the status line's content.
-    fn set_status(&mut self, status: String) {
+    fn set_status(&mut self, status: &str) {
         self.status = status.replace('\n', "\\n").replace('\r', "\\r");
     }
 
@@ -550,7 +553,7 @@ impl UI {
                 out.write_all(s.as_ref());
                 out.flush();
             }
-            Action::Status(s) => self.set_status(s),
+            Action::Status(s) => self.set_status(&s),
             Action::Open(title, url) => self.open(&title, &url)?,
             Action::Prompt(query, fun) => {
                 if let Some(response) = self.prompt(&query, "") {
@@ -591,7 +594,10 @@ impl UI {
                     if let Some(page) = self.views.get(self.focused) {
                         let url = page.url();
                         match bookmarks::save(&url, &url) {
-                            Ok(()) => self.set_status(format!("Saved bookmark: {}", url)),
+                            Ok(()) => {
+                                let msg = format!("Saved bookmark: {}", url);
+                                self.set_status(&msg);
+                            }
                             Err(e) => return Err(error!("Save failed: {}", e)),
                         }
                     }
@@ -610,7 +616,8 @@ impl UI {
                     if let Some(page) = self.views.get(self.focused) {
                         let url = page.url();
                         copy_to_clipboard(&url)?;
-                        self.set_status(format!("Copied {} to clipboard.", url));
+                        let msg = format!("Copied {} to clipboard.", url);
+                        self.set_status(&msg);
                     }
                 }
                 'w' => {
