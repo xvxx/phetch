@@ -56,7 +56,7 @@ pub struct Menu {
 /// field will point to its index in the Menu's `links` Vec.
 pub struct Line {
     /// Text of the line.
-    pub name: String,
+    pub text: String,
     /// URL, if it's a link.
     pub url: String,
     /// Gopher Item Type.
@@ -228,23 +228,23 @@ impl Menu {
             }
 
             // truncate long lines, instead of wrapping
-            let name = if line.name.len() > MAX_COLS {
-                line.name.chars().take(MAX_COLS).collect::<String>()
+            let text = if line.text.len() > MAX_COLS {
+                line.text.chars().take(MAX_COLS).collect::<String>()
             } else {
-                line.name.to_string()
+                line.text.to_string()
             };
 
             // color the line
             out.push_str(&match line.typ {
-                Type::Text => color!(name, Cyan),
-                Type::Menu => color!(name, Blue),
-                Type::Info => color!(name, Yellow),
-                Type::HTML => color!(name, Green),
-                Type::Error => color!(name, Red),
-                Type::Telnet => color!(name, Grey),
-                typ if typ.is_download() => color!(name, Underline, White),
-                typ if !typ.is_supported() => color!(name, Red, WhiteBG),
-                _ => name,
+                Type::Text => color!(text, Cyan),
+                Type::Menu => color!(text, Blue),
+                Type::Info => color!(text, Yellow),
+                Type::HTML => color!(text, Green),
+                Type::Error => color!(text, Red),
+                Type::Telnet => color!(text, Grey),
+                typ if typ.is_download() => color!(text, Underline, White),
+                typ if !typ.is_supported() => color!(text, Red, WhiteBG),
+                _ => text,
             });
 
             // clear rest of line
@@ -490,7 +490,7 @@ impl Menu {
         let pattern = pattern.to_ascii_lowercase();
         for &pos in it {
             let line = self.lines.get(pos)?;
-            if line.name.to_ascii_lowercase().contains(&pattern) {
+            if line.text.to_ascii_lowercase().contains(&pattern) {
                 return Some(line.link);
             }
         }
@@ -635,7 +635,7 @@ impl Menu {
             let (typ, _, _, _) = gopher::parse_url(&url);
             match typ {
                 Type::Search => {
-                    let prompt = format!("{}> ", line.name);
+                    let prompt = format!("{}> ", line.text);
                     Action::Prompt(
                         prompt.clone(),
                         Box::new(move |query| {
@@ -646,9 +646,9 @@ impl Menu {
                         }),
                     )
                 }
-                Type::Error => Action::Error(line.name.to_string()),
+                Type::Error => Action::Error(line.text.to_string()),
                 t if !t.is_supported() => Action::Error(format!("{:?} not supported", t)),
-                _ => Action::Open(line.name.to_string(), url),
+                _ => Action::Open(line.text.to_string(), url),
             }
         } else {
             Action::None
@@ -772,8 +772,8 @@ impl Menu {
             }
 
             if let Some(mut line) = parse_line(line) {
-                if line.name.len() > longest {
-                    longest = line.name.len();
+                if line.text.len() > longest {
+                    longest = line.text.len();
                 }
                 if line.typ.is_link() {
                     line.link = links.len();
@@ -817,20 +817,20 @@ pub fn parse_line(line: &str) -> Option<Line> {
             line.len()
         };
         return Some(Line {
-            name: line[1..end].into(),
+            text: line[1..end].into(),
             url: "".to_string(),
             typ,
             link: 0,
         });
     }
 
-    let mut name = "n/a";
+    let mut text = "n/a";
     let mut sel = "(null)";
     let mut host = "localhost";
     let mut port = "70";
     for (i, chunk) in line[1..].trim_end_matches('\r').split('\t').enumerate() {
         match i {
-            0 => name = chunk,
+            0 => text = chunk,
             1 => sel = chunk,
             2 => host = chunk,
             3 => port = chunk,
@@ -858,7 +858,7 @@ pub fn parse_line(line: &str) -> Option<Line> {
     };
 
     Some(Line {
-        name: name.into(),
+        text: text.into(),
         url,
         typ,
         link: 0,
@@ -896,11 +896,11 @@ i---------------------------------------------------------
         assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
         assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
         assert_eq!(menu.lines[3].url, "gopher://earth.rice.edu/1Geosphere");
-        assert_eq!(menu.lines[4].name, "wacky links");
-        assert_eq!(menu.lines[5].name, "-----------");
+        assert_eq!(menu.lines[4].text, "wacky links");
+        assert_eq!(menu.lines[5].text, "-----------");
         assert_eq!(menu.lines[6].url, "telnet://bbs.impakt.net:6502");
         assert_eq!(menu.lines[7].url, "https://github.com/my/code");
-        assert_eq!(menu.lines[8].name, "-----------");
+        assert_eq!(menu.lines[8].text, "-----------");
     }
 
     #[test]
