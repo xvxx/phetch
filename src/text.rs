@@ -161,7 +161,7 @@ impl View for Text {
 
 impl Text {
     /// Create a Text View from a raw Gopher response and a few options.
-    pub fn from(url: &str, response: &str, tls: bool, tor: bool) -> Text {
+    pub fn from(url: &str, response: String, tls: bool, tor: bool) -> Text {
         let mut lines = 0;
         let mut longest = 0;
         for line in response.split_terminator('\n') {
@@ -173,7 +173,7 @@ impl Text {
 
         Text {
             url: url.into(),
-            raw_response: response.into(),
+            raw_response: response,
             scroll: 0,
             lines,
             longest,

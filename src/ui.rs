@@ -246,8 +246,8 @@ impl UI {
         };
         let (typ, _, _, _) = gopher::parse_url(&url);
         match typ {
-            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url, &res, tls, tor))),
-            Type::Text | Type::HTML => Ok(Box::new(Text::from(url, &res, tls, tor))),
+            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url, res, tls, tor))),
+            Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, tls, tor))),
             _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
     }
@@ -258,7 +258,7 @@ impl UI {
             &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
         ) {
-            Ok(Box::new(Menu::from(url, &source, false, false)))
+            Ok(Box::new(Menu::from(url, source, false, false)))
         } else {
             Err(error!("phetch URL not found: {}", url))
         }
@@ -584,7 +584,7 @@ impl UI {
                 'r' => {
                     if let Some(page) = self.views.get(self.focused) {
                         let url = page.url();
-                        let raw = page.raw();
+                        let raw = page.raw().to_string();
                         let mut text = Text::from(url, raw, page.is_tls(), page.is_tor());
                         text.wide = true;
                         self.add_page(Box::new(text));

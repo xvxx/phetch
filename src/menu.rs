@@ -113,7 +113,7 @@ impl View for Menu {
 impl Menu {
     /// Create a representation of a Gopher Menu from a raw Gopher
     /// response and a few options.
-    pub fn from(url: &str, response: &str, tls: bool, tor: bool) -> Menu {
+    pub fn from(url: &str, response: String, tls: bool, tor: bool) -> Menu {
         Menu {
             tls,
             tor,
@@ -760,7 +760,7 @@ impl Menu {
     }
 
     /// Parse gopher response into a Menu object.
-    pub fn parse(url: &str, raw: &str) -> Menu {
+    pub fn parse(url: &str, raw: String) -> Menu {
         let mut lines = vec![];
         let mut links = vec![];
         let mut longest = 0;
@@ -788,7 +788,7 @@ impl Menu {
             lines,
             links,
             longest,
-            raw: url.into(),
+            raw,
             input: String::new(),
             link: 0,
             mode: Default::default(),
@@ -866,7 +866,7 @@ mod tests {
 
     macro_rules! parse {
         ($s:literal) => {
-            Menu::parse("test", $s);
+            Menu::parse("test", $s.to_string());
         };
     }
 
