@@ -26,7 +26,7 @@ fn run() -> i32 {
         Mode::Help => return print_usage(),
         Mode::NoTTY => return print_plain(&cfg.start, cfg.tls, cfg.tor),
         Mode::Print => cfg.wide = true,
-        _ => {}
+        Mode::Run => {}
     }
 
     // load url
