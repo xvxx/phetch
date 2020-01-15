@@ -188,7 +188,7 @@ impl UI {
         }
 
         // binary downloads
-        let (typ, _, _, _) = gopher::parse_url(url);
+        let gopher::Url { typ, .. } = gopher::parse_url(url);
         if typ.is_download() {
             self.dirty = true;
             return if self.confirm(&format!("Download {}?", url)) {
@@ -244,7 +244,7 @@ impl UI {
         } else {
             self.spinner("", move || gopher::fetch_url(&thread_url, tls, tor))??
         };
-        let (typ, _, _, _) = gopher::parse_url(&url);
+        let gopher::Url { typ, .. } = gopher::parse_url(&url);
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(url, res, tls, tor))),
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, tls, tor))),
@@ -489,7 +489,7 @@ impl UI {
 
     /// Opens an interactive telnet session.
     fn telnet(&mut self, url: &str) -> Result<()> {
-        let (_, host, port, _) = gopher::parse_url(url);
+        let gopher::Url { host, port, .. } = gopher::parse_url(url);
         let out = self.out.borrow_mut();
         out.suspend_raw_mode();
         let mut cmd = process::Command::new("telnet")

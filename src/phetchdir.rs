@@ -42,15 +42,15 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
     path().and_then(|dotdir| {
         let path = dotdir.join(filename);
         if let Ok(mut file) = OpenOptions::new().append(true).create(true).open(path) {
-            let (t, host, port, sel) = gopher::parse_url(&url);
+            let u = gopher::parse_url(&url);
             file.write_all(
                 format!(
                     "{}{}\t{}\t{}\t{}\r\n",
-                    t.to_char().unwrap_or('i'),
+                    u.typ.to_char().unwrap_or('i'),
                     label,
-                    sel,
-                    host,
-                    port
+                    u.sel,
+                    u.host,
+                    u.port
                 )
                 .as_ref(),
             );
@@ -71,18 +71,18 @@ pub fn prepend(filename: &str, label: &str, url: &str) -> Result<()> {
             .create(true)
             .open(path)
         {
-            let (t, host, port, sel) = gopher::parse_url(&url);
+            let url = gopher::parse_url(&url);
             let mut buf = vec![];
             file.read_to_end(&mut buf);
             file.seek(std::io::SeekFrom::Start(0));
             file.write_all(
                 format!(
                     "{}{}\t{}\t{}\t{}\r\n",
-                    t.to_char().unwrap_or('i'),
+                    url.typ.to_char().unwrap_or('i'),
                     label,
-                    sel,
-                    host,
-                    port
+                    url.sel,
+                    url.host,
+                    url.port
                 )
                 .as_ref(),
             );

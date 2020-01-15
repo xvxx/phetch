@@ -59,11 +59,23 @@ impl Write for Stream {
     }
 }
 
+/// Gopher URL. Returned by `parse_url()`.
+pub struct Url<'a> {
+    /// Gopher Type
+    pub typ: Type,
+    /// Hostname
+    pub host: &'a str,
+    /// Port. Defaults to 70
+    pub port: &'a str,
+    /// Selector
+    pub sel: &'a str,
+}
+
 /// Fetches a gopher URL and returns a tuple of:
 ///   (did tls work?, raw Gopher response)
 pub fn fetch_url(url: &str, tls: bool, tor: bool) -> Result<(bool, String)> {
-    let (_, host, port, sel) = parse_url(url);
-    fetch(host, port, sel, tls, tor)
+    let u = parse_url(url);
+    fetch(u.host, u.port, u.sel, tls, tor)
 }
 
 /// Fetches a gopher URL by its component parts and returns a tuple of:
@@ -98,18 +110,19 @@ fn clean_response(res: &str) -> String {
 /// Returns a tuple of:
 ///   (path it was saved to, the size in bytes)
 pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> {
-    let (_, host, port, sel) = parse_url(url);
-    let filename = sel
+    let u = parse_url(url);
+    let filename = u
+        .sel
         .split_terminator('/')
         .rev()
         .nth(0)
-        .ok_or_else(|| error!("Bad download filename: {}", sel))?;
+        .ok_or_else(|| error!("Bad download filename: {}", u.sel))?;
     let mut path = std::path::PathBuf::from(".");
     path.push(filename);
     let stdin = termion::async_stdin();
     let mut keys = stdin.keys();
 
-    let mut stream = request(host, port, sel, tls, tor)?;
+    let mut stream = request(u.host, u.port, u.sel, tls, tor)?;
     let mut file = std::fs::OpenOptions::new()
         .write(true)
         .create(true)
@@ -192,9 +205,21 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
     })
 }
 
+impl<'a> Url<'a> {
+    /// Creates a new Gopher Url quickly from a tuple of Url fields.
+    pub fn new(typ: Type, host: &'a str, port: &'a str, sel: &'a str) -> Url<'a> {
+        Url {
+            typ,
+            host,
+            port,
+            sel,
+        }
+    }
+}
+
 /// Parses gopher URL into parts.
 /// Returns (Type, host, port, sel)
-pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
+pub fn parse_url<'a>(url: &'a str) -> Url<'a> {
     let mut url = url.trim_start_matches("gopher://");
     let mut typ = Type::Menu;
     let mut host;
@@ -203,7 +228,7 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
 
     // simple URLs, ex: "dog.com"
     if !url.contains(':') && !url.contains('/') {
-        return (Type::Menu, url, "70", "");
+        return Url::new(Type::Menu, url, "70", "");
     }
 
     // telnet urls
@@ -212,7 +237,7 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
         url = url.trim_start_matches("telnet://");
     } else if url.contains("://") {
         // non-gopher URLs, stick everything in selector
-        return (Type::HTML, "", "", url);
+        return Url::new(Type::HTML, "", "", url);
     }
 
     // check selector first
@@ -233,7 +258,7 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
                 }
             }
         } else {
-            return (Type::Error, "Unclosed ipv6 bracket", "", url);
+            return Url::new(Type::Error, "Unclosed ipv6 bracket", "", url);
         }
     } else if let Some(idx) = host.find(':') {
         // two :'s == probably ipv6
@@ -255,7 +280,7 @@ pub fn parse_url(url: &str) -> (Type, &str, &str, &str) {
         }
     }
 
-    (typ, host, port, sel)
+    Url::new(typ, host, port, sel)
 }
 
 #[cfg(test)]
@@ -282,94 +307,94 @@ mod tests {
             "telnet://bbs.impakt.net:6502/",
         ];
 
-        let (typ, host, port, sel) = parse_url(urls[0]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "gopher.club");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "/phlogs/");
+        let url = parse_url(urls[0]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "gopher.club");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/phlogs/");
 
-        let (typ, host, port, sel) = parse_url(urls[1]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "sdf.org");
-        assert_eq!(port, "7777");
-        assert_eq!(sel, "/maps");
+        let url = parse_url(urls[1]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "sdf.org");
+        assert_eq!(url.port, "7777");
+        assert_eq!(url.sel, "/maps");
 
-        let (typ, host, port, sel) = parse_url(urls[2]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "gopher.floodgap.org");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "");
+        let url = parse_url(urls[2]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "gopher.floodgap.org");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "");
 
-        let (typ, host, port, sel) = parse_url(urls[3]);
-        assert_eq!(typ, Type::Text);
-        assert_eq!(host, "gopher.floodgap.com");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "/gopher/relevance.txt");
+        let url = parse_url(urls[3]);
+        assert_eq!(url.typ, Type::Text);
+        assert_eq!(url.host, "gopher.floodgap.com");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/gopher/relevance.txt");
 
-        let (typ, host, port, sel) = parse_url(urls[4]);
-        assert_eq!(typ, Type::Search);
-        assert_eq!(host, "gopherpedia.com");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "/lookup?Gopher");
+        let url = parse_url(urls[4]);
+        assert_eq!(url.typ, Type::Search);
+        assert_eq!(url.host, "gopherpedia.com");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/lookup?Gopher");
 
-        let (typ, host, port, sel) = parse_url(urls[5]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "dead:beef:1234:5678:9012:3456:feed:deed");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "");
+        let url = parse_url(urls[5]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "dead:beef:1234:5678:9012:3456:feed:deed");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "");
 
-        let (typ, host, port, sel) = parse_url(urls[6]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "1234:2345:dead:4567:7890:1234:beef:1111");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "/files");
+        let url = parse_url(urls[6]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "1234:2345:dead:4567:7890:1234:beef:1111");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/files");
 
-        let (typ, host, port, sel) = parse_url(urls[7]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "2001:cdba:0000:0000:0000:0000:3257:9121");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "");
+        let url = parse_url(urls[7]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "2001:cdba:0000:0000:0000:0000:3257:9121");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "");
 
-        let (typ, host, port, sel) = parse_url(urls[8]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "2001:cdba::3257:9652");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "");
+        let url = parse_url(urls[8]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "2001:cdba::3257:9652");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "");
 
-        let (typ, host, port, sel) = parse_url(urls[9]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "9999:aaaa::abab:baba:aaaa:9999");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "");
+        let url = parse_url(urls[9]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "9999:aaaa::abab:baba:aaaa:9999");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "");
 
-        let (typ, host, port, sel) = parse_url(urls[10]);
-        assert_eq!(typ, Type::Error);
-        assert_eq!(host, "Unclosed ipv6 bracket");
-        assert_eq!(port, "");
-        assert_eq!(sel, "[2001:2099:dead:beef:0000");
+        let url = parse_url(urls[10]);
+        assert_eq!(url.typ, Type::Error);
+        assert_eq!(url.host, "Unclosed ipv6 bracket");
+        assert_eq!(url.port, "");
+        assert_eq!(url.sel, "[2001:2099:dead:beef:0000");
 
-        let (typ, host, port, sel) = parse_url(urls[11]);
-        assert_eq!(typ, Type::Menu);
-        assert_eq!(host, "::1");
-        assert_eq!(port, "70");
-        assert_eq!(sel, "");
+        let url = parse_url(urls[11]);
+        assert_eq!(url.typ, Type::Menu);
+        assert_eq!(url.host, "::1");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "");
 
-        let (typ, host, port, sel) = parse_url(urls[12]);
-        assert_eq!(typ, Type::HTML);
-        assert_eq!(host, "");
-        assert_eq!(port, "");
-        assert_eq!(sel, "ssh://kiosk@bitreich.org");
+        let url = parse_url(urls[12]);
+        assert_eq!(url.typ, Type::HTML);
+        assert_eq!(url.host, "");
+        assert_eq!(url.port, "");
+        assert_eq!(url.sel, "ssh://kiosk@bitreich.org");
 
-        let (typ, host, port, sel) = parse_url(urls[13]);
-        assert_eq!(typ, Type::HTML);
-        assert_eq!(host, "");
-        assert_eq!(port, "");
-        assert_eq!(sel, "https://github.com/xvxx/phetch");
+        let url = parse_url(urls[13]);
+        assert_eq!(url.typ, Type::HTML);
+        assert_eq!(url.host, "");
+        assert_eq!(url.port, "");
+        assert_eq!(url.sel, "https://github.com/xvxx/phetch");
 
-        let (typ, host, port, sel) = parse_url(urls[14]);
-        assert_eq!(typ, Type::Telnet);
-        assert_eq!(host, "bbs.impakt.net");
-        assert_eq!(port, "6502");
-        assert_eq!(sel, "/");
+        let url = parse_url(urls[14]);
+        assert_eq!(url.typ, Type::Telnet);
+        assert_eq!(url.host, "bbs.impakt.net");
+        assert_eq!(url.port, "6502");
+        assert_eq!(url.sel, "/");
     }
 }
