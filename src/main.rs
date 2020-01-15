@@ -1,5 +1,5 @@
 use phetch::{
-    args, gopher,
+    args, gopher, menu,
     ui::{Mode, UI},
 };
 use std::{env, process};
@@ -127,14 +127,9 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> i32 {
     match gopher::fetch_url(url, tls, tor) {
         Ok((_, response)) => match typ {
             gopher::Type::Menu => {
-                // TODO use parse_line()
-                for line in response.trim_end_matches(".\r\n").lines() {
-                    let line = line.trim_end_matches('\r');
-                    if let Some(desc) = line.splitn(2, '\t').nth(0) {
-                        let desc = desc.trim();
-                        out.push_str(&desc[1..]);
-                        out.push('\n');
-                    }
+                for line in menu::parse(url, response).lines {
+                    out.push_str(&line.text);
+                    out.push('\n');
                 }
             }
             gopher::Type::Text => println!("{}", response.trim_end_matches(".\r\n")),

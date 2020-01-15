@@ -117,7 +117,7 @@ impl Menu {
         Menu {
             tls,
             tor,
-            ..Self::parse(url, response)
+            ..parse(url, response)
         }
     }
 
@@ -758,47 +758,47 @@ impl Menu {
             _ => Action::Keypress(key),
         }
     }
+}
 
-    /// Parse gopher response into a Menu object.
-    pub fn parse(url: &str, raw: String) -> Menu {
-        let mut lines = vec![];
-        let mut links = vec![];
-        let mut longest = 0;
+/// Parse gopher response into a Menu object.
+pub fn parse(url: &str, raw: String) -> Menu {
+    let mut lines = vec![];
+    let mut links = vec![];
+    let mut longest = 0;
 
-        for line in raw.split_terminator('\n') {
-            // Check for Gopher's weird "end of response" message.
-            if line == ".\r" || line == "." {
-                break;
-            }
-
-            if let Some(mut line) = parse_line(line) {
-                if line.text.len() > longest {
-                    longest = line.text.len();
-                }
-                if line.typ.is_link() {
-                    line.link = links.len();
-                    links.push(lines.len());
-                }
-                lines.push(line);
-            }
+    for line in raw.split_terminator('\n') {
+        // Check for Gopher's weird "end of response" message.
+        if line == ".\r" || line == "." {
+            break;
         }
 
-        Menu {
-            url: url.into(),
-            lines,
-            links,
-            longest,
-            raw,
-            input: String::new(),
-            link: 0,
-            mode: Default::default(),
-            scroll: 0,
-            searching: false,
-            size: (0, 0),
-            tls: false,
-            tor: false,
-            wide: false,
+        if let Some(mut line) = parse_line(line) {
+            if line.text.len() > longest {
+                longest = line.text.len();
+            }
+            if line.typ.is_link() {
+                line.link = links.len();
+                links.push(lines.len());
+            }
+            lines.push(line);
         }
+    }
+
+    Menu {
+        url: url.into(),
+        lines,
+        links,
+        longest,
+        raw,
+        input: String::new(),
+        link: 0,
+        mode: Default::default(),
+        scroll: 0,
+        searching: false,
+        size: (0, 0),
+        tls: false,
+        tor: false,
+        wide: false,
     }
 }
 
@@ -871,7 +871,7 @@ mod tests {
 
     macro_rules! parse {
         ($s:literal) => {
-            Menu::parse("test", $s.to_string());
+            parse("test", $s.to_string());
         };
     }
 
