@@ -131,7 +131,7 @@ impl fmt::Display for Type {
         if let Some(c) = self.to_char() {
             write!(f, "{}", c)
         } else {
-            write!(f, "{}", '?')
+            write!(f, "?")
         }
     }
 }
