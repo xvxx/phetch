@@ -214,19 +214,20 @@ impl Menu {
             } else {
                 if line.link == self.link && self.show_cursor() {
                     out.push_str(color!(Bold));
-                    out.push_str("*");
+                    out.push('*');
                     out.push_str(color!(Reset));
                 } else {
                     out.push(' ');
                 }
                 out.push(' ');
-                out.push_str("\x1b[95m");
+                out.push_str(color!(Magenta));
                 if line.link < 9 {
                     out.push(' ');
                 }
                 let num = (line.link + 1).to_string();
                 out.push_str(&num);
-                out.push_str(".\x1b[0m ");
+                out.push_str(". ");
+                out.push_str(color!(Reset));
             }
 
             // truncate long lines, instead of wrapping
@@ -238,9 +239,11 @@ impl Menu {
 
             // color the line
             if line.typ.is_download() {
-                out.push_str(&color_string!(text, Underline, White));
+                out.push_str(color!(Underline));
+                out.push_str(color!(White));
             } else if !line.typ.is_supported() {
-                out.push_str(&color_string!(text, Red, WhiteBG));
+                out.push_str(color!(WhiteBG));
+                out.push_str(color!(Red));
             } else {
                 out.push_str(&match line.typ {
                     Type::Text => color!(Cyan),
@@ -249,6 +252,7 @@ impl Menu {
                     Type::HTML => color!(Green),
                     Type::Error => color!(Red),
                     Type::Telnet => color!(Grey),
+                    Type::Search => color!(White),
                     _ => color!(Red),
                 });
             }
