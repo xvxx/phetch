@@ -48,11 +48,7 @@ impl Type {
 
     /// Is this a link, ie something we can navigate to or open?
     pub fn is_link(self) -> bool {
-        match self {
-            Type::Menu | Type::Search | Type::Telnet | Type::HTML => true,
-            e if e.is_download() => true,
-            _ => false,
-        }
+        !self.is_info()
     }
 
     /// Is this something we can download?
