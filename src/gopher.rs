@@ -150,9 +150,7 @@ pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> 
 /// connection if it fails.
 pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> Result<Stream> {
     let selector = selector.replace('?', "\t"); // search queries
-    let sock = format!("{}:{}", host, port)
-        .to_socket_addrs()
-        .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))?;
+    let addr = format!("{}:{}", host, port);
 
     // attempt tls connection
     if tls {
@@ -160,6 +158,9 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
         {
             {
                 if let Ok(connector) = TlsConnector::new() {
+                    let sock = addr.to_socket_addrs().and_then(|mut socks| {
+                        socks.next().ok_or_else(|| error!("Can't create socket"))
+                    })?;
                     let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
                     stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
                     if let Ok(mut stream) = connector.connect(host, stream) {
@@ -184,7 +185,7 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
                 .to_socket_addrs()?
                 .nth(0)
                 .unwrap();
-            let mut stream = match TorStream::connect_with_address(proxy, sock) {
+            let mut stream = match TorStream::connect_with_address(proxy, addr.as_ref()) {
                 Ok(s) => s,
                 Err(e) => return Err(error!("Tor error: {}", e)),
             };
@@ -198,6 +199,9 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
     }
 
     // no tls or tor, try regular connection
+    let sock = addr
+        .to_socket_addrs()
+        .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))?;
     let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
     stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
     stream.write_all(selector.as_ref())?;
