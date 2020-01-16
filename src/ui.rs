@@ -349,14 +349,14 @@ impl UI {
     fn render_conn_status(&self) -> Option<String> {
         let page = self.views.get(self.focused)?;
         if page.is_tls() {
-            let status = color!("TLS", Black, GreenBG);
+            let status = color_string!("TLS", Black, GreenBG);
             return Some(format!(
                 "{}{}",
                 termion::cursor::Goto(self.cols() - 3, self.rows()),
                 if self.config.emoji { "🔐" } else { &status },
             ));
         } else if page.is_tor() {
-            let status = color!("TOR", Bold, White, MagentaBG);
+            let status = color_string!("TOR", Bold, White, MagentaBG);
             return Some(format!(
                 "{}{}",
                 termion::cursor::Goto(self.cols() - 3, self.rows()),

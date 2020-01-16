@@ -7,18 +7,30 @@ use std::fmt;
 /// Shortcut to produce a String colored with one or more colors.
 /// Example:
 /// ```
-///   let s = color!("Red string", Red);
-///   let x = color!("Hyperlink-ish", Blue, Underline);
-macro_rules! color {
+///   let s = color_string!("Red string", Red);
+///   let x = color_string!("Hyperlink-ish", Blue, Underline);
+macro_rules! color_string {
     ($s:expr, $( $color:ident ),+) => {{
-        use crate::color;
-        let codes = [$( color::$color.as_ref() ),+];
-        if codes.len() > 1 {
-            format!("\x1b[{}m{}{}", codes.join(";"), $s, color::Reset)
-        } else {
-            format!("\x1b[{}m{}{}", codes[0], $s, color::Reset)
-        }
+        let mut out = String::from("\x1b[");
+        $( out.push_str(crate::color::$color::code()); out.push_str(";"); )+
+        out.push('m');
+        out.push_str(&$s);
+        out.push_str(crate::color::Reset.as_ref());
+        out.replace(";m", "m")
     }};
+}
+
+/// Shortcut to produce a color's ANSI escape code. Don't forget to Reset!
+/// ```
+///   let mut o = String::new();
+///   o.push_str(color!(Blue));
+///   o.push_str(color!(Underline));
+///   o.push_str("Hyperlinkish.");
+///   o.push_str(color!(Reset));
+macro_rules! color {
+    ($color:ident) => {
+        crate::color::$color.as_ref()
+    };
 }
 
 /// Create a color:: struct that can be used with format!.
@@ -34,13 +46,20 @@ macro_rules! define_color {
         pub struct $color;
         impl fmt::Display for $color {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                write!(f, "\x1b[{}m", self.as_ref())
+                write!(f, "{}", self.as_ref())
+            }
+        }
+        impl $color {
+            #[allow(missing_docs)]
+            #[inline]
+            pub fn code() -> &'static str {
+                concat!($code)
             }
         }
         impl AsRef<str> for $color {
             #[inline]
             fn as_ref(&self) -> &'static str {
-                concat!($code)
+                concat!("\x1b[", $code, "m")
             }
         }
     };
@@ -81,13 +100,13 @@ define_color!(WhiteBG, 47);
 mod tests {
     #[test]
     fn test_colors() {
-        assert_eq!(color!("Error", Red), "\x1b[91mError\x1b[0m");
+        assert_eq!(color_string!("Error", Red), "\x1b[91mError\x1b[0m");
         assert_eq!(
-            color!("Fancy Pants", Blue, Underline),
+            color_string!("Fancy Pants", Blue, Underline),
             "\x1b[94;4mFancy Pants\x1b[0m"
         );
         assert_eq!(
-            color!("Super-duper-fancy-pants", Magenta, Underline, Bold, BlueBG),
+            color_string!("Super-duper-fancy-pants", Magenta, Underline, Bold, BlueBG),
             "\x1b[95;4;1;44mSuper-duper-fancy-pants\x1b[0m"
         )
     }

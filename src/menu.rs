@@ -213,7 +213,9 @@ impl Menu {
                 out.push_str("      ");
             } else {
                 if line.link == self.link && self.show_cursor() {
-                    out.push_str(&color!("*", Bold))
+                    out.push_str(color!(Bold));
+                    out.push_str("*");
+                    out.push_str(color!(Reset));
                 } else {
                     out.push(' ');
                 }
@@ -229,23 +231,29 @@ impl Menu {
 
             // truncate long lines, instead of wrapping
             let text = if line.text.len() > MAX_COLS {
-                line.text.chars().take(MAX_COLS).collect::<String>()
+                &line.text[..MAX_COLS]
             } else {
-                line.text.to_string()
+                &line.text
             };
 
             // color the line
-            out.push_str(&match line.typ {
-                Type::Text => color!(text, Cyan),
-                Type::Menu => color!(text, Blue),
-                Type::Info => color!(text, Yellow),
-                Type::HTML => color!(text, Green),
-                Type::Error => color!(text, Red),
-                Type::Telnet => color!(text, Grey),
-                typ if typ.is_download() => color!(text, Underline, White),
-                typ if !typ.is_supported() => color!(text, Red, WhiteBG),
-                _ => text,
-            });
+            if line.typ.is_download() {
+                out.push_str(&color_string!(text, Underline, White));
+            } else if !line.typ.is_supported() {
+                out.push_str(&color_string!(text, Red, WhiteBG));
+            } else {
+                out.push_str(&match line.typ {
+                    Type::Text => color!(Cyan),
+                    Type::Menu => color!(Blue),
+                    Type::Info => color!(Yellow),
+                    Type::HTML => color!(Green),
+                    Type::Error => color!(Red),
+                    Type::Telnet => color!(Grey),
+                    _ => color!(Red),
+                });
+            }
+            out.push_str(&text);
+            out.push_str(color!(Reset));
 
             // clear rest of line
             out.push_str(&format!("{}", clear::UntilNewline));
