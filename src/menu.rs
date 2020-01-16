@@ -256,12 +256,12 @@ impl Menu {
             out.push_str(color!(Reset));
 
             // clear rest of line
-            out.push_str(&format!("{}", clear::UntilNewline));
+            out.push_str(clear::UntilNewline.as_ref());
             out.push_str("\r\n");
         }
 
         // clear remainder of screen
-        out.push_str(&format!("{}", clear::AfterCursor));
+        out.push_str(clear::AfterCursor.as_ref());
 
         out
     }
@@ -318,7 +318,7 @@ impl Menu {
         if self.searching {
             Action::Status(self.render_input())
         } else {
-            Action::Status(format!("{}", cursor::Hide))
+            Action::Status(cursor::Hide.to_string())
         }
     }
 
