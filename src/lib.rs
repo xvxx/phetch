@@ -32,6 +32,7 @@
 #![warn(deprecated_in_future)]
 #![warn(missing_docs)]
 #![allow(clippy::while_let_on_iterator)]
+#![allow(clippy::write_with_newline)]
 
 #[macro_use]
 pub mod utils;

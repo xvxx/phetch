@@ -51,7 +51,7 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
                 u.sel,
                 u.host,
                 u.port
-            );
+            )?;
             Ok(())
         } else {
             Err(error!("Can't open file for writing: {:?}", filename))

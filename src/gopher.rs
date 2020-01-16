@@ -241,7 +241,7 @@ pub fn type_for_url(url: &str) -> Type {
 
 /// Parses gopher URL into parts.
 /// Returns (Type, host, port, sel)
-pub fn parse_url<'a>(url: &'a str) -> Url<'a> {
+pub fn parse_url(url: &str) -> Url {
     let mut url = url.trim_start_matches("gopher://");
     let mut typ = Type::Menu;
     let mut host;
