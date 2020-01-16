@@ -169,7 +169,7 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
                     return Err(ArgError::new(format!("unknown argument: {}", arg)));
                 } else {
                     got_url = true;
-                    cfg.start = arg.into();
+                    cfg.start = arg.trim().into();
                 }
             }
         }
@@ -198,6 +198,12 @@ mod tests {
         let cfg = parse(&["-l"]).expect("failed to parse");
         assert_eq!(cfg.start, "gopher://127.0.0.1:7070");
         assert_eq!(cfg.wide, false);
+    }
+
+    #[test]
+    fn test_ignore_trailing_whitespace() {
+        let cfg = parse(&["some-url.io   "]).expect("should work");
+        assert_eq!(cfg.start, "some-url.io");
     }
 
     #[test]
