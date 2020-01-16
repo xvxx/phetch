@@ -71,8 +71,8 @@ pub fn prepend(filename: &str, label: &str, url: &str) -> Result<()> {
         {
             let url = gopher::parse_url(&url);
             let mut buf = vec![];
-            file.read_to_end(&mut buf);
-            file.seek(std::io::SeekFrom::Start(0));
+            file.read_to_end(&mut buf)?;
+            file.seek(std::io::SeekFrom::Start(0))?;
             write!(
                 file,
                 "{}{}\t{}\t{}\t{}\r\n",
@@ -81,8 +81,8 @@ pub fn prepend(filename: &str, label: &str, url: &str) -> Result<()> {
                 url.sel,
                 url.host,
                 url.port
-            );
-            file.write_all(&buf);
+            )?;
+            file.write_all(&buf)?;
             Ok(())
         } else {
             Err(error!("Can't open file for writing: {:?}", filename))

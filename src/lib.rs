@@ -25,7 +25,6 @@
 //! Suggestions and improvements are more than welcome.
 //!
 
-#![allow(unused_must_use)]
 #![warn(absolute_paths_not_starting_with_crate)]
 #![warn(explicit_outlives_requirements)]
 #![warn(unreachable_pub)]

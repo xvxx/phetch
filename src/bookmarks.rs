@@ -33,12 +33,15 @@ pub fn as_raw_menu() -> String {
         return out;
     }
 
-    phetchdir::load(BOOKMARKS_FILE)
-        .and_then(|mut reader| reader.read_to_string(&mut out))
-        .map_err(|e| {
-            out = format!("3{}", e);
-            e
-        });
+    match phetchdir::load(BOOKMARKS_FILE) {
+        Ok(mut reader) => {
+            if let Err(e) = reader.read_to_string(&mut out) {
+                out = format!("3{}", e);
+            }
+        }
+        Err(e) => out = format!("3{}", e),
+    }
+
     out
 }
 

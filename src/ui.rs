@@ -49,10 +49,19 @@ pub type Page = Box<dyn View>;
 
 /// How many lines to jump by when using page up/down.
 pub const SCROLL_LINES: usize = 15;
+
 /// How big the longest line can be, for the purposes of calculating
 /// margin sizes. We often draw longer lines than this and allow
 /// wrapping in text views.
 pub const MAX_COLS: usize = 77;
+
+/// Fatal errors. In general we want to try and catch any errors
+/// (network, parsing gopher response, etc) and just show an error
+/// message in the status bar, but if we can't write to STDOUT or
+/// control the screen, we need to just crash.
+const ERR_RAW_MODE: &str = "Fatal Error using Raw Mode.";
+const ERR_SCREEN: &str = "Fatal Error using Alternate Screen.";
+const ERR_STDOUT: &str = "Fatal Error writing to STDOUT.";
 
 /// UI is mainly concerned with drawing to the screen, managing the
 /// active Views/pages, and responding to user input.
@@ -85,10 +94,8 @@ impl UI {
         // Store raw terminal but don't enable it yet or switch the
         // screen. We don't want to stare at a fully blank screen
         // while waiting for a slow page to load.
-        let out = stdout()
-            .into_raw_mode()
-            .expect("Failed to initialize raw mode.");
-        out.suspend_raw_mode();
+        let out = stdout().into_raw_mode().expect(ERR_RAW_MODE);
+        out.suspend_raw_mode().expect(ERR_RAW_MODE);
 
         UI {
             views: vec![],
@@ -106,15 +113,15 @@ impl UI {
     /// mode, eg inside run()
     pub fn startup(&mut self) {
         let mut out = self.out.borrow_mut();
-        out.activate_raw_mode();
-        write!(out, "{}", termion::screen::ToAlternateScreen);
+        out.activate_raw_mode().expect(ERR_RAW_MODE);
+        write!(out, "{}", termion::screen::ToAlternateScreen).expect(ERR_SCREEN);
     }
 
     /// Clean up after ourselves. Should only be used after running in
     /// interactive mode.
     pub fn shutdown(&mut self) {
         let mut out = self.out.borrow_mut();
-        write!(out, "{}", termion::screen::ToMainScreen);
+        write!(out, "{}", termion::screen::ToMainScreen).expect(ERR_SCREEN);
     }
 
     /// Main loop.
@@ -141,13 +148,13 @@ impl UI {
                 termion::cursor::Hide,
                 screen,
                 status,
-            );
-            out.flush();
+            )?;
+            out.flush()?;
             self.dirty = false;
         } else {
             let mut out = self.out.borrow_mut();
-            out.write_all(status.as_ref());
-            out.flush();
+            out.write_all(status.as_ref())?;
+            out.flush()?;
         }
         Ok(())
     }
@@ -306,13 +313,13 @@ impl UI {
                     color::Reset,
                     termion::cursor::Show,
                 );
-                stdout().flush();
+                stdout().flush().expect(ERR_STDOUT);
                 thread::sleep(Duration::from_millis(500));
             }
         });
 
         let result = req.join();
-        tx.send(true); // stop spinner
+        tx.send(true).expect("Fatal Error in Spinner channel."); // stop spinner
         self.dirty = true;
         result.map_err(|e| error!("Spinner error: {:?}", e))
     }
@@ -404,8 +411,9 @@ impl UI {
             termion::clear::CurrentLine,
             question,
             termion::cursor::Show,
-        );
-        out.flush();
+        )
+        .expect(ERR_STDOUT);
+        out.flush().expect(ERR_STDOUT);
 
         if let Some(Ok(key)) = stdin().keys().next() {
             match key {
@@ -433,8 +441,9 @@ impl UI {
             prompt,
             input,
             termion::cursor::Show,
-        );
-        out.flush();
+        )
+        .expect(ERR_STDOUT);
+        out.flush().expect(ERR_STDOUT);
 
         for k in stdin().keys() {
             if let Ok(key) = k {
@@ -445,8 +454,9 @@ impl UI {
                             "{}{}",
                             termion::clear::CurrentLine,
                             termion::cursor::Hide
-                        );
-                        out.flush();
+                        )
+                        .expect(ERR_STDOUT);
+                        out.flush().expect(ERR_STDOUT);
                         return Some(input);
                     }
                     Key::Char(c) => input.push(c),
@@ -456,8 +466,9 @@ impl UI {
                             "{}{}",
                             termion::clear::CurrentLine,
                             termion::cursor::Hide
-                        );
-                        out.flush();
+                        )
+                        .expect(ERR_STDOUT);
+                        out.flush().expect(ERR_STDOUT);
                         return None;
                     }
                     Key::Backspace | Key::Delete => {
@@ -476,8 +487,9 @@ impl UI {
                 termion::clear::CurrentLine,
                 prompt,
                 input,
-            );
-            out.flush();
+            )
+            .expect(ERR_STDOUT);
+            out.flush().expect(ERR_STDOUT);
         }
 
         if !input.is_empty() {
@@ -491,15 +503,15 @@ impl UI {
     fn telnet(&mut self, url: &str) -> Result<()> {
         let gopher::Url { host, port, .. } = gopher::parse_url(url);
         let out = self.out.borrow_mut();
-        out.suspend_raw_mode();
+        out.suspend_raw_mode().expect(ERR_RAW_MODE);
         let mut cmd = process::Command::new("telnet")
             .arg(host)
             .arg(port)
             .stdin(Stdio::inherit())
             .stdout(Stdio::inherit())
             .spawn()?;
-        cmd.wait();
-        out.activate_raw_mode();
+        cmd.wait()?;
+        out.activate_raw_mode().expect(ERR_RAW_MODE);
         self.dirty = true; // redraw when finished with session
         Ok(())
     }
@@ -524,11 +536,11 @@ impl UI {
     /// Ctrl-Z: Suspend Unix process w/ SIGTSTP.
     fn suspend(&mut self) {
         let mut out = self.out.borrow_mut();
-        write!(out, "{}", termion::screen::ToMainScreen);
-        out.flush();
+        write!(out, "{}", termion::screen::ToMainScreen).expect(ERR_SCREEN);
+        out.flush().expect(ERR_STDOUT);
         unsafe { libc::raise(libc::SIGTSTP) };
-        write!(out, "{}", termion::screen::ToAlternateScreen);
-        out.flush();
+        write!(out, "{}", termion::screen::ToAlternateScreen).expect(ERR_SCREEN);
+        out.flush().expect(ERR_STDOUT);
         self.dirty = true;
     }
 
@@ -538,7 +550,7 @@ impl UI {
         match action {
             Action::List(actions) => {
                 for action in actions {
-                    self.process_action(action);
+                    self.process_action(action)?;
                 }
             }
             Action::Keypress(Key::Ctrl('c')) => {
@@ -550,14 +562,14 @@ impl UI {
             Action::Redraw => self.dirty = true,
             Action::Draw(s) => {
                 let mut out = self.out.borrow_mut();
-                out.write_all(s.as_ref());
-                out.flush();
+                out.write_all(s.as_ref())?;
+                out.flush()?;
             }
             Action::Status(s) => self.set_status(&s),
             Action::Open(title, url) => self.open(&title, &url)?,
             Action::Prompt(query, fun) => {
                 if let Some(response) = self.prompt(&query, "") {
-                    self.process_action(fun(response));
+                    self.process_action(fun(response))?;
                 }
             }
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
@@ -607,7 +619,7 @@ impl UI {
                         let current_url = page.url();
                         if let Some(url) = self.prompt("Current URL: ", &current_url) {
                             if url != current_url {
-                                self.open(&url, &url);
+                                self.open(&url, &url)?;
                             }
                         }
                     }
@@ -636,8 +648,8 @@ impl UI {
 impl Drop for UI {
     fn drop(&mut self) {
         let mut out = self.out.borrow_mut();
-        write!(out, "{}{}", color::Reset, termion::cursor::Show,);
-        out.flush();
+        write!(out, "{}{}", color::Reset, termion::cursor::Show).expect(ERR_STDOUT);
+        out.flush().expect(ERR_STDOUT);
     }
 }
 

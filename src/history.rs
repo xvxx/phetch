@@ -42,18 +42,15 @@ pub fn as_raw_menu() -> String {
     }
 
     let mut out = vec![format!("i{}:\r\ni", homepath)];
-    phetchdir::load(HISTORY_FILE)
-        .and_then(|reader| {
+    match phetchdir::load(HISTORY_FILE) {
+        Ok(reader) => {
             let mut lines = reader.lines();
             while let Some(Ok(line)) = lines.next() {
                 out.insert(1, line);
             }
-            Ok(())
-        })
-        .map_err(|e| {
-            out.push(format!("3{}", e));
-            e
-        });
+        }
+        Err(e) => out.push(format!("3{}", e)),
+    }
 
     if out.len() == 1 {
         out.insert(1, "iNo history entries yet.".to_string());

@@ -163,8 +163,8 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
                     let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
                     stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
                     if let Ok(mut stream) = connector.connect(host, stream) {
-                        stream.write_all(selector.as_ref());
-                        stream.write_all("\r\n".as_ref());
+                        stream.write_all(selector.as_ref())?;
+                        stream.write_all("\r\n".as_ref())?;
                         return Ok(Stream {
                             io: Box::new(stream),
                             tls: true,
@@ -188,8 +188,8 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
                 Ok(s) => s,
                 Err(e) => return Err(error!("Tor error: {}", e)),
             };
-            stream.write_all(selector.as_ref());
-            stream.write_all("\r\n".as_ref());
+            stream.write_all(selector.as_ref())?;
+            stream.write_all("\r\n".as_ref())?;
             return Ok(Stream {
                 io: Box::new(stream),
                 tls: false,
@@ -200,8 +200,8 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
     // no tls or tor, try regular connection
     let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
     stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
-    stream.write_all(selector.as_ref());
-    stream.write_all("\r\n".as_ref());
+    stream.write_all(selector.as_ref())?;
+    stream.write_all("\r\n".as_ref())?;
     Ok(Stream {
         io: Box::new(stream),
         tls: false,
