@@ -234,6 +234,7 @@ pub fn type_for_url(url: &str) -> Type {
         return Type::HTML;
     }
 
+    let url = url.trim_start_matches("gopher://");
     if let Some(idx) = url.find('/') {
         if let Some(t) = url.chars().nth(idx + 1) {
             return Type::from(t).unwrap_or(Type::Menu);
@@ -430,6 +431,10 @@ mod tests {
         assert_eq!(type_for_url("phkt.io/1"), Type::Menu);
         assert_eq!(type_for_url("phkt.io/1/"), Type::Menu);
         assert_eq!(type_for_url("phkt.io/0/info.txt"), Type::Text);
+        assert_eq!(
+            type_for_url("gopher://vernunftzentrum.de/0/tfurrows/resources/tokipona.txt"),
+            Type::Text
+        );
         assert_eq!(type_for_url("URL:https://google.com"), Type::HTML);
         assert_eq!(
             type_for_url("telnet://bbs.inter.net:6502/connect"),
