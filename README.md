@@ -51,6 +51,10 @@ the gophersphere.
 
 ## installation
 
+If you already have a Gopher client, download `phetch` here:
+
+    gopher://phkt.io/1/phetch/latest
+
 On macOS you can install with [Homebrew](https://brew.sh/):
 
     brew install xvxx/code/phetch
@@ -64,30 +68,26 @@ https://github.com/xvxx/phetch/releases:
 
 Just unzip/untar the `phetch` program into your $PATH and get going!
 
-You can also build and install from source:
+You can also build and install from source if you have `cargo`,
+`make`, and the other dependencies described in the next section:
 
     git clone https://github.com/xvxx/phetch
     cd phetch
     env PREFIX=/usr/local make install
 
-## updates
-
-To check for new versions of `phetch`, use the on-line help system in
-the app (`ctrl-h`) or visit:
-
-    gopher://phkt.io/1/phetch/latest
-
 ## development
-
-    cargo run -- <gopher-url>
-
-*Pro-tip:* Run a local gopher server on `127.0.0.1:7070` and start
-phetch with `-l` or `--local` to quickly connect to it.
 
 To build with TLS support on **Linux**, you need `openssl` and
 `pkg-config`:
 
     sudo apt install -y pkg-config libssl-dev
+
+Regular development uses `cargo`:
+
+    cargo run -- <gopher-url>
+
+*Pro-tip:* Run a local gopher server on `127.0.0.1:7070` and start
+phetch with `-l` or `--local` to quickly connect to it.
 
 phetch builds with TLS and Tor support by default. To disable these
 features, or to enable only one of them, use the
