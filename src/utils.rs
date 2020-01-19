@@ -1,4 +1,8 @@
 //! Helper functions and macros.
+use std::{
+    io::{Result, Write},
+    process::{self, Stdio},
+};
 
 /// Debug macro that appends a line to `phetch.log`.
 /// Useful for printf-style debugging - add your `log!()` calls,
@@ -48,4 +52,39 @@ pub fn human_bytes(bytes: usize) -> String {
     };
 
     format!("{}{}", count, tag)
+}
+
+/// Copies data to the system clipboard, if possible.
+/// Uses `pbcopy` on macOS or `xclip -sel clip` on Linux.
+pub fn copy_to_clipboard(data: &str) -> Result<()> {
+    #[cfg(target_os = "macos")]
+    let mut cmd = process::Command::new("pbcopy");
+    #[cfg(not(target_os = "macos"))]
+    let mut cmd = process::Command::new("xclip").args(&["-sel", "clip"]);
+
+    cmd.stdin(Stdio::piped()).spawn().and_then(|mut child| {
+        let child_stdin = child.stdin.as_mut().unwrap();
+        child_stdin.write_all(data.as_bytes())
+    })
+}
+
+/// Used to open non-Gopher URLs.
+/// Runs `open` command on macOS or `xdg-open` on Linux.
+pub fn open_external(url: &str) -> Result<()> {
+    #[cfg(target_os = "macos")]
+    let cmd = "open";
+    #[cfg(not(target_os = "macos"))]
+    let cmd = "xdg-open";
+
+    let output = process::Command::new(cmd).arg(url).output()?;
+    if output.stderr.is_empty() {
+        Ok(())
+    } else {
+        Err(error!(
+            "`open` error: {}",
+            String::from_utf8(output.stderr)
+                .unwrap_or_else(|_| "?".into())
+                .trim_end()
+        ))
+    }
 }

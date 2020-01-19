@@ -14,9 +14,7 @@
 mod action;
 mod mode;
 mod view;
-pub use self::action::Action;
-pub use self::mode::Mode;
-pub use self::view::View;
+pub use self::{action::Action, mode::Mode, view::View};
 
 use crate::{
     bookmarks, color,
@@ -188,7 +186,7 @@ impl UI {
         if url.contains("://") && !url.starts_with("gopher://") {
             self.dirty = true;
             return if self.confirm(&format!("Open external URL? {}", url)) {
-                open_external(url)
+                utils::open_external(url)
             } else {
                 Ok(())
             };
@@ -627,7 +625,7 @@ impl UI {
                 'y' => {
                     if let Some(page) = self.views.get(self.focused) {
                         let url = page.url();
-                        copy_to_clipboard(&url)?;
+                        utils::copy_to_clipboard(&url)?;
                         let msg = format!("Copied {} to clipboard.", url);
                         self.set_status(&msg);
                     }
@@ -650,40 +648,5 @@ impl Drop for UI {
         let mut out = self.out.borrow_mut();
         write!(out, "{}{}", color::Reset, termion::cursor::Show).expect(ERR_STDOUT);
         out.flush().expect(ERR_STDOUT);
-    }
-}
-
-fn copy_to_clipboard(data: &str) -> Result<()> {
-    spawn_os_clipboard().and_then(|mut child| {
-        let child_stdin = child.stdin.as_mut().unwrap();
-        child_stdin.write_all(data.as_bytes())
-    })
-}
-
-fn spawn_os_clipboard() -> Result<process::Child> {
-    if cfg!(target_os = "macos") {
-        process::Command::new("pbcopy")
-            .stdin(Stdio::piped())
-            .spawn()
-    } else {
-        process::Command::new("xclip")
-            .args(&["-sel", "clip"])
-            .stdin(Stdio::piped())
-            .spawn()
-    }
-}
-
-// runs the `open` shell command
-fn open_external(url: &str) -> Result<()> {
-    let output = process::Command::new("open").arg(url).output()?;
-    if output.stderr.is_empty() {
-        Ok(())
-    } else {
-        Err(error!(
-            "`open` error: {}",
-            String::from_utf8(output.stderr)
-                .unwrap_or_else(|_| "?".into())
-                .trim_end()
-        ))
     }
 }
