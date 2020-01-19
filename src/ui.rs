@@ -203,7 +203,7 @@ impl UI {
             };
         }
 
-        self.fetch(title, url).and_then(|page| {
+        self.load(title, url).and_then(|page| {
             self.add_page(page);
             Ok(())
         })
@@ -231,10 +231,10 @@ impl UI {
     }
 
     /// Fetches a URL and returns a View for its content.
-    fn fetch(&mut self, title: &str, url: &str) -> Result<Page> {
+    fn load(&mut self, title: &str, url: &str) -> Result<Page> {
         // on-line help
         if url.starts_with("gopher://phetch/") {
-            return self.fetch_internal(url);
+            return self.load_internal(url);
         }
         // record history urls
         let hurl = url.to_string();
@@ -258,7 +258,7 @@ impl UI {
     }
 
     /// Get Menu for on-line help, home page, etc, ex: gopher://home/1/help/types
-    fn fetch_internal(&mut self, url: &str) -> Result<Page> {
+    fn load_internal(&mut self, url: &str) -> Result<Page> {
         if let Some(source) = help::lookup(
             &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
