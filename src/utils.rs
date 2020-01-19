@@ -60,7 +60,9 @@ pub fn copy_to_clipboard(data: &str) -> Result<()> {
     #[cfg(target_os = "macos")]
     let mut cmd = process::Command::new("pbcopy");
     #[cfg(not(target_os = "macos"))]
-    let mut cmd = process::Command::new("xclip").args(&["-sel", "clip"]);
+    let mut cmd = process::Command::new("xclip");
+    #[cfg(not(target_os = "macos"))]
+    let cmd = cmd.args(&["-sel", "clip"]);
 
     cmd.stdin(Stdio::piped())
         .spawn()
