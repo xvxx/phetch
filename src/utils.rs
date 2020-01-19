@@ -62,10 +62,13 @@ pub fn copy_to_clipboard(data: &str) -> Result<()> {
     #[cfg(not(target_os = "macos"))]
     let mut cmd = process::Command::new("xclip").args(&["-sel", "clip"]);
 
-    cmd.stdin(Stdio::piped()).spawn().and_then(|mut child| {
-        let child_stdin = child.stdin.as_mut().unwrap();
-        child_stdin.write_all(data.as_bytes())
-    })
+    cmd.stdin(Stdio::piped())
+        .spawn()
+        .and_then(|mut child| {
+            let child_stdin = child.stdin.as_mut().unwrap();
+            child_stdin.write_all(data.as_bytes())
+        })
+        .map_err(|e| error!("Clipboard error: {}", e))
 }
 
 /// Used to open non-Gopher URLs.
@@ -76,15 +79,17 @@ pub fn open_external(url: &str) -> Result<()> {
     #[cfg(not(target_os = "macos"))]
     let cmd = "xdg-open";
 
-    let output = process::Command::new(cmd).arg(url).output()?;
+    let output = process::Command::new(cmd)
+        .arg(url)
+        .output()
+        .map_err(|e| error!("`open` error: {}", e))?;
+
     if output.stderr.is_empty() {
         Ok(())
     } else {
         Err(error!(
             "`open` error: {}",
-            String::from_utf8(output.stderr)
-                .unwrap_or_else(|_| "?".into())
-                .trim_end()
+            String::from_utf8_lossy(&output.stderr).trim_end()
         ))
     }
 }

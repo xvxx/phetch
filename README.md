@@ -114,8 +114,6 @@ To enable just TLS support, or just Tor support, use `--features`:
 - [ ] don't create new strings for every Line
 - [ ] catch SIGWINCH
 - [ ] disable ctrl-c outside of raw mode (telnet)
-- [ ] xdg-open
-- [ ] nicer error msg when there's no xclip/pbcopy
 
 ## bugs
 
