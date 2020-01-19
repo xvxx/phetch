@@ -257,7 +257,7 @@ impl UI {
         }
     }
 
-    /// Get Menu for on-line help, home page, etc, ex: gopher://home/1/help/types
+    /// Get Menu for on-line help, home page, etc, ex: gopher://phetch/1/help/types
     fn load_internal(&mut self, url: &str) -> Result<Page> {
         if let Some(source) = help::lookup(
             &url.trim_start_matches("gopher://phetch/")
