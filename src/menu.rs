@@ -6,10 +6,10 @@
 //! The Menu doesn't draw or perform any actions on its own, instead
 //! it returns an Action to the UI representing its intent.
 
-use crate::ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES};
 use crate::{
     config::Config,
     gopher::{self, Type},
+    ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
 };
 use std::fmt;
 use termion::{clear, cursor};
