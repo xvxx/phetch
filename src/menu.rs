@@ -93,7 +93,7 @@ impl Line {
 
     /// Get the URL for this line, if it's a link.
     pub fn url(&self, raw: &str) -> String {
-        if !self.typ.is_link() {
+        if !self.typ.is_link() || self.text_end >= self.end {
             return String::from("");
         }
 
@@ -894,11 +894,7 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
     }
 
     let line = &raw[start..];
-    let end = if let Some(i) = line.find('\n') {
-        i + start
-    } else {
-        line.len()
-    };
+    let end = line.find('\n').unwrap_or_else(|| line.len()) + start;
     let line = &raw[start..end]; // constrain \t search
     let text_end = if let Some(i) = line.find('\t') {
         i + start
