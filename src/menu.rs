@@ -52,18 +52,83 @@ pub struct Menu {
 }
 
 /// The Line represents a single line in a Gopher menu.
-/// It must exist in the context of a Menu struct, and its `link`
-/// field will point to its index in the Menu's `links` Vec.
+/// It must exist in the context of a Menu struct - its `link`
+/// field is its index in the Menu's `links` Vec, and
+/// start/end/text_end point to locations in Menu's `raw` Gopher
+/// response.
 pub struct Line {
-    /// Text of the line.
-    pub text: String,
-    /// URL, if it's a link.
-    pub url: String,
     /// Gopher Item Type.
     pub typ: Type,
+    /// Where this line starts in its Menu's `raw` Gopher response.
+    start: usize,
+    /// Where this line ends in Menu.raw.
+    end: usize,
+    /// Where the text/label of this line ends. Might be the same as
+    /// `end`, or might be earlier.
+    text_end: usize,
     /// Index of this link in the Menu::links vector, if it's a
     /// `gopher::Type.is_link()`
     pub link: usize,
+}
+
+impl Line {
+    /// Returns the text field of this line, given a raw Gopher response.
+    /// The same Line must always be used with the same Gopher response.
+    pub fn text<'a>(&self, raw: &'a str) -> &'a str {
+        if raw.len() >= self.text_end && self.start < self.text_end {
+            &raw[self.start + 1..self.text_end]
+        } else {
+            ""
+        }
+    }
+
+    /// Get the length of this line's text field.
+    pub fn text_len(&self) -> usize {
+        if self.text_end > self.start {
+            self.text_end - self.start
+        } else {
+            0
+        }
+    }
+
+    /// Get the URL for this line, if it's a link.
+    pub fn url(&self, raw: &str) -> String {
+        if !self.typ.is_link() {
+            return String::from("");
+        }
+
+        let line = &raw[self.text_end..self.end].trim_end_matches('\r');
+        let mut sel = "(null)";
+        let mut host = "localhost";
+        let mut port = "70";
+        for (i, chunk) in line.split('\t').enumerate() {
+            match i {
+                0 => {}
+                1 => sel = chunk,
+                2 => host = chunk,
+                3 => port = chunk,
+                _ => break,
+            }
+        }
+
+        if self.typ.is_html() {
+            sel.trim_start_matches('/')
+                .trim_start_matches("URL:")
+                .to_string()
+        } else if self.typ.is_telnet() {
+            format!("telnet://{}:{}", host, port)
+        } else {
+            let mut path = format!("/{}{}", self.typ, sel);
+            if sel.is_empty() || sel == "/" {
+                path.clear();
+            }
+            if port == "70" {
+                format!("gopher://{}{}", host, path)
+            } else {
+                format!("gopher://{}:{}{}", host, port, path)
+            }
+        }
+    }
 }
 
 /// Direction of a given link relative to the visible screen.
@@ -231,10 +296,10 @@ impl Menu {
             }
 
             // truncate long lines, instead of wrapping
-            let text = if line.text.len() > MAX_COLS {
-                &line.text[..MAX_COLS]
+            let text = if line.text_len() > MAX_COLS {
+                &line.text(&self.raw)[..MAX_COLS]
             } else {
-                &line.text
+                &line.text(&self.raw)
             };
 
             // color the line
@@ -502,7 +567,7 @@ impl Menu {
         let pattern = pattern.to_ascii_lowercase();
         for &pos in it {
             let line = self.lines.get(pos)?;
-            if line.text.to_ascii_lowercase().contains(&pattern) {
+            if line.text(&self.raw).to_ascii_lowercase().contains(&pattern) {
                 return Some(line.link);
             }
         }
@@ -643,11 +708,11 @@ impl Menu {
         self.input.clear();
 
         if let Some(line) = self.link(self.link) {
-            let url = line.url.to_string();
+            let url = line.url(&self.raw);
             let typ = gopher::type_for_url(&url);
             match typ {
                 Type::Search => {
-                    let prompt = format!("{}> ", line.text);
+                    let prompt = format!("{}> ", line.text(&self.raw));
                     Action::Prompt(
                         prompt.clone(),
                         Box::new(move |query| {
@@ -658,9 +723,9 @@ impl Menu {
                         }),
                     )
                 }
-                Type::Error => Action::Error(line.text.to_string()),
+                Type::Error => Action::Error(line.text(&self.raw).to_string()),
                 t if !t.is_supported() => Action::Error(format!("{:?} not supported", t)),
-                _ => Action::Open(line.text.to_string(), url),
+                _ => Action::Open(line.text(&self.raw).to_string(), url),
             }
         } else {
             Action::None
@@ -777,6 +842,7 @@ pub fn parse(url: &str, raw: String) -> Menu {
     let mut lines = vec![];
     let mut links = vec![];
     let mut longest = 0;
+    let mut start = 0;
 
     for line in raw.split_terminator('\n') {
         // Check for Gopher's weird "end of response" message.
@@ -784,9 +850,14 @@ pub fn parse(url: &str, raw: String) -> Menu {
             break;
         }
 
-        if let Some(mut line) = parse_line(line) {
-            if line.text.len() > longest {
-                longest = line.text.len();
+        if line == "" {
+            start += 1;
+            continue;
+        }
+
+        if let Some(mut line) = parse_line(start, &raw) {
+            if line.text_len() > longest {
+                longest = line.text_len();
             }
             if line.typ.is_link() {
                 line.link = links.len();
@@ -794,6 +865,8 @@ pub fn parse(url: &str, raw: String) -> Menu {
             }
             lines.push(line);
         }
+
+        start += line.len() + 1;
     }
 
     Menu {
@@ -815,63 +888,29 @@ pub fn parse(url: &str, raw: String) -> Menu {
 }
 
 /// Parses a single line from a Gopher menu into a `Line` struct.
-pub fn parse_line(line: &str) -> Option<Line> {
-    if line.is_empty() {
+pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
+    if raw.is_empty() || start >= raw.len() {
         return None;
     }
 
+    let line = &raw[start..];
+    let end = if let Some(i) = line.find('\n') {
+        i + start
+    } else {
+        line.len()
+    };
+    let line = &raw[start..end]; // constrain \t search
+    let text_end = if let Some(i) = line.find('\t') {
+        i + start
+    } else {
+        end
+    };
     let typ = Type::from(line.chars().nth(0)?)?;
 
-    if !typ.is_link() {
-        let end = if let Some(idx) = line.find('\t') {
-            idx
-        } else {
-            line.len()
-        };
-        return Some(Line {
-            text: line[1..end].into(),
-            url: "".to_string(),
-            typ,
-            link: 0,
-        });
-    }
-
-    let mut text = "n/a";
-    let mut sel = "(null)";
-    let mut host = "localhost";
-    let mut port = "70";
-    for (i, chunk) in line[1..].trim_end_matches('\r').split('\t').enumerate() {
-        match i {
-            0 => text = chunk,
-            1 => sel = chunk,
-            2 => host = chunk,
-            3 => port = chunk,
-            _ => break,
-        }
-    }
-
-    let url = if typ.is_html() {
-        sel.trim_start_matches('/')
-            .trim_start_matches("URL:")
-            .to_string()
-    } else if typ.is_telnet() {
-        format!("telnet://{}:{}", host, port)
-    } else {
-        let mut path = format!("/{}{}", typ, sel);
-        if sel.is_empty() || sel == "/" {
-            path.clear();
-        }
-
-        if port == "70" {
-            format!("gopher://{}{}", host, path)
-        } else {
-            format!("gopher://{}:{}{}", host, port, path)
-        }
-    };
-
     Some(Line {
-        text: text.into(),
-        url,
+        start,
+        end,
+        text_end,
         typ,
         link: 0,
     })
@@ -905,21 +944,27 @@ i---------------------------------------------------------
         );
         assert_eq!(menu.lines.len(), 10);
         assert_eq!(menu.links.len(), 5);
-        assert_eq!(menu.lines[1].url, "gopher://gopher.club/1/phlogs/");
-        assert_eq!(menu.lines[2].url, "gopher://sdf.org/1/maps/");
-        assert_eq!(menu.lines[3].url, "gopher://earth.rice.edu/1Geosphere");
-        assert_eq!(menu.lines[4].text, "wacky links");
-        assert_eq!(menu.lines[5].text, "-----------");
-        assert_eq!(menu.lines[6].url, "telnet://bbs.impakt.net:6502");
-        assert_eq!(menu.lines[7].url, "https://github.com/my/code");
-        assert_eq!(menu.lines[8].text, "-----------");
+        assert_eq!(
+            menu.lines[1].url(&menu.raw),
+            "gopher://gopher.club/1/phlogs/"
+        );
+        assert_eq!(menu.lines[2].url(&menu.raw), "gopher://sdf.org/1/maps/");
+        assert_eq!(
+            menu.lines[3].url(&menu.raw),
+            "gopher://earth.rice.edu/1Geosphere"
+        );
+        assert_eq!(menu.lines[4].text(&menu.raw), "wacky links");
+        assert_eq!(menu.lines[5].text(&menu.raw), "-----------");
+        assert_eq!(menu.lines[6].url(&menu.raw), "telnet://bbs.impakt.net:6502");
+        assert_eq!(menu.lines[7].url(&menu.raw), "https://github.com/my/code");
+        assert_eq!(menu.lines[8].text(&menu.raw), "-----------");
     }
 
     #[test]
     fn test_no_path() {
         let menu = parse!("1Circumlunar Space		circumlunar.space	70");
         assert_eq!(menu.links.len(), 1);
-        assert_eq!(menu.lines[0].url, "gopher://circumlunar.space");
+        assert_eq!(menu.lines[0].url(&menu.raw), "gopher://circumlunar.space");
     }
 
     #[test]
@@ -951,17 +996,26 @@ i	Err	bitreich.org	70
         menu.term_size(80, 40);
 
         assert_eq!(menu.links.len(), 9);
-        assert_eq!(menu.link(0).unwrap().url, "gopher://bitreich.org/1/lawn");
         assert_eq!(
-            menu.link(1).unwrap().url,
+            menu.link(0).unwrap().url(&menu.raw),
+            "gopher://bitreich.org/1/lawn"
+        );
+        assert_eq!(
+            menu.link(1).unwrap().url(&menu.raw),
             "gopher://bitreich.org/1/tutorials"
         );
-        assert_eq!(menu.link(2).unwrap().url, "gopher://bitreich.org/1/onion");
-        assert_eq!(menu.link(3).unwrap().url, "gopher://bitreich.org/1/kiosk");
+        assert_eq!(
+            menu.link(2).unwrap().url(&menu.raw),
+            "gopher://bitreich.org/1/onion"
+        );
+        assert_eq!(
+            menu.link(3).unwrap().url(&menu.raw),
+            "gopher://bitreich.org/1/kiosk"
+        );
         assert_eq!(menu.link, 0);
 
         let ssh = menu.link(4).unwrap();
-        assert_eq!(ssh.url, "ssh://kiosk@bitreich.org");
+        assert_eq!(ssh.url(&menu.raw), "ssh://kiosk@bitreich.org");
         assert_eq!(ssh.typ, Type::HTML);
 
         menu.action_down();

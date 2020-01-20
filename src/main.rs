@@ -127,8 +127,9 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> i32 {
     match gopher::fetch_url(url, tls, tor) {
         Ok((_, response)) => match typ {
             gopher::Type::Menu => {
-                for line in menu::parse(url, response).lines {
-                    out.push_str(&line.text);
+                let menu = menu::parse(url, response);
+                for line in menu.lines {
+                    out.push_str(line.text(&menu.raw));
                     out.push('\n');
                 }
             }
