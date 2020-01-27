@@ -407,7 +407,9 @@ impl Menu {
         // and do nothing.
         if self.scroll >= self.final_scroll() {
             self.scroll = self.final_scroll();
-            self.link = self.links.len() - 1;
+            if !self.links.is_empty() {
+                self.link = self.links.len() - 1;
+            }
             return Action::Redraw;
         }
 
