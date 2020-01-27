@@ -900,6 +900,8 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
     let line = &raw[start..end]; // constrain \t search
     let text_end = if let Some(i) = line.find('\t') {
         i + start
+    } else if let Some(i) = line.find('\r') {
+        i + start
     } else {
         end
     };
