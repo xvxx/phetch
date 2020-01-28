@@ -1,3 +1,30 @@
+## Unreleased
+
+This is the first release candidate for `phetch v1.0.0`. We will
+continue fixing bugs, but no new features will be added until v1.0.0
+is released.
+
+### Added
+
+- Changelog is now available:
+  gopher://phkt.io/0/code/phetch/CHANGELOG.md
+- Added some basic internals documentation.
+- Added `--no-default-features` build flag to disable Tor and TLS.
+
+### Changed
+
+- Rendering imperformance got a huge boost.
+- Memory utilization has been reduced.
+- Error checking has been improved throughout.
+- Fixed .onion URLs when using Tor.
+- phetch is now clippy compatible.
+- phetch config is not loaded in tests.
+- TTY checking disabled in tests.
+- Fixed `--no-config` flag.
+- Fixed crash when building without git.
+- Fixed a few status line display bugs.
+- Fixed a minor config parsing bug.
+
 ## v0.1.13
 
 This release fixes some longstanding display bugs and introduces Tor
