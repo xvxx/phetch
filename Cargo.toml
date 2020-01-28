@@ -32,6 +32,21 @@ pre-release-replacements = [
 ]
 dev-version-ext = "dev"
 
+[dev-dependencies]
+criterion = "0.1.2"
+
+[[bench]]
+name = "parse_gopher"
+harness = false
+
+[[bench]]
+name = "render_menu"
+harness = false
+
+[[bench]]
+name = "render_text"
+harness = false
+
 [dependencies]
 termion = "1.5.3"
 libc = "0.2.66"
