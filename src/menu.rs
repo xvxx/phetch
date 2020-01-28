@@ -75,7 +75,7 @@ impl Line {
     /// Returns the text field of this line, given a raw Gopher response.
     /// The same Line must always be used with the same Gopher response.
     pub fn text<'a>(&self, raw: &'a str) -> &'a str {
-        if raw.len() >= self.text_end && self.start < self.text_end {
+        if self.start < self.text_end {
             &raw[self.start + 1..self.text_end]
         } else {
             ""
@@ -820,7 +820,7 @@ impl Menu {
                 let s = self
                     .input
                     .chars()
-                    .take(self.input.len())
+                    .take(self.input.chars().count())
                     .collect::<String>();
                 if let Ok(num) = s.parse::<usize>() {
                     if num > 0 && num <= self.links.len() {
@@ -896,7 +896,7 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
     }
 
     let line = &raw[start..];
-    let end = line.find('\n').unwrap_or_else(|| line.len()) + start;
+    let end = line.find('\n').unwrap_or_else(|| line.chars().count()) + start;
     let line = &raw[start..end]; // constrain \t search
     let text_end = if let Some(i) = line.find('\t') {
         i + start

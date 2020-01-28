@@ -166,8 +166,9 @@ impl Text {
         let mut longest = 0;
         for line in response.split_terminator('\n') {
             lines += 1;
-            if line.len() > longest {
-                longest = line.len();
+            let count = line.chars().count();
+            if count > longest {
+                longest = count;
             }
         }
 

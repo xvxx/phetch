@@ -111,12 +111,11 @@ To enable just TLS support, or just Tor support, use `--features`:
 
 ## todo
 
-- [ ] don't create new strings for every Line
 - [ ] catch SIGWINCH
-- [ ] disable ctrl-c outside of raw mode (telnet)
 
 ## bugs
 
+- [ ] ctrl-c while telneting kills phetch
 - [ ] unknown keypress: [ during status messages
 - [ ] new status doesn't replace old (download complete -> copy url)
 
