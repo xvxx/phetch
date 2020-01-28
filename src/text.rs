@@ -173,6 +173,7 @@ impl Text {
     pub fn from(url: &str, response: String, config: &Config, tls: bool) -> Text {
         let mut lines = 0;
         let mut longest = 0;
+
         for line in response.split_terminator('\n') {
             lines += 1;
             let count = line.chars().count();

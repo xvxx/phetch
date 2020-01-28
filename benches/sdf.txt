@@ -1,0 +1,1161 @@
+iWelcome to the active SDF User Gopherspace!		null.host	1
+i		null.host	1
+iHere you will find the FRESHEST SDF User gopher sites in alphabetical		null.host	1
+iorder.  Sites here have had activity in the past 5 years.  To get your		null.host	1
+isite listed here, just type 'mkgopher' at the shell.		null.host	1
+i		null.host	1
+1[28-Jan-2020]        dbucklin  Text Obsessed	/users/dbucklin/	sdf.org	70
+1[28-Jan-2020]        baguette  Baguette's Godawful Gopherspace	/users/baguette/	sdf.org	70
+1[28-Jan-2020]technotheologist  Technotheologist in Love	/users/technotheologist/	sdf.org	70
+1[27-Jan-2020]          emilio  Gopher in Spanish	/users/emilio/	sdf.org	70
+1[27-Jan-2020]          ayaron  Amit Yaron's Gopherhole	/users/ayaron/	sdf.org	70
+1[27-Jan-2020]            kito  X	/users/kito/	sdf.org	70
+1[26-Jan-2020]       sysdharma  sysdharma's gopherhole	/users/sysdharma/	sdf.org	70
+1[26-Jan-2020]           onito 	/users/onito/	sdf.org	70
+1[26-Jan-2020]            jynx  RPoD Phlog	/users/jynx/	sdf.org	70
+1[25-Jan-2020]        inpefess  Boris Shminke's Gopherhole	/users/inpefess/	sdf.org	70
+1[24-Jan-2020]        djringjr  Morse Code Archives and Info	/users/djringjr/	sdf.org	70
+1[24-Jan-2020]             elw  Things with a a side of stuff	/users/elw/	sdf.org	70
+1[23-Jan-2020]         kali4ya  Trying this shit out!	/users/kali4ya/	sdf.org	70
+1[23-Jan-2020]      unclejonno  Techno-Minimalism	/users/unclejonno/	sdf.org	70
+1[22-Jan-2020]        tomasino  Tomasino's Gopher Hole	/users/tomasino/	sdf.org	70
+1[22-Jan-2020]           every  every@sdf.org	/users/every/	sdf.org	70
+1[21-Jan-2020]         pirgooo  pirgooo	/users/pirgooo/	sdf.org	70
+1[20-Jan-2020]            undo  Ctrl Z back to Sanity	/users/undo/	sdf.org	70
+1[20-Jan-2020]             jgw 	/users/jgw/	sdf.org	70
+1[20-Jan-2020]            ynac  The Butcher Papers: Gopher Edition	/users/ynac/	sdf.org	70
+1[19-Jan-2020]       developer  Developer's gopher site	/users/developer/	sdf.org	70
+1[19-Jan-2020]      honeycombb  bry's hut	/users/honeycombb/	sdf.org	70
+1[18-Jan-2020]             scn  SCN	/users/scn/	sdf.org	70
+1[17-Jan-2020]        junkyjim  JunkyJim's Pit of Infinite Despair	/users/junkyjim/	sdf.org	70
+1[16-Jan-2020]         rbigelo  Plain Text is Beautiful	/users/rbigelo/	sdf.org	70
+1[16-Jan-2020]           xiled  THE XILED RUMINATION CONSTRUCT	/users/xiled/	sdf.org	70
+1[15-Jan-2020]           peron  Ubuntu Peronista	/users/peron/	sdf.org	70
+1[14-Jan-2020]         cmccabe  More Questions than Answers	/users/cmccabe/	sdf.org	70
+1[14-Jan-2020]     zhangjunphy  Not A Knot	/users/zhangjunphy/	sdf.org	70
+1[14-Jan-2020]              ds  Dustin's Gopher Site	/users/ds/	sdf.org	70
+1[14-Jan-2020]           rusty  Rhizomatix Blog	/users/rusty/	sdf.org	70
+1[12-Jan-2020]             lel 	/users/lel/	sdf.org	70
+1[12-Jan-2020]   netpassport89  GopherJunk20	/users/netpassport89/	sdf.org	70
+1[11-Jan-2020]          morton  Morton's NOFAP	/users/morton/	sdf.org	70
+1[11-Jan-2020]          shakya  Mental Monk	/users/shakya/	sdf.org	70
+1[11-Jan-2020]         jebug29  Jesse's Phlog	/users/jebug29/	sdf.org	70
+1[11-Jan-2020]         bradmac  Thoughts of a middle aged Australian male	/users/bradmac/	sdf.org	70
+1[10-Jan-2020]    scorpion1761  scorpion in the hole	/users/scorpion1761/	sdf.org	70
+1[09-Jan-2020]             dox  Dox' Gopher Site	/users/dox/	sdf.org	70
+1[09-Jan-2020]          chrisb  Chrisb Gopherspace	/users/chrisb/	sdf.org	70
+1[09-Jan-2020]          hobbsc  cyclopean computation	/users/hobbsc/	sdf.org	70
+1[09-Jan-2020]             tdc  Top Dead Center	/users/tdc/	sdf.org	70
+1[08-Jan-2020]       schroeder  AOL Keyword: obsolete	/users/schroeder/	sdf.org	70
+1[07-Jan-2020]   erosdiscordia  erosdiscordia	/users/erosdiscordia/	sdf.org	70
+1[06-Jan-2020]  asnowmanhowsad  blog	/users/asnowmanhowsad/	sdf.org	70
+1[04-Jan-2020]         nexthem 	/users/nexthem/	sdf.org	70
+1[04-Jan-2020]         slugmax  The Lonely Cabin	/users/slugmax/	sdf.org	70
+1[03-Jan-2020]         jreeves  2020	/users/jreeves/	sdf.org	70
+1[03-Jan-2020]        baruchel  baruchel's gopherspace	/users/baruchel/	sdf.org	70
+1[03-Jan-2020]        pkotrcka  pkotrcka plaintext	/users/pkotrcka/	sdf.org	70
+1[03-Jan-2020]        tfurrows  Jozhaus on SDF	/users/tfurrows/	sdf.org	70
+1[03-Jan-2020]          launch  Betsy Vesper's Beef Trust	/users/launch/	sdf.org	70
+1[02-Jan-2020]        sparcipx  The Backroad to Civilization	/users/sparcipx/	sdf.org	70
+1[02-Jan-2020]          output 	/users/output/	sdf.org	70
+1[01-Jan-2020]       mutoshack  MutoShack's Spruce Forest	/users/mutoshack/	sdf.org	70
+1[01-Jan-2020]         barryjb  Barry's Gopher Hole	/users/barryjb/	sdf.org	70
+1[01-Jan-2020]           chals  chalsattack gopher	/users/chals/	sdf.org	70
+1[31-Dec-2019]             rak  RAK's gopherspace	/users/rak/	sdf.org	70
+1[30-Dec-2019]          mmeta4  under deconstruction...	/users/mmeta4/	sdf.org	70
+1[30-Dec-2019] homemadesteam58  Homemadesteam58's GopherSpace	/users/homemadesteam58/	sdf.org	70
+1[30-Dec-2019]       simsyland  the lady who knew too much and wrote too little	/users/simsyland/	sdf.org	70
+1[29-Dec-2019]        pizzapal  My Documents	/users/pizzapal/	sdf.org	70
+1[28-Dec-2019]          flonlo  QVODLIBET	/users/flonlo/	sdf.org	70
+1[27-Dec-2019]      enigmaunix  Enigmatico's Gopherspace	/users/enigmaunix/	sdf.org	70
+1[27-Dec-2019]            yeti  Himalaya	/users/yeti/	sdf.org	70
+1[26-Dec-2019]             sjc  Steven Jay Cohen	/users/sjc/	sdf.org	70
+1[25-Dec-2019]             meh 	/users/meh/	sdf.org	70
+1[25-Dec-2019]      johngodlee  John L. Godlee	/users/johngodlee/	sdf.org	70
+1[25-Dec-2019]       fevermind 	/users/fevermind/	sdf.org	70
+1[20-Dec-2019]           annna  AnNnA's gOpHeRsPaCe Of DoOm!1!1!1!1	/users/annna/	sdf.org	70
+1[18-Dec-2019]     helpdeskdan  helpdeskdan's world	/users/helpdeskdan/	sdf.org	70
+1[18-Dec-2019]       maisonpop 	/users/maisonpop/	sdf.org	70
+1[16-Dec-2019]    gallowsgryph  Starfield of the Skies	/users/gallowsgryph/	sdf.org	70
+1[16-Dec-2019]          pthfdr  SAMPLE	/users/pthfdr/	sdf.org	70
+1[15-Dec-2019]        trampith trampith	/users/trampith/	sdf.org	70
+1[14-Dec-2019]             aro  unnamed gopherhole	/users/aro/	sdf.org	70
+1[14-Dec-2019]        xxzozaxx  BAGH	/users/xxzozaxx/	sdf.org	70
+1[13-Dec-2019]           kudut  35000 Kenneth Udut's organized by Dewey Decimal (AI decided)	/users/kudut/	sdf.org	70
+1[11-Dec-2019]           yargo  # Yargo // HB9KNS #	/users/yargo/	sdf.org	70
+1[11-Dec-2019]              xt 	/users/xt/	sdf.org	70
+1[11-Dec-2019]         nynergy  Continuum	/users/nynergy/	sdf.org	70
+1[10-Dec-2019]         iiogama  iiogama's playing underground	/users/iiogama/	sdf.org	70
+1[08-Dec-2019]     queenslight  Trenton Matthews - Underground!	/users/queenslight/	sdf.org	70
+1[07-Dec-2019]       superstar 	/users/superstar/	sdf.org	70
+1[05-Dec-2019]          spinfz  Blefuscu	/users/spinfz/	sdf.org	70
+1[04-Dec-2019]           lumia  Lumia's Realm of Saints and Decimals	/users/lumia/	sdf.org	70
+1[27-Nov-2019]             mnw  Squirrelling thoughts in my gopher hole	/users/mnw/	sdf.org	70
+1[27-Nov-2019]           helix  helix	/users/helix/	sdf.org	70
+1[27-Nov-2019]            esrh 	/users/esrh/	sdf.org	70
+1[26-Nov-2019]         flewkey  flewkey	/users/flewkey/	sdf.org	70
+1[26-Nov-2019]             asl  alexa'a area	/users/asl/	sdf.org	70
+1[26-Nov-2019]          jasmaz jasmaz	/users/jasmaz/	sdf.org	70
+1[24-Nov-2019]          aiwein  an experiment in minimalism	/users/aiwein/	sdf.org	70
+1[21-Nov-2019]            niko  BORN TO DIE	/users/niko/	sdf.org	70
+1[17-Nov-2019]           irnex  Infrarednex Gopher Site	/users/irnex/	sdf.org	70
+1[15-Nov-2019]       lbonanomi  lbonanomi	/users/lbonanomi/	sdf.org	70
+1[14-Nov-2019]           joelz joelz	/users/joelz/	sdf.org	70
+1[12-Nov-2019]        tallship  A hammer in my hand.	/users/tallship/	sdf.org	70
+1[12-Nov-2019]            mmww  MMWW's underwhelming gopherspace	/users/mmww/	sdf.org	70
+1[12-Nov-2019]      donotshake 	/users/donotshake/	sdf.org	70
+1[12-Nov-2019]         rbmills 	/users/rbmills/	sdf.org	70
+1[11-Nov-2019]        mcalhoun  MCalhoun's gopher space (whatever that is)	/users/mcalhoun/	sdf.org	70
+1[09-Nov-2019]            uafr  Wolfgang Becker	/users/uafr/	sdf.org	70
+1[08-Nov-2019]        dalkmann  Bernhard Dalkmann's Gopherspace - The Doctor is in.	/users/dalkmann/	sdf.org	70
+1[07-Nov-2019]       soundmin7  My Soundmin7 Gopher Page	/users/soundmin7/	sdf.org	70
+1[07-Nov-2019]      dopantlion 	/users/dopantlion/	sdf.org	70
+1[05-Nov-2019]    gnostiquette  angie's site	/users/gnostiquette/	sdf.org	70
+1[05-Nov-2019]        drskrzyk  Dr. Otto Skrzyk - CEO of Skrzyk Labs	/users/drskrzyk/	sdf.org	70
+1[04-Nov-2019]          br.iot br.iot	/users/br.iot/	sdf.org	70
+1[02-Nov-2019]             ddc  Drunken Dogcow	/users/ddc/	sdf.org	70
+1[01-Nov-2019]        mhembree  ¯\_(ツ)_/¯	/users/mhembree/	sdf.org	70
+1[29-Oct-2019]         jnoen23  Organization Space	/users/jnoen23/	sdf.org	70
+1[28-Oct-2019]      blktshrt79  ghetto plastic spoon phlog	/users/blktshrt79/	sdf.org	70
+1[27-Oct-2019]          lucina 	/users/lucina/	sdf.org	70
+1[23-Oct-2019]        mirmidon  El Hormiguero de Mirmidon	/users/mirmidon/	sdf.org	70
+1[22-Oct-2019]          fenris 	/users/fenris/	sdf.org	70
+1[22-Oct-2019]            m68k  	/users/m68k/	sdf.org	70
+1[18-Oct-2019]         k1l0b1t 	/users/k1l0b1t/	sdf.org	70
+1[18-Oct-2019]       ajroach42 	/users/ajroach42/	sdf.org	70
+1[15-Oct-2019]           jasan  Crypto Minimalism (no just kidding)	/users/jasan/	sdf.org	70
+1[13-Oct-2019]       ratfactor  RGB: Ratfactor's Gopher Burrow	/users/ratfactor/	sdf.org	70
+1[12-Oct-2019]            rach  Rach's Gopherhole	/users/rach/	sdf.org	70
+1[11-Oct-2019]     chicagotiug  Chicago TI-99/4A Users Group	/users/chicagotiug/	sdf.org	70
+1[06-Oct-2019]           denyr  Denyr's Gopherspace!	/users/denyr/	sdf.org	70
+1[06-Oct-2019]      typewriter  Another short-lived interest?	/users/typewriter/	sdf.org	70
+1[05-Oct-2019]      braixenirl  BraixenIRL's old gopherspace	/users/braixenirl/	sdf.org	70
+1[05-Oct-2019]          lneely  lneely's gopherspace	/users/lneely/	sdf.org	70
+1[03-Oct-2019]        blubrick  Pages? We don't need no steenkin' pages!	/users/blubrick/	sdf.org	70
+1[01-Oct-2019]            lord  LORD CHINCHILLA	/users/lord/	sdf.org	70
+1[30-Sep-2019]         jbbdude 	/users/jbbdude/	sdf.org	70
+1[30-Sep-2019]        chupawan  chupawan's blog	/users/chupawan/	sdf.org	70
+1[26-Sep-2019]           jakeg  jake g.'s digital basement	/users/jakeg/	sdf.org	70
+1[26-Sep-2019]      spaceboy99 	/users/spaceboy99/	sdf.org	70
+1[25-Sep-2019]       snowcrash  Snowcrash's Gopherhole	/users/snowcrash/	sdf.org	70
+1[24-Sep-2019]        mstinson 	/users/mstinson/	sdf.org	70
+1[23-Sep-2019]              cm 	/users/cm/	sdf.org	70
+1[23-Sep-2019]         mathk1d  ... one should dash forward and with joy.	/users/mathk1d/	sdf.org	70
+1[20-Sep-2019]          mrjoey 	/users/mrjoey/	sdf.org	70
+1[19-Sep-2019]          epl692  epl692's hole	/users/epl692/	sdf.org	70
+1[18-Sep-2019]        bjbishop  Bryan's gopher site	/users/bjbishop/	sdf.org	70
+1[17-Sep-2019]  christyotwisty  The Luau Deck	/users/christyotwisty/	sdf.org	70
+1[16-Sep-2019]     electristan  The Oldest House	/users/electristan/	sdf.org	70
+1[16-Sep-2019]      seanpompea  thx1138	/users/seanpompea/	sdf.org	70
+1[14-Sep-2019]            gnsk  gnsk gopher	/users/gnsk/	sdf.org	70
+1[12-Sep-2019]          stecla  Long live Gopher!!	/users/stecla/	sdf.org	70
+1[11-Sep-2019]            jan6  nothing sane comes this way	/users/jan6/	sdf.org	70
+1[08-Sep-2019]         techmaz  Techmaz's Gopher Site	/users/techmaz/	sdf.org	70
+1[06-Sep-2019]          flageo  Gopher, opher, pher, her	/users/flageo/	sdf.org	70
+1[04-Sep-2019]        nordvark  nordvark.com	/users/nordvark/	sdf.org	70
+1[03-Sep-2019]    prof.raymond  Educational Musings	/users/prof.raymond/	sdf.org	70
+1[31-Aug-2019]  scientistninja  Beyond the stars!, A blog by a Hacking God.	/users/scientistninja/	sdf.org	70
+1[30-Aug-2019]             mhj  World Shaking Revolution	/users/mhj/	sdf.org	70
+1[28-Aug-2019]             mtw  Random code and rants about life.	/users/mtw/	sdf.org	70
+1[27-Aug-2019]             nmh  T3X.ORG	/users/nmh/	sdf.org	70
+1[27-Aug-2019]             fsf  fsf@gopher	/users/fsf/	sdf.org	70
+1[23-Aug-2019]           vcfmw  SDF @ VCFMW 14	/users/vcfmw/	sdf.org	70
+1[22-Aug-2019]       saarullik  Andrei's gopher space	/users/saarullik/	sdf.org	70
+1[22-Aug-2019]         bopfrog  Bopfrog's gopher filespace	/users/bopfrog/	sdf.org	70
+1[21-Aug-2019]           marsh  marsh gopher	/users/marsh/	sdf.org	70
+1[17-Aug-2019]           okflo  OKFLOs home	/users/okflo/	sdf.org	70
+1[15-Aug-2019]         altered  altered	/users/altered/	sdf.org	70
+1[14-Aug-2019]           staxx  Staxx for days	/users/staxx/	sdf.org	70
+1[13-Aug-2019]    rustypoetics  RUSTY POETICS	/users/rustypoetics/	sdf.org	70
+1[13-Aug-2019]         sixfour  Gopher Hole 64	/users/sixfour/	sdf.org	70
+1[10-Aug-2019]        hardmous  DJ hardmous	/users/hardmous/	sdf.org	70
+1[05-Aug-2019]       rjtatwork  RJTatWork Gopher Space	/users/rjtatwork/	sdf.org	70
+1[03-Aug-2019]             igk  Göktuğ's Gopherspace	/users/igk/	sdf.org	70
+1[03-Aug-2019]            argv  Ankit R Gadiya	/users/argv/	sdf.org	70
+1[02-Aug-2019]         samalex  Sam's Gopherspace	/users/samalex/	sdf.org	70
+1[31-Jul-2019]       win8linux  win8linux's Gopher Hole	/users/win8linux/	sdf.org	70
+1[31-Jul-2019]             qaf  qaf (queer as f...)	/users/qaf/	sdf.org	70
+1[29-Jul-2019]        frrobert  Fr. Robert's Gopherhole	/users/frrobert/	sdf.org	70
+1[27-Jul-2019]    michaelgraaf  The next little big thing	/users/michaelgraaf/	sdf.org	70
+1[27-Jul-2019]          kvothe  gopherhole // phlog // mindmap	/users/kvothe/	sdf.org	70
+1[27-Jul-2019]          lothar lothar	/users/lothar/	sdf.org	70
+1[26-Jul-2019]            cmrn  cam	/users/cmrn/	sdf.org	70
+1[26-Jul-2019]       floatvoid  the void shed	/users/floatvoid/	sdf.org	70
+1[24-Jul-2019]         cseiter  cseiter Gopherspace	/users/cseiter/	sdf.org	70
+1[24-Jul-2019]    cthulhupunk0  cthulhupunk0Space	/users/cthulhupunk0/	sdf.org	70
+1[24-Jul-2019]           slnix  slnix	/users/slnix/	sdf.org	70
+1[23-Jul-2019]        wjdurkin  The GeoPhlogicist	/users/wjdurkin/	sdf.org	70
+1[18-Jul-2019]            dlom  dlom's gopherspace	/users/dlom/	sdf.org	70
+1[17-Jul-2019]    omegapaladin  OmegaPaladin's GopherHole - The Skydock	/users/omegapaladin/	sdf.org	70
+1[16-Jul-2019]             cat  21st century jet boy machine	/users/cat/	sdf.org	70
+1[15-Jul-2019]        ljdcodes  Sharing my codes	/users/ljdcodes/	sdf.org	70
+1[15-Jul-2019]        amcclure  Anton McClure's Gopher Site	/users/amcclure/	sdf.org	70
+1[14-Jul-2019]         verkaro  Verkaro	/users/verkaro/	sdf.org	70
+1[12-Jul-2019]            x7cc  0x7cc	/users/x7cc/	sdf.org	70
+1[10-Jul-2019]        lynx7os5  Journey Down a Gopher Hole.	/users/lynx7os5/	sdf.org	70
+1[09-Jul-2019]      disposable 	/users/disposable/	sdf.org	70
+1[09-Jul-2019]   captainnemo69  CAPTAINNEMO	/users/captainnemo69/	sdf.org	70
+1[07-Jul-2019]       bfgaughan  Sic mundus creatus est	/users/bfgaughan/	sdf.org	70
+1[07-Jul-2019]           erkin  Moved to suika.erkin.party	/users/erkin/	sdf.org	70
+1[03-Jul-2019]          ingwer 	/users/ingwer/	sdf.org	70
+1[03-Jul-2019]     swiftearmor  Swiftearmors Gophersite	/users/swiftearmor/	sdf.org	70
+1[28-Jun-2019]          oddtor  My Home Space	/users/oddtor/	sdf.org	70
+1[28-Jun-2019]             cim  cim's secret gopherspace	/users/cim/	sdf.org	70
+1[27-Jun-2019]           akean  akean's experiment	/users/akean/	sdf.org	70
+1[24-Jun-2019]             jur  Juro gopherspace	/users/jur/	sdf.org	70
+1[23-Jun-2019]          chshbh 	/users/chshbh/	sdf.org	70
+1[23-Jun-2019]       henrycase  RANDOM NOISE	/users/henrycase/	sdf.org	70
+1[21-Jun-2019]       nocarrier 	/users/nocarrier/	sdf.org	70
+1[21-Jun-2019]       celadevra  The Underground Well	/users/celadevra/	sdf.org	70
+1[17-Jun-2019]          wrench  a wrench in the works	/users/wrench/	sdf.org	70
+1[15-Jun-2019]        xmanmonk  What the...?	/users/xmanmonk/	sdf.org	70
+1[14-Jun-2019]        champlij  The Jimmy James	/users/champlij/	sdf.org	70
+1[14-Jun-2019]           ewerd  E-werd's Gopherhole	/users/ewerd/	sdf.org	70
+1[12-Jun-2019]        retreaux  welcome away from the wide webbed world	/users/retreaux/	sdf.org	70
+1[10-Jun-2019]         trnslts trnslts	/users/trnslts/	sdf.org	70
+1[09-Jun-2019]        julianbr 	/users/julianbr/	sdf.org	70
+1[09-Jun-2019]       mushmouth  mushmouth gopherspace	/users/mushmouth/	sdf.org	70
+1[09-Jun-2019]           vt100  Vinh's Gopher Page	/users/vt100/	sdf.org	70
+1[08-Jun-2019]            saba 	/users/saba/	sdf.org	70
+1[06-Jun-2019]         prakash  Prakash Karunanithi Gopher Hole	/users/prakash/	sdf.org	70
+1[04-Jun-2019]        dotemacs 	/users/dotemacs/	sdf.org	70
+1[04-Jun-2019]       cyberpunk  Welcome to the Cyber Corporation, Cyberpunks	/users/cyberpunk/	sdf.org	70
+1[03-Jun-2019]           mosst  mosst's |d|i|g|i|t|a|l| dirt mound	/users/mosst/	sdf.org	70
+1[03-Jun-2019]     tokyogringo  Tokyo Gringo: The Man and The Journey	/users/tokyogringo/	sdf.org	70
+1[03-Jun-2019]     muttman1357 	/users/muttman1357/	sdf.org	70
+1[02-Jun-2019]           btate  Hawaii Software Solutions	/users/btate/	sdf.org	70
+1[01-Jun-2019]            june  BIG CARP FISHING IN 2008	/users/june/	sdf.org	70
+1[31-May-2019]  lesliesrussell  Infinite Regurgitation	/users/lesliesrussell/	sdf.org	70
+1[30-May-2019]        roll1961  Panicked Zebra	/users/roll1961/	sdf.org	70
+1[30-May-2019]           abbub  Nozin' Aroun'	/users/abbub/	sdf.org	70
+1[28-May-2019]        zelbrium zelbrium	/users/zelbrium/	sdf.org	70
+1[23-May-2019]            nw8l  Ham Radio and Retro Tech	/users/nw8l/	sdf.org	70
+1[22-May-2019]        slegrand  Kosh2501 Ramblings/Music/etc.	/users/slegrand/	sdf.org	70
+1[20-May-2019]      ontheocean  on the ocean	/users/ontheocean/	sdf.org	70
+1[20-May-2019]        myst32yt  The Toy Gopher Page	/users/myst32yt/	sdf.org	70
+1[19-May-2019]            azod  azod's gopher site	/users/azod/	sdf.org	70
+1[17-May-2019]       icediver3 	/users/icediver3/	sdf.org	70
+1[17-May-2019]    fallingknife  FallingKnife's Gopher Hole	/users/fallingknife/	sdf.org	70
+1[16-May-2019]          milky9  Cyberspace and Witchcraft	/users/milky9/	sdf.org	70
+1[13-May-2019]         grisly1  Grisly; something horrible, or not?	/users/grisly1/	sdf.org	70
+1[09-May-2019]          lerxst  lerxst gopher	/users/lerxst/	sdf.org	70
+1[08-May-2019]        pacbilly  PacBilly's Domain	/users/pacbilly/	sdf.org	70
+1[04-May-2019]        nelliott  welcome to nelliott's site	/users/nelliott/	sdf.org	70
+1[03-May-2019]          isis07  un gopher francais	/users/isis07/	sdf.org	70
+1[02-May-2019]      philmacfly  GophmacFLy	/users/philmacfly/	sdf.org	70
+1[01-May-2019]       wilinskey  Ranks of the Operators	/users/wilinskey/	sdf.org	70
+1[29-Apr-2019]         madhaha 	/users/madhaha/	sdf.org	70
+1[28-Apr-2019]       cesionaut  indistinguishable	/users/cesionaut/	sdf.org	70
+1[27-Apr-2019]      hairylarry 	/users/hairylarry/	sdf.org	70
+1[25-Apr-2019]   thecakeflavor  this is my space	/users/thecakeflavor/	sdf.org	70
+1[23-Apr-2019]            thse 	/users/thse/	sdf.org	70
+1[22-Apr-2019]          traxex  traxex	/users/traxex/	sdf.org	70
+1[22-Apr-2019]         saibato 	/users/saibato/	sdf.org	70
+1[21-Apr-2019]         planetx  Placeholder	/users/planetx/	sdf.org	70
+1[20-Apr-2019]        oldfolio  Gopherspace of an Antiquary	/users/oldfolio/	sdf.org	70
+1[19-Apr-2019]      acresearch  Logging my research	/users/acresearch/	sdf.org	70
+1[16-Apr-2019]       mlemsgevl  Mlem's Hub	/users/mlemsgevl/	sdf.org	70
+1[16-Apr-2019]         gnstaxo  Gustavo	/users/gnstaxo/	sdf.org	70
+1[14-Apr-2019]      astroplant  THE HOLE OF GOPHER	/users/astroplant/	sdf.org	70
+1[13-Apr-2019]          sander  Sander's Gopherhole	/users/sander/	sdf.org	70
+1[11-Apr-2019]       servergod  you're the man now dog	/users/servergod/	sdf.org	70
+1[11-Apr-2019]           azure  A Predator of Information	/users/azure/	sdf.org	70
+1[10-Apr-2019]            sbrk  I'm all right. Nobody worry about me.	/users/sbrk/	sdf.org	70
+1[09-Apr-2019]           spelk  spelkhole	/users/spelk/	sdf.org	70
+1[09-Apr-2019]         systems  Systemshole	/users/systems/	sdf.org	70
+1[09-Apr-2019]          ayoshi  Paradigm Shift for the medicine from Japan	/users/ayoshi/	sdf.org	70
+1[08-Apr-2019]         yehudah  Yehudah's fun house	/users/yehudah/	sdf.org	70
+1[07-Apr-2019]           fripp  Fripp's corner	/users/fripp/	sdf.org	70
+1[07-Apr-2019]            stfd 	/users/stfd/	sdf.org	70
+1[06-Apr-2019]            acsk  Action's Gopherstation	/users/acsk/	sdf.org	70
+1[06-Apr-2019]    saltedhashes  TEST GOPHER PAGE	/users/saltedhashes/	sdf.org	70
+1[06-Apr-2019]   softwaresucks  Startpage v1.0	/users/softwaresucks/	sdf.org	70
+1[04-Apr-2019]         mcrable  And now...	/users/mcrable/	sdf.org	70
+1[04-Apr-2019]    starkweather  Starkweather's Stuff	/users/starkweather/	sdf.org	70
+1[04-Apr-2019]             npa  npa's site	/users/npa/	sdf.org	70
+1[04-Apr-2019]        hjohnson  The Cyclone Matrix / Johnson Protocol	/users/hjohnson/	sdf.org	70
+1[03-Apr-2019]         kaction  Bye, world!	/users/kaction/	sdf.org	70
+1[01-Apr-2019]        jeschust  the state that I am in	/users/jeschust/	sdf.org	70
+1[30-Mar-2019]             itf  itf's public stuff	/users/itf/	sdf.org	70
+1[30-Mar-2019]   offdutypirate offdutypirate	/users/offdutypirate/	sdf.org	70
+1[29-Mar-2019]        julienxx  Julien's Gopher Hole	/users/julienxx/	sdf.org	70
+1[29-Mar-2019]      ransondrew  RansonDrew's Hole	/users/ransondrew/	sdf.org	70
+1[28-Mar-2019]         dolpher  dolpher thinks!	/users/dolpher/	sdf.org	70
+1[27-Mar-2019]         qwerty7  qwerty7's little slice of SDF	/users/qwerty7/	sdf.org	70
+1[25-Mar-2019]       tiwesdaeg  Testing 1 2 4	/users/tiwesdaeg/	sdf.org	70
+1[22-Mar-2019]         cstroie  CS Gopherspace	/users/cstroie/	sdf.org	70
+1[21-Mar-2019]           swld0  ANOTACIONES FINALES	/users/swld0/	sdf.org	70
+1[19-Mar-2019]           jelle  Jelle's gopherspace	/users/jelle/	sdf.org	70
+1[19-Mar-2019]        payphone payphone	/users/payphone/	sdf.org	70
+1[17-Mar-2019]          vhhg13 	/users/vhhg13/	sdf.org	70
+1[17-Mar-2019]          ratter  rat hole	/users/ratter/	sdf.org	70
+1[17-Mar-2019]          dirtyv  <-- has no clue what they're doing	/users/dirtyv/	sdf.org	70
+1[15-Mar-2019]         jboverf  Justin's Software Phlog	/users/jboverf/	sdf.org	70
+1[15-Mar-2019]      aarontyree  Bucktooth Billy	/users/aarontyree/	sdf.org	70
+1[15-Mar-2019]       agntsmart  Agnt Smart in Gopherspace	/users/agntsmart/	sdf.org	70
+1[14-Mar-2019]          melton  Bits & Bytes	/users/melton/	sdf.org	70
+1[12-Mar-2019]            limn  LimnSpace	/users/limn/	sdf.org	70
+1[10-Mar-2019]           jocko  jocko's gopher hole	/users/jocko/	sdf.org	70
+1[09-Mar-2019]       digdeeper 	/users/digdeeper/	sdf.org	70
+1[09-Mar-2019]        anthonyg  Anthony's Gopherspace	/users/anthonyg/	sdf.org	70
+1[06-Mar-2019]           freon  beneath the wired	/users/freon/	sdf.org	70
+1[05-Mar-2019]        amedrado  amedrado's Gopherhole	/users/amedrado/	sdf.org	70
+1[04-Mar-2019]          kahiru  kahiru's phlog	/users/kahiru/	sdf.org	70
+1[03-Mar-2019]            disc  my name is disc	/users/disc/	sdf.org	70
+1[03-Mar-2019]        jewlives  is this thing on?	/users/jewlives/	sdf.org	70
+1[02-Mar-2019]     pussyslayer  lair of the pussyslayer	/users/pussyslayer/	sdf.org	70
+1[02-Mar-2019]        discdfec  errorspace	/users/discdfec/	sdf.org	70
+1[01-Mar-2019]         mercury  Mercury's Gopher	/users/mercury/	sdf.org	70
+1[01-Mar-2019]      ladywillow  The Willowness on Gopher	/users/ladywillow/	sdf.org	70
+1[27-Feb-2019]          spid3r  sirspid3r	/users/spid3r/	sdf.org	70
+1[27-Feb-2019]     userhicks11  Hicks	/users/userhicks11/	sdf.org	70
+1[26-Feb-2019]          g.love  Organized Chaos Rebooted	/users/g.love/	sdf.org	70
+1[25-Feb-2019]         zwansch  Zwansch's gopherhole	/users/zwansch/	sdf.org	70
+1[25-Feb-2019]        thinknix thinknix	/users/thinknix/	sdf.org	70
+1[23-Feb-2019]            yune  yune's Gopherspace	/users/yune/	sdf.org	70
+1[23-Feb-2019]    authoritimmy  Authoritimmy's SDF Gopher Site	/users/authoritimmy/	sdf.org	70
+1[22-Feb-2019]         stream2  Stream Two's Gopherhole	/users/stream2/	sdf.org	70
+1[20-Feb-2019]         katolaz  KatolaZ' gopher hole	/users/katolaz/	sdf.org	70
+1[17-Feb-2019]          cdmnky  cd-space	/users/cdmnky/	sdf.org	70
+1[12-Feb-2019]     starbreaker  Matthew Graybosch on Gopher	/users/starbreaker/	sdf.org	70
+1[11-Feb-2019]         danielo  danielo (el gopherspace)	/users/danielo/	sdf.org	70
+1[07-Feb-2019]         jeremij  Jeremiah's GopherSpace.	/users/jeremij/	sdf.org	70
+1[05-Feb-2019]     seventysnap  70-snap! Simplified Space	/users/seventysnap/	sdf.org	70
+1[04-Feb-2019]        bsd4life  People, Places, and Things	/users/bsd4life/	sdf.org	70
+1[04-Feb-2019]          fernan 	/users/fernan/	sdf.org	70
+1[03-Feb-2019]         junkman  My gopher	/users/junkman/	sdf.org	70
+1[01-Feb-2019]             lro  lro's phlog	/users/lro/	sdf.org	70
+1[31-Jan-2019]          vext01  Vext01's Gopher Site	/users/vext01/	sdf.org	70
+1[31-Jan-2019]     cipherstone  CIPHERSTONE'S SPACE	/users/cipherstone/	sdf.org	70
+1[30-Jan-2019]            marg 	/users/marg/	sdf.org	70
+1[30-Jan-2019]             yal  FreeBSD gopher site	/users/yal/	sdf.org	70
+1[29-Jan-2019]     donandres70 	/users/donandres70/	sdf.org	70
+1[29-Jan-2019]         valter4  valter4's gophersite	/users/valter4/	sdf.org	70
+1[28-Jan-2019]          seanzo 	/users/seanzo/	sdf.org	70
+1[28-Jan-2019]         jleedev  Adverb's Actions	/users/jleedev/	sdf.org	70
+1[27-Jan-2019]         henrikj 	/users/henrikj/	sdf.org	70
+1[26-Jan-2019]        justinle  Justin's Gopherhole	/users/justinle/	sdf.org	70
+1[26-Jan-2019]        zontargs  zontargs' gopher bunker	/users/zontargs/	sdf.org	70
+1[25-Jan-2019]    cloudyisland  8sync's Cloudy Island	/users/cloudyisland/	sdf.org	70
+1[24-Jan-2019]         jsalens  jjsalens Gopher	/users/jsalens/	sdf.org	70
+1[24-Jan-2019]           ulcer  noobs! ------v	/users/ulcer/	sdf.org	70
+1[23-Jan-2019]     notyourcode  Not Your Code	/users/notyourcode/	sdf.org	70
+1[23-Jan-2019]             otr  Old Time Radio Shows From This Day In History..Made Fresh Da	/users/otr/	sdf.org	70
+1[19-Jan-2019]        kickmule  kickmule's gopher hole	/users/kickmule/	sdf.org	70
+1[18-Jan-2019]             scm  TGenXer	/users/scm/	sdf.org	70
+1[15-Jan-2019]           pvinc  Private phlog and Aleph-cross sancutary	/users/pvinc/	sdf.org	70
+1[15-Jan-2019]         siobhan  Terminus	/users/siobhan/	sdf.org	70
+1[13-Jan-2019]           utf8x  UTF's NetHole	/users/utf8x/	sdf.org	70
+1[12-Jan-2019]          xvetrd  xvetrd is not an an?cronym	/users/xvetrd/	sdf.org	70
+1[12-Jan-2019]      blackhawk7  Black Hawk 7 by MJA	/users/blackhawk7/	sdf.org	70
+1[11-Jan-2019]             m3m 	/users/m3m/	sdf.org	70
+1[11-Jan-2019]          hitoro 	/users/hitoro/	sdf.org	70
+1[09-Jan-2019]            vera  Vera's space	/users/vera/	sdf.org	70
+1[08-Jan-2019]           sloum  dim light from distant stars	/users/sloum/	sdf.org	70
+1[07-Jan-2019]        nixfloyd  nixfloyd's gopherhole	/users/nixfloyd/	sdf.org	70
+1[05-Jan-2019]        snowdusk  snowdusk underground	/users/snowdusk/	sdf.org	70
+1[04-Jan-2019]           gabek  Gabe's Phlog	/users/gabek/	sdf.org	70
+1[04-Jan-2019]      sshifflett  An Arbitrary Gopher Hole	/users/sshifflett/	sdf.org	70
+1[03-Jan-2019]             idf  IDF's gopher hole	/users/idf/	sdf.org	70
+1[03-Jan-2019]       morehuman 	/users/morehuman/	sdf.org	70
+1[03-Jan-2019]           nullz  ..::nullNETZ::..	/users/nullz/	sdf.org	70
+1[01-Jan-2019]            till 	/users/till/	sdf.org	70
+1[01-Jan-2019]        haakonda  Capybara Project	/users/haakonda/	sdf.org	70
+1[27-Dec-2018]          ddavis  Basic Questions	/users/ddavis/	sdf.org	70
+1[26-Dec-2018]          dflate  Lightning	/users/dflate/	sdf.org	70
+1[25-Dec-2018]          rlopez  Ray's SDF Gopher Hole	/users/rlopez/	sdf.org	70
+1[23-Dec-2018]           berjo  TITLE	/users/berjo/	sdf.org	70
+1[22-Dec-2018]             ktw  Katie's Empty Gopher Site	/users/ktw/	sdf.org	70
+1[21-Dec-2018]           hanzo  Still Alive.	/users/hanzo/	sdf.org	70
+1[21-Dec-2018]           kirch  Kirch's Gopherspace	/users/kirch/	sdf.org	70
+1[19-Dec-2018]        lvturner  The advenutres of a fly farmer	/users/lvturner/	sdf.org	70
+1[18-Dec-2018]        bwinmill  Bumbling Bea's Burrow	/users/bwinmill/	sdf.org	70
+1[16-Dec-2018]        sethmhur sethmhur	/users/sethmhur/	sdf.org	70
+1[13-Dec-2018]     majormajors  M	/users/majormajors/	sdf.org	70
+1[13-Dec-2018]           ipduh  duh	/users/ipduh/	sdf.org	70
+1[13-Dec-2018]        mikkokoo mikkokoo	/users/mikkokoo/	sdf.org	70
+1[13-Dec-2018]            aqdm  aqdm day log	/users/aqdm/	sdf.org	70
+1[11-Dec-2018]      solderpunk  Rosin to the core	/users/solderpunk/	sdf.org	70
+1[10-Dec-2018]            papa  Papa's Cave	/users/papa/	sdf.org	70
+1[04-Dec-2018]       amutneith 	/users/amutneith/	sdf.org	70
+1[02-Dec-2018]            g504 g504	/users/g504/	sdf.org	70
+1[01-Dec-2018]         buzzert  buzzert's lair	/users/buzzert/	sdf.org	70
+1[29-Nov-2018]         sadrach  Flip Flop Spider	/users/sadrach/	sdf.org	70
+1[28-Nov-2018]            sako  sako	/users/sako/	sdf.org	70
+1[26-Nov-2018]       jacobrd92  Jacob Robert Davis in GopherSpace	/users/jacobrd92/	sdf.org	70
+1[26-Nov-2018]      menglehorn  Michael's Gopherspace	/users/menglehorn/	sdf.org	70
+1[26-Nov-2018]        andrew.b 	/users/andrew.b/	sdf.org	70
+1[25-Nov-2018]          kf5ydu  kf5ydu	/users/kf5ydu/	sdf.org	70
+1[25-Nov-2018]           yavit yavit	/users/yavit/	sdf.org	70
+1[25-Nov-2018]            renn  G is G	/users/renn/	sdf.org	70
+1[23-Nov-2018]        kbushnel  Junk Drawer	/users/kbushnel/	sdf.org	70
+1[20-Nov-2018]         enduser  Welcome To My Gopher Hole	/users/enduser/	sdf.org	70
+1[20-Nov-2018]           redux  Eterna Redux	/users/redux/	sdf.org	70
+1[18-Nov-2018]              ba 	/users/ba/	sdf.org	70
+1[17-Nov-2018]             dvf 	/users/dvf/	sdf.org	70
+1[14-Nov-2018] unlimitedcoder2 	/users/unlimitedcoder2/	sdf.org	70
+1[12-Nov-2018]       sehnsucht  The Count's Lore	/users/sehnsucht/	sdf.org	70
+1[11-Nov-2018]         slaanco  .:slaanco:.	/users/slaanco/	sdf.org	70
+1[10-Nov-2018]         ahriman  Ahriman's Gopherhole	/users/ahriman/	sdf.org	70
+1[04-Nov-2018]     epimorphism  ~ EPiMORPHISM's LAIR ~	/users/epimorphism/	sdf.org	70
+1[03-Nov-2018]           zcray zcray	/users/zcray/	sdf.org	70
+1[01-Nov-2018]     bradfonseca  The Emporium of Lost Thoughts (Gopher Version)	/users/bradfonseca/	sdf.org	70
+1[31-Oct-2018]letthewatersroar  Let The Waters Roar	/users/letthewatersroar/	sdf.org	70
+1[30-Oct-2018]        driver76  Welcome to my Gopherspace!	/users/driver76/	sdf.org	70
+1[30-Oct-2018]          juzekk  Gopher for JuzekK	/users/juzekk/	sdf.org	70
+1[29-Oct-2018]         darkfox  Testing	/users/darkfox/	sdf.org	70
+1[29-Oct-2018]          concon  CoNCoN	/users/concon/	sdf.org	70
+1[26-Oct-2018]       skynebula  Skypher	/users/skynebula/	sdf.org	70
+1[24-Oct-2018]          strixy  strixy's gopherhole	/users/strixy/	sdf.org	70
+1[22-Oct-2018]      aaabbbb222  testtesttest	/users/aaabbbb222/	sdf.org	70
+1[20-Oct-2018]        herronjo  Josh's Amazing Gopher Space	/users/herronjo/	sdf.org	70
+1[19-Oct-2018]          france france	/users/france/	sdf.org	70
+1[17-Oct-2018]       old.snail  notes from a shell	/users/old.snail/	sdf.org	70
+1[15-Oct-2018]          aldrik  Phlog de Aldrik	/users/aldrik/	sdf.org	70
+1[15-Oct-2018]            mn4v  The Gopher Trap	/users/mn4v/	sdf.org	70
+1[12-Oct-2018]            onat  qwerty	/users/onat/	sdf.org	70
+1[09-Oct-2018]           jirka  Jirka's Gopher Site	/users/jirka/	sdf.org	70
+1[09-Oct-2018]      postphotos  postphotos	/users/postphotos/	sdf.org	70
+1[07-Oct-2018]           ricci  ricci	/users/ricci/	sdf.org	70
+1[07-Oct-2018]            stee  A Hidden Place, A Gopher's Hole	/users/stee/	sdf.org	70
+1[04-Oct-2018]         laemeur  The CUNICULUS of LAEMEUR	/users/laemeur/	sdf.org	70
+1[04-Oct-2018]      brarempire 	/users/brarempire/	sdf.org	70
+1[01-Oct-2018]    sanchopanzer 	/users/sanchopanzer/	sdf.org	70
+1[30-Sep-2018]        bacterio  bacterio's gopher hole	/users/bacterio/	sdf.org	70
+1[30-Sep-2018]          wicked  always win	/users/wicked/	sdf.org	70
+1[30-Sep-2018]          konafu 	/users/konafu/	sdf.org	70
+1[29-Sep-2018]          lepton  Hello, gopherworld!	/users/lepton/	sdf.org	70
+1[27-Sep-2018]        ricardus  RicarduSpace	/users/ricardus/	sdf.org	70
+1[27-Sep-2018]             wvs  Civilized, Ordered, Advanced.	/users/wvs/	sdf.org	70
+1[26-Sep-2018]             kat  koshka	/users/kat/	sdf.org	70
+1[25-Sep-2018]         raoeupb  RAOEUPB	/users/raoeupb/	sdf.org	70
+1[22-Sep-2018]       racccooon  raccoon!	/users/racccooon/	sdf.org	70
+1[20-Sep-2018]        jmahoney  JMAHONEY	/users/jmahoney/	sdf.org	70
+1[18-Sep-2018]             ulf  leitzahl.de gopher information source	/users/ulf/	sdf.org	70
+1[17-Sep-2018]          clusey  Just Another Phlog	/users/clusey/	sdf.org	70
+1[17-Sep-2018]             elm 	/users/elm/	sdf.org	70
+1[17-Sep-2018]             mrn  36 hours of beer and pizza with kurt	/users/mrn/	sdf.org	70
+1[15-Sep-2018]             vls  vlsimpson	/users/vls/	sdf.org	70
+1[13-Sep-2018]         noogles  Nooglesphere	/users/noogles/	sdf.org	70
+1[12-Sep-2018]        sylranch  Tales From SYL Ranch	/users/sylranch/	sdf.org	70
+1[11-Sep-2018]        beatdown  Chainsawed and Strangled	/users/beatdown/	sdf.org	70
+1[09-Sep-2018]       alchemist  Alchemist's Gopherspace	/users/alchemist/	sdf.org	70
+1[09-Sep-2018]          dokuja  dokuja's gopher hole	/users/dokuja/	sdf.org	70
+1[06-Sep-2018]         mutyola  MUTYOLA'S GOPHER SPACE	/users/mutyola/	sdf.org	70
+1[04-Sep-2018]             dor  THIS IS A TEST	/users/dor/	sdf.org	70
+1[01-Sep-2018]             org 	/users/org/	sdf.org	70
+1[31-Aug-2018]      cfenollosa cfenollosa	/users/cfenollosa/	sdf.org	70
+1[31-Aug-2018]          alexjm 	/users/alexjm/	sdf.org	70
+1[30-Aug-2018]       theesaint  Gopher Hole from the Mountains	/users/theesaint/	sdf.org	70
+1[30-Aug-2018]          yakkoj 	/users/yakkoj/	sdf.org	70
+1[30-Aug-2018]        fuddster  Fuddster Was Here	/users/fuddster/	sdf.org	70
+1[29-Aug-2018]              ja  gopher://sdf.org:70/1/users/ja/	/users/ja/	sdf.org	70
+1[27-Aug-2018]  fiddlerwoaroof 	/users/fiddlerwoaroof/	sdf.org	70
+1[26-Aug-2018]          railey  seventheaven	/users/railey/	sdf.org	70
+1[25-Aug-2018]             adw  Introverted Ideation	/users/adw/	sdf.org	70
+1[24-Aug-2018]             tty  tty	/users/tty/	sdf.org	70
+1[21-Aug-2018]            zori  works in progress	/users/zori/	sdf.org	70
+1[21-Aug-2018]           libre  Muh phlog	/users/libre/	sdf.org	70
+1[16-Aug-2018]              mk 	/users/mk/	sdf.org	70
+1[14-Aug-2018]            amox  amox' space in web 0.2	/users/amox/	sdf.org	70
+1[14-Aug-2018]             bej  Jelle Besseling's Gopher Site	/users/bej/	sdf.org	70
+1[12-Aug-2018]             ufo  under construction	/users/ufo/	sdf.org	70
+1[12-Aug-2018]      dharmaxbum dharmaxbum	/users/dharmaxbum/	sdf.org	70
+1[11-Aug-2018]         nyufutz nyufutz	/users/nyufutz/	sdf.org	70
+1[10-Aug-2018]          tejasr 	/users/tejasr/	sdf.org	70
+1[09-Aug-2018]        gshogren 	/users/gshogren/	sdf.org	70
+1[09-Aug-2018]          embien 	/users/embien/	sdf.org	70
+1[09-Aug-2018]         greydus  some weeb's gopherspace	/users/greydus/	sdf.org	70
+1[09-Aug-2018]          kf6gpe  KF6GPE's Gopher Space	/users/kf6gpe/	sdf.org	70
+1[08-Aug-2018]         olivier  olivier	/users/olivier/	sdf.org	70
+1[08-Aug-2018]             wal 	/users/wal/	sdf.org	70
+1[08-Aug-2018]       darksnake  The Snake Pit	/users/darksnake/	sdf.org	70
+1[07-Aug-2018]       sheeplord 	/users/sheeplord/	sdf.org	70
+1[07-Aug-2018]      benburwell 	/users/benburwell/	sdf.org	70
+1[07-Aug-2018]       wiredlain 	/users/wiredlain/	sdf.org	70
+1[06-Aug-2018]          kc4zvw  much deeper than Alice's rabbit hole	/users/kc4zvw/	sdf.org	70
+1[05-Aug-2018]         gnoufou  Gnoufou's Corner	/users/gnoufou/	sdf.org	70
+1[05-Aug-2018]      mhoogkamer  Michael's Files	/users/mhoogkamer/	sdf.org	70
+1[04-Aug-2018]        wilsonnb  wilsonnb's gopherspace	/users/wilsonnb/	sdf.org	70
+1[03-Aug-2018]          bernak  Gopherspace B-Chile to the world	/users/bernak/	sdf.org	70
+1[01-Aug-2018]        cyrkuler  procrastination-central	/users/cyrkuler/	sdf.org	70
+1[31-Jul-2018]             qrn  Matthew in Gopherspace	/users/qrn/	sdf.org	70
+1[31-Jul-2018]         molotov 	/users/molotov/	sdf.org	70
+1[30-Jul-2018]           nydel  nydel's gopher	/users/nydel/	sdf.org	70
+1[29-Jul-2018]        dmadhatr  All that fits! Goes in/down the hole!	/users/dmadhatr/	sdf.org	70
+1[28-Jul-2018]           kj8am 	/users/kj8am/	sdf.org	70
+1[27-Jul-2018]       retrogeek  Oldschool	/users/retrogeek/	sdf.org	70
+1[24-Jul-2018]        rinpatch  Anime tiddies and ES6 features	/users/rinpatch/	sdf.org	70
+1[23-Jul-2018]             azq [24-Jul-2018] rinpatch Anime tiddies and ES6 features	/users/azq/	sdf.org	70
+1[23-Jul-2018]         skellat skellat	/users/skellat/	sdf.org	70
+1[22-Jul-2018]thanatophobia666  Gopher Public Library	/users/thanatophobia666/	sdf.org	70
+1[19-Jul-2018]       lolimanko  Jocata's Gopherspace	/users/lolimanko/	sdf.org	70
+1[15-Jul-2018]             sda  my gopherspace	/users/sda/	sdf.org	70
+1[13-Jul-2018]     therealbill  Bill's Gophersite	/users/therealbill/	sdf.org	70
+1[12-Jul-2018]             hnb  Hiro's Notebook	/users/hnb/	sdf.org	70
+1[12-Jul-2018]             mre 	/users/mre/	sdf.org	70
+1[11-Jul-2018]          nickca  Nicholas the Large's GOPHERSPACE!!1!	/users/nickca/	sdf.org	70
+1[10-Jul-2018]        viewcomp  viewcomp	/users/viewcomp/	sdf.org	70
+1[10-Jul-2018]          kjwill  kjwill's gopherspace	/users/kjwill/	sdf.org	70
+1[09-Jul-2018]             npg  Crap	/users/npg/	sdf.org	70
+1[07-Jul-2018]            mukt  Mukt Landing	/users/mukt/	sdf.org	70
+1[04-Jul-2018]             ch4 ch4	/users/ch4/	sdf.org	70
+1[03-Jul-2018] giantessgnostic  Infinity's Core	/users/giantessgnostic/	sdf.org	70
+1[02-Jul-2018]           keiya  Keiya's	/users/keiya/	sdf.org	70
+1[28-Jun-2018]         adaniau  Anna D's gopher	/users/adaniau/	sdf.org	70
+1[27-Jun-2018]       famicoman  Famicoman	/users/famicoman/	sdf.org	70
+1[27-Jun-2018]         jmcgann  School Thoughts	/users/jmcgann/	sdf.org	70
+1[27-Jun-2018]        martians  a martians tale of a green planet	/users/martians/	sdf.org	70
+1[27-Jun-2018]         reppard  Reppard's Gopher Hole	/users/reppard/	sdf.org	70
+1[27-Jun-2018]        vansteen  Tom's Gopher Space	/users/vansteen/	sdf.org	70
+1[27-Jun-2018]          pdfinn  PDFINN's GOPHERSPACE	/users/pdfinn/	sdf.org	70
+1[27-Jun-2018]           loewe  loewesGophers�pace	/users/loewe/	sdf.org	70
+1[26-Jun-2018]             nim 	/users/nim/	sdf.org	70
+1[24-Jun-2018]          lbreda  LBreda's gopherspace	/users/lbreda/	sdf.org	70
+1[24-Jun-2018]             sdl  fivetoedsloth's dirty little gopher hole	/users/sdl/	sdf.org	70
+1[15-Jun-2018]       blacknite  Blacknite's Telehack Page	/users/blacknite/	sdf.org	70
+1[13-Jun-2018]       sethsimon  Seth Simon's Home Page	/users/sethsimon/	sdf.org	70
+1[10-Jun-2018]           kkwoo  kkwoo's Scrapbook	/users/kkwoo/	sdf.org	70
+1[03-Jun-2018]              cy  CYBER and MORE!	/users/cy/	sdf.org	70
+1[02-Jun-2018]  mahadkalam1234 	/users/mahadkalam1234/	sdf.org	70
+1[31-May-2018]             m0m  MoMo	/users/m0m/	sdf.org	70
+1[30-May-2018]          kenyon 	/users/kenyon/	sdf.org	70
+1[30-May-2018]        docgreen  Doc Green's Research	/users/docgreen/	sdf.org	70
+1[30-May-2018]             f6k  f6k's log	/users/f6k/	sdf.org	70
+1[29-May-2018]         txminth  nothing mind-blowing	/users/txminth/	sdf.org	70
+1[24-May-2018]      kodachrome  KodaSSH Redirect & Gopher Spaxtastic	/users/kodachrome/	sdf.org	70
+1[22-May-2018]              e4  Shogi, chess an board games	/users/e4/	sdf.org	70
+1[21-May-2018]          roscom  RKN	/users/roscom/	sdf.org	70
+1[21-May-2018]              s9 	/users/s9/	sdf.org	70
+1[21-May-2018]         robertg 	/users/robertg/	sdf.org	70
+1[19-May-2018]       adamc1999  AC's Gopher Space	/users/adamc1999/	sdf.org	70
+1[18-May-2018]            xchg 	/users/xchg/	sdf.org	70
+1[16-May-2018]           louks  DL's GopherSpace - Playtime's Over	/users/louks/	sdf.org	70
+1[16-May-2018]         dfstorm  A sad man from Canada traveling around the world.	/users/dfstorm/	sdf.org	70
+1[13-May-2018]          lyrics  Lyrics - Access lyrics to your favorite songs via Gopher!	/users/lyrics/	sdf.org	70
+1[06-May-2018]        pet84rik  A plaintext world	/users/pet84rik/	sdf.org	70
+1[05-May-2018]            mujo 	/users/mujo/	sdf.org	70
+1[04-May-2018]       howtophil  Phil's Gopherspace	/users/howtophil/	sdf.org	70
+1[03-May-2018]         polluks  World of Polluks	/users/polluks/	sdf.org	70
+1[02-May-2018]          pengan  Pengan's Gopher	/users/pengan/	sdf.org	70
+1[30-Apr-2018]          ptkach  Paul Tkach's Gopherspace	/users/ptkach/	sdf.org	70
+1[29-Apr-2018]          reined  GroundHog	/users/reined/	sdf.org	70
+1[25-Apr-2018]            c25l  c25l's phlog	/users/c25l/	sdf.org	70
+1[25-Apr-2018]         zekyzen  Y[D?	/users/zekyzen/	sdf.org	70
+1[23-Apr-2018]    markus.mayer 	/users/markus.mayer/	sdf.org	70
+1[20-Apr-2018]            knur  the hole	/users/knur/	sdf.org	70
+1[18-Apr-2018]          pngwen  The CS Gopher Hole	/users/pngwen/	sdf.org	70
+1[18-Apr-2018]          phlogs  gopher.club tutorial area	/users/phlogs/	sdf.org	70
+1[17-Apr-2018]           skewr  Skewr's Gophersite	/users/skewr/	sdf.org	70
+1[16-Apr-2018]         mhocker  Matthew Hocker	/users/mhocker/	sdf.org	70
+1[16-Apr-2018]             cwr 	/users/cwr/	sdf.org	70
+1[14-Apr-2018]          ldbeth  (LAMBDA (G) (LAMBDA (H) ((F (G G)) H)))	/users/ldbeth/	sdf.org	70
+1[13-Apr-2018]         clemens  Michael Clemens	/users/clemens/	sdf.org	70
+1[12-Apr-2018]        geesdorf  Curt Geesdorf' personal pages	/users/geesdorf/	sdf.org	70
+1[12-Apr-2018]          gorpub  Goretti Publications	/users/gorpub/	sdf.org	70
+1[07-Apr-2018]            rvan rvan	/users/rvan/	sdf.org	70
+1[06-Apr-2018]        sjlawson  Ceol agus cód	/users/sjlawson/	sdf.org	70
+1[05-Apr-2018]         alberti  Albatross's Anachronism	/users/alberti/	sdf.org	70
+1[03-Apr-2018]      sirwilliam  Missale	/users/sirwilliam/	sdf.org	70
+1[03-Apr-2018]          waterg  Waters' Gopher Site	/users/waterg/	sdf.org	70
+1[01-Apr-2018]              bj  bj's gopher space	/users/bj/	sdf.org	70
+1[31-Mar-2018]            zkpr  a quiet life	/users/zkpr/	sdf.org	70
+1[30-Mar-2018]       texluthor  texluthor@sdf.org	/users/texluthor/	sdf.org	70
+1[29-Mar-2018]            roan  Once upon a time...	/users/roan/	sdf.org	70
+1[28-Mar-2018]           samis  samis's tiny Gopherspace	/users/samis/	sdf.org	70
+1[27-Mar-2018]          sanlyx  ~sanlyx's gopherspace	/users/sanlyx/	sdf.org	70
+1[25-Mar-2018]        knusbaum  Gopher Tools by knusbaum@sdf.org	/users/knusbaum/	sdf.org	70
+1[25-Mar-2018]     gunnarfrost  RANDOM	/users/gunnarfrost/	sdf.org	70
+1[23-Mar-2018]           frost  Ice Palace	/users/frost/	sdf.org	70
+1[23-Mar-2018]        kinker31  kinker31's Gopher Thing	/users/kinker31/	sdf.org	70
+1[19-Mar-2018]         heliarc  Gophers of Interest	/users/heliarc/	sdf.org	70
+1[18-Mar-2018]             zeb zeb	/users/zeb/	sdf.org	70
+1[18-Mar-2018]          lulcer  phlog engine emporium	/users/lulcer/	sdf.org	70
+1[16-Mar-2018]      satisficer  Gopher	/users/satisficer/	sdf.org	70
+1[16-Mar-2018]        auzymoto  my brain dump	/users/auzymoto/	sdf.org	70
+1[15-Mar-2018]           decal 	/users/decal/	sdf.org	70
+1[14-Mar-2018]           herco  Old World	/users/herco/	sdf.org	70
+1[13-Mar-2018]           nhunt  Here's the Title	/users/nhunt/	sdf.org	70
+1[10-Mar-2018]       jgundlach  pocket chip adventures	/users/jgundlach/	sdf.org	70
+1[10-Mar-2018]             oms  oms space	/users/oms/	sdf.org	70
+1[09-Mar-2018]             ds2  Above	/users/ds2/	sdf.org	70
+1[08-Mar-2018]        kiddkaes  KodaKingdom	/users/kiddkaes/	sdf.org	70
+1[08-Mar-2018]       jcrawford  Jesse B. Crawford	/users/jcrawford/	sdf.org	70
+1[05-Mar-2018]         gnusosa  gnusosa's gopher corner - part of the rodere.systems network	/users/gnusosa/	sdf.org	70
+1[04-Mar-2018]             tak  Tak's Public Gopherspace	/users/tak/	sdf.org	70
+1[27-Feb-2018]    sunnyscarlet 	/users/sunnyscarlet/	sdf.org	70
+1[26-Feb-2018]           bones  alone and quiet	/users/bones/	sdf.org	70
+1[26-Feb-2018]    swimmeringer  always learning	/users/swimmeringer/	sdf.org	70
+1[25-Feb-2018]            benc  Ben Clifford test gopher site	/users/benc/	sdf.org	70
+1[25-Feb-2018]        shmcinty  kernelklink	/users/shmcinty/	sdf.org	70
+1[23-Feb-2018]      lispadawan  Lisp Padawan	/users/lispadawan/	sdf.org	70
+1[22-Feb-2018]           grueb  Some Thoughts	/users/grueb/	sdf.org	70
+1[21-Feb-2018]        lherrera  The spirits in me...	/users/lherrera/	sdf.org	70
+1[20-Feb-2018]         amoline  Tango Hack	/users/amoline/	sdf.org	70
+1[17-Feb-2018]          slacka  DIRTPILE	/users/slacka/	sdf.org	70
+1[16-Feb-2018]        thegiant 	/users/thegiant/	sdf.org	70
+1[15-Feb-2018]        mcaudill 	/users/mcaudill/	sdf.org	70
+1[13-Feb-2018]         mpcclub  Moss Point Computer Club	/users/mpcclub/	sdf.org	70
+1[12-Feb-2018]         shriver  the MAD FARMER'S radio ALMANAC: gopher edition	/users/shriver/	sdf.org	70
+1[12-Feb-2018]         bitanga  Working Title	/users/bitanga/	sdf.org	70
+1[11-Feb-2018]             irl  Iain R. Learmonth's Gopher Site	/users/irl/	sdf.org	70
+1[10-Feb-2018]           m3tti m3tti	/users/m3tti/	sdf.org	70
+1[09-Feb-2018]         spetiya 	/users/spetiya/	sdf.org	70
+1[09-Feb-2018]           artsk 	/users/artsk/	sdf.org	70
+1[08-Feb-2018]     tomatobodhi  Yin Feng's Chan Buddhist Gopherhole	/users/tomatobodhi/	sdf.org	70
+1[08-Feb-2018]     wojowhiskey  wojowhiskeysite	/users/wojowhiskey/	sdf.org	70
+1[07-Feb-2018]          notptr  Why a Title	/users/notptr/	sdf.org	70
+1[07-Feb-2018]        zhivoder  Zhivoder's Homepage	/users/zhivoder/	sdf.org	70
+1[07-Feb-2018]            glen  Glen's Gopherspace	/users/glen/	sdf.org	70
+1[07-Feb-2018]            fos1  Far Out Science	/users/fos1/	sdf.org	70
+1[07-Feb-2018]           raker  raker gopherspace	/users/raker/	sdf.org	70
+1[07-Feb-2018]       mulrooney  David Mulrooney's Gopher Space	/users/mulrooney/	sdf.org	70
+1[07-Feb-2018]      copyeditor  Copyediting and Computers	/users/copyeditor/	sdf.org	70
+1[07-Feb-2018]             krr  Retro computing	/users/krr/	sdf.org	70
+1[07-Feb-2018]          yosefb  Yosef's gopher	/users/yosefb/	sdf.org	70
+1[07-Feb-2018]        tgampper  Terry Gampper's Gopherspace	/users/tgampper/	sdf.org	70
+1[07-Feb-2018]        t3hyoshi  tymail	/users/t3hyoshi/	sdf.org	70
+1[07-Feb-2018]          simple  SiMpLe MaChInEs	/users/simple/	sdf.org	70
+1[07-Feb-2018]         samwise  KD0KSP	/users/samwise/	sdf.org	70
+1[07-Feb-2018]            said said	/users/said/	sdf.org	70
+1[07-Feb-2018]         rudolph  RudGopherHole	/users/rudolph/	sdf.org	70
+1[07-Feb-2018]        rpreston 	/users/rpreston/	sdf.org	70
+1[07-Feb-2018]              rp  R.A.Pavlov's Gopher	/users/rp/	sdf.org	70
+1[07-Feb-2018]          plexus  Plexus - Computing, Radio & technology	/users/plexus/	sdf.org	70
+1[07-Feb-2018]        peteyboy  My Job Hunting	/users/peteyboy/	sdf.org	70
+1[07-Feb-2018]              pd 	/users/pd/	sdf.org	70
+1[07-Feb-2018]         mprotts  Mike's gopher site	/users/mprotts/	sdf.org	70
+1[07-Feb-2018]          mkacer  Nothing here yet	/users/mkacer/	sdf.org	70
+1[07-Feb-2018]           mbays  Nameless, Endless	/users/mbays/	sdf.org	70
+1[07-Feb-2018]        matiasch  MatiasCh in Gopher	/users/matiasch/	sdf.org	70
+1[07-Feb-2018]         lachman  A Gopher Burrow	/users/lachman/	sdf.org	70
+1[07-Feb-2018]           jovan  BrainTree	/users/jovan/	sdf.org	70
+1[07-Feb-2018]           jawsh  Jawsh McCullaugh's Gopher Site	/users/jawsh/	sdf.org	70
+1[07-Feb-2018]          idhats  IDHATS	/users/idhats/	sdf.org	70
+1[07-Feb-2018]         evilfix  evils gopher	/users/evilfix/	sdf.org	70
+1[07-Feb-2018]         epowerj 	/users/epowerj/	sdf.org	70
+1[07-Feb-2018]           dupuy 	/users/dupuy/	sdf.org	70
+1[07-Feb-2018]            davr  Dave R	/users/davr/	sdf.org	70
+1[07-Feb-2018]          cfkoch  Christian's Gopherspace	/users/cfkoch/	sdf.org	70
+1[06-Feb-2018]         sanjuro  Indian Food Gopher	/users/sanjuro/	sdf.org	70
+1[06-Feb-2018]            opus  Why gopher? Why not?	/users/opus/	sdf.org	70
+1[05-Feb-2018]         sajfarz 	/users/sajfarz/	sdf.org	70
+1[05-Feb-2018]       mechanist  Welcome to my Gopherspace!	/users/mechanist/	sdf.org	70
+1[04-Feb-2018]          duszek  The Cult of the Gopher	/users/duszek/	sdf.org	70
+1[04-Feb-2018]             zuz  ADVENTURE: The Gopher Hole of Zuz	/users/zuz/	sdf.org	70
+1[03-Feb-2018]        cooltile cooltile	/users/cooltile/	sdf.org	70
+1[02-Feb-2018]         bglopez  Gopher	/users/bglopez/	sdf.org	70
+1[01-Feb-2018]         jwalker  Fascinating!	/users/jwalker/	sdf.org	70
+1[31-Jan-2018]          daphne  Daphne's Phlog	/users/daphne/	sdf.org	70
+1[31-Jan-2018]           nekdo  Nekdo's Warm Burrow	/users/nekdo/	sdf.org	70
+1[30-Jan-2018]             jan  jan's gopher hole / space	/users/jan/	sdf.org	70
+1[30-Jan-2018]             smj  the gopher is coming	/users/smj/	sdf.org	70
+1[28-Jan-2018]         imrowan  Music for Misanthropes	/users/imrowan/	sdf.org	70
+1[27-Jan-2018]          cpider  thoughts I still won't put elsewhere	/users/cpider/	sdf.org	70
+1[25-Jan-2018]            thom  Thomas in Gopherspace	/users/thom/	sdf.org	70
+1[23-Jan-2018]        tschuden 	/users/tschuden/	sdf.org	70
+1[21-Jan-2018]         mrguilt  Mr. Guilt's Gopher at SDF	/users/mrguilt/	sdf.org	70
+1[17-Jan-2018]       snakecase  snake_case's den	/users/snakecase/	sdf.org	70
+1[16-Jan-2018]           senri  I am senri	/users/senri/	sdf.org	70
+1[13-Jan-2018]         philipv 	/users/philipv/	sdf.org	70
+1[13-Jan-2018]         toonarm 	/users/toonarm/	sdf.org	70
+1[12-Jan-2018]            nueh  exobrain	/users/nueh/	sdf.org	70
+1[11-Jan-2018]       nicholass 	/users/nicholass/	sdf.org	70
+1[11-Jan-2018]         psztrnk  LOGS	/users/psztrnk/	sdf.org	70
+1[11-Jan-2018]      nessdabest 	/users/nessdabest/	sdf.org	70
+1[08-Jan-2018]            cccv 	/users/cccv/	sdf.org	70
+1[05-Jan-2018]           pdp11  PDP-11 mainframe	/users/pdp11/	sdf.org	70
+1[05-Jan-2018]           saper  Saper is testing	/users/saper/	sdf.org	70
+1[04-Jan-2018]       stargazer  Stargazers Gopher	/users/stargazer/	sdf.org	70
+1[04-Jan-2018]         scarecw 	/users/scarecw/	sdf.org	70
+1[04-Jan-2018]       zenostein  Zeno's Gopherhole	/users/zenostein/	sdf.org	70
+1[04-Jan-2018]          pkill9 	/users/pkill9/	sdf.org	70
+1[31-Dec-2017]       benaustin  Ben Austin's Gopherspace	/users/benaustin/	sdf.org	70
+1[30-Dec-2017]         sgilles  Gopherspace of S. Gilles	/users/sgilles/	sdf.org	70
+1[29-Dec-2017]         jepityr [30-Dec-2017] sgilles Gopherspace of S. Gilles	/users/jepityr/	sdf.org	70
+1[29-Dec-2017]           fr4nk  fr4nk's scribbles	/users/fr4nk/	sdf.org	70
+1[23-Dec-2017]           ivanh  Ivan's Gopher	/users/ivanh/	sdf.org	70
+1[22-Dec-2017]          gadhra  David Lightman's Gopherhole	/users/gadhra/	sdf.org	70
+1[20-Dec-2017]     athrunnailo  My new gopher page	/users/athrunnailo/	sdf.org	70
+1[20-Dec-2017]        shangril  Shang-Lin's Gopherspace	/users/shangril/	sdf.org	70
+1[19-Dec-2017]             mek  Pure as the driven slush	/users/mek/	sdf.org	70
+1[15-Dec-2017]            wafl  Magical Girls In Space	/users/wafl/	sdf.org	70
+1[12-Dec-2017]     mongoosetom  Ebullient Ocelot Underground	/users/mongoosetom/	sdf.org	70
+1[12-Dec-2017]      ratsnest23  Rat Salad Park	/users/ratsnest23/	sdf.org	70
+1[11-Dec-2017]          lui881  This is lui881's gopher site	/users/lui881/	sdf.org	70
+1[08-Dec-2017]            ziff  Ziff's Gopherhole	/users/ziff/	sdf.org	70
+1[05-Dec-2017]          kotori 	/users/kotori/	sdf.org	70
+1[04-Dec-2017]           marco 	/users/marco/	sdf.org	70
+1[02-Dec-2017]        chaseraz  ChaseRaz	/users/chaseraz/	sdf.org	70
+1[28-Nov-2017]             tln  TLN	/users/tln/	sdf.org	70
+1[25-Nov-2017]          icefox  Gopher test	/users/icefox/	sdf.org	70
+1[24-Nov-2017]         valter3  SDF user gopherspace	/users/valter3/	sdf.org	70
+1[23-Nov-2017]        capheind  CapheindPlays	/users/capheind/	sdf.org	70
+1[22-Nov-2017]       wambotron  wambotronika	/users/wambotron/	sdf.org	70
+1[21-Nov-2017]        creichle  XNet stub	/users/creichle/	sdf.org	70
+1[20-Nov-2017]        bgardner 	/users/bgardner/	sdf.org	70
+1[14-Nov-2017]             bru  Argentina's Lonely Gopher Explorer	/users/bru/	sdf.org	70
+1[10-Nov-2017]             tut  A Silent Place	/users/tut/	sdf.org	70
+1[10-Nov-2017]       demifiend  Delusions of Erudition	/users/demifiend/	sdf.org	70
+1[10-Nov-2017]          navier  Gopher Site for Navier	/users/navier/	sdf.org	70
+1[07-Nov-2017]        kerobero  kerobero's gopherhole	/users/kerobero/	sdf.org	70
+1[07-Nov-2017]           tyrel  tyrel's burrow	/users/tyrel/	sdf.org	70
+1[06-Nov-2017]        neustadt  Neustadt - Parimal's Gopher Space	/users/neustadt/	sdf.org	70
+1[05-Nov-2017]          thabto 	/users/thabto/	sdf.org	70
+1[03-Nov-2017]            elsa  A City of Mine Own	/users/elsa/	sdf.org	70
+1[03-Nov-2017]            mdom 	/users/mdom/	sdf.org	70
+1[31-Oct-2017]          viktis  5051M01Y41T54	/users/viktis/	sdf.org	70
+1[29-Oct-2017]          ecelis  ecelis @ gopherspace	/users/ecelis/	sdf.org	70
+1[29-Oct-2017]          kd5njr  KD5NJR's lo-fi corner of the web	/users/kd5njr/	sdf.org	70
+1[25-Oct-2017]             gcg 	/users/gcg/	sdf.org	70
+1[25-Oct-2017]          nfultz  na??	/users/nfultz/	sdf.org	70
+1[24-Oct-2017]             awb  LOST IN CYBERSPACE	/users/awb/	sdf.org	70
+1[23-Oct-2017]           xdb6f  lol	/users/xdb6f/	sdf.org	70
+1[23-Oct-2017]        underdim 	/users/underdim/	sdf.org	70
+1[22-Oct-2017]   robert2430lee  Robert2430	/users/robert2430lee/	sdf.org	70
+1[18-Oct-2017]          jad340 	/users/jad340/	sdf.org	70
+1[06-Oct-2017]           wakiz  WakiZ iz Me.	/users/wakiz/	sdf.org	70
+1[05-Oct-2017]        mallaidh  Mallaidh's dorknet	/users/mallaidh/	sdf.org	70
+1[05-Oct-2017]          lehnux  Lehnux goph	/users/lehnux/	sdf.org	70
+1[01-Oct-2017]       semmetrik  semmetrik semantic metered aesthetics	/users/semmetrik/	sdf.org	70
+1[28-Sep-2017]     almostlibre  almost libre	/users/almostlibre/	sdf.org	70
+1[27-Sep-2017]          xzibit 	/users/xzibit/	sdf.org	70
+1[27-Sep-2017]         quadbat  Pretty Basic	/users/quadbat/	sdf.org	70
+1[25-Sep-2017]      morsnoctus 	/users/morsnoctus/	sdf.org	70
+1[25-Sep-2017]           mekon  Picketwire	/users/mekon/	sdf.org	70
+1[24-Sep-2017]            odie  things I made (and things other people made)	/users/odie/	sdf.org	70
+1[22-Sep-2017]             kbp  kyle	/users/kbp/	sdf.org	70
+1[17-Sep-2017]        joshua.m  The Ramblings of a Young Man	/users/joshua.m/	sdf.org	70
+1[15-Sep-2017]          kthorn  An SDF History	/users/kthorn/	sdf.org	70
+1[10-Sep-2017]        shdwfear  NOTEBOOK	/users/shdwfear/	sdf.org	70
+1[09-Sep-2017]      jacksteele  jack steele's gopherspace	/users/jacksteele/	sdf.org	70
+1[08-Sep-2017]         karnath  useless area	/users/karnath/	sdf.org	70
+1[01-Sep-2017]   northfarthing  The Northfarthing	/users/northfarthing/	sdf.org	70
+1[28-Aug-2017]             xfz  xfz's gopherspace	/users/xfz/	sdf.org	70
+1[26-Aug-2017]            jrod 	/users/jrod/	sdf.org	70
+1[22-Aug-2017]       nonlinear  nonLinear	/users/nonlinear/	sdf.org	70
+1[22-Aug-2017]     ayygiocasta 	/users/ayygiocasta/	sdf.org	70
+1[21-Aug-2017]            mthu  mthu	/users/mthu/	sdf.org	70
+1[17-Aug-2017]          spidre 	/users/spidre/	sdf.org	70
+1[17-Aug-2017]          s3krit  s3krit's chunk of the GOPHERSPACE	/users/s3krit/	sdf.org	70
+1[13-Aug-2017]        jajacobs  Test Site	/users/jajacobs/	sdf.org	70
+1[10-Aug-2017]        cmaltese  Chris' Gopherspace	/users/cmaltese/	sdf.org	70
+1[10-Aug-2017]        endomain 	/users/endomain/	sdf.org	70
+1[10-Aug-2017]        elwillow  elwillow space	/users/elwillow/	sdf.org	70
+1[08-Aug-2017]            mole  Mole's Gopher space	/users/mole/	sdf.org	70
+1[08-Aug-2017]  gustavohmsilva  Gustavo H M Silva Gopher	/users/gustavohmsilva/	sdf.org	70
+1[08-Aug-2017]          johnmw  Welcome to John's Gopherspace	/users/johnmw/	sdf.org	70
+1[06-Aug-2017]          nprice  Nick Price	/users/nprice/	sdf.org	70
+1[02-Aug-2017]          than0s  than0sgophersite	/users/than0s/	sdf.org	70
+1[31-Jul-2017]        kwillett 	/users/kwillett/	sdf.org	70
+1[30-Jul-2017]          thorns 	/users/thorns/	sdf.org	70
+1[30-Jul-2017]         quinten 	/users/quinten/	sdf.org	70
+1[23-Jul-2017]      tbgosalvez  In Search of (nice) Shrubbery	/users/tbgosalvez/	sdf.org	70
+1[21-Jul-2017]        sethkush  Seth Kushniryk's SDF gopherspace	/users/sethkush/	sdf.org	70
+1[19-Jul-2017]          kwills  this is Kevin	/users/kwills/	sdf.org	70
+1[16-Jul-2017]    manticore010  Manticore's House of Nostalgia	/users/manticore010/	sdf.org	70
+1[16-Jul-2017]           bonzi  bonzi	/users/bonzi/	sdf.org	70
+1[11-Jul-2017]             cel  cel's cool gopher space	/users/cel/	sdf.org	70
+1[07-Jul-2017]       jmajeremy  Jeremy's Gopher Space	/users/jmajeremy/	sdf.org	70
+1[01-Jul-2017]     mydeardiary  My Dear Diary	/users/mydeardiary/	sdf.org	70
+1[27-Jun-2017]         trinoox  Zooklie Gopher Directory	/users/trinoox/	sdf.org	70
+1[26-Jun-2017]          layer9 	/users/layer9/	sdf.org	70
+1[24-Jun-2017]       mrfreeman  mrfreeman's gopher homepage	/users/mrfreeman/	sdf.org	70
+1[22-Jun-2017]   testsshserver  t?he first homepage title of parsi[A[C	/users/testsshserver/	sdf.org	70
+1[12-Jun-2017]            kche  Stedsnavn	/users/kche/	sdf.org	70
+1[08-Jun-2017]          orbere 	/users/orbere/	sdf.org	70
+1[31-May-2017]         madchen 	/users/madchen/	sdf.org	70
+1[25-May-2017]         br0ken1  br0ken 1	/users/br0ken1/	sdf.org	70
+1[24-May-2017]              if  Site of If	/users/if/	sdf.org	70
+1[23-May-2017]             jzp  gopherthing	/users/jzp/	sdf.org	70
+1[22-May-2017]   greencapgonzo  Journalism at it's most lackluster	/users/greencapgonzo/	sdf.org	70
+1[19-May-2017]          maxime  Max's Gopher	/users/maxime/	sdf.org	70
+1[17-May-2017]         xolzsec  x0lzs3c	/users/xolzsec/	sdf.org	70
+1[17-May-2017]              ku 	/users/ku/	sdf.org	70
+1[16-May-2017]        dogparty  EMERGENCY DOG PARTY SYSTEM	/users/dogparty/	sdf.org	70
+1[16-May-2017]      tigerstyle 	/users/tigerstyle/	sdf.org	70
+1[12-May-2017]          tux101  A test site	/users/tux101/	sdf.org	70
+1[12-May-2017]         drajiin  Drajiin's Space	/users/drajiin/	sdf.org	70
+1[09-May-2017]            maax 	/users/maax/	sdf.org	70
+1[09-May-2017]          macpro  Mel's Internet Universe Gopher Site	/users/macpro/	sdf.org	70
+1[08-May-2017]            plox  Gopherspace resistance	/users/plox/	sdf.org	70
+1[05-May-2017]       mputerba1 	/users/mputerba1/	sdf.org	70
+1[05-May-2017]             bdd  bdd gopherspace	/users/bdd/	sdf.org	70
+1[03-May-2017]           epyon  epyon's gopher-space	/users/epyon/	sdf.org	70
+1[03-May-2017]           gfred  Gfred	/users/gfred/	sdf.org	70
+1[03-May-2017]         bobafet  googy	/users/bobafet/	sdf.org	70
+1[03-May-2017]          awkure  Thy truth lasts to be invisible	/users/awkure/	sdf.org	70
+1[30-Apr-2017]       tjadowski  My Daily Log - Tomasz Jadowski (http://mnmlista.pl)	/users/tjadowski/	sdf.org	70
+1[29-Apr-2017]   philopolymath  Something To Do About Nothing	/users/philopolymath/	sdf.org	70
+1[21-Apr-2017] forkbombpodcast  Fork Bomb Podcast	/users/forkbombpodcast/	sdf.org	70
+1[20-Apr-2017]          takiya 	/users/takiya/	sdf.org	70
+1[19-Apr-2017]        derchris  My Gopher Page	/users/derchris/	sdf.org	70
+1[19-Apr-2017]          yrashk  Yurii Rashkovskii	/users/yrashk/	sdf.org	70
+1[16-Apr-2017]           ungen  ungen's gopherhole	/users/ungen/	sdf.org	70
+1[11-Apr-2017]         nsarker 	/users/nsarker/	sdf.org	70
+1[09-Apr-2017]     leetspoofer 	/users/leetspoofer/	sdf.org	70
+1[09-Apr-2017]        navybear  NavyBear's SDF Gopherspace	/users/navybear/	sdf.org	70
+1[29-Mar-2017]            cory  Cory's Amazing Gopher Hole of Amazingness	/users/cory/	sdf.org	70
+1[26-Mar-2017]            sopa  Hey, it's Sopa!	/users/sopa/	sdf.org	70
+1[26-Mar-2017]        zedwards  Helllllllo	/users/zedwards/	sdf.org	70
+1[25-Mar-2017]       sherzberg  sherzberg's pages	/users/sherzberg/	sdf.org	70
+1[24-Mar-2017]            ccth ccth	/users/ccth/	sdf.org	70
+1[23-Mar-2017]       sahensley  Random ramblings from Shawn	/users/sahensley/	sdf.org	70
+1[22-Mar-2017]      psycho1488 	/users/psycho1488/	sdf.org	70
+1[19-Mar-2017]            nure  The funnel of sincerity	/users/nure/	sdf.org	70
+1[18-Mar-2017]            ixtl  A Gopherspace no one will ever see!	/users/ixtl/	sdf.org	70
+1[18-Mar-2017]       unixparty  KaylaSoft Solutions	/users/unixparty/	sdf.org	70
+1[18-Mar-2017]       amelorate  Amelorate's Tests	/users/amelorate/	sdf.org	70
+1[16-Mar-2017]           matto  MATTO	/users/matto/	sdf.org	70
+1[13-Mar-2017]            mofo  In the Beginning Was the Command Line	/users/mofo/	sdf.org	70
+1[11-Mar-2017]    codingcowboy 	/users/codingcowboy/	sdf.org	70
+1[07-Mar-2017]           adeka  Adeka, un espacio sin espacio	/users/adeka/	sdf.org	70
+1[05-Mar-2017]             ng0 [07-Mar-2017] adeka Adeka, un espacio sin espacio	/users/ng0/	sdf.org	70
+1[03-Mar-2017]        zubrowka  test	/users/zubrowka/	sdf.org	70
+1[28-Feb-2017]            artu 	/users/artu/	sdf.org	70
+1[25-Feb-2017]        kgsuarez  kgsuarez	/users/kgsuarez/	sdf.org	70
+1[25-Feb-2017]         reedych  Reedych's gopherspace	/users/reedych/	sdf.org	70
+1[21-Feb-2017]    dillonalynch 	/users/dillonalynch/	sdf.org	70
+1[21-Feb-2017]    seanpmthe1st  I have no idea what I'm doing, but I'm gonna do it anyway.	/users/seanpmthe1st/	sdf.org	70
+1[14-Feb-2017]              vv  Title of this gopher	/users/vv/	sdf.org	70
+1[13-Feb-2017]        atlasjan 	/users/atlasjan/	sdf.org	70
+1[13-Feb-2017]           jcrao  The Whole Christ	/users/jcrao/	sdf.org	70
+1[11-Feb-2017]           jkalb  Jim Kalb's gopherspace	/users/jkalb/	sdf.org	70
+1[04-Feb-2017]     postcardist  Second glances ...	/users/postcardist/	sdf.org	70
+1[04-Feb-2017]          jaysen  Jaysen's Gopher Space	/users/jaysen/	sdf.org	70
+1[31-Jan-2017]          dozens  Dozens of Gophers	/users/dozens/	sdf.org	70
+1[29-Jan-2017]       aj3138111 	/users/aj3138111/	sdf.org	70
+1[28-Jan-2017]          bratch 	/users/bratch/	sdf.org	70
+1[28-Jan-2017]       pegzmasta  Pegz Prolific Phlog	/users/pegzmasta/	sdf.org	70
+1[24-Jan-2017]        fergwill  Sweaters till July: a humble phlog.	/users/fergwill/	sdf.org	70
+1[24-Jan-2017]        bluebear  Bluebear's Gopherspace	/users/bluebear/	sdf.org	70
+1[22-Jan-2017]          handyc  This site is an experimental gopher project.	/users/handyc/	sdf.org	70
+1[21-Jan-2017]          doofer 	/users/doofer/	sdf.org	70
+1[14-Jan-2017]         saiwolf 	/users/saiwolf/	sdf.org	70
+1[06-Jan-2017]          bctnry  Brad Contenary on SDF.org/gopher	/users/bctnry/	sdf.org	70
+1[06-Jan-2017]              b0 	/users/b0/	sdf.org	70
+1[25-Dec-2016]          dusted  DusteDs redirection in gopherspace	/users/dusted/	sdf.org	70
+1[22-Dec-2016]     mikefeneley  Michael Gopher	/users/mikefeneley/	sdf.org	70
+1[22-Dec-2016]           pippy  FU COO	/users/pippy/	sdf.org	70
+1[18-Dec-2016]      thelovebug thelovebug	/users/thelovebug/	sdf.org	70
+1[18-Dec-2016]            kaod  kaoD's Gopherspace	/users/kaod/	sdf.org	70
+1[14-Dec-2016]         nexusix  ghNEXUSIX	/users/nexusix/	sdf.org	70
+1[13-Dec-2016]          nicole  nico nico nii	/users/nicole/	sdf.org	70
+1[13-Dec-2016]            macu 	/users/macu/	sdf.org	70
+1[11-Dec-2016]         jonmisc  Jon Misc's Gopher Space	/users/jonmisc/	sdf.org	70
+1[07-Dec-2016]         seleuco  Espacio personal gopher de Manuel Jiménez Friaza	/users/seleuco/	sdf.org	70
+1[07-Dec-2016]       jdonez777 jdonez777	/users/jdonez777/	sdf.org	70
+1[06-Dec-2016]         kheldar  Kheldar Phlog	/users/kheldar/	sdf.org	70
+1[04-Dec-2016]             phf  go go gopher	/users/phf/	sdf.org	70
+1[01-Dec-2016]        semperos  Daniel Gregoire (semperos)	/users/semperos/	sdf.org	70
+1[01-Dec-2016]          masked 	/users/masked/	sdf.org	70
+1[30-Nov-2016]     yoloziggins  Ziggin' Around	/users/yoloziggins/	sdf.org	70
+1[29-Nov-2016]             bie 	/users/bie/	sdf.org	70
+1[29-Nov-2016]        shaknais  Shakna Israel	/users/shaknais/	sdf.org	70
+1[27-Nov-2016]           zackh  Zack's Gopherspace	/users/zackh/	sdf.org	70
+1[25-Nov-2016]           liuyc 	/users/liuyc/	sdf.org	70
+1[24-Nov-2016]         eientei  Eientei	/users/eientei/	sdf.org	70
+1[24-Nov-2016]            lear  Voice & Hats	/users/lear/	sdf.org	70
+1[22-Nov-2016]          shaine  Shaine's Gopher Hole	/users/shaine/	sdf.org	70
+1[21-Nov-2016]            loli  loli	/users/loli/	sdf.org	70
+1[20-Nov-2016]          tkmike  1984 WaSn'T lYiN	/users/tkmike/	sdf.org	70
+1[20-Nov-2016]          carlds  the nerdery	/users/carlds/	sdf.org	70
+1[17-Nov-2016]          akraut  Opie's Gopher Site	/users/akraut/	sdf.org	70
+1[10-Nov-2016]            jstg  jstg's gopher	/users/jstg/	sdf.org	70
+1[09-Nov-2016]         wrstone  The Jackelope Of Truth	/users/wrstone/	sdf.org	70
+1[08-Nov-2016]           maff1  alchemy	/users/maff1/	sdf.org	70
+1[06-Nov-2016]         slyalgo  cmj	/users/slyalgo/	sdf.org	70
+1[03-Nov-2016]         echo420  Echo's bag of tips	/users/echo420/	sdf.org	70
+1[01-Nov-2016]    aditya999123  Aditya test1	/users/aditya999123/	sdf.org	70
+1[31-Oct-2016]     lepereceval lepereceval	/users/lepereceval/	sdf.org	70
+1[29-Oct-2016]        mcformat  McFormat's page	/users/mcformat/	sdf.org	70
+1[28-Oct-2016]           ed588  ed588's epic gopher site	/users/ed588/	sdf.org	70
+1[25-Oct-2016]             gsn 	/users/gsn/	sdf.org	70
+1[23-Oct-2016]       joeygreen  joeygreen's gopher	/users/joeygreen/	sdf.org	70
+1[22-Oct-2016]          edqwer 	/users/edqwer/	sdf.org	70
+1[19-Oct-2016]     realmrrobot 	/users/realmrrobot/	sdf.org	70
+1[18-Oct-2016]            merv  Home On The Page	/users/merv/	sdf.org	70
+1[16-Oct-2016]      wintermann 	/users/wintermann/	sdf.org	70
+1[14-Oct-2016]         crandom  Here we go again	/users/crandom/	sdf.org	70
+1[13-Oct-2016]        mcornick  Mark's gopher	/users/mcornick/	sdf.org	70
+1[09-Oct-2016]      katacarbix  Katacarbix	/users/katacarbix/	sdf.org	70
+1[07-Oct-2016]            piai  nel mezzo del cammin di nostra vita...	/users/piai/	sdf.org	70
+1[06-Oct-2016]        wisdomc0 	/users/wisdomc0/	sdf.org	70
+1[06-Oct-2016]        extropic  weeeeeeeeee	/users/extropic/	sdf.org	70
+1[30-Sep-2016]           sneas  Hi	/users/sneas/	sdf.org	70
+1[27-Sep-2016]        mjkerpan  MJK's Retro Gopher Hole	/users/mjkerpan/	sdf.org	70
+1[25-Sep-2016]        commania  a	/users/commania/	sdf.org	70
+1[21-Sep-2016]      mustafejen  My second gopher hole	/users/mustafejen/	sdf.org	70
+1[14-Sep-2016]          shufei  Shufei's Bumblebee Groundhive	/users/shufei/	sdf.org	70
+1[13-Sep-2016]        nonsense  l e s s i s m o r e	/users/nonsense/	sdf.org	70
+1[11-Sep-2016]    cosmicpuppet  cosmicpuppet	/users/cosmicpuppet/	sdf.org	70
+1[01-Sep-2016]             ljs  Macintosh & Newton Stuff	/users/ljs/	sdf.org	70
+1[01-Sep-2016]        november  november's homepage	/users/november/	sdf.org	70
+1[31-Aug-2016]          anning  Ceratogaulus hatcheri	/users/anning/	sdf.org	70
+1[31-Aug-2016]   luke.seabrook  Classic Mac & Newton Files	/users/luke.seabrook/	sdf.org	70
+1[30-Aug-2016]    shadymrpatch  GOPHERit	/users/shadymrpatch/	sdf.org	70
+1[30-Aug-2016]       rchamblee 	/users/rchamblee/	sdf.org	70
+1[26-Aug-2016]              ma  ~�~⸮(º،º)?~	/users/ma/	sdf.org	70
+1[20-Aug-2016]      pentagon98  vk_gopher	/users/pentagon98/	sdf.org	70
+1[19-Aug-2016]            nemz  there juance lived a man name juan	/users/nemz/	sdf.org	70
+1[18-Aug-2016]           echo3  Test echo3 GOPHER	/users/echo3/	sdf.org	70
+1[17-Aug-2016]          echosa  Echosa's GOPHER Space	/users/echosa/	sdf.org	70
+1[15-Aug-2016]             jsp  jsp's Personal Gopherspace	/users/jsp/	sdf.org	70
+1[13-Aug-2016]   josh.hawcroft  Josh's Test Gopher Site	/users/josh.hawcroft/	sdf.org	70
+1[13-Aug-2016]midnightsledding  midnightsledding	/users/midnightsledding/	sdf.org	70
+1[12-Aug-2016]           tom71 	/users/tom71/	sdf.org	70
+1[11-Aug-2016]     cmaceachern  Dev and sysadmin resources/blog/notes from cmaceachern.	/users/cmaceachern/	sdf.org	70
+1[10-Aug-2016]           mattf 	/users/mattf/	sdf.org	70
+1[10-Aug-2016]          xenier  Random stuff	/users/xenier/	sdf.org	70
+1[08-Aug-2016]          nethit  About Nethit	/users/nethit/	sdf.org	70
+1[07-Aug-2016]             ab9 ab9	/users/ab9/	sdf.org	70
+1[01-Aug-2016]           krooq 	/users/krooq/	sdf.org	70
+1[01-Aug-2016]      m.williams  THE M.WILLIAMS SDF SITE	/users/m.williams/	sdf.org	70
+1[30-Jul-2016]          barend 	/users/barend/	sdf.org	70
+1[28-Jul-2016]       chameleon 	/users/chameleon/	sdf.org	70
+1[27-Jul-2016] ballisticwombat 	/users/ballisticwombat/	sdf.org	70
+1[25-Jul-2016]        peyethon 	/users/peyethon/	sdf.org	70
+1[23-Jul-2016]          pantsi 	/users/pantsi/	sdf.org	70
+1[23-Jul-2016]       pantsdown 	/users/pantsdown/	sdf.org	70
+1[23-Jul-2016]          androw  Androw	/users/androw/	sdf.org	70
+1[21-Jul-2016]    logan.robert 	/users/logan.robert/	sdf.org	70
+1[20-Jul-2016]       netscaler  Netscalers gopherspace	/users/netscaler/	sdf.org	70
+1[08-Jul-2016]           compu compu	/users/compu/	sdf.org	70
+1[05-Jul-2016]             pwr  The Infrequent P.W.R. Gazette	/users/pwr/	sdf.org	70
+1[05-Jul-2016]           pingu  Pengu's Gp?opher Space	/users/pingu/	sdf.org	70
+1[30-Jun-2016]          pepper  Pepper the Grey	/users/pepper/	sdf.org	70
+1[30-Jun-2016]             vgk  वेणु गोपाल	/users/vgk/	sdf.org	70
+1[30-Jun-2016]        donxfive  Don's Prairie Home	/users/donxfive/	sdf.org	70
+1[29-Jun-2016]        rednight  RedNight's SDF gopher hole	/users/rednight/	sdf.org	70
+1[22-Jun-2016]         denzuko  Temple of the Cyberlords	/users/denzuko/	sdf.org	70
+1[21-Jun-2016]          ivanov  Paul Ivanov's Gopherhole	/users/ivanov/	sdf.org	70
+1[16-Jun-2016]    evansunchips  Siracha Fish Twigs	/users/evansunchips/	sdf.org	70
+1[14-Jun-2016]      zenbutcher  ^x ^v - zenbutcher's cut-ups of public-domain works	/users/zenbutcher/	sdf.org	70
+1[13-Jun-2016]      rbgamer100 	/users/rbgamer100/	sdf.org	70
+1[11-Jun-2016]        mgoszcz2  Maciej Goszczycki's Gopher Corner	/users/mgoszcz2/	sdf.org	70
+1[04-Jun-2016]        xzyorion  zorion-gopher	/users/xzyorion/	sdf.org	70
+1[02-Jun-2016]           exile  Thoughts, questions, queries and qualms	/users/exile/	sdf.org	70
+1[29-May-2016]            eggy  Eggy	/users/eggy/	sdf.org	70
+1[28-May-2016]         killven 	/users/killven/	sdf.org	70
+1[23-May-2016]           asahi  ASAHI@sdf	/users/asahi/	sdf.org	70
+1[21-May-2016]          miehas  Gopher Miehas	/users/miehas/	sdf.org	70
+1[14-May-2016]           wayne  Just go for it.	/users/wayne/	sdf.org	70
+1[11-May-2016]           ichou  SE-R gopherspace	/users/ichou/	sdf.org	70
+1[07-May-2016]        free.ios 	/users/free.ios/	sdf.org	70
+1[03-May-2016]        rothfuss 	/users/rothfuss/	sdf.org	70
+1[30-Apr-2016]        bitgeist 	/users/bitgeist/	sdf.org	70
+1[28-Apr-2016]           upton 	/users/upton/	sdf.org	70
+1[22-Apr-2016]          jia3ep  Code @ C	/users/jia3ep/	sdf.org	70
+1[14-Apr-2016]            omni  .Omni.	/users/omni/	sdf.org	70
+1[11-Apr-2016]             lnx  something	/users/lnx/	sdf.org	70
+1[10-Apr-2016]           g0dub  G0DUB's gopherspace for amateur radio and emergency communic	/users/g0dub/	sdf.org	70
+1[31-Mar-2016]             leh 	/users/leh/	sdf.org	70
+1[31-Mar-2016]           debug [31-Mar-2016] leh	/users/debug/	sdf.org	70
+1[30-Mar-2016]        halfbear 	/users/halfbear/	sdf.org	70
+1[28-Mar-2016]          colin7  Colin's Gopherspace that happens to only use <200MB	/users/colin7/	sdf.org	70
+1[25-Mar-2016]          dbreez 	/users/dbreez/	sdf.org	70
+1[21-Mar-2016]           yahio  yahio's brainspace	/users/yahio/	sdf.org	70
+1[20-Mar-2016]       saahriktu  Saahriktu's hermitage	/users/saahriktu/	sdf.org	70
+1[18-Mar-2016]      r.houlihan  Just for you	/users/r.houlihan/	sdf.org	70
+1[16-Mar-2016]           comet  Comet	/users/comet/	sdf.org	70
+1[07-Mar-2016]        mgingras 	/users/mgingras/	sdf.org	70
+1[06-Mar-2016]            mewt  Simply Me	/users/mewt/	sdf.org	70
+1[04-Mar-2016]         thomask thomask	/users/thomask/	sdf.org	70
+1[04-Mar-2016]        soloroad  That gopher won't leave its hole	/users/soloroad/	sdf.org	70
+1[28-Feb-2016]        kropkarz  Witam anonow na kolejnym tajnym xD	/users/kropkarz/	sdf.org	70
+1[27-Feb-2016]        crossing  Tugboat Crossing	/users/crossing/	sdf.org	70
+1[27-Feb-2016]           ro0ks 	/users/ro0ks/	sdf.org	70
+1[27-Feb-2016]          iceyec  Chris MacNaughton	/users/iceyec/	sdf.org	70
+1[25-Feb-2016]       bonsai982  Bonsai982's Gopherspace	/users/bonsai982/	sdf.org	70
+1[23-Feb-2016]          tak256  Blog użytkownika tak256	/users/tak256/	sdf.org	70
+1[23-Feb-2016]         lburton  lburton	/users/lburton/	sdf.org	70
+1[12-Feb-2016]         nasvera 	/users/nasvera/	sdf.org	70
+1[09-Feb-2016]           maman  Darknet	/users/maman/	sdf.org	70
+1[08-Feb-2016]        tricasse 	/users/tricasse/	sdf.org	70
+1[08-Feb-2016]            eaml  Of Things Unnatural	/users/eaml/	sdf.org	70
+1[02-Feb-2016]             zlg  zlg's Gopherspace	/users/zlg/	sdf.org	70
+1[01-Feb-2016]          rudbot  RudBot's Gopherspace	/users/rudbot/	sdf.org	70
+1[01-Feb-2016]        fbwright  /u/fbwright's gopherspace	/users/fbwright/	sdf.org	70
+1[30-Jan-2016]         bwhazel bwhazel	/users/bwhazel/	sdf.org	70
+1[29-Jan-2016]          armpit  Armpits gopherspace on SDF	/users/armpit/	sdf.org	70
+1[21-Jan-2016]            c4po 	/users/c4po/	sdf.org	70
+1[13-Jan-2016]             mpp 	/users/mpp/	sdf.org	70
+1[11-Jan-2016]             vom  v o m w a v e	/users/vom/	sdf.org	70
+1[10-Jan-2016]        pirhanas  Pirhanas Gopher Space on sdf.org	/users/pirhanas/	sdf.org	70
+1[09-Jan-2016] hypercoffeedude  My few bytes on the web thrown into the gopher hole!	/users/hypercoffeedude/	sdf.org	70
+1[04-Jan-2016]           datab  Lumen in coelo.	/users/datab/	sdf.org	70
+1[30-Dec-2015]          yo9gjx  YO9GJX Gopher space	/users/yo9gjx/	sdf.org	70
+1[28-Dec-2015]       gigasquid  Gigasquid's Gopher	/users/gigasquid/	sdf.org	70
+1[25-Dec-2015]         failure  Failure - Gopher for some reason	/users/failure/	sdf.org	70
+1[25-Dec-2015]            tika  Tika's Gopher	/users/tika/	sdf.org	70
+1[23-Dec-2015]    henriqueleng  Henrique Lengler gopher space	/users/henriqueleng/	sdf.org	70
+1[22-Dec-2015]          lupine 	/users/lupine/	sdf.org	70
+1[21-Dec-2015]            adun  UndergroundNeTWoRK	/users/adun/	sdf.org	70
+1[15-Dec-2015]   curious.koala 	/users/curious.koala/	sdf.org	70
+1[15-Dec-2015]        lrollins  lrollins	/users/lrollins/	sdf.org	70
+1[09-Dec-2015]         snhdemo  SNH DEMO GOPHERSPACE 2016	/users/snhdemo/	sdf.org	70
+1[08-Dec-2015]        mfreeman  BaronJaster's Gopherspace	/users/mfreeman/	sdf.org	70
+1[08-Dec-2015]            babs  clocktower.zed	/users/babs/	sdf.org	70
+1[06-Dec-2015]            spek spek	/users/spek/	sdf.org	70
+1[04-Dec-2015]             pyy  pyy's gopher page	/users/pyy/	sdf.org	70
+1[02-Dec-2015]          henesy  Mad Cow Powers	/users/henesy/	sdf.org	70
+1[30-Nov-2015]       boris1993  Boris' gopher site	/users/boris1993/	sdf.org	70
+1[29-Nov-2015]        dynabyte dynabyte	/users/dynabyte/	sdf.org	70
+1[29-Nov-2015]         genchik 	/users/genchik/	sdf.org	70
+1[29-Nov-2015]          optamo  recistencia	/users/optamo/	sdf.org	70
+1[22-Nov-2015]        thescorp  The Scorpion	/users/thescorp/	sdf.org	70
+1[22-Nov-2015]         jwodder  Variations on a Theme	/users/jwodder/	sdf.org	70
+1[20-Nov-2015]            mlot  MLot's UnderGround Gopher Hole	/users/mlot/	sdf.org	70
+1[15-Nov-2015]         nuchire  Nuchire's Gophersite Test	/users/nuchire/	sdf.org	70
+1[15-Nov-2015]        dsummers 	/users/dsummers/	sdf.org	70
+1[15-Nov-2015]            jjtp jjtp	/users/jjtp/	sdf.org	70
+1[11-Nov-2015]            gtfh 	/users/gtfh/	sdf.org	70
+1[06-Nov-2015]        alexwebr  Things about mental health.	/users/alexwebr/	sdf.org	70
+1[05-Nov-2015]      tomrevilla 	/users/tomrevilla/	sdf.org	70
+1[01-Nov-2015]      crossdiver  Crossdiver's Gopher Hole	/users/crossdiver/	sdf.org	70
+1[24-Oct-2015]        habreu71  El sitio Gopher de Hector	/users/habreu71/	sdf.org	70
+1[16-Oct-2015]         fireman 	/users/fireman/	sdf.org	70
+1[14-Oct-2015]            unan 	/users/unan/	sdf.org	70
+1[14-Oct-2015]         oldogre oldogre	/users/oldogre/	sdf.org	70
+1[11-Oct-2015]        thomsonj  gopher chauffer	/users/thomsonj/	sdf.org	70
+1[11-Oct-2015]      thundertnt  YouTube	/users/thundertnt/	sdf.org	70
+1[06-Oct-2015]           mslsr  MSLSR'S GOPHERSPACE//	/users/mslsr/	sdf.org	70
+1[29-Sep-2015]        nwerneck  Aquarius Gopher	/users/nwerneck/	sdf.org	70
+1[27-Sep-2015]          turner  Turner's Gopher Space	/users/turner/	sdf.org	70
+1[26-Sep-2015]        jamesian  jamesian	/users/jamesian/	sdf.org	70
+1[24-Sep-2015]        xiaoyong  A clear mind where text shine	/users/xiaoyong/	sdf.org	70
+1[23-Sep-2015]            wtan 	/users/wtan/	sdf.org	70
+1[23-Sep-2015]        mjcunnin 	/users/mjcunnin/	sdf.org	70
+1[17-Sep-2015]            m0kl 	/users/m0kl/	sdf.org	70
+1[16-Sep-2015]             ljc  moles	/users/ljc/	sdf.org	70
+1[07-Sep-2015]          plains  plains' gopherspace	/users/plains/	sdf.org	70
+1[04-Sep-2015]           g62lx 	/users/g62lx/	sdf.org	70
+1[04-Sep-2015]             dtr dtr	/users/dtr/	sdf.org	70
+1[28-Aug-2015]         ripnitz 	/users/ripnitz/	sdf.org	70
+1[27-Aug-2015]           tej68 	/users/tej68/	sdf.org	70
+1[26-Aug-2015]         jeikner  jim in austin	/users/jeikner/	sdf.org	70
+1[24-Aug-2015]             chr chr	/users/chr/	sdf.org	70
+1[24-Aug-2015]        nightsky  Under construction...	/users/nightsky/	sdf.org	70
+1[23-Aug-2015]        hivenode hivenode	/users/hivenode/	sdf.org	70
+1[17-Aug-2015]           jfmxl  underground jfmxl	/users/jfmxl/	sdf.org	70
+1[16-Aug-2015]          crosma  Marty and Happy are back from nowhere...	/users/crosma/	sdf.org	70
+1[15-Aug-2015]      likehowdoi  likehowdoi	/users/likehowdoi/	sdf.org	70
+1[08-Aug-2015]        dcameron  Derek Cameron's Gopher Site	/users/dcameron/	sdf.org	70
+1[07-Aug-2015]             kym  kym horsell's gopher space at massbus.org	/users/kym/	sdf.org	70
+1[04-Aug-2015]          bobbo1  bobtestpage	/users/bobbo1/	sdf.org	70
+1[01-Aug-2015]   s.shillinglaw 	/users/s.shillinglaw/	sdf.org	70
+1[27-Jul-2015]         edbucks 	/users/edbucks/	sdf.org	70
+1[24-Jul-2015]              sj  sj's gopher space	/users/sj/	sdf.org	70
+1[24-Jul-2015]         fashiro 	/users/fashiro/	sdf.org	70
+1[18-Jul-2015]              cg  chucks gopher hole	/users/cg/	sdf.org	70
+1[15-Jul-2015]        polyhack polyhack	/users/polyhack/	sdf.org	70
+1[13-Jul-2015]           elang  On Protoculture and Other Miscelany	/users/elang/	sdf.org	70
+1[11-Jul-2015]          rorojo  ROROJO GHOPER[D[D	/users/rorojo/	sdf.org	70
+1[10-Jul-2015]          berlin 	/users/berlin/	sdf.org	70
+1[07-Jul-2015]             csh  Under Construction	/users/csh/	sdf.org	70
+1[06-Jul-2015]      bogjesrbin  Bog Je Srbin	/users/bogjesrbin/	sdf.org	70
+1[04-Jul-2015]         lnxwalt  LNXWALT's World	/users/lnxwalt/	sdf.org	70
+1[01-Jul-2015]           dolza 	/users/dolza/	sdf.org	70
+1[01-Jul-2015]           jmisc 	/users/jmisc/	sdf.org	70
+1[29-Jun-2015]          jacwib  Jacwib's site. Come on in!	/users/jacwib/	sdf.org	70
+1[28-Jun-2015]             jba  Jeff's Gopher Hole	/users/jba/	sdf.org	70
+1[27-Jun-2015]           cisse  CISSE GOPHER CORNER	/users/cisse/	sdf.org	70
+1[25-Jun-2015]    imillahacker 	/users/imillahacker/	sdf.org	70
+1[23-Jun-2015]             elp  Emilio Lo Prete - Gopher Site	/users/elp/	sdf.org	70
+1[22-Jun-2015]       gordoncsa  Circle Stone Aviator	/users/gordoncsa/	sdf.org	70
+1[19-Jun-2015]       whiteline  Whiteline's gopherspace?????????	/users/whiteline/	sdf.org	70
+1[17-Jun-2015]        paulskin  Paulskin's Gopherspace - Warum Nicht?	/users/paulskin/	sdf.org	70
+1[17-Jun-2015]        paleblue  My imaginative gopher pace	/users/paleblue/	sdf.org	70
+1[16-Jun-2015]        gnu4ever  gnu4ever	/users/gnu4ever/	sdf.org	70
+1[16-Jun-2015]       constable  Constable Gopher	/users/constable/	sdf.org	70
+1[15-Jun-2015]        jim12345 	/users/jim12345/	sdf.org	70
+1[15-Jun-2015]       larslogin  Lars' Gopher space	/users/larslogin/	sdf.org	70
+1[13-Jun-2015]           retr0  nerf this	/users/retr0/	sdf.org	70
+1[12-Jun-2015]          navoda  Welcome	/users/navoda/	sdf.org	70
+1[10-Jun-2015]            kfwz kfwz	/users/kfwz/	sdf.org	70
+1[10-Jun-2015]           waldo  This is how I do	/users/waldo/	sdf.org	70
+1[09-Jun-2015]        kitsune6 kitsune6	/users/kitsune6/	sdf.org	70
+1[05-Jun-2015]  trentonthetman  Trenton's Public Gopher Space	/users/trentonthetman/	sdf.org	70
+1[01-Jun-2015]          jonasg  Jonas Gorauskas .:|:. Gopher	/users/jonasg/	sdf.org	70
+1[28-May-2015]           speck 	/users/speck/	sdf.org	70
+1[28-May-2015]          bbfans  Bbfans's Gopher since 2015	/users/bbfans/	sdf.org	70
+1[26-May-2015]            ccdb  ccdb	/users/ccdb/	sdf.org	70
+1[24-May-2015]          micahm  My increasingly adequate gopherspace	/users/micahm/	sdf.org	70
+1[24-May-2015]      johnbeyond  L E M U R I A N ` C O - O P	/users/johnbeyond/	sdf.org	70
+1[21-May-2015]        theflash  theflash's Gopherspace	/users/theflash/	sdf.org	70
+1[19-May-2015]             vca  Test Gopherspace	/users/vca/	sdf.org	70
+1[17-May-2015]        hszillat  My personal Gopher-site	/users/hszillat/	sdf.org	70
+1[16-May-2015]          keyvin  Irradiated Grain	/users/keyvin/	sdf.org	70
+1[15-May-2015]         saltine  Saltines Gopherspace	/users/saltine/	sdf.org	70
+1[15-May-2015]         eritreo  Dodispace	/users/eritreo/	sdf.org	70
+1[14-May-2015]        birdetta  Niceware Inc.	/users/birdetta/	sdf.org	70
+1[10-May-2015]          vertov  VERT<>V // G<>PHERSPACE	/users/vertov/	sdf.org	70
+1[10-May-2015]        pieterer 	/users/pieterer/	sdf.org	70
+1[05-May-2015]           febri  Febriyanto Nugroho	/users/febri/	sdf.org	70
+1[03-May-2015]            moof 	/users/moof/	sdf.org	70
+1[03-May-2015]          lkmnds lkmnds	/users/lkmnds/	sdf.org	70
+1[30-Apr-2015]             pjn 	/users/pjn/	sdf.org	70
+1[28-Apr-2015]             xyb 	/users/xyb/	sdf.org	70
+1[25-Apr-2015]        thisissa  TO DO	/users/thisissa/	sdf.org	70
+1[23-Apr-2015]      brucebales 	/users/brucebales/	sdf.org	70
+1[20-Apr-2015]          davide 	/users/davide/	sdf.org	70
+1[18-Apr-2015]          n00bly 	/users/n00bly/	sdf.org	70
+1[12-Apr-2015]        stephane 	/users/stephane/	sdf.org	70
+1[09-Apr-2015]              x1  under construction or useless	/users/x1/	sdf.org	70
+1[09-Apr-2015]       agentsolo  AGENT BOGEN	/users/agentsolo/	sdf.org	70
+1[08-Apr-2015]        blaziken  Le mitiche seconde	/users/blaziken/	sdf.org	70
+1[04-Apr-2015]      crashnburn  A Clockwork Orange - I'm singing in the rain!	/users/crashnburn/	sdf.org	70
+1[03-Apr-2015]              xz  xz's gopher library	/users/xz/	sdf.org	70
+1[03-Apr-2015]             bem  beest's gopherspace for things and stuff	/users/bem/	sdf.org	70
+1[01-Apr-2015]          metric  NEVERMORE	/users/metric/	sdf.org	70
+1[29-Mar-2015]          layer8 	/users/layer8/	sdf.org	70
+1[25-Mar-2015]    raitosaikuru  Raitosaikuru	/users/raitosaikuru/	sdf.org	70
+1[20-Mar-2015]           tier3 tier3	/users/tier3/	sdf.org	70
+1[19-Mar-2015]         octotep  Octotep's Gopherspace	/users/octotep/	sdf.org	70
+1[16-Mar-2015]           jzimm  jzimm.freeshell.org	/users/jzimm/	sdf.org	70
+1[15-Mar-2015]        marcuson  Iain Thoughts on Gaming, Computing, and More	/users/marcuson/	sdf.org	70
+1[11-Mar-2015]          gadget 	/users/gadget/	sdf.org	70
+1[10-Mar-2015]       cosmonaut 	/users/cosmonaut/	sdf.org	70
+1[10-Mar-2015]        kristian  Journey into unix	/users/kristian/	sdf.org	70
+1[07-Mar-2015]   eternitybraid  A User's Guide to the Apocalypse	/users/eternitybraid/	sdf.org	70
+1[05-Mar-2015]        lennx.pf  Lennx_Retro	/users/lennx.pf/	sdf.org	70
+1[28-Feb-2015]             mfa  mfa home	/users/mfa/	sdf.org	70
+1[28-Feb-2015]           akess  Just a quick gopher site	/users/akess/	sdf.org	70
+1[28-Feb-2015]           xeric  2000 monkeys	/users/xeric/	sdf.org	70
+1[20-Feb-2015]        flipchan 	/users/flipchan/	sdf.org	70
+1[19-Feb-2015]         mcginty  De Profundis	/users/mcginty/	sdf.org	70
+1[18-Feb-2015]           jlawr  jlawr - linguistics, technology, music	/users/jlawr/	sdf.org	70
+1[17-Feb-2015]        intercal 	/users/intercal/	sdf.org	70
+1[17-Feb-2015]          spring  The awful truth.	/users/spring/	sdf.org	70
+1[17-Feb-2015]         marcmmw  Marc Meléndez Schofield	/users/marcmmw/	sdf.org	70
+1[10-Feb-2015]            loki  Squirrel!	/users/loki/	sdf.org	70
+1[10-Feb-2015]       norwelian norwelian	/users/norwelian/	sdf.org	70
+1[10-Feb-2015]          baheee  Baheee GOPHER	/users/baheee/	sdf.org	70
+1[09-Feb-2015]        pradovil  This is my Gopherspace!	/users/pradovil/	sdf.org	70
+1[08-Feb-2015]       ianremsen 	/users/ianremsen/	sdf.org	70
+1[07-Feb-2015]        neutrino 	/users/neutrino/	sdf.org	70
+1[05-Feb-2015]          llamab  I have gopher now	/users/llamab/	sdf.org	70
+1[04-Feb-2015]             asj 	/users/asj/	sdf.org	70
+1[02-Feb-2015]         jrandom 	/users/jrandom/	sdf.org	70
+1[31-Jan-2015]        a1t3r3g0  captive musings	/users/a1t3r3g0/	sdf.org	70
+1[31-Jan-2015]             jmz  jmz-gopher	/users/jmz/	sdf.org	70
+1[30-Jan-2015]    vaughnmcbob1  storage	/users/vaughnmcbob1/	sdf.org	70
+1[30-Jan-2015]     keiranrowan  Keiran's Gopherspace	/users/keiranrowan/	sdf.org	70
+1[29-Jan-2015]            moga 	/users/moga/	sdf.org	70
+1[28-Jan-2015]        timecube  TIMECUBE	/users/timecube/	sdf.org	70
+1[25-Jan-2015]          t0m5k1  .::TOMSBOX::. phl0g	/users/t0m5k1/	sdf.org	70
+1[24-Jan-2015]     mountaineer  Testing gopher	/users/mountaineer/	sdf.org	70
+1[24-Jan-2015]          klaatu  Bloody Hole	/users/klaatu/	sdf.org	70
+1[24-Jan-2015]            llxv  Gopher is nice	/users/llxv/	sdf.org	70
+1[22-Jan-2015]            dsrx  my gopher	/users/dsrx/	sdf.org	70
+1[21-Jan-2015]          kdavis  Adventure Partners!	/users/kdavis/	sdf.org	70
+1[19-Jan-2015]           kevin 	/users/kevin/	sdf.org	70
+1[14-Jan-2015]         reecepc  Verrator's Gopher Space	/users/reecepc/	sdf.org	70
+1[10-Jan-2015]           gonif  Gonif Systems - Gopher	/users/gonif/	sdf.org	70
+1[09-Jan-2015]             wcs  cat - | /dev/null	/users/wcs/	sdf.org	70
+1[08-Jan-2015]           dschi  dschiGopherSpace	/users/dschi/	sdf.org	70
+1[07-Jan-2015]            toxy  mine	/users/toxy/	sdf.org	70
+1[05-Jan-2015]             jmv  JMV's Gopherspace	/users/jmv/	sdf.org	70
+1[02-Jan-2015]          minkcv  Cool Stuff	/users/minkcv/	sdf.org	70
+.
+

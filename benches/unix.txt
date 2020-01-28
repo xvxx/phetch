@@ -1,0 +1,192 @@
+i   __  ___   _______  __		null.host	1
+i  / / / / | / /  _/ |/ /		null.host	1
+i / / / /  |/ // / |   / 		null.host	1
+i/ /_/ / /|  // / /   |  		null.host	1
+i\____/_/ |_/___//_/|_|  		null.host	1
+i                        		null.host	1
+iI love the GNU tools.  While GNU might not be UNIX, it's certainly 		null.host	1
+icomparable with UNIX.  That makes literature about UNIX relevant 		null.host	1
+ito the GNU tools we use today.  There are a lot of GNU-specific 		null.host	1
+imanuals and writing out there, but I still think these books and 		null.host	1
+imemos contain interesting and inspirational writing that is 		null.host	1
+iapplicable today.		null.host	1
+i		null.host	1
+i		null.host	1
+iORIGINS		null.host	1
+i=======	/users/dbucklin/UNIX/=======	sdf.org	70
+i		null.host	1
+iDennis M. Ritchie, Ken Thompson, 'The UNIX Time-Sharing System',		null.host	1
+iAssociation for Computing Machinery, Inc., 1974		null.host	1
+i		null.host	1
+9unix.pdf	/users/dbucklin/UNIX/unix.pdf	sdf.org	70
+i		null.host	1
+iDennis M. Ritchie, 'The Evolution of the Unix Time-sharing System',		null.host	1
+iBell Laboratories, Murray Hill, NJ, 1984		null.host	1
+i		null.host	1
+9ritchie84evolution.pdf	/users/dbucklin/UNIX/ritchie84evolution.pdf	sdf.org	70
+i		null.host	1
+i		null.host	1
+iARTICLES		null.host	1
+i========	/users/dbucklin/UNIX/========	sdf.org	70
+i		null.host	1
+iBrian W. Kernighan, 'UNIX for Beginners', Bell Laboratories, 		null.host	1
+iMurray Hill, N. J., 1974		null.host	1
+i		null.host	1
+9beg.pdf	/users/dbucklin/UNIX/beg.pdf	sdf.org	70
+i		null.host	1
+iRob Pike, Brian W. Kernighan, 'Program design in the UNIX environment'		null.host	1
+i		null.host	1
+9unix_prog_design.pdf	/users/dbucklin/UNIX/unix_prog_design.pdf	sdf.org	70
+i		null.host	1
+iDennis M. Ritchie, 'A Stream Input-Output System', AT&T Bell 		null.host	1
+iLaboratories Technical Journal 63, No. 8 Part 2 (October, 1984), 		null.host	1
+ipp. 1897-1910.		null.host	1
+i		null.host	1
+9st.pdf	/users/dbucklin/UNIX/st.pdf	sdf.org	70
+i		null.host	1
+iM. Douglas McIlroy, 'A Research UNIX Reader: Annotated Excerpts 		null.host	1
+ifrom the Programmer's Manual, 1971-1986'		null.host	1
+i		null.host	1
+9reader.pdf	/users/dbucklin/UNIX/reader.pdf	sdf.org	70
+i		null.host	1
+iJoe Condon, Brian Kernighan, Ken Thompson, 'Experience with the 		null.host	1
+iMergenthaler Linotron 202 Phototypesetter, or, How We Spent Our 		null.host	1
+iSummer Vacation', Bell Laboratories, 1980		null.host	1
+i		null.host	1
+9summer.reconstructed.pdf	/users/dbucklin/UNIX/summer.reconstructed.pdf	sdf.org	70
+i		null.host	1
+i		null.host	1
+iUNIX REFERENCE		null.host	1
+i==============	/users/dbucklin/UNIX/==============	sdf.org	70
+i		null.host	1
+iBrian W. Kernighan, Rob Pike, 'The UNIX Programming Environment', Prentice-H		null.host	1
+i		null.host	1
+9upe.pdf	/users/dbucklin/UNIX/upe.pdf	sdf.org	70
+i		null.host	1
+iJoseph F. Osanna, Brian W. Kernighan, 'Troff User's Manual', AT&T 		null.host	1
+iBell Laboratories, 1992		null.host	1
+i		null.host	1
+954.pdf	/users/dbucklin/UNIX/54.pdf	sdf.org	70
+i		null.host	1
+iBrian W. Kernighan, Dennis M. Ritchie, 'C Programming Language, 		null.host	1
+i2nd Edition', Prentice Hall, 1978		null.host	1
+i		null.host	1
+9C Programming Language, 2nd Edition by Brian W. Kernighan, Dennis M. Ritchie.pdf	/users/dbucklin/UNIX/C Programming Language, 2nd Edition by Brian W. Kernighan, Dennis M. Ritchie.pdf	sdf.org	70
+i		null.host	1
+iAlfred V. Aho, Brian W. Kernighan, Peter J. Weinberger, 'The AWK 		null.host	1
+iProgramming Language', Addison-Wesley, 1988		null.host	1
+i		null.host	1
+9The_AWK_Programming_Language.pdf	/users/dbucklin/UNIX/The_AWK_Programming_Language.pdf	sdf.org	70
+i		null.host	1
+i'UNIX System V Documentors Workbench Reference Manual', Prentice 		null.host	1
+iHall, 1989		null.host	1
+i		null.host	1
+9UNIX_System_V_Documentors_Workbench_Reference_Manual_1989.pdf	/users/dbucklin/UNIX/UNIX_System_V_Documentors_Workbench_Reference_Manual_1989.pdf	sdf.org	70
+i		null.host	1
+iDale Dougherty, Tim O'Reilly, 'UNIX Text Processing', Hayden 		null.host	1
+iBooks, 1987		null.host	1
+i		null.host	1
+9utp_book-1.1.pdf	/users/dbucklin/UNIX/utp_book-1.1.pdf	sdf.org	70
+i		null.host	1
+iK. Thompson, D. M. Ritchie, 'UNIX Programmer's Manual, Fourth 		null.host	1
+iEdition', Bell Telephone Laboratories, Inc., 1973		null.host	1
+i		null.host	1
+9v4man.pdf	/users/dbucklin/UNIX/v4man.pdf	sdf.org	70
+i		null.host	1
+i'UNIX Programmer's Manual, Seventh Edition, Volume 1', Bell 		null.host	1
+iTelephone Laboratories, Inc., 1979		null.host	1
+i		null.host	1
+9v7vol1.pdf	/users/dbucklin/UNIX/v7vol1.pdf	sdf.org	70
+i		null.host	1
+i'UNIX Programmer's Manual, Seventh Edition, Volume 2A', Bell 		null.host	1
+iTelephone Laboratories, Inc., 1979		null.host	1
+i		null.host	1
+9v7vol2a.pdf	/users/dbucklin/UNIX/v7vol2a.pdf	sdf.org	70
+i		null.host	1
+i'UNIX Programmer's Manual, Seventh Edition, Volume 2B', Bell 		null.host	1
+iTelephone Laboratories, Inc., 1979		null.host	1
+i		null.host	1
+9v7vol2b.pdf	/users/dbucklin/UNIX/v7vol2b.pdf	sdf.org	70
+i		null.host	1
+i		null.host	1
+iRELATED TOOLS		null.host	1
+i=============	/users/dbucklin/UNIX/=============	sdf.org	70
+i		null.host	1
+iMark McDonnell, 'Pro Vim', Apress, 2014		null.host	1
+i		null.host	1
+9Pro Vim.pdf	/users/dbucklin/UNIX/Pro Vim.pdf	sdf.org	70
+i		null.host	1
+i'Bash Notes for Professionals'		null.host	1
+i		null.host	1
+9BashNotesForProfessionals.pdf	/users/dbucklin/UNIX/BashNotesForProfessionals.pdf	sdf.org	70
+i		null.host	1
+iPeter Schaffter, 'Groff and mom: an overview', 2017		null.host	1
+i		null.host	1
+9groff-and-mom.pdf	/users/dbucklin/UNIX/groff-and-mom.pdf	sdf.org	70
+i		null.host	1
+iTrent A. Fisher, Werner Lemberg, 'groff: The GNU implementation of 		null.host	1
+itroff', Free Software Foundation, Inc., 2014		null.host	1
+i		null.host	1
+9groff.pdf	/users/dbucklin/UNIX/groff.pdf	sdf.org	70
+i		null.host	1
+iWilliam Joy, Mark Horton, 'An Introduction to Display Editing with 		null.host	1
+iVi' Computer Science Division, Department of Electrical 		null.host	1
+iEngineering and Computer Science, University of California, 		null.host	1
+iBerkeley		null.host	1
+i		null.host	1
+9vi-intro.pdf	/users/dbucklin/UNIX/vi-intro.pdf	sdf.org	70
+i		null.host	1
+i'help.txt for Vim 7.4', 2016		null.host	1
+i		null.host	1
+9vimhelp.pdf	/users/dbucklin/UNIX/vimhelp.pdf	sdf.org	70
+i		null.host	1
+iDean Allen Provins, 'The Groff and Friends HOWTO', University of		null.host	1
+iCalgary, 2001		null.host	1
+i		null.host	1
+9TheGroffFriendsHowto.pdf	/users/dbucklin/UNIX/TheGroffFriendsHowto.pdf	sdf.org	70
+i		null.host	1
+iClifford E. Rhoades, Jr., 'Roff - A Manuscript Printing Program:		null.host	1
+iUser's Manual', Air Force Weapons Laboratory, Kirtland Air Force		null.host	1
+iBase, New Mexico, 1972		null.host	1
+i		null.host	1
+9roff-manual-rhoades-1972.pdf	/users/dbucklin/UNIX/roff-manual-rhoades-1972.pdf	sdf.org	70
+i		null.host	1
+i		null.host	1
+iDISSENT		null.host	1
+i=======	/users/dbucklin/UNIX/=======	sdf.org	70
+i		null.host	1
+iSimson Garfinkel, Daniel Weise, Steven Straussman, 'The UNIX-Haters		null.host	1
+iHandbook', IDG Books Worldwide, Inc., 1994		null.host	1
+i		null.host	1
+9ugh.pdf	/users/dbucklin/UNIX/ugh.pdf	sdf.org	70
+i		null.host	1
+i		null.host	1
+iHARDCOPY		null.host	1
+i========	/users/dbucklin/UNIX/========	sdf.org	70
+i		null.host	1
+iAlfred V. Aho, Brian W. Kernighan, Peter J. Weinberger, 'The AWK		null.host	1
+iProgramming Language', Addison-Wesley Publishing Company, 1988		null.host	1
+i		null.host	1
+iArnold Robbins, 'Effective awk Programming', O'Reilly Media Inc.,		null.host	1
+i2015		null.host	1
+i		null.host	1
+iB. Srinivasan, 'Unix Document Processing and Typesetting', World		null.host	1
+iScientific Publishing Co., 1993		null.host	1
+i		null.host	1
+iBrian Kernighan, P. J. Plauger, 'Software Tools', Addison-Wesley		null.host	1
+iPublishing Company, 1976		null.host	1
+i		null.host	1
+iEric Raymond, 'The Art of Unix Programming' ,Addison-Wesley Publishing		null.host	1
+iCompany, 2004		null.host	1
+i		null.host	1
+iNarain Gehani, 'Document Formatting and Typesetting on the UNIX		null.host	1
+iSystem', Silicon Press, 1987		null.host	1
+i		null.host	1
+iNarain Gehani, Steven Lally, 'Document Formatting and Typesetting		null.host	1
+ion the UNIX System Volume II', Silicon Press, 1988		null.host	1
+i		null.host	1
+iPeter H. Salus, 'A Quarter Century of UNIX', Addison-Wesley Publishing		null.host	1
+iCompany, 1994		null.host	1
+i		null.host	1
+.
+

@@ -1,0 +1,283 @@
+i=====================================================================	ERR	err.host	0
+i                              RPoD Phlog                              	ERR	err.host	0
+i   "No one wants a disarmed population more than entrenched capital   	ERR	err.host	0
+i           with access to the means of counterfeit." - anon           	ERR	err.host	0
+i=====================================================================	ERR	err.host	0
+iCurrent phlog entry also available at: finger phlog@1436.ninja	ERR	err.host	0
+0Phlog atom feed	/phlog.atom	1436.ninja	70
+0Nokia N810 Review (20200125.post)	/Phlog/20200125.post	1436.ninja	70
+0Gitlab Updates (20200120.post)	/Phlog/20200120.post	1436.ninja	70
+0RPoD Rewrite Complete (20200117.post)	/Phlog/20200117.post	1436.ninja	70
+0Various Updates (20200114.post)	/Phlog/20200114.post	1436.ninja	70
+0Stickers (20200113.post)	/Phlog/20200113.post	1436.ninja	70
+0More vim fun! (20200109.post)	/Phlog/20200109.post	1436.ninja	70
+0Adventures in modifying vim plugins (20200106.post)	/Phlog/20200106.post	1436.ninja	70
+0Friendship ended with emacs, vim is my true friend (20200104.post)	/Phlog/20200104.post	1436.ninja	70
+0New Portable Music Player Setup Review (20200102.post)	/Phlog/20200102.post	1436.ninja	70
+0More on rewrites (20200101b.post)	/Phlog/20200101b.post	1436.ninja	70
+0Happy New Decade (20200101.post)	/Phlog/20200101.post	1436.ninja	70
+0On a gopherhole rewrite (20191227.post)	/Phlog/20191227.post	1436.ninja	70
+0Emacs (20191226.post)	/Phlog/20191226.post	1436.ninja	70
+0Laptop adventures (20191214.post)	/Phlog/20191214.post	1436.ninja	70
+0On mellow (20191205.post)	/Phlog/20191205.post	1436.ninja	70
+0Catch up (20191122.post)	/Phlog/20191122.post	1436.ninja	70
+0Projects!! (20191116.post)	/Phlog/20191116.post	1436.ninja	70
+0On Free Time (20191105.post)	/Phlog/20191105.post	1436.ninja	70
+0Mechanicin' (20191104.post)	/Phlog/20191104.post	1436.ninja	70
+0Not much (20191026.post)	/Phlog/20191026.post	1436.ninja	70
+0Yep, it happened (20191017.post)	/Phlog/20191017.post	1436.ninja	70
+0Not RE: s-word (cat) (20191015.post)	/Phlog/20191015.post	1436.ninja	70
+0Ratpoison, layoffs, inversion (20191012.post)	/Phlog/20191012.post	1436.ninja	70
+0RE: ratfactor vimwiki (20191002.post)	/Phlog/20191002.post	1436.ninja	70
+0On PIM (RE: jirka and xiled) (20190930.post)	/Phlog/20190930.post	1436.ninja	70
+0On the Palm Ultra Thin Keyboard (20190923.post)	/Phlog/20190923.post	1436.ninja	70
+0RE: Jirka, Palm OS questions (20190922b.post)	/Phlog/20190922b.post	1436.ninja	70
+0RE: visiblink - I'm going thru your stuff (20190922.post)	/Phlog/20190922.post	1436.ninja	70
+0On the 90 percent of gopher... (20190914.post)	/Phlog/20190914.post	1436.ninja	70
+0Gnu direvent (20190910.post)	/Phlog/20190910.post	1436.ninja	70
+0Shunning (20190909.post)	/Phlog/20190909.post	1436.ninja	70
+0Received the Tungsten C (20190907.post)	/Phlog/20190907.post	1436.ninja	70
+0ROOPHLOCH 2019 (20190831.post)	/Phlog/20190831.post	1436.ninja	70
+0Received the first of two new devices (20190826.post)	/Phlog/20190826.post	1436.ninja	70
+0Cleaned up HTTPS->HTTP proxy code (20190824.post)	/Phlog/20190824.post	1436.ninja	70
+0HTTPS->HTTP Proxy for Plucker (20190823.post)	/Phlog/20190823.post	1436.ninja	70
+0On Plucker (20190819.post)	/Phlog/20190819.post	1436.ninja	70
+0Fun with Palm doc format (20190818.post)	/Phlog/20190818.post	1436.ninja	70
+0On comp.unix.shell (20190816.post)	/Phlog/20190816.post	1436.ninja	70
+0Treo 90 Arrived (20190815.post)	/Phlog/20190815.post	1436.ninja	70
+0New Palm Device Coming (20190810.post)	/Phlog/20190810.post	1436.ninja	70
+0On a satisfying lazy day (20190803.post)	/Phlog/20190803.post	1436.ninja	70
+0Re: visiblink (camping gear) (20190801.post)	/Phlog/20190801.post	1436.ninja	70
+0On Camping (20190731.post)	/Phlog/20190731.post	1436.ninja	70
+0Catch up (20190721.post)	/Phlog/20190721.post	1436.ninja	70
+0On a balmy Sunday (20190630.post)	/Phlog/20190630.post	1436.ninja	70
+0On being social (20190623.post)	/Phlog/20190623.post	1436.ninja	70
+0On this weekend (20190622.post)	/Phlog/20190622.post	1436.ninja	70
+0Warm weather (20190618.post)	/Phlog/20190618.post	1436.ninja	70
+0On reinventing Gopher (20190611.post)	/Phlog/20190611.post	1436.ninja	70
+0Music Update (20190607.post)	/Phlog/20190607.post	1436.ninja	70
+0On activities of late (20190601.post)	/Phlog/20190601.post	1436.ninja	70
+0The last month (20190516.post)	/Phlog/20190516.post	1436.ninja	70
+0On Isolation (20190414.post)	/Phlog/20190414.post	1436.ninja	70
+0Solo RPG Ideas (20190329.post)	/Phlog/20190329.post	1436.ninja	70
+0On changes (20190317.post)	/Phlog/20190317.post	1436.ninja	70
+0On North Dakota in February (20190302.post)	/Phlog/20190302.post	1436.ninja	70
+0Changing schedule (20190224.post)	/Phlog/20190224.post	1436.ninja	70
+0On further messing with the Lifebook P1120 (20190220.post)	/Phlog/20190220.post	1436.ninja	70
+0On old Windows (20190214.post)	/Phlog/20190214.post	1436.ninja	70
+0Apple Newton eMate 300 Battery Mod Complete (20190209.post)	/Phlog/20190209.post	1436.ninja	70
+0On upcoming retrocomputing projects (20190208.post)	/Phlog/20190208.post	1436.ninja	70
+0Acquisitions (20190130.post)	/Phlog/20190130.post	1436.ninja	70
+0On phlog revisions and the small internet (RE: visiblink) (20190125.post)	/Phlog/20190125.post	1436.ninja	70
+0On joy (20190124.post)	/Phlog/20190124.post	1436.ninja	70
+0On the OmniBook 800ct Restoration - pt. 1 (20190120.post)	/Phlog/20190120.post	1436.ninja	70
+0On attachment to equipment (RE: sysdharma) (20190119.post)	/Phlog/20190119.post	1436.ninja	70
+0PocketChip flashing in 2019 (20190118b.post)	/Phlog/20190118b.post	1436.ninja	70
+0Computer Timeline (20190118.post)	/Phlog/20190118.post	1436.ninja	70
+0On tmux awesomeness (20190117.post)	/Phlog/20190117.post	1436.ninja	70
+0On Old Stuff (20190113.post)	/Phlog/20190113.post	1436.ninja	70
+0Writing Progress (20190112.post)	/Phlog/20190112.post	1436.ninja	70
+0Days off / eMate 300 (20190111.post)	/Phlog/20190111.post	1436.ninja	70
+0The projects are rolling in (20190107.post)	/Phlog/20190107.post	1436.ninja	70
+0Finger! (20190104.post)	/Phlog/20190104.post	1436.ninja	70
+0Happy New Year! (20190101.post)	/Phlog/20190101.post	1436.ninja	70
+0Bone Conduction Headphones (20181231.post)	/Phlog/20181231.post	1436.ninja	70
+0On further device segmentation (20181228.post)	/Phlog/20181228.post	1436.ninja	70
+0On the Vance Fry Dana Batt Hack (20181227.post)	/Phlog/20181227.post	1436.ninja	70
+0Alphasmart Fonts (20181224.post)	/Phlog/20181224.post	1436.ninja	70
+0AlphaSmart Dana fun  (20181223.post)	/Phlog/20181223.post	1436.ninja	70
+0On darkness and mood  (20181221.post)	/Phlog/20181221.post	1436.ninja	70
+0On bringing back the blog (20181219.post)	/Phlog/20181219.post	1436.ninja	70
+0In between dejavu (20181218.post)	/Phlog/20181218.post	1436.ninja	70
+0On the in between  (20181217.post)	/Phlog/20181217.post	1436.ninja	70
+0Re: tfurrows :: Handera 300 (20181211.post)	/Phlog/20181211.post	1436.ninja	70
+0The 1436 Files (part deux) (20181209.post)	/Phlog/20181209.post	1436.ninja	70
+0Handera 330  (20181206.post)	/Phlog/20181206.post	1436.ninja	70
+0On the adventure of retro devices (20181202.post)	/Phlog/20181202.post	1436.ninja	70
+0fail (20181130.post)	/Phlog/20181130.post	1436.ninja	70
+0On Projects [Nov2018]  (20181129.post)	/Phlog/20181129.post	1436.ninja	70
+0So much cool stuff going on (20181128.post)	/Phlog/20181128.post	1436.ninja	70
+0On restlessness (20181126.post)	/Phlog/20181126.post	1436.ninja	70
+0On a pattern of delay (20181119.post)	/Phlog/20181119.post	1436.ninja	70
+0On WinCE devices - RE: Visiblink (20181118.post)	/Phlog/20181118.post	1436.ninja	70
+0On the last week (20181113.post)	/Phlog/20181113.post	1436.ninja	70
+0Travel tomorrow -- a week gone (20181105.post)	/Phlog/20181105.post	1436.ninja	70
+0On the much maligned Sony Clie PEG-UX50 (20181104.post)	/Phlog/20181104.post	1436.ninja	70
+0Delays with the UX50 (20181031.post)	/Phlog/20181031.post	1436.ninja	70
+0Got my Palm IIIxe today (20181022.post)	/Phlog/20181022.post	1436.ninja	70
+0Re: Jirka (UX50) (20181020.post)	/Phlog/20181020.post	1436.ninja	70
+0I have a problem (20181019.post)	/Phlog/20181019.post	1436.ninja	70
+0On Plucker (20181018.post)	/Phlog/20181018.post	1436.ninja	70
+0On trips (20181017.post)	/Phlog/20181017.post	1436.ninja	70
+0On the last week (20181014.post)	/Phlog/20181014.post	1436.ninja	70
+0On tags (20181006.post)	/Phlog/20181006.post	1436.ninja	70
+0Randomness (20181005.post)	/Phlog/20181005.post	1436.ninja	70
+0Checking out (20181004.post)	/Phlog/20181004.post	1436.ninja	70
+0More on the palm os stuff (20181001.post)	/Phlog/20181001.post	1436.ninja	70
+0Adventures in chroot! (20180930.post)	/Phlog/20180930.post	1436.ninja	70
+0On Palm Devices (20180928.post)	/Phlog/20180928.post	1436.ninja	70
+0re: enforced anonymity [tomasino] (20180925b.post)	/Phlog/20180925b.post	1436.ninja	70
+0Installing Ubuntu on an RCA Cambio 2-in-1 (20180925.post)	/Phlog/20180925.post	1436.ninja	70
+0Inspiration (20180923.post)	/Phlog/20180923.post	1436.ninja	70
+0On vim as damn near anything (20180921.post)	/Phlog/20180921.post	1436.ninja	70
+0On Void Linux fun (20180918.post)	/Phlog/20180918.post	1436.ninja	70
+0On WSL and General Nerdery (20180914.post)	/Phlog/20180914.post	1436.ninja	70
+0Personal Computing Ecosystem (20180912.post)	/Phlog/20180912.post	1436.ninja	70
+0On the www (20180909.post)	/Phlog/20180909.post	1436.ninja	70
+0On so much to do, so little time (20180830.post)	/Phlog/20180830.post	1436.ninja	70
+0On Memory (20180826.post)	/Phlog/20180826.post	1436.ninja	70
+0On Raspberry Pi (20180824.post)	/Phlog/20180824.post	1436.ninja	70
+0On Work (20180817.post)	/Phlog/20180817.post	1436.ninja	70
+0Gopher stuff (20180804.post)	/Phlog/20180804.post	1436.ninja	70
+0On happiness in the face of massive disagreement (20180802.post)	/Phlog/20180802.post	1436.ninja	70
+0On web as newspeak: limiting features to corral people (20180726.post)	/Phlog/20180726.post	1436.ninja	70
+0Good to be home (20180725.post)	/Phlog/20180725.post	1436.ninja	70
+0On the last day of freedom (20180716.post)	/Phlog/20180716.post	1436.ninja	70
+0On where I find myself today (20180712.post)	/Phlog/20180712.post	1436.ninja	70
+0On life segmentation and happiness (20180709.post)	/Phlog/20180709.post	1436.ninja	70
+0Old-man observation and Wiki progress (20180706.post)	/Phlog/20180706.post	1436.ninja	70
+0On Pursuits (20180626.post)	/Phlog/20180626.post	1436.ninja	70
+0On the Internet Archive as Backup (20180623.post)	/Phlog/20180623.post	1436.ninja	70
+0RE: Tomasino - moleskines (20180621b.post)	/Phlog/20180621b.post	1436.ninja	70
+0Curveballs and Stamina (20180621.post)	/Phlog/20180621.post	1436.ninja	70
+0Well that didn't last long (20180618b.post)	/Phlog/20180618b.post	1436.ninja	70
+0On setting up a graphical user interface on the Raspberry Pi of Anguish (20180618.post)	/Phlog/20180618.post	1436.ninja	70
+0On the joy of simplicty (20180616.post)	/Phlog/20180616.post	1436.ninja	70
+0On vimwiki and the merger of 1436 and http (20180610.post)	/Phlog/20180610.post	1436.ninja	70
+0On abuse of the language -- "adulting" (20180608.post)	/Phlog/20180608.post	1436.ninja	70
+0On Death and Uncertainty (RE: alexschroeder) (20180606.post)	/Phlog/20180606.post	1436.ninja	70
+0On miniature books -- Pocketmod as RPG Tool (20180603.post)	/Phlog/20180603.post	1436.ninja	70
+0Responses to txminth (20180530.post)	/Phlog/20180530.post	1436.ninja	70
+0On bicycles (20180528a.post)	/Phlog/20180528a.post	1436.ninja	70
+0Funeral Next Weekend (20180528.post)	/Phlog/20180528.post	1436.ninja	70
+0On mind free to roam (20180525.post)	/Phlog/20180525.post	1436.ninja	70
+0On fun rpg tools (20180520.post)	/Phlog/20180520.post	1436.ninja	70
+0On a mobile pencil and paper gaming setup (20180519.post)	/Phlog/20180519.post	1436.ninja	70
+0On Multiplexing A Phlog (20180517.post)	/Phlog/20180517.post	1436.ninja	70
+0Rain (20180510.post)	/Phlog/20180510.post	1436.ninja	70
+0World creation progress (Ice Age Campaign) (20180506.post)	/Phlog/20180506.post	1436.ninja	70
+0On playing with actual people (20180505.post)	/Phlog/20180505.post	1436.ninja	70
+0On the ice age RPG project (20180429.post)	/Phlog/20180429.post	1436.ninja	70
+0On all-in-vim + git (pt 2) (20180428.post)	/Phlog/20180428.post	1436.ninja	70
+0On vim (20180427.post)	/Phlog/20180427.post	1436.ninja	70
+0On world creation (20180423.post)	/Phlog/20180423.post	1436.ninja	70
+0On gaming progress (20180419.post)	/Phlog/20180419.post	1436.ninja	70
+0On the third week (20180409.post)	/Phlog/20180409.post	1436.ninja	70
+0On my take on a note and task app (20180331.post)	/Phlog/20180331.post	1436.ninja	70
+0On gopher proxies and search engines (again), hoarders, and gnu screen (20180325.post)	/Phlog/20180325.post	1436.ninja	70
+0On interviews (re kichimi) (20180324a.post)	/Phlog/20180324a.post	1436.ninja	70
+0On My Game Master Assistant Script (20180324.post)	/Phlog/20180324.post	1436.ninja	70
+0RE zlg - Refactor or Rewrite (20180322.post)	/Phlog/20180322.post	1436.ninja	70
+0Hey, sysdharma - There are feeds on 1436 (20180318.post)	/Phlog/20180318.post	1436.ninja	70
+0On RPGs (20180317a.post)	/Phlog/20180317a.post	1436.ninja	70
+0I Need To Change Gopher Servers (20180317.post)	/Phlog/20180317.post	1436.ninja	70
+0Calendar Solution (20180315.post)	/Phlog/20180315.post	1436.ninja	70
+0On Server Reduction + Vim Tip (20180312a.post)	/Phlog/20180312a.post	1436.ninja	70
+0Phlog Rewrite - Part the Next (20180312.post)	/Phlog/20180312.post	1436.ninja	70
+0On my console experiment (20180311.post)	/Phlog/20180311.post	1436.ninja	70
+0On gopher self-sufficiency and RFCs (20180310a.post)	/Phlog/20180310a.post	1436.ninja	70
+0On SDF, Also Music (20180310.post)	/Phlog/20180310.post	1436.ninja	70
+0On the RPoD Phlog Rewrite (20180308b.post)	/Phlog/20180308b.post	1436.ninja	70
+0On tcsh and more troff (20180308a.post)	/Phlog/20180308a.post	1436.ninja	70
+0On Redoing My Linux Android Tablet (20180308.post)	/Phlog/20180308.post	1436.ninja	70
+0On Freetime (20180306a.post)	/Phlog/20180306a.post	1436.ninja	70
+0On Layout (20180306.post)	/Phlog/20180306.post	1436.ninja	70
+0On the specialness of gopher (reply to ckeen) (20180305.post)	/Phlog/20180305.post	1436.ninja	70
+0On the interesting stuff you can learn on gopher (20180304.post)	/Phlog/20180304.post	1436.ninja	70
+0SDF sticker (20180228.post)	/Phlog/20180228.post	1436.ninja	70
+0On defeat (20180226.post)	/Phlog/20180226.post	1436.ninja	70
+0More on music website progress (20180225.post)	/Phlog/20180225.post	1436.ninja	70
+0On my music website and VPS (20180224.post)	/Phlog/20180224.post	1436.ninja	70
+0On learning shells (20180222.post)	/Phlog/20180222.post	1436.ninja	70
+0Reply to Ulcer (20180220.post)	/Phlog/20180220.post	1436.ninja	70
+0On music and weather (20180219a.post)	/Phlog/20180219a.post	1436.ninja	70
+0On moku-pona (20180219.post)	/Phlog/20180219.post	1436.ninja	70
+0Maybe?? (20180217b.post)	/Phlog/20180217b.post	1436.ninja	70
+0More on SDF listing (20180217a.post)	/Phlog/20180217a.post	1436.ninja	70
+0On the weekend (20180217.post)	/Phlog/20180217.post	1436.ninja	70
+0SDF listing update (20180214a.post)	/Phlog/20180214a.post	1436.ninja	70
+0On the work week (20180214.post)	/Phlog/20180214.post	1436.ninja	70
+0On SDF phlog listing (20180212a.post)	/Phlog/20180212a.post	1436.ninja	70
+0On laptop cleanup and the Energy Sector (20180212.post)	/Phlog/20180212.post	1436.ninja	70
+0On EDC (20180211b.post)	/Phlog/20180211b.post	1436.ninja	70
+0On catching up (20180211.post)	/Phlog/20180211.post	1436.ninja	70
+0On the difference of age, or it ain't a big deal (20180129.post)	/Phlog/20180129.post	1436.ninja	70
+0On project progress (20180127.post)	/Phlog/20180127.post	1436.ninja	70
+0Computer Inventory (20180121.post)	/Phlog/20180121.post	1436.ninja	70
+0On Gutenberg... redo (20180120.post)	/Phlog/20180120.post	1436.ninja	70
+0On hats (20180119.post)	/Phlog/20180119.post	1436.ninja	70
+0On the Thinkpad project (20180117.post)	/Phlog/20180117.post	1436.ninja	70
+0On entropy and the randomness of life (20180111.post)	/Phlog/20180111.post	1436.ninja	70
+0On uptime (20180107.post)	/Phlog/20180107.post	1436.ninja	70
+0On software (reply to Solderpunk) and laptops (20180106.post)	/Phlog/20180106.post	1436.ninja	70
+0On the new year and laptop sadness (20180101.post)	/Phlog/20180101.post	1436.ninja	70
+0On comments (20171230.post)	/Phlog/20171230.post	1436.ninja	70
+0On phlog replies 20171229 (20171229.post)	/Phlog/20171229.post	1436.ninja	70
+0On the Raspberry Pi of Anguish (20171226.post)	/Phlog/20171226.post	1436.ninja	70
+0On capitulation (20171222.post)	/Phlog/20171222.post	1436.ninja	70
+0On further simplication (20171217.post)	/Phlog/20171217.post	1436.ninja	70
+0Phlog replies (pet84rik, tfurrows, slugmax, tomasino) (20171216.post)	/Phlog/20171216.post	1436.ninja	70
+0On a simple pastebin (20171215.post)	/Phlog/20171215.post	1436.ninja	70
+0On backups (20171211.post)	/Phlog/20171211.post	1436.ninja	70
+0On my favorite software (20171210.post)	/Phlog/20171210.post	1436.ninja	70
+0On the beauty of Unix (20171209.post)	/Phlog/20171209.post	1436.ninja	70
+0Sent to my department on 20171124, a nice write up on imposter syndrome: (20171205b.post)	/Phlog/20171205b.post	1436.ninja	70
+0On email (part 3) (20171205.post)	/Phlog/20171205.post	1436.ninja	70
+0On gopher to http proxies (20171204b.post)	/Phlog/20171204b.post	1436.ninja	70
+0On Arch on Android (20171204.post)	/Phlog/20171204.post	1436.ninja	70
+0On email UPDATE (20171203.post)	/Phlog/20171203.post	1436.ninja	70
+0On email (20171202b.post)	/Phlog/20171202b.post	1436.ninja	70
+0On life enrichment thru lurking (20171202.post)	/Phlog/20171202.post	1436.ninja	70
+0On the coming new RPi (20171201.post)	/Phlog/20171201.post	1436.ninja	70
+0On site updating (some more) (20171129.post)	/Phlog/20171129.post	1436.ninja	70
+0On the between times (20171126.post)	/Phlog/20171126.post	1436.ninja	70
+0On the past (20171125.post)	/Phlog/20171125.post	1436.ninja	70
+0On a memory of web past (20171124b.post)	/Phlog/20171124b.post	1436.ninja	70
+0On some todos for RPoD (20171124.post)	/Phlog/20171124.post	1436.ninja	70
+0On thanksgiving (20171122.post)	/Phlog/20171122.post	1436.ninja	70
+0On mobile gopher (20171120.post)	/Phlog/20171120.post	1436.ninja	70
+0On resonance (20171119.post)	/Phlog/20171119.post	1436.ninja	70
+0On gopher, lynx, and UTF-8 (20171115.post)	/Phlog/20171115.post	1436.ninja	70
+0On a ~$65 Linux box  (20171113.post)	/Phlog/20171113.post	1436.ninja	70
+0On the RPoD DocumentStore  (20171106.post)	/Phlog/20171106.post	1436.ninja	70
+0On device (20171104.post)	/Phlog/20171104.post	1436.ninja	70
+0On music (20171103.post)	/Phlog/20171103.post	1436.ninja	70
+0On  temptation (20171102.post)	/Phlog/20171102.post	1436.ninja	70
+0On git and gopher (20171029c.post)	/Phlog/20171029c.post	1436.ninja	70
+0On Politics (20171029b.post)	/Phlog/20171029b.post	1436.ninja	70
+0On Project Gutenberg (20171029.post)	/Phlog/20171029.post	1436.ninja	70
+0On electronics and music  (20171028.post)	/Phlog/20171028.post	1436.ninja	70
+0On sustainable hobbies (20171027.post)	/Phlog/20171027.post	1436.ninja	70
+0On RPoD Phlog  (20171026.post)	/Phlog/20171026.post	1436.ninja	70
+0On technology and personal honesty (20171022.post)	/Phlog/20171022.post	1436.ninja	70
+0On Asceticism  (20171020.post)	/Phlog/20171020.post	1436.ninja	70
+0On life, Music, PPC, GopherProxy, Kindle (20171014.post)	/Phlog/20171014.post	1436.ninja	70
+0On Relating  (20171008.post)	/Phlog/20171008.post	1436.ninja	70
+0On gopherbook (20170929b.post)	/Phlog/20170929b.post	1436.ninja	70
+0On the dream setup  (20170929.post)	/Phlog/20170929.post	1436.ninja	70
+0On Social Networks (20170924.post)	/Phlog/20170924.post	1436.ninja	70
+0On Archives  (20170923.post)	/Phlog/20170923.post	1436.ninja	70
+0On Git  (20170921b.post)	/Phlog/20170921b.post	1436.ninja	70
+0On GG Alin  (20170921.post)	/Phlog/20170921.post	1436.ninja	70
+0On the Project Gutenberg Gopher Frontend  (20170920.post)	/Phlog/20170920.post	1436.ninja	70
+0On Victories (20170917.post)	/Phlog/20170917.post	1436.ninja	70
+0On odd forum bugs and laptops (20170910.post)	/Phlog/20170910.post	1436.ninja	70
+0Dammit  (20170909.post)	/Phlog/20170909.post	1436.ninja	70
+0On the RPoD Gopher Proxy  (20170907b.post)	/Phlog/20170907b.post	1436.ninja	70
+0On email (20170907.post)	/Phlog/20170907.post	1436.ninja	70
+0On the RPoD Discussion forum  (20170902.post)	/Phlog/20170902.post	1436.ninja	70
+0On Projects  (20170830.post)	/Phlog/20170830.post	1436.ninja	70
+0On searching for content  (20170828.post)	/Phlog/20170828.post	1436.ninja	70
+0On figuring out wifi (20170826b.post)	/Phlog/20170826b.post	1436.ninja	70
+0Omnibook 800ct Project Update  (20170826.post)	/Phlog/20170826.post	1436.ninja	70
+0More on the Eclipse and Why CSS Ruins the Web (20170821.post)	/Phlog/20170821.post	1436.ninja	70
+0OmniBook Project Update  (20170819.post)	/Phlog/20170819.post	1436.ninja	70
+0On False-Flag Ops and the Solar Eclipse  (20170817.post)	/Phlog/20170817.post	1436.ninja	70
+0Nostalgia Tripping  (20170814.post)	/Phlog/20170814.post	1436.ninja	70
+0Trampoline park, my music, etc.  (20170813.post)	/Phlog/20170813.post	1436.ninja	70
+0on the rejoining of sdf (20170812.post)	/Phlog/20170812.post	1436.ninja	70
+0No days off for you  (20170810.post)	/Phlog/20170810.post	1436.ninja	70
+i____________________________________________________________________________		null.host	1
+i                     Gophered by Gophernicus/101 on NetBSD/amd64 8.1_STABLE		null.host	1
+.
+
