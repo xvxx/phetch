@@ -65,7 +65,7 @@ fn run() -> i32 {
 /// --version
 fn print_version() -> i32 {
     println!(
-        "phetch - quick lil gopher client (v{version} - {built})",
+        "phetch v{version} ({built})",
         built = phetch::BUILD_DATE,
         version = phetch::VERSION
     );
