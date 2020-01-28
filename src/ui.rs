@@ -251,8 +251,8 @@ impl UI {
         };
         let typ = gopher::type_for_url(&url);
         match typ {
-            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url, res, tls, tor))),
-            Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, tls, tor))),
+            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url, res, &self.config, tls))),
+            Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, &self.config, tls))),
             _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
     }
@@ -263,7 +263,7 @@ impl UI {
             &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
         ) {
-            Ok(Box::new(Menu::from(url, source, false, false)))
+            Ok(Box::new(Menu::from(url, source, &self.config, false)))
         } else {
             Err(error!("phetch URL not found: {}", url))
         }
@@ -330,7 +330,7 @@ impl UI {
             if !self.views.is_empty() && self.focused < self.views.len() {
                 if let Some(page) = self.views.get_mut(self.focused) {
                     page.term_size(cols as usize, rows as usize);
-                    return Ok(page.render(&self.config));
+                    return Ok(page.render());
                 }
             }
             Err(error!(
@@ -595,7 +595,7 @@ impl UI {
                     if let Some(page) = self.views.get(self.focused) {
                         let url = page.url();
                         let raw = page.raw().to_string();
-                        let mut text = Text::from(url, raw, page.is_tls(), page.is_tor());
+                        let mut text = Text::from(url, raw, &self.config, page.is_tls());
                         text.wide = true;
                         self.add_page(Box::new(text));
                     }
@@ -632,7 +632,11 @@ impl UI {
                 }
                 'w' => {
                     self.config.wide = !self.config.wide;
-                    self.dirty = true;
+                    if let Some(view) = self.views.get_mut(self.focused) {
+                        let w = view.wide();
+                        view.set_wide(!w);
+                        self.dirty = true;
+                    }
                 }
                 'q' => self.running = false,
                 c => return Err(error!("Unknown keypress: {}", c)),

@@ -28,6 +28,8 @@ pub struct Text {
     pub tls: bool,
     /// Retrieved via Tor?
     pub tor: bool,
+    /// UI mode. Interactive (Run), Printing, Raw mode...
+    mode: ui::Mode,
     /// Currently in wide mode?
     pub wide: bool,
 }
@@ -57,6 +59,14 @@ impl View for Text {
 
     fn term_size(&mut self, cols: usize, rows: usize) {
         self.size = (cols, rows);
+    }
+
+    fn set_wide(&mut self, wide: bool) {
+        self.wide = wide;
+    }
+
+    fn wide(&mut self) -> bool {
+        self.wide
     }
 
     fn respond(&mut self, c: Key) -> Action {
@@ -108,8 +118,7 @@ impl View for Text {
         }
     }
 
-    fn render(&mut self, cfg: &Config) -> String {
-        self.wide = cfg.wide;
+    fn render(&mut self) -> String {
         let (cols, rows) = self.size;
         let mut out = String::new();
         let longest = if self.longest > MAX_COLS {
@@ -124,7 +133,7 @@ impl View for Text {
         } else {
             String::from("")
         };
-        let limit = if cfg.mode == ui::Mode::Run {
+        let limit = if self.mode == ui::Mode::Run {
             rows - 1
         } else {
             self.lines
@@ -161,7 +170,7 @@ impl View for Text {
 
 impl Text {
     /// Create a Text View from a raw Gopher response and a few options.
-    pub fn from(url: &str, response: String, tls: bool, tor: bool) -> Text {
+    pub fn from(url: &str, response: String, config: &Config, tls: bool) -> Text {
         let mut lines = 0;
         let mut longest = 0;
         for line in response.split_terminator('\n') {
@@ -179,9 +188,10 @@ impl Text {
             lines,
             longest,
             size: (0, 0),
+            mode: config.mode,
             tls,
-            tor,
-            wide: false,
+            tor: config.tor,
+            wide: config.wide,
         }
     }
 

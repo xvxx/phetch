@@ -158,12 +158,20 @@ impl View for Menu {
         self.raw.as_ref()
     }
 
-    fn render(&mut self, cfg: &Config) -> String {
-        self.render_lines(cfg)
+    fn render(&mut self) -> String {
+        self.render_lines()
     }
 
     fn respond(&mut self, key: Key) -> Action {
         self.process_key(key)
+    }
+
+    fn set_wide(&mut self, wide: bool) {
+        self.wide = wide;
+    }
+
+    fn wide(&mut self) -> bool {
+        self.wide
     }
 
     fn term_size(&mut self, cols: usize, rows: usize) {
@@ -178,10 +186,12 @@ impl View for Menu {
 impl Menu {
     /// Create a representation of a Gopher Menu from a raw Gopher
     /// response and a few options.
-    pub fn from(url: &str, response: String, tls: bool, tor: bool) -> Menu {
+    pub fn from(url: &str, response: String, config: &Config, tls: bool) -> Menu {
         Menu {
             tls,
-            tor,
+            tor: config.tor,
+            wide: config.wide,
+            mode: config.mode,
             ..parse(url, response)
         }
     }
@@ -256,9 +266,7 @@ impl Menu {
         Some((x as u16, y as u16))
     }
 
-    fn render_lines(&mut self, cfg: &Config) -> String {
-        self.wide = cfg.wide;
-        self.mode = cfg.mode;
+    fn render_lines(&mut self) -> String {
         let mut out = String::new();
         let limit = if self.mode == ui::Mode::Run {
             // only show as many lines as screen rows minus one
