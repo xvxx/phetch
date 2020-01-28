@@ -1,10 +1,10 @@
-on: 
+on:
   push:
     branches: [master]
   pull_request:
     branches: ["*"]
 
-name: Run Tests
+name: ci
 
 jobs:
   test_macos:
@@ -34,11 +34,11 @@ jobs:
           toolchain: stable
           override: true
       - name: check
-        run: cargo check 
+        run: cargo check
       - name: clippy
         run: cargo clippy
       - name: test
-        run: cargo test 
+        run: cargo test
       - name: build
         run: cargo build --release
 
@@ -63,10 +63,10 @@ jobs:
           path: target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
       - name: check
-        run: cargo check 
+        run: cargo check
       - name: clippy
         run: cargo clippy
       - name: test
-        run: cargo test 
+        run: cargo test
       - name: build
         run: cargo build --release
