@@ -34,14 +34,14 @@ the gophersphere.
         -s, --tls              Try to open Gopher URLs securely w/ TLS
         -o, --tor              Use local Tor proxy to open all pages
         -S, -O                 Disable TLS or Tor
-                                
+
         -r, --raw              Print raw Gopher response only
         -p, --print            Print rendered Gopher response only
         -l, --local            Connect to 127.0.0.1:7070
 
         -c, --config FILE      Use instead of ~/.config/phetch/phetch.conf
-        -C, --no-config        Don't use any config file            
-        
+        -C, --no-config        Don't use any config file
+
         -h, --help             Show this screen
         -v, --version          Show phetch version
 
@@ -116,6 +116,7 @@ To enable just TLS support, or just Tor support, use `--features`:
 
 ## bugs
 
+- [ ] ctrl+c doesn't cancel load()
 - [ ] ctrl-c while telneting kills phetch
 - [ ] unknown keypress: [ during status messages
 - [ ] new status doesn't replace old (download complete -> copy url)
