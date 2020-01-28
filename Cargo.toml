@@ -14,9 +14,9 @@ exclude = [
 ]
 
 [features]
-tls=["native-tls"]
-tor=["tor-stream"]
-default =["tls", "tor"]
+tls = ["native-tls"]
+tor = ["tor-stream"]
+default = ["tls", "tor"]
 
 [profile.release]
 panic = 'abort' 
