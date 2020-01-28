@@ -86,8 +86,9 @@ Regular development uses `cargo`:
 
     cargo run -- <gopher-url>
 
-*Pro-tip:* Run a local gopher server on `127.0.0.1:7070` and start
-phetch with `-l` or `--local` to quickly connect to it.
+*Pro-tip:* Run a local gopher server (like [phd][phd]) on
+`127.0.0.1:7070` and start phetch with `-l` or `--local` to quickly
+connect to it.
 
 phetch builds with TLS and Tor support by default. To disable these
 features, or to enable only one of them, use the
@@ -136,3 +137,4 @@ To enable just TLS support, or just Tor support, use `--features`:
 [0]: https://github.com/xvxx/phetch/releases/download/v0.1.13/phetch-v0.1.13-linux-x86_64.tgz
 [1]: https://github.com/xvxx/phetch/releases/download/v0.1.13/phetch-v0.1.13-linux-armv7.tgz
 [2]: https://github.com/xvxx/phetch/releases/download/v0.1.13/phetch-v0.1.13-macos.zip
+[phd]: https://github.com/xvxx/phd
