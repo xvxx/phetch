@@ -1,0 +1,162 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build_armv7:
+    name: Build for armv7
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: armv7-unknown-linux-gnueabihf
+          override: true
+      - name: Build release
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --target armv7-unknown-linux-gnueabihf
+      - name: Get current version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Package Binary
+        run: cd ./target/armv7-unknown-linux-gnueabihf/release/ && tar zcvf phetch-${{ steps.get_version.outputs.VERSION }}-linux-armv7.tgz phetch
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: phetch-linux-armv7
+          path: target/armv7-unknown-linux-gnueabihf/release/phetch-${{ steps.get_version.outputs.VERSION }}-linux-armv7.tgz
+
+  build_linux:
+    name: Build for Linux x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build release
+        run: cargo build --release
+      - name: Get current version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Package Binary
+        run: cd ./target/release/ && tar zcvf phetch-${{ steps.get_version.outputs.VERSION }}-linux-x86_64.tgz phetch
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: phetch-linux-x86_64
+          path: target/release/phetch-${{ steps.get_version.outputs.VERSION }}-linux-x86_64.tgz
+
+  build_macos:
+    name: Build for macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Build release
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      - name: Get current version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Package Binary
+        run: cd ./target/release/ && zip -r phetch-${{ steps.get_version.outputs.VERSION }}-macos.zip phetch
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: phetch-macos
+          path: target/release/phetch-${{ steps.get_version.outputs.VERSION }}-macos.zip
+
+  create:
+    name: Create Release
+    needs: [build_armv7, build_linux, build_macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get current version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: phetch-macos
+      - name: Download Linux (x86_64) artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: phetch-linux-x86_64
+      - name: Download Linux (armv7) artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: phetch-linux-armv7
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          prerelease: true
+          files: |
+            phetch-macos/phetch-${{ steps.get_version.outputs.VERSION }}-macos.zip
+            phetch-linux-x86_64/phetch-${{ steps.get_version.outputs.VERSION }}-linux-x86_64.tgz
+            phetch-linux-armv7/phetch-${{ steps.get_version.outputs.VERSION }}-linux-armv7.tgz 
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
