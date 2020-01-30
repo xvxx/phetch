@@ -1,7 +1,8 @@
 ## Unreleased
 
 This is the first release candidate for `phetch v1.0.0`. We will
-continue fixing bugs, but no new features will be added until v1.0.0
+continue fixing bugs, tweaking the release system, and pruning
+the public Rust API, but no new features will be added until v1.0.0
 is released.
 
 ### Added
