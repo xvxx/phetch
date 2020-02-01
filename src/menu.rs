@@ -42,13 +42,13 @@ pub struct Menu {
     /// Incremental search mode?
     pub searching: bool,
     /// Was this menu retrieved via TLS?
-    pub tls: bool,
+    tls: bool,
     /// Retrieved via Tor?
-    pub tor: bool,
+    tor: bool,
     /// Size of the screen currently, cols and rows
     pub size: (usize, usize),
     /// Wide mode?
-    pub wide: bool,
+    wide: bool,
 }
 
 /// The Line represents a single line in a Gopher menu.

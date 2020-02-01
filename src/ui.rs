@@ -42,9 +42,6 @@ use termion::{
 /// Alias for a termion Key event.
 pub type Key = termion::event::Key;
 
-/// Alias for either a Menu or Text View.
-pub type Page = Box<dyn View>;
-
 /// How many lines to jump by when using page up/down.
 pub const SCROLL_LINES: usize = 15;
 
@@ -62,10 +59,10 @@ const ERR_SCREEN: &str = "Fatal Error using Alternate Screen.";
 const ERR_STDOUT: &str = "Fatal Error writing to STDOUT.";
 
 /// UI is mainly concerned with drawing to the screen, managing the
-/// active Views/pages, and responding to user input.
+/// active views, and responding to user input.
 pub struct UI {
     /// Current loaded Gopher views. Menu or Text
-    views: Vec<Page>,
+    views: Vec<Box<dyn View>>,
     /// Index of currently focused View
     focused: usize,
     /// Does the UI need to be entirely redrawn?
@@ -159,7 +156,7 @@ impl UI {
 
     /// Accept user input and update data.
     pub fn update(&mut self) {
-        let action = self.process_page_input();
+        let action = self.process_view_input();
         if !action.is_none() {
             self.status.clear();
         }
@@ -171,8 +168,8 @@ impl UI {
     /// Open a URL - Gopher, internal, telnet, or something else.
     pub fn open(&mut self, title: &str, url: &str) -> Result<()> {
         // no open loops
-        if let Some(page) = self.views.get(self.focused) {
-            if page.url() == url {
+        if let Some(view) = self.views.get(self.focused) {
+            if view.url() == url {
                 return Ok(());
             }
         }
@@ -203,8 +200,8 @@ impl UI {
             };
         }
 
-        self.load(title, url).and_then(|page| {
-            self.add_page(page);
+        self.load(title, url).and_then(|view| {
+            self.add_view(view);
             Ok(())
         })
     }
@@ -231,7 +228,7 @@ impl UI {
     }
 
     /// Fetches a URL and returns a View for its content.
-    fn load(&mut self, title: &str, url: &str) -> Result<Page> {
+    fn load(&mut self, title: &str, url: &str) -> Result<Box<dyn View>> {
         // on-line help
         if url.starts_with("gopher://phetch/") {
             return self.load_internal(url);
@@ -258,7 +255,7 @@ impl UI {
     }
 
     /// Get Menu for on-line help, home page, etc, ex: gopher://phetch/1/help/types
-    fn load_internal(&mut self, url: &str) -> Result<Page> {
+    fn load_internal(&mut self, url: &str) -> Result<Box<dyn View>> {
         if let Some(source) = help::lookup(
             &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
@@ -328,9 +325,9 @@ impl UI {
         if let Ok((cols, rows)) = terminal_size() {
             self.term_size(cols as usize, rows as usize);
             if !self.views.is_empty() && self.focused < self.views.len() {
-                if let Some(page) = self.views.get_mut(self.focused) {
-                    page.term_size(cols as usize, rows as usize);
-                    return Ok(page.render());
+                if let Some(view) = self.views.get_mut(self.focused) {
+                    view.term_size(cols as usize, rows as usize);
+                    return Ok(view.render());
                 }
             }
             Err(error!(
@@ -352,15 +349,15 @@ impl UI {
 
     /// Render the connection status (TLS or Tor).
     fn render_conn_status(&self) -> Option<String> {
-        let page = self.views.get(self.focused)?;
-        if page.is_tls() {
+        let view = self.views.get(self.focused)?;
+        if view.is_tls() {
             let status = color_string!("TLS", Black, GreenBG);
             return Some(format!(
                 "{}{}",
                 termion::cursor::Goto(self.cols() - 3, self.rows()),
                 if self.config.emoji { "🔐" } else { &status },
             ));
-        } else if page.is_tor() {
+        } else if view.is_tor() {
             let status = color_string!("TOR", Bold, White, MagentaBG);
             return Some(format!(
                 "{}{}",
@@ -385,12 +382,12 @@ impl UI {
     }
 
     /// Add a View to the app's currently opened Views.
-    fn add_page(&mut self, page: Page) {
+    fn add_view(&mut self, view: Box<dyn View>) {
         self.dirty = true;
         if !self.views.is_empty() && self.focused < self.views.len() - 1 {
             self.views.truncate(self.focused + 1);
         }
-        self.views.push(page);
+        self.views.push(view);
         if self.views.len() > 1 {
             self.focused += 1;
         }
@@ -515,15 +512,15 @@ impl UI {
     }
 
     /// Asks the current View to process user input and produce an Action.
-    fn process_page_input(&mut self) -> Action {
-        if let Some(page) = self.views.get_mut(self.focused) {
+    fn process_view_input(&mut self) -> Action {
+        if let Some(view) = self.views.get_mut(self.focused) {
             if let Ok(key) = stdin()
                 .keys()
                 .nth(0)
                 .ok_or_else(|| Action::Error("stdin.keys() error".to_string()))
             {
                 if let Ok(key) = key {
-                    return page.respond(key);
+                    return view.respond(key);
                 }
             }
         }
@@ -592,17 +589,17 @@ impl UI {
                 }
                 'h' => self.open("Help", "gopher://phetch/1/help")?,
                 'r' => {
-                    if let Some(page) = self.views.get(self.focused) {
-                        let url = page.url();
-                        let raw = page.raw().to_string();
-                        let mut text = Text::from(url, raw, &self.config, page.is_tls());
+                    if let Some(view) = self.views.get(self.focused) {
+                        let url = view.url();
+                        let raw = view.raw().to_string();
+                        let mut text = Text::from(url, raw, &self.config, view.is_tls());
                         text.wide = true;
-                        self.add_page(Box::new(text));
+                        self.add_view(Box::new(text));
                     }
                 }
                 's' => {
-                    if let Some(page) = self.views.get(self.focused) {
-                        let url = page.url();
+                    if let Some(view) = self.views.get(self.focused) {
+                        let url = view.url();
                         match bookmarks::save(&url, &url) {
                             Ok(()) => {
                                 let msg = format!("Saved bookmark: {}", url);
@@ -613,8 +610,8 @@ impl UI {
                     }
                 }
                 'u' => {
-                    if let Some(page) = self.views.get(self.focused) {
-                        let current_url = page.url();
+                    if let Some(view) = self.views.get(self.focused) {
+                        let current_url = view.url();
                         if let Some(url) = self.prompt("Current URL: ", &current_url) {
                             if url != current_url {
                                 self.open(&url, &url)?;
@@ -623,8 +620,8 @@ impl UI {
                     }
                 }
                 'y' => {
-                    if let Some(page) = self.views.get(self.focused) {
-                        let url = page.url();
+                    if let Some(view) = self.views.get(self.focused) {
+                        let url = view.url();
                         utils::copy_to_clipboard(&url)?;
                         let msg = format!("Copied {} to clipboard.", url);
                         self.set_status(&msg);
