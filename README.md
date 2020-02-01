@@ -62,9 +62,9 @@ On macOS you can install with [Homebrew](https://brew.sh/):
 Binaries for Linux, Raspberry Pi, and Mac are available at
 https://github.com/xvxx/phetch/releases:
 
-- [phetch-v0.1.13-linux-x86_64.tgz][0]
-- [phetch-v0.1.13-linux-armv7.tgz (Raspberry Pi)][1]
-- [phetch-v0.1.13-macos.zip][2]
+- [phetch-v0.9.0-linux-x86_64.tgz][0]
+- [phetch-v0.9.0-linux-armv7.tgz (Raspberry Pi)][1]
+- [phetch-v0.9.0-macos.zip][2]
 
 Just unzip/untar the `phetch` program into your $PATH and get going!
 
@@ -135,7 +135,7 @@ To enable just TLS support, or just Tor support, use `--features`:
 - [ ] bookmarks: toggle instead of just prepending to the file
 - [ ] bookmarks: save the title of the current page
 
-[0]: https://github.com/xvxx/phetch/releases/download/v0.1.13/phetch-v0.1.13-linux-x86_64.tgz
-[1]: https://github.com/xvxx/phetch/releases/download/v0.1.13/phetch-v0.1.13-linux-armv7.tgz
-[2]: https://github.com/xvxx/phetch/releases/download/v0.1.13/phetch-v0.1.13-macos.zip
+[0]: https://github.com/xvxx/phetch/releases/download/v0.9.0/phetch-v0.9.0-linux-x86_64.tgz
+[1]: https://github.com/xvxx/phetch/releases/download/v0.9.0/phetch-v0.9.0-linux-armv7.tgz
+[2]: https://github.com/xvxx/phetch/releases/download/v0.9.0/phetch-v0.9.0-macos.zip
 [phd]: https://github.com/xvxx/phd
