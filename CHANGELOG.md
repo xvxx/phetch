@@ -1,4 +1,4 @@
-## Unreleased
+## v0.9.0
 
 This is the first release candidate for `phetch v1.0.0`. We will
 continue fixing bugs, tweaking the release system, and pruning
