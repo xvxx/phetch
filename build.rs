@@ -10,7 +10,7 @@ fn main() {
 }
 
 fn sh(args: &str) -> String {
-    let args: Vec<&str> = args.split(" ").collect();
+    let args: Vec<&str> = args.split(' ').collect();
     let cmd = args[0];
     let args: Vec<_> = args.iter().skip(1).collect();
 
