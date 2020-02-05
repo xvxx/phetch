@@ -22,6 +22,7 @@ use crate::{
     gopher::{self, Type},
     help, history,
     menu::Menu,
+    terminal,
     text::Text,
     utils, BUG_URL,
 };
@@ -109,14 +110,14 @@ impl UI {
     pub fn startup(&mut self) {
         let mut out = self.out.borrow_mut();
         out.activate_raw_mode().expect(ERR_RAW_MODE);
-        write!(out, "{}", termion::screen::ToAlternateScreen).expect(ERR_SCREEN);
+        write!(out, "{}", terminal::ToAlternateScreen).expect(ERR_SCREEN);
     }
 
     /// Clean up after ourselves. Should only be used after running in
     /// interactive mode.
     pub fn shutdown(&mut self) {
         let mut out = self.out.borrow_mut();
-        write!(out, "{}", termion::screen::ToMainScreen).expect(ERR_SCREEN);
+        write!(out, "{}", terminal::ToMainScreen).expect(ERR_SCREEN);
     }
 
     /// Main loop.
@@ -139,8 +140,8 @@ impl UI {
             write!(
                 out,
                 "{}{}{}{}",
-                termion::cursor::Goto(1, 1),
-                termion::cursor::Hide,
+                terminal::Goto(1, 1),
+                terminal::HideCursor,
                 screen,
                 status,
             )?;
@@ -161,7 +162,7 @@ impl UI {
             self.status.clear();
         }
         if let Err(e) = self.process_action(action) {
-            self.set_status(&format!("{}{}{}", color::Red, e, termion::cursor::Hide));
+            self.set_status(&format!("{}{}{}", color::Red, e, terminal::HideCursor));
         }
     }
 
@@ -300,13 +301,13 @@ impl UI {
                 }
                 print!(
                     "{}{}{}{}{}{}{}",
-                    termion::cursor::Goto(1, rows),
-                    termion::cursor::Hide,
+                    terminal::Goto(1, rows),
+                    terminal::HideCursor,
                     label,
                     ".".repeat(i),
-                    termion::clear::UntilNewline,
+                    terminal::ClearUntilNewline,
                     color::Reset,
-                    termion::cursor::Show,
+                    terminal::ShowCursor,
                 );
                 stdout().flush().expect(ERR_STDOUT);
                 thread::sleep(Duration::from_millis(500));
@@ -354,14 +355,14 @@ impl UI {
             let status = color_string!("TLS", Black, GreenBG);
             return Some(format!(
                 "{}{}",
-                termion::cursor::Goto(self.cols() - 3, self.rows()),
+                terminal::Goto(self.cols() - 3, self.rows()),
                 if self.config.emoji { "🔐" } else { &status },
             ));
         } else if view.is_tor() {
             let status = color_string!("TOR", Bold, White, MagentaBG);
             return Some(format!(
                 "{}{}",
-                termion::cursor::Goto(self.cols() - 3, self.rows()),
+                terminal::Goto(self.cols() - 3, self.rows()),
                 if self.config.emoji { "🧅" } else { &status },
             ));
         }
@@ -372,9 +373,9 @@ impl UI {
     fn render_status(&self) -> String {
         format!(
             "{}{}{}{}{}{}",
-            termion::cursor::Hide,
-            termion::cursor::Goto(1, self.rows()),
-            termion::clear::CurrentLine,
+            terminal::HideCursor,
+            terminal::Goto(1, self.rows()),
+            terminal::ClearCurrentLine,
             self.status,
             self.render_conn_status().unwrap_or_else(|| "".into()),
             color::Reset,
@@ -402,10 +403,10 @@ impl UI {
             out,
             "{}{}{}{} [Y/n]: {}",
             color::Reset,
-            termion::cursor::Goto(1, rows),
-            termion::clear::CurrentLine,
+            terminal::Goto(1, rows),
+            terminal::ClearCurrentLine,
             question,
-            termion::cursor::Show,
+            terminal::ShowCursor,
         )
         .expect(ERR_STDOUT);
         out.flush().expect(ERR_STDOUT);
@@ -431,11 +432,11 @@ impl UI {
             out,
             "{}{}{}{}{}{}",
             color::Reset,
-            termion::cursor::Goto(1, rows),
-            termion::clear::CurrentLine,
+            terminal::Goto(1, rows),
+            terminal::ClearCurrentLine,
             prompt,
             input,
-            termion::cursor::Show,
+            terminal::ShowCursor,
         )
         .expect(ERR_STDOUT);
         out.flush().expect(ERR_STDOUT);
@@ -447,8 +448,8 @@ impl UI {
                         write!(
                             out,
                             "{}{}",
-                            termion::clear::CurrentLine,
-                            termion::cursor::Hide
+                            terminal::ClearCurrentLine,
+                            terminal::HideCursor
                         )
                         .expect(ERR_STDOUT);
                         out.flush().expect(ERR_STDOUT);
@@ -459,8 +460,8 @@ impl UI {
                         write!(
                             out,
                             "{}{}",
-                            termion::clear::CurrentLine,
-                            termion::cursor::Hide
+                            terminal::ClearCurrentLine,
+                            terminal::HideCursor
                         )
                         .expect(ERR_STDOUT);
                         out.flush().expect(ERR_STDOUT);
@@ -478,8 +479,8 @@ impl UI {
             write!(
                 out,
                 "{}{}{}{}",
-                termion::cursor::Goto(1, rows),
-                termion::clear::CurrentLine,
+                terminal::Goto(1, rows),
+                terminal::ClearCurrentLine,
                 prompt,
                 input,
             )
@@ -531,10 +532,10 @@ impl UI {
     /// Ctrl-Z: Suspend Unix process w/ SIGTSTP.
     fn suspend(&mut self) {
         let mut out = self.out.borrow_mut();
-        write!(out, "{}", termion::screen::ToMainScreen).expect(ERR_SCREEN);
+        write!(out, "{}", terminal::ToMainScreen).expect(ERR_SCREEN);
         out.flush().expect(ERR_STDOUT);
         unsafe { libc::raise(libc::SIGTSTP) };
-        write!(out, "{}", termion::screen::ToAlternateScreen).expect(ERR_SCREEN);
+        write!(out, "{}", terminal::ToAlternateScreen).expect(ERR_SCREEN);
         out.flush().expect(ERR_STDOUT);
         self.dirty = true;
     }
@@ -647,7 +648,7 @@ impl UI {
 impl Drop for UI {
     fn drop(&mut self) {
         let mut out = self.out.borrow_mut();
-        write!(out, "{}{}", color::Reset, termion::cursor::Show).expect(ERR_STDOUT);
+        write!(out, "{}{}", color::Reset, terminal::ShowCursor).expect(ERR_STDOUT);
         out.flush().expect(ERR_STDOUT);
     }
 }

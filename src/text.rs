@@ -4,10 +4,10 @@
 
 use crate::{
     config::Config,
+    terminal,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
 };
 use std::fmt;
-use termion::clear;
 
 /// The Text View holds the raw Gopher response as well as information
 /// about which lines should currently be displayed on screen.
@@ -156,13 +156,13 @@ impl View for Text {
             out.push_str(&line);
 
             // clear rest of line
-            out.push_str(&format!("{}", clear::UntilNewline));
+            out.push_str(&format!("{}", terminal::ClearUntilNewline));
 
             out.push_str("\r\n");
         }
 
         // clear remainder of screen
-        out.push_str(&format!("{}", clear::AfterCursor));
+        out.push_str(&format!("{}", terminal::ClearAfterCursor));
 
         out
     }

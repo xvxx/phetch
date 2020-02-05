@@ -45,6 +45,7 @@ pub mod help;
 pub mod history;
 pub mod menu;
 pub mod phetchdir;
+pub mod terminal;
 pub mod text;
 pub mod ui;
 

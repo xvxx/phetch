@@ -9,10 +9,10 @@
 use crate::{
     config::Config,
     gopher::{self, Type},
+    terminal,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
 };
 use std::fmt;
-use termion::{clear, cursor};
 
 /// The Menu holds our Gopher Lines, a list of links, and maintains
 /// both where the cursor is on screen and which lines need to be
@@ -333,12 +333,12 @@ impl Menu {
             out.push_str(color!(Reset));
 
             // clear rest of line
-            out.push_str(clear::UntilNewline.as_ref());
+            out.push_str(terminal::ClearUntilNewline.as_ref());
             out.push_str("\r\n");
         }
 
         // clear remainder of screen
-        out.push_str(clear::AfterCursor.as_ref());
+        out.push_str(terminal::ClearAfterCursor.as_ref());
 
         out
     }
@@ -364,7 +364,7 @@ impl Menu {
             return None;
         }
         let (x, y) = self.screen_coords(link)?;
-        Some(format!("{} {}", cursor::Goto(x, y), cursor::Hide))
+        Some(format!("{} {}", terminal::Goto(x, y), terminal::HideCursor))
     }
 
     /// Print this string to draw the cursor on screen.
@@ -376,8 +376,8 @@ impl Menu {
         let (x, y) = self.screen_coords(self.link)?;
         Some(format!(
             "{}\x1b[97;1m*\x1b[0m{}",
-            cursor::Goto(x, y),
-            cursor::Hide
+            terminal::Goto(x, y),
+            terminal::HideCursor
         ))
     }
 
@@ -388,14 +388,14 @@ impl Menu {
 
     /// User input field.
     fn render_input(&self) -> String {
-        format!("Find: {}{}", self.input, cursor::Show)
+        format!("Find: {}{}", self.input, terminal::ShowCursor)
     }
 
     fn redraw_input(&self) -> Action {
         if self.searching {
             Action::Status(self.render_input())
         } else {
-            Action::Status(cursor::Hide.to_string())
+            Action::Status(terminal::HideCursor.to_string())
         }
     }
 
