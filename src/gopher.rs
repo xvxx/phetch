@@ -5,6 +5,7 @@
 //! IPv6 addresses.
 
 use std::{
+    fs,
     io::{Read, Result, Write},
     net::TcpStream,
     net::ToSocketAddrs,
@@ -123,12 +124,12 @@ pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> 
     let mut keys = stdin.keys();
 
     let mut stream = request(u.host, u.port, u.sel, tls, tor)?;
-    let mut file = std::fs::OpenOptions::new()
+    let mut file = fs::OpenOptions::new()
         .write(true)
         .create(true)
         .truncate(true)
         .mode(0o770)
-        .open(path)?;
+        .open(&path)?;
 
     let mut buf = [0; 1024];
     let mut bytes = 0;
@@ -139,6 +140,9 @@ pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> 
         bytes += count;
         file.write_all(&buf[..count])?;
         if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
+            if path.exists() {
+                fs::remove_file(path)?;
+            }
             return Err(error!("Download cancelled"));
         }
     }
