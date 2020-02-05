@@ -116,10 +116,11 @@ To enable just TLS support, or just Tor support, use `--features`:
 
 ## bugs
 
-- [ ] ctrl+c doesn't cancel load()
 - [ ] ctrl-c while telneting kills phetch
-- [ ] unknown keypress: [ during status messages
-- [ ] new status doesn't replace old (download complete -> copy url)
+- [ ] ctrl-c in load() not yet implemented
+- [ ] ctrl-c in download fails to return to listening state 
+      because of termion bug:
+      https://gitlab.redox-os.org/redox-os/termion/issues/168
 
 ## v1.0
 
