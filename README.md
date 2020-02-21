@@ -19,6 +19,8 @@
 `phetch` is a terminal client designed to help you quickly navigate
 the gophersphere.
 
+<hr>
+
 ![demo of phetch in action](img/phetch-demo.gif "demo of phetch")
 
 ## features
