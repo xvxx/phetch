@@ -5,6 +5,9 @@
 |__/ |  / |__  |__  |__  |  /
 |
 --> <p align="center"> <img src="./img/logo.png"> <br>
+<a href="https://git.io/JvR5g">
+<img src="https://github.com/xvxx/phetch/workflows/build/badge.svg">
+</a>
 <a href="https://git.io/JveQo">
 <img src="https://img.shields.io/github/v/release/xvxx/phetch?include_prereleases">
 </a>
