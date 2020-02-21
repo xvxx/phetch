@@ -106,12 +106,6 @@ To enable just TLS support, or just Tor support, use `--features`:
 
     cargo run --no-default-features --features tor -- gopher://phetch/about
 
-## screenies
-
-|![DOS Archive](./img/dos.png)|![Floodgap](./img/menu-view.png)|
-|:-:|:-:|
-| DOS Archive | Floodgap |
-
 ## todo
 
 - [ ] catch SIGWINCH
