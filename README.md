@@ -13,6 +13,8 @@
 `phetch` is a terminal client designed to help you quickly navigate
 the gophersphere.
 
+![demo of phetch in action](img/phetch-demo.gif "demo of phetch")
+
 ## features
 
 - <1MB executable for Linux and Mac
@@ -121,10 +123,6 @@ To enable just TLS support, or just Tor support, use `--features`:
 - [ ] ctrl-c in download fails to return to listening state 
       because of termion bug:
       https://gitlab.redox-os.org/redox-os/termion/issues/168
-
-## v1.0
-
-- [ ] GIF screencast
 
 ## future features
 
