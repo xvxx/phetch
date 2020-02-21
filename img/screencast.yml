@@ -1,0 +1,379 @@
+# terminalizer config
+# The configurations that used for the recording, feel free to edit them
+config:
+
+  # The configurations that used for the recording, feel free to edit them
+
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: /usr/local/bin/phetch
+
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: /Users/xvxx/Code
+
+  # Export additional ENV variables
+  env:
+    recording: true
+
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: auto
+
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: auto
+
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+
+  # Quality
+  # 1 - 100
+  quality: 75
+
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 2000
+
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: null
+    title: null
+    style:
+      border: 0px black solid
+      backgroundColor: black
+      # boxShadow: none
+      # margin: 0px
+
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a URL, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: "Monaco, Lucida Console, Ubuntu Mono, Monospace"
+
+  # The size of the font
+  fontSize: 10
+
+  # The height of lines
+  lineHeight: 1
+
+  # The spacing between letters
+  letterSpacing: 0
+
+  # Theme
+  theme:
+    background: "transparent"
+    foreground: "#afafaf"
+    cursor: "#c7c7c7"
+    black: "#232628"
+    red: "#fc4384"
+    green: "#b3e33b"
+    yellow: "#ffa727"
+    blue: "#198fff"
+    magenta: "#ae89fe"
+    cyan: "#708387"
+    white: "#d5d5d0"
+    brightBlack: "#626566"
+    brightRed: "red"
+    brightGreen: "#19cb00"
+    brightYellow: "yellow"
+    brightBlue: "#198fff"
+    brightMagenta: "#fb28ff"
+    brightCyan: "#14ffff"
+    brightWhite: "white"
+
+# Records, feel free to edit them
+records:
+  - delay: 1400
+    content: "\e[?1049h\e[1;1H\e[?25l                                 \e[93m\e[0m\e[K\r\n                                 \e[93m      /         /         /\e[0m\e[K\r\n                                 \e[93m ___ (___  ___ (___  ___ (___\e[0m\e[K\r\n                                 \e[93m|   )|   )|___)|    |    |   )  \e[0m\e[K\r\n                                 \e[93m|__/ |  / |__  |__  |__  |  /\e[0m\e[K\r\n                                 \e[93m|\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n                                 \e[93m            ~ * ~\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n                           \e[1m*\e[0m \e[95m 1. \e[0m\e[97msearch gopher\e[0m\e[K\r\n                             \e[95m 2. \e[0m\e[94mgopherpedia\e[0m\e[K\r\n                             \e[95m 3. \e[0m\e[94mgopher lawn\e[0m\e[K\r\n                             \e[95m 4. \e[0m\e[94mwelcome to gopherspace\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n                                 \e[93m            ~ * ~\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n                             \e[95m 5. \e[0m\e[94mshow help          (ctrl-h)\e[0m\e[K\r\n                             \e[95m 6. \e[0m\e[94mshow history       (ctrl-a)\e[0m\e[K\r\n                             \e[95m 7. \e[0m\e[94mshow bookmarks     (ctrl-b)\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 1408
+    content: "\e[10;28H \e[?25l\e[11;28H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 166
+    content: "\e[11;28H \e[?25l\e[12;28H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 568
+    content: "\e[12;28H \e[?25l\e[13;28H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 241
+    content: "\e[13;28H \e[?25l\e[12;28H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 119
+    content: "\e[12;28H \e[?25l\e[11;28H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 241
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 270
+    content: "\e[1;1H\e[?25l              \e[93m                    _                              _ _       _\e[0m\e[K\r\n              \e[93m                   | |                            | (_)     | |\e[0m\e[K\r\n              \e[93m   __ _  ___  _ __ | |__   ___ _ __ _ __   ___  __| |_  __ _| |\e[0m\e[K\r\n              \e[93m  / _` |/ _ \\| '_ \\| '_ \\ / _ \\ '__| '_ \\ / _ \\/ _` | |/ _` | |\e[0m\e[K\r\n              \e[93m | (_| | (_) | |_) | | | |  __/ |  | |_) |  __/ (_| | | (_| |_|\e[0m\e[K\r\n              \e[93m  \\__, |\\___/| .__/|_| |_|\\___|_|  | .__/ \\___|\\__,_|_|\\__,_(_)\e[0m\e[K\r\n              \e[93m   __/ |     | |                   | |\e[0m\e[K\r\n              \e[93m  |___/      |_|                   |_|\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mWelcome to **Gopherpedia**, the gopher interface to Wikipedia. This is\e[0m\e[K\r\n              \e[93ma direct interface to wikipedia, you can search and read articles via\e[0m\e[K\r\n              \e[93mthe search form below. Enjoy!\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n        \e[1m*\e[0m \e[95m 1. \e[0m\e[94mmore about gopherpedia\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mSearch gopherpedia:\e[0m\e[K\r\n          \e[95m 2. \e[0m\e[97mSearch Gopherpedia\e[0m\e[K\r\n              \e[93m                           Featured Content\e[0m\e[K\r\n              \e[93m======================================================================\e[0m\e[K\r\n          \e[95m 3. \e[0m\e[96mFebruary 21, 2020: Wail al-Shehri\e[0m\e[K\r\n          \e[95m 4. \e[0m\e[96mFebruary 20, 2020: Ashcan comic\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 690
+    content: "\e[14;9H \e[?25l\e[18;9H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 133
+    content: "\e[1;1H\e[?25l              \e[93m                   | |                            | (_)     | |\e[0m\e[K\r\n              \e[93m   __ _  ___  _ __ | |__   ___ _ __ _ __   ___  __| |_  __ _| |\e[0m\e[K\r\n              \e[93m  / _` |/ _ \\| '_ \\| '_ \\ / _ \\ '__| '_ \\ / _ \\/ _` | |/ _` | |\e[0m\e[K\r\n              \e[93m | (_| | (_) | |_) | | | |  __/ |  | |_) |  __/ (_| | | (_| |_|\e[0m\e[K\r\n              \e[93m  \\__, |\\___/| .__/|_| |_|\\___|_|  | .__/ \\___|\\__,_|_|\\__,_(_)\e[0m\e[K\r\n              \e[93m   __/ |     | |                   | |\e[0m\e[K\r\n              \e[93m  |___/      |_|                   |_|\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mWelcome to **Gopherpedia**, the gopher interface to Wikipedia. This is\e[0m\e[K\r\n              \e[93ma direct interface to wikipedia, you can search and read articles via\e[0m\e[K\r\n              \e[93mthe search form below. Enjoy!\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n          \e[95m 1. \e[0m\e[94mmore about gopherpedia\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mSearch gopherpedia:\e[0m\e[K\r\n          \e[95m 2. \e[0m\e[97mSearch Gopherpedia\e[0m\e[K\r\n              \e[93m                           Featured Content\e[0m\e[K\r\n              \e[93m======================================================================\e[0m\e[K\r\n        \e[1m*\e[0m \e[95m 3. \e[0m\e[96mFebruary 21, 2020: Wail al-Shehri\e[0m\e[K\r\n          \e[95m 4. \e[0m\e[96mFebruary 20, 2020: Ashcan comic\e[0m\e[K\r\n          \e[95m 5. \e[0m\e[96mFebruary 19, 2020: Kosmoceratops\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 165
+    content: "\e[1;1H\e[?25l              \e[93m   __ _  ___  _ __ | |__   ___ _ __ _ __   ___  __| |_  __ _| |\e[0m\e[K\r\n              \e[93m  / _` |/ _ \\| '_ \\| '_ \\ / _ \\ '__| '_ \\ / _ \\/ _` | |/ _` | |\e[0m\e[K\r\n              \e[93m | (_| | (_) | |_) | | | |  __/ |  | |_) |  __/ (_| | | (_| |_|\e[0m\e[K\r\n              \e[93m  \\__, |\\___/| .__/|_| |_|\\___|_|  | .__/ \\___|\\__,_|_|\\__,_(_)\e[0m\e[K\r\n              \e[93m   __/ |     | |                   | |\e[0m\e[K\r\n              \e[93m  |___/      |_|                   |_|\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mWelcome to **Gopherpedia**, the gopher interface to Wikipedia. This is\e[0m\e[K\r\n              \e[93ma direct interface to wikipedia, you can search and read articles via\e[0m\e[K\r\n              \e[93mthe search form below. Enjoy!\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n          \e[95m 1. \e[0m\e[94mmore about gopherpedia\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mSearch gopherpedia:\e[0m\e[K\r\n          \e[95m 2. \e[0m\e[97mSearch Gopherpedia\e[0m\e[K\r\n              \e[93m                           Featured Content\e[0m\e[K\r\n              \e[93m======================================================================\e[0m\e[K\r\n          \e[95m 3. \e[0m\e[96mFebruary 21, 2020: Wail al-Shehri\e[0m\e[K\r\n        \e[1m*\e[0m \e[95m 4. \e[0m\e[96mFebruary 20, 2020: Ashcan comic\e[0m\e[K\r\n          \e[95m 5. \e[0m\e[96mFebruary 19, 2020: Kosmoceratops\e[0m\e[K\r\n          \e[95m 6. \e[0m\e[96mFebruary 18, 2020: Neferefre\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 150
+    content: "\e[1;1H\e[?25l              \e[93m  / _` |/ _ \\| '_ \\| '_ \\ / _ \\ '__| '_ \\ / _ \\/ _` | |/ _` | |\e[0m\e[K\r\n              \e[93m | (_| | (_) | |_) | | | |  __/ |  | |_) |  __/ (_| | | (_| |_|\e[0m\e[K\r\n              \e[93m  \\__, |\\___/| .__/|_| |_|\\___|_|  | .__/ \\___|\\__,_|_|\\__,_(_)\e[0m\e[K\r\n              \e[93m   __/ |     | |                   | |\e[0m\e[K\r\n              \e[93m  |___/      |_|                   |_|\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mWelcome to **Gopherpedia**, the gopher interface to Wikipedia. This is\e[0m\e[K\r\n              \e[93ma direct interface to wikipedia, you can search and read articles via\e[0m\e[K\r\n              \e[93mthe search form below. Enjoy!\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n          \e[95m 1. \e[0m\e[94mmore about gopherpedia\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mSearch gopherpedia:\e[0m\e[K\r\n          \e[95m 2. \e[0m\e[97mSearch Gopherpedia\e[0m\e[K\r\n              \e[93m                           Featured Content\e[0m\e[K\r\n              \e[93m======================================================================\e[0m\e[K\r\n          \e[95m 3. \e[0m\e[96mFebruary 21, 2020: Wail al-Shehri\e[0m\e[K\r\n          \e[95m 4. \e[0m\e[96mFebruary 20, 2020: Ashcan comic\e[0m\e[K\r\n        \e[1m*\e[0m \e[95m 5. \e[0m\e[96mFebruary 19, 2020: Kosmoceratops\e[0m\e[K\r\n          \e[95m 6. \e[0m\e[96mFebruary 18, 2020: Neferefre\e[0m\e[K\r\n          \e[95m 7. \e[0m\e[96mFebruary 17, 2020: Tropical Storm Carlotta (2018)\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 179
+    content: "\e[1;1H\e[?25l              \e[93m | (_| | (_) | |_) | | | |  __/ |  | |_) |  __/ (_| | | (_| |_|\e[0m\e[K\r\n              \e[93m  \\__, |\\___/| .__/|_| |_|\\___|_|  | .__/ \\___|\\__,_|_|\\__,_(_)\e[0m\e[K\r\n              \e[93m   __/ |     | |                   | |\e[0m\e[K\r\n              \e[93m  |___/      |_|                   |_|\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mWelcome to **Gopherpedia**, the gopher interface to Wikipedia. This is\e[0m\e[K\r\n              \e[93ma direct interface to wikipedia, you can search and read articles via\e[0m\e[K\r\n              \e[93mthe search form below. Enjoy!\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n          \e[95m 1. \e[0m\e[94mmore about gopherpedia\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mSearch gopherpedia:\e[0m\e[K\r\n          \e[95m 2. \e[0m\e[97mSearch Gopherpedia\e[0m\e[K\r\n              \e[93m                           Featured Content\e[0m\e[K\r\n              \e[93m======================================================================\e[0m\e[K\r\n          \e[95m 3. \e[0m\e[96mFebruary 21, 2020: Wail al-Shehri\e[0m\e[K\r\n          \e[95m 4. \e[0m\e[96mFebruary 20, 2020: Ashcan comic\e[0m\e[K\r\n          \e[95m 5. \e[0m\e[96mFebruary 19, 2020: Kosmoceratops\e[0m\e[K\r\n        \e[1m*\e[0m \e[95m 6. \e[0m\e[96mFebruary 18, 2020: Neferefre\e[0m\e[K\r\n          \e[95m 7. \e[0m\e[96mFebruary 17, 2020: Tropical Storm Carlotta (2018)\e[0m\e[K\r\n          \e[95m 8. \e[0m\e[96mFebruary 16, 2020: Spider-Man (2018 video game)\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 151
+    content: "\e[1;1H\e[?25l              \e[93m  \\__, |\\___/| .__/|_| |_|\\___|_|  | .__/ \\___|\\__,_|_|\\__,_(_)\e[0m\e[K\r\n              \e[93m   __/ |     | |                   | |\e[0m\e[K\r\n              \e[93m  |___/      |_|                   |_|\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mWelcome to **Gopherpedia**, the gopher interface to Wikipedia. This is\e[0m\e[K\r\n              \e[93ma direct interface to wikipedia, you can search and read articles via\e[0m\e[K\r\n              \e[93mthe search form below. Enjoy!\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n          \e[95m 1. \e[0m\e[94mmore about gopherpedia\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mSearch gopherpedia:\e[0m\e[K\r\n          \e[95m 2. \e[0m\e[97mSearch Gopherpedia\e[0m\e[K\r\n              \e[93m                           Featured Content\e[0m\e[K\r\n              \e[93m======================================================================\e[0m\e[K\r\n          \e[95m 3. \e[0m\e[96mFebruary 21, 2020: Wail al-Shehri\e[0m\e[K\r\n          \e[95m 4. \e[0m\e[96mFebruary 20, 2020: Ashcan comic\e[0m\e[K\r\n          \e[95m 5. \e[0m\e[96mFebruary 19, 2020: Kosmoceratops\e[0m\e[K\r\n          \e[95m 6. \e[0m\e[96mFebruary 18, 2020: Neferefre\e[0m\e[K\r\n        \e[1m*\e[0m \e[95m 7. \e[0m\e[96mFebruary 17, 2020: Tropical Storm Carlotta (2018)\e[0m\e[K\r\n          \e[95m 8. \e[0m\e[96mFebruary 16, 2020: Spider-Man (2018 video game)\e[0m\e[K\r\n          \e[95m 9. \e[0m\e[96mFebruary 15, 2020: Roger B. Chaffee\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 736
+    content: "\e[20;9H \e[?25l\e[19;9H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 149
+    content: "\e[19;9H \e[?25l\e[18;9H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 134
+    content: "\e[18;9H \e[?25l\e[17;9H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 136
+    content: "\e[17;9H \e[?25l\e[16;9H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 331
+    content: "\e[16;9H \e[?25l\e[13;9H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 433
+    content: "\e[0m\e[23;1H\e[2KSearch Gopherpedia> \e[?25h"
+  - delay: 480
+    content: "\e[23;1H\e[2KSearch Gopherpedia> g"
+  - delay: 60
+    content: "\e[23;1H\e[2KSearch Gopherpedia> go"
+  - delay: 45
+    content: "\e[23;1H\e[2KSearch Gopherpedia> gop"
+  - delay: 75
+    content: "\e[23;1H\e[2KSearch Gopherpedia> goph"
+  - delay: 135
+    content: "\e[23;1H\e[2KSearch Gopherpedia> gophe"
+  - delay: 30
+    content: "\e[23;1H\e[2KSearch Gopherpedia> gopher"
+  - delay: 105
+    content: "\e[2K\e[?25l\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 345
+    content: "\e[1;1H\e[?25l                                   \e[93m\e[0m\e[K\r\n                                   \e[93m** RESULTS FOR gopher **\e[0m\e[K\r\n                                   \e[93m\e[0m\e[K\r\n                             \e[1m*\e[0m \e[95m 1. \e[0m\e[96mGopher\e[0m\e[K\r\n                               \e[95m 2. \e[0m\e[96mGopher (protocol)\e[0m\e[K\r\n                               \e[95m 3. \e[0m\e[96mGopher Broke (2004 film)\e[0m\e[K\r\n                               \e[95m 4. \e[0m\e[96mGopher wood\e[0m\e[K\r\n                               \e[95m 5. \e[0m\e[96mGopher tortoise\e[0m\e[K\r\n                               \e[95m 6. \e[0m\e[96mGordon the Gopher\e[0m\e[K\r\n                               \e[95m 7. \e[0m\e[96mGopher (disambiguation)\e[0m\e[K\r\n                               \e[95m 8. \e[0m\e[96mGopher+\e[0m\e[K\r\n                               \e[95m 9. \e[0m\e[96mSS Gopher State (T-ACS-4)\e[0m\e[K\r\n                               \e[95m10. \e[0m\e[96mPacific gopher snake\e[0m\e[K\r\n                                   \e[93m\e[0m\e[K\r\n                                   \e[93m** Powered by Gopher 2000 **\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 1259
+    content: "\e[4;30H \e[?25l\e[5;30H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 181
+    content: "\e[5;30H \e[?25l\e[6;30H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 164
+    content: "\e[6;30H \e[?25l\e[7;30H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 495
+    content: "\e[7;30H \e[?25l\e[8;30H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 165
+    content: "\e[8;30H \e[?25l\e[9;30H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 420
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 94
+    content: "\e[1;1H\e[?25l           \e[K\r\n           \e[K\r\n           ======================================================================\e[K\r\n           =                         Gordon the Gopher                          =\e[K\r\n           ======================================================================\e[K\r\n           \e[K\r\n                                        Introduction                             \e[K\r\n           ======================================================================\e[K\r\n           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 1060
+    content: "\e[1;1H\e[?25l           \e[K\r\n           ======================================================================\e[K\r\n           =                         Gordon the Gopher                          =\e[K\r\n           ======================================================================\e[K\r\n           \e[K\r\n                                        Introduction                             \e[K\r\n           ======================================================================\e[K\r\n           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 210
+    content: "\e[1;1H\e[?25l           ======================================================================\e[K\r\n           =                         Gordon the Gopher                          =\e[K\r\n           ======================================================================\e[K\r\n           \e[K\r\n                                        Introduction                             \e[K\r\n           ======================================================================\e[K\r\n           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n           the Saturday morning show 'Going Live!'. On one occasion, Gordon was\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 181
+    content: "\e[1;1H\e[?25l           =                         Gordon the Gopher                          =\e[K\r\n           ======================================================================\e[K\r\n           \e[K\r\n                                        Introduction                             \e[K\r\n           ======================================================================\e[K\r\n           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n           the Saturday morning show 'Going Live!'. On one occasion, Gordon was\e[K\r\n           famously attacked by a puppy that had been brought on to the show. In\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 134
+    content: "\e[1;1H\e[?25l           ======================================================================\e[K\r\n           \e[K\r\n                                        Introduction                             \e[K\r\n           ======================================================================\e[K\r\n           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n           the Saturday morning show 'Going Live!'. On one occasion, Gordon was\e[K\r\n           famously attacked by a puppy that had been brought on to the show. In\e[K\r\n           1988, Gordon and Schofield were replaced on 'The Broom Cupboard' by\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 150
+    content: "\e[1;1H\e[?25l           \e[K\r\n                                        Introduction                             \e[K\r\n           ======================================================================\e[K\r\n           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n           the Saturday morning show 'Going Live!'. On one occasion, Gordon was\e[K\r\n           famously attacked by a puppy that had been brought on to the show. In\e[K\r\n           1988, Gordon and Schofield were replaced on 'The Broom Cupboard' by\e[K\r\n           Edd the Duck and Andy Crane.\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 166
+    content: "\e[1;1H\e[?25l                                        Introduction                             \e[K\r\n           ======================================================================\e[K\r\n           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n           the Saturday morning show 'Going Live!'. On one occasion, Gordon was\e[K\r\n           famously attacked by a puppy that had been brought on to the show. In\e[K\r\n           1988, Gordon and Schofield were replaced on 'The Broom Cupboard' by\e[K\r\n           Edd the Duck and Andy Crane.\e[K\r\n           \e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 180
+    content: "\e[1;1H\e[?25l           ======================================================================\e[K\r\n           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n           the Saturday morning show 'Going Live!'. On one occasion, Gordon was\e[K\r\n           famously attacked by a puppy that had been brought on to the show. In\e[K\r\n           1988, Gordon and Schofield were replaced on 'The Broom Cupboard' by\e[K\r\n           Edd the Duck and Andy Crane.\e[K\r\n           \e[K\r\n           In 1991, Gordon had a series named after himself which was shown on\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 134
+    content: "\e[1;1H\e[?25l           Gordon the Gopher, also known as Gordon T. Gopher, is an English\e[K\r\n           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n           the Saturday morning show 'Going Live!'. On one occasion, Gordon was\e[K\r\n           famously attacked by a puppy that had been brought on to the show. In\e[K\r\n           1988, Gordon and Schofield were replaced on 'The Broom Cupboard' by\e[K\r\n           Edd the Duck and Andy Crane.\e[K\r\n           \e[K\r\n           In 1991, Gordon had a series named after himself which was shown on\e[K\r\n           CBBC on BBC One and BBC Two and ran from 3 January 1991 to 28 March\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 149
+    content: "\e[1;1H\e[?25l           puppet gopher who first appeared on Children's BBC (CBBC) between 1983\e[K\r\n           and 1987, listed on television shows by Phillip Schofield on the\e[K\r\n           interstitial or in-vision continuity programme 'The Broom Cupboard'.\e[K\r\n           His main puppeteer was Paul Smith, who would later go on to a career\e[K\r\n           as a BBC executive.\e[K\r\n           \e[K\r\n           \e[K\r\n            Early work \e[K\r\n           ============\e[K\r\n           Gordon's first appearances were on CBBC between 1985 and 1987,\e[K\r\n           presenting television shows with Phillip Schofield on the interstitial\e[K\r\n           programme 'The Broom Cupboard'.\e[K\r\n           \e[K\r\n           In 1987, Gordon and Schofield, with Sarah Greene, went on to present\e[K\r\n           the Saturday morning show 'Going Live!'. On one occasion, Gordon was\e[K\r\n           famously attacked by a puppy that had been brought on to the show. In\e[K\r\n           1988, Gordon and Schofield were replaced on 'The Broom Cupboard' by\e[K\r\n           Edd the Duck and Andy Crane.\e[K\r\n           \e[K\r\n           In 1991, Gordon had a series named after himself which was shown on\e[K\r\n           CBBC on BBC One and BBC Two and ran from 3 January 1991 to 28 March\e[K\r\n           1991 only lasting a series of 13 episodes, appearing with his friend\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 210
+    content: "\e[1;1H\e[?25l           famously attacked by a puppy that had been brought on to the show. In\e[K\r\n           1988, Gordon and Schofield were replaced on 'The Broom Cupboard' by\e[K\r\n           Edd the Duck and Andy Crane.\e[K\r\n           \e[K\r\n           In 1991, Gordon had a series named after himself which was shown on\e[K\r\n           CBBC on BBC One and BBC Two and ran from 3 January 1991 to 28 March\e[K\r\n           1991 only lasting a series of 13 episodes, appearing with his friend\e[K\r\n           and colleague Phillip Schofield. The series was shown twice on 'BBC\e[K\r\n           One', the first time being in  January to March 1991 and again from 26\e[K\r\n           October to 21 December 1992 continuing where BBC Two left off at\e[K\r\n           lunchtime repeats in Summer 1991, 'BBC Two' have also repeated the\e[K\r\n           series at lunchtimes four times from 18 June to 23 July 1991, 20\e[K\r\n           September to 6 December 1993, 9 March to 1 June 1994, The Christmas\e[K\r\n           season of 1994 from 22 and 23 December 1994 and 17 January 1995 to 28\e[K\r\n           March 1995. It has not been repeated since 28 March 1995 on the BBC.\e[K\r\n           \e[K\r\n           In 1990, he appeared on a children's programme called 'Scrooge - A\e[K\r\n           Christmas Sarah'.\e[K\r\n           \e[K\r\n           \e[K\r\n            Later work \e[K\r\n           ============\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 272
+    content: "\e[1;1H\e[?25l           \e[K\r\n           In 1990, he appeared on a children's programme called 'Scrooge - A\e[K\r\n           Christmas Sarah'.\e[K\r\n           \e[K\r\n           \e[K\r\n            Later work \e[K\r\n           ============\e[K\r\n           During his 2005 'Room 101' appearance, Schofield made an attempt to\e[K\r\n           place Gordon in Room 101 (i.e., consign him to the past), but in an\e[K\r\n           audience vote Gordon was spared.\e[K\r\n           \e[K\r\n           On 26 February 2006, Gordon briefly appeared at the end of Channel 4's\e[K\r\n           'The 100 Greatest Funny Moments'.\e[K\r\n           \e[K\r\n           In December 2006, he returned to the screen in the 'Going Live!'\e[K\r\n           segment of the BBC special 'It Started With... Swap Shop'.\e[K\r\n           \e[K\r\n           Gordon also made a brief appearance with Schofield during a\e[K\r\n           1980s-themed edition of 'Dancing on Ice' in February 2009. He also\e[K\r\n           made a brief appearance on 5 February 2012 edition.\e[K\r\n           \e[K\r\n           Gordon appeared on 'This Morning' on 13 September 2010 to celebrate\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 373
+    content: "\e[1;1H\e[?25l           segment of the BBC special 'It Started With... Swap Shop'.\e[K\r\n           \e[K\r\n           Gordon also made a brief appearance with Schofield during a\e[K\r\n           1980s-themed edition of 'Dancing on Ice' in February 2009. He also\e[K\r\n           made a brief appearance on 5 February 2012 edition.\e[K\r\n           \e[K\r\n           Gordon appeared on 'This Morning' on 13 September 2010 to celebrate\e[K\r\n           Phillip Schofield's 25th anniversary of first presenting CBBC.\e[K\r\n           Schofield said \"I miss him\".\e[K\r\n           \e[K\r\n           In September 2013 Gordon appeared on an episode of 'Celebrity Juice'.\e[K\r\n           \e[K\r\n           In August 2015, Gordon appeared in an online short where he returned\e[K\r\n           to the BBC and got a job as a cleaner. In this short, he was voiced by\e[K\r\n           Warwick Davis.\e[K\r\n           \e[K\r\n           \e[K\r\n                                         Puppeteers                              \e[K\r\n           ======================================================================\e[K\r\n           Gordon was operated by several people in 'The Broom Cupboard', but the\e[K\r\n           person who did it longest was BBC TV executive John Thompson who also\e[K\r\n           operated Gordon for the whole run of 'Going Live!'\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 465
+    content: "\e[1;1H\e[?25l                                   \e[93m\e[0m\e[K\r\n                                   \e[93m** RESULTS FOR gopher **\e[0m\e[K\r\n                                   \e[93m\e[0m\e[K\r\n                               \e[95m 1. \e[0m\e[96mGopher\e[0m\e[K\r\n                               \e[95m 2. \e[0m\e[96mGopher (protocol)\e[0m\e[K\r\n                               \e[95m 3. \e[0m\e[96mGopher Broke (2004 film)\e[0m\e[K\r\n                               \e[95m 4. \e[0m\e[96mGopher wood\e[0m\e[K\r\n                               \e[95m 5. \e[0m\e[96mGopher tortoise\e[0m\e[K\r\n                             \e[1m*\e[0m \e[95m 6. \e[0m\e[96mGordon the Gopher\e[0m\e[K\r\n                               \e[95m 7. \e[0m\e[96mGopher (disambiguation)\e[0m\e[K\r\n                               \e[95m 8. \e[0m\e[96mGopher+\e[0m\e[K\r\n                               \e[95m 9. \e[0m\e[96mSS Gopher State (T-ACS-4)\e[0m\e[K\r\n                               \e[95m10. \e[0m\e[96mPacific gopher snake\e[0m\e[K\r\n                                   \e[93m\e[0m\e[K\r\n                                   \e[93m** Powered by Gopher 2000 **\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 212
+    content: "\e[1;1H\e[?25l              \e[93m  \\__, |\\___/| .__/|_| |_|\\___|_|  | .__/ \\___|\\__,_|_|\\__,_(_)\e[0m\e[K\r\n              \e[93m   __/ |     | |                   | |\e[0m\e[K\r\n              \e[93m  |___/      |_|                   |_|\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mWelcome to **Gopherpedia**, the gopher interface to Wikipedia. This is\e[0m\e[K\r\n              \e[93ma direct interface to wikipedia, you can search and read articles via\e[0m\e[K\r\n              \e[93mthe search form below. Enjoy!\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n          \e[95m 1. \e[0m\e[94mmore about gopherpedia\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93m\e[0m\e[K\r\n              \e[93mSearch gopherpedia:\e[0m\e[K\r\n        \e[1m*\e[0m \e[95m 2. \e[0m\e[97mSearch Gopherpedia\e[0m\e[K\r\n              \e[93m                           Featured Content\e[0m\e[K\r\n              \e[93m======================================================================\e[0m\e[K\r\n          \e[95m 3. \e[0m\e[96mFebruary 21, 2020: Wail al-Shehri\e[0m\e[K\r\n          \e[95m 4. \e[0m\e[96mFebruary 20, 2020: Ashcan comic\e[0m\e[K\r\n          \e[95m 5. \e[0m\e[96mFebruary 19, 2020: Kosmoceratops\e[0m\e[K\r\n          \e[95m 6. \e[0m\e[96mFebruary 18, 2020: Neferefre\e[0m\e[K\r\n          \e[95m 7. \e[0m\e[96mFebruary 17, 2020: Tropical Storm Carlotta (2018)\e[0m\e[K\r\n          \e[95m 8. \e[0m\e[96mFebruary 16, 2020: Spider-Man (2018 video game)\e[0m\e[K\r\n          \e[95m 9. \e[0m\e[96mFebruary 15, 2020: Roger B. Chaffee\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 165
+    content: "\e[1;1H\e[?25l                                 \e[93m\e[0m\e[K\r\n                                 \e[93m      /         /         /\e[0m\e[K\r\n                                 \e[93m ___ (___  ___ (___  ___ (___\e[0m\e[K\r\n                                 \e[93m|   )|   )|___)|    |    |   )  \e[0m\e[K\r\n                                 \e[93m|__/ |  / |__  |__  |__  |  /\e[0m\e[K\r\n                                 \e[93m|\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n                                 \e[93m            ~ * ~\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n                             \e[95m 1. \e[0m\e[97msearch gopher\e[0m\e[K\r\n                           \e[1m*\e[0m \e[95m 2. \e[0m\e[94mgopherpedia\e[0m\e[K\r\n                             \e[95m 3. \e[0m\e[94mgopher lawn\e[0m\e[K\r\n                             \e[95m 4. \e[0m\e[94mwelcome to gopherspace\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n                                 \e[93m            ~ * ~\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n                             \e[95m 5. \e[0m\e[94mshow help          (ctrl-h)\e[0m\e[K\r\n                             \e[95m 6. \e[0m\e[94mshow history       (ctrl-a)\e[0m\e[K\r\n                             \e[95m 7. \e[0m\e[94mshow bookmarks     (ctrl-b)\e[0m\e[K\r\n                                 \e[93m\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 149
+    content: "\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 809
+    content: "\e[11;28H \e[?25l\e[12;28H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 315
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 505
+    content: "\e[23;1H\e[?25l.\e[K\e[0m\e[?25h"
+  - delay: 166
+    content: "\e[1;1H\e[?25l           \e[93m\e[0m\e[K\r\n           \e[93m                       T H E   G O P H E R  L A W N\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n           \e[93mThe gopher lawn is a moderated directory of gopherspace links. You can use\e[0m\e[K\r\n           \e[93mthis to easily find sorted content.\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n           \e[93m____________________________C_A_T_E_G_O_R_I_E_S___________________________\e[0m\e[K\r\n           \e[93mIf you want to propose a link or some category, go on IRC and contact __20h__\e[0m\e[K\r\n           \e[93min #bitreich-en or #gopherproject on Freenode.\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n     \e[1m*\e[0m \e[95m 1. \e[0m\e[94marchives of all sorts\e[0m\e[K\r\n       \e[95m 2. \e[0m\e[94mascii art\e[0m\e[K\r\n       \e[95m 3. \e[0m\e[94mbulletin board systems\e[0m\e[K\r\n       \e[95m 4. \e[0m\e[94mdocumentation / manpages\e[0m\e[K\r\n       \e[95m 5. \e[0m\e[94mfun for everyone\e[0m\e[K\r\n       \e[95m 6. \e[0m\e[94mgaming\e[0m\e[K\r\n       \e[95m 7. \e[0m\e[94mgopher-related\e[0m\e[K\r\n       \e[95m 8. \e[0m\e[94mhackerspaces\e[0m\e[K\r\n       \e[95m 9. \e[0m\e[94mhistorical important\e[0m\e[K\r\n       \e[95m10. \e[0m\e[94mhomepages\e[0m\e[K\r\n       \e[95m11. \e[0m\e[94mhosting / shells\e[0m\e[K\r\n       \e[95m12. \e[0m\e[94monion sites / tor\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 334
+    content: "\e[11;6H \e[?25l\e[12;6H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 180
+    content: "\e[12;6H \e[?25l\e[13;6H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 691
+    content: "\e[13;6H \e[?25l\e[12;6H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 406
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 503
+    content: "\e[23;1H\e[?25l.\e[K\e[0m\e[?25h"
+  - delay: 18
+    content: "\e[1;1H\e[?25l            \e[93m\e[0m\e[K\r\n            \e[93m_________________________________A_S_C_I_I________________________________\e[0m\e[K\r\n            \e[93m\e[0m\e[K\r\n      \e[1m*\e[0m \e[95m 1. \e[0m\e[94mMateusz's ASCII arts\e[0m\e[K\r\n            \e[93mVarious ASCII arts from Mateuz's attic\e[0m\e[K\r\n            \e[93m\e[0m\e[K\r\n        \e[95m 2. \e[0m\e[96mASCII Art farts\e[0m\e[K\r\n            \e[93mRandom (and maybe offensive) ASCII art fortunes\e[0m\e[K\r\n            \e[93m\e[0m\e[K\r\n        \e[95m 3. \e[0m\e[94mFiglet generator\e[0m\e[K\r\n            \e[93mA generator of ASCII art from text, with dozens of available fonts.\e[0m\e[K\r\n            \e[93m\e[0m\e[K\r\n        \e[95m 4. \e[0m\e[94m<< back\e[0m\e[K\r\n            \e[93m\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 467
+    content: "\e[4;7H \e[?25l\e[7;7H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 285
+    content: "\e[7;7H \e[?25l\e[10;7H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 285
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 495
+    content: "\e[1;1H\e[?25l          \e[1m*\e[0m \e[95m 1. \e[0m\e[94mFloodgap Gopher Fun and Games\e[0m\e[K\r\n                \e[93m \e[0m\e[K\r\n                \e[93m           ** Welcome to the Floodgap Figlet Gateway! **\e[0m\e[K\r\n                \e[93m     ___              ___           __                         \e[0m\e[K\r\n                \e[93m   /'___\\ __         /\\_ \\         /\\ \\__                      \e[0m\e[K\r\n                \e[93m  /\\ \\__//\\_\\     __ \\//\\ \\      __\\ \\ ,_\\    __   __  __  __  \e[0m\e[K\r\n                \e[93m  \\ \\ ,__\\/\\ \\  /'_ `\\ \\ \\ \\   /'__`\\ \\ \\/  /'_ `\\/\\ \\/\\ \\/\\ \\ \e[0m\e[K\r\n                \e[93m   \\ \\ \\_/\\ \\ \\/\\ \\L\\ \\ \\_\\ \\_/\\  __/\\ \\ \\_/\\ \\L\\ \\ \\ \\_/ \\_/ \\\e[0m\e[K\r\n                \e[93m    \\ \\_\\  \\ \\_\\ \\____ \\/\\____\\ \\____\\\\ \\__\\ \\____ \\ \\___x___/'\e[0m\e[K\r\n                \e[93m     \\/_/   \\/_/\\/___L\\ \\/____/\\/____/ \\/__/\\/___L\\ \\/__//__/  \e[0m\e[K\r\n                \e[93m                  /\\____/                     /\\____/          \e[0m\e[K\r\n                \e[93m                  \\_/__/                      \\_/__/           \e[0m\e[K\r\n                \e[93m+---------------------------------------------------------------+\e[0m\e[K\r\n                \e[93m| The Gateway uses the figlet utility to create ASCII font art. |\e[0m\e[K\r\n                \e[93m|    You may enter up to 80 characters for figlet to convert.   |\e[0m\e[K\r\n                \e[93m+---------------------------------------------------------------+\e[0m\e[K\r\n            \e[95m 2. \e[0m\e[97mEnter characters (then pick font)\e[0m\e[K\r\n            \e[95m 3. \e[0m\e[92mFiglet home page (WWW)\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 751
+    content: "\e[1;11H \e[?25l\e[17;11H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 329
+    content: "\e[0m\e[23;1H\e[2KEnter characters (then pick font)> \e[?25h"
+  - delay: 510
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> h"
+  - delay: 59
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> hi"
+  - delay: 76
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> hi "
+  - delay: 45
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> hi g"
+  - delay: 91
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> hi go"
+  - delay: 29
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> hi gop"
+  - delay: 75
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> hi goph"
+  - delay: 60
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> hi gophe"
+  - delay: 45
+    content: "\e[23;1H\e[2KEnter characters (then pick font)> hi gopher"
+  - delay: 180
+    content: "\e[2K\e[?25l\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 208
+    content: "\e[1;1H\e[?25l                 \e[93m \e[0m\e[K\r\n                 \e[93m** Select a font to render your text in.\e[0m\e[K\r\n                 \e[93m   The figlet fonts loaded on gopher.floodgap.com appear below.\e[0m\e[K\r\n                 \e[93m \e[0m\e[K\r\n           \e[1m*\e[0m \e[95m 1. \e[0m\e[97mRe-enter characters\e[0m\e[K\r\n                 \e[93m \e[0m\e[K\r\n             \e[95m 2. \e[0m\e[96malligator2\e[0m\e[K\r\n             \e[95m 3. \e[0m\e[96mbanner\e[0m\e[K\r\n             \e[95m 4. \e[0m\e[96mbanner3d\e[0m\e[K\r\n             \e[95m 5. \e[0m\e[96mbig\e[0m\e[K\r\n             \e[95m 6. \e[0m\e[96mbinary\e[0m\e[K\r\n             \e[95m 7. \e[0m\e[96mblock\e[0m\e[K\r\n             \e[95m 8. \e[0m\e[96mbubble\e[0m\e[K\r\n             \e[95m 9. \e[0m\e[96mcalgphy2\e[0m\e[K\r\n             \e[95m10. \e[0m\e[96mcolossal\e[0m\e[K\r\n             \e[95m11. \e[0m\e[96mcomputer\e[0m\e[K\r\n             \e[95m12. \e[0m\e[96mcosmic\e[0m\e[K\r\n             \e[95m13. \e[0m\e[96mdigital\e[0m\e[K\r\n             \e[95m14. \e[0m\e[96mdoh\e[0m\e[K\r\n             \e[95m15. \e[0m\e[96mdotmatrix\e[0m\e[K\r\n             \e[95m16. \e[0m\e[96mgraffiti\e[0m\e[K\r\n             \e[95m17. \e[0m\e[96misometric3\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 647
+    content: "\e[5;12H \e[?25l\e[7;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 167
+    content: "\e[7;12H \e[?25l\e[8;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 501
+    content: "\e[8;12H \e[?25l\e[9;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 82
+    content: "\e[9;12H \e[?25l\e[10;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 83
+    content: "\e[10;12H \e[?25l\e[11;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 84
+    content: "\e[11;12H \e[?25l\e[12;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 83
+    content: "\e[12;12H \e[?25l\e[13;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 84
+    content: "\e[13;12H \e[?25l\e[14;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 83
+    content: "\e[14;12H \e[?25l\e[15;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 84
+    content: "\e[15;12H \e[?25l\e[16;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 84
+    content: "\e[16;12H \e[?25l\e[17;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 82
+    content: "\e[17;12H \e[?25l\e[18;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 398
+    content: "\e[1;1H\e[?25l                 \e[93m** Select a font to render your text in.\e[0m\e[K\r\n                 \e[93m   The figlet fonts loaded on gopher.floodgap.com appear below.\e[0m\e[K\r\n                 \e[93m \e[0m\e[K\r\n             \e[95m 1. \e[0m\e[97mRe-enter characters\e[0m\e[K\r\n                 \e[93m \e[0m\e[K\r\n             \e[95m 2. \e[0m\e[96malligator2\e[0m\e[K\r\n             \e[95m 3. \e[0m\e[96mbanner\e[0m\e[K\r\n             \e[95m 4. \e[0m\e[96mbanner3d\e[0m\e[K\r\n             \e[95m 5. \e[0m\e[96mbig\e[0m\e[K\r\n             \e[95m 6. \e[0m\e[96mbinary\e[0m\e[K\r\n             \e[95m 7. \e[0m\e[96mblock\e[0m\e[K\r\n             \e[95m 8. \e[0m\e[96mbubble\e[0m\e[K\r\n             \e[95m 9. \e[0m\e[96mcalgphy2\e[0m\e[K\r\n             \e[95m10. \e[0m\e[96mcolossal\e[0m\e[K\r\n             \e[95m11. \e[0m\e[96mcomputer\e[0m\e[K\r\n             \e[95m12. \e[0m\e[96mcosmic\e[0m\e[K\r\n             \e[95m13. \e[0m\e[96mdigital\e[0m\e[K\r\n           \e[1m*\e[0m \e[95m14. \e[0m\e[96mdoh\e[0m\e[K\r\n             \e[95m15. \e[0m\e[96mdotmatrix\e[0m\e[K\r\n             \e[95m16. \e[0m\e[96mgraffiti\e[0m\e[K\r\n             \e[95m17. \e[0m\e[96misometric3\e[0m\e[K\r\n             \e[95m18. \e[0m\e[96mivrit\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 211
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 355
+    content: "\e[1;1H\e[?25l               Here is the result of your figlet job (formatted for 66 characters so\e[K\r\n               that it will also work fine in gopher menus).\e[K\r\n               \e[K\r\n                                           \e[K\r\n                                           \e[K\r\n               hhhhhhh               iiii  \e[K\r\n               h:::::h              i::::i \e[K\r\n               h:::::h               iiii  \e[K\r\n               h:::::h                     \e[K\r\n                h::::h hhhhh       iiiiiii \e[K\r\n                h::::hh:::::hhh    i:::::i \e[K\r\n                h::::::::::::::hh   i::::i \e[K\r\n                h:::::::hhh::::::h  i::::i \e[K\r\n                h::::::h   h::::::h i::::i \e[K\r\n                h:::::h     h:::::h i::::i \e[K\r\n                h:::::h     h:::::h i::::i \e[K\r\n                h:::::h     h:::::h i::::i \e[K\r\n                h:::::h     h:::::hi::::::i\e[K\r\n                h:::::h     h:::::hi::::::i\e[K\r\n                h:::::h     h:::::hi::::::i\e[K\r\n                hhhhhhh     hhhhhhhiiiiiiii\e[K\r\n                                           \e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 771
+    content: "\e[1;1H\e[?25l                 \e[93m** Select a font to render your text in.\e[0m\e[K\r\n                 \e[93m   The figlet fonts loaded on gopher.floodgap.com appear below.\e[0m\e[K\r\n                 \e[93m \e[0m\e[K\r\n             \e[95m 1. \e[0m\e[97mRe-enter characters\e[0m\e[K\r\n                 \e[93m \e[0m\e[K\r\n             \e[95m 2. \e[0m\e[96malligator2\e[0m\e[K\r\n             \e[95m 3. \e[0m\e[96mbanner\e[0m\e[K\r\n             \e[95m 4. \e[0m\e[96mbanner3d\e[0m\e[K\r\n             \e[95m 5. \e[0m\e[96mbig\e[0m\e[K\r\n             \e[95m 6. \e[0m\e[96mbinary\e[0m\e[K\r\n             \e[95m 7. \e[0m\e[96mblock\e[0m\e[K\r\n             \e[95m 8. \e[0m\e[96mbubble\e[0m\e[K\r\n             \e[95m 9. \e[0m\e[96mcalgphy2\e[0m\e[K\r\n             \e[95m10. \e[0m\e[96mcolossal\e[0m\e[K\r\n             \e[95m11. \e[0m\e[96mcomputer\e[0m\e[K\r\n             \e[95m12. \e[0m\e[96mcosmic\e[0m\e[K\r\n             \e[95m13. \e[0m\e[96mdigital\e[0m\e[K\r\n           \e[1m*\e[0m \e[95m14. \e[0m\e[96mdoh\e[0m\e[K\r\n             \e[95m15. \e[0m\e[96mdotmatrix\e[0m\e[K\r\n             \e[95m16. \e[0m\e[96mgraffiti\e[0m\e[K\r\n             \e[95m17. \e[0m\e[96misometric3\e[0m\e[K\r\n             \e[95m18. \e[0m\e[96mivrit\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 283
+    content: "\e[18;12H \e[?25l\e[17;12H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 270
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 278
+    content: "\e[1;1H\e[?25l               Here is the result of your figlet job (formatted for 66 characters so\e[K\r\n               that it will also work fine in gopher menus).\e[K\r\n               \e[K\r\n               +-+-+ +-+-+-+-+-+-+\e[K\r\n               |h|i| |g|o|p|h|e|r|\e[K\r\n               +-+-+ +-+-+-+-+-+-+\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 1118
+    content: "\e[1;1H\e[?25l                 \e[93m** Select a font to render your text in.\e[0m\e[K\r\n                 \e[93m   The figlet fonts loaded on gopher.floodgap.com appear below.\e[0m\e[K\r\n                 \e[93m \e[0m\e[K\r\n             \e[95m 1. \e[0m\e[97mRe-enter characters\e[0m\e[K\r\n                 \e[93m \e[0m\e[K\r\n             \e[95m 2. \e[0m\e[96malligator2\e[0m\e[K\r\n             \e[95m 3. \e[0m\e[96mbanner\e[0m\e[K\r\n             \e[95m 4. \e[0m\e[96mbanner3d\e[0m\e[K\r\n             \e[95m 5. \e[0m\e[96mbig\e[0m\e[K\r\n             \e[95m 6. \e[0m\e[96mbinary\e[0m\e[K\r\n             \e[95m 7. \e[0m\e[96mblock\e[0m\e[K\r\n             \e[95m 8. \e[0m\e[96mbubble\e[0m\e[K\r\n             \e[95m 9. \e[0m\e[96mcalgphy2\e[0m\e[K\r\n             \e[95m10. \e[0m\e[96mcolossal\e[0m\e[K\r\n             \e[95m11. \e[0m\e[96mcomputer\e[0m\e[K\r\n             \e[95m12. \e[0m\e[96mcosmic\e[0m\e[K\r\n           \e[1m*\e[0m \e[95m13. \e[0m\e[96mdigital\e[0m\e[K\r\n             \e[95m14. \e[0m\e[96mdoh\e[0m\e[K\r\n             \e[95m15. \e[0m\e[96mdotmatrix\e[0m\e[K\r\n             \e[95m16. \e[0m\e[96mgraffiti\e[0m\e[K\r\n             \e[95m17. \e[0m\e[96misometric3\e[0m\e[K\r\n             \e[95m18. \e[0m\e[96mivrit\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 615
+    content: "\e[?25l\e[23;1H\e[2KSaved bookmark: gopher://gopher.floodgap.com/7/fun/figletgw?hi gopher\e[0m"
+  - delay: 1574
+    content: "\e[0m\e[23;1H\e[2KGo to URL: \e[?25h"
+  - delay: 585
+    content: "\e[23;1H\e[2KGo to URL: s"
+  - delay: 44
+    content: "\e[23;1H\e[2KGo to URL: sd"
+  - delay: 181
+    content: "\e[23;1H\e[2KGo to URL: sdf"
+  - delay: 121
+    content: "\e[23;1H\e[2KGo to URL: sdf."
+  - delay: 194
+    content: "\e[23;1H\e[2KGo to URL: sdf.o"
+  - delay: 59
+    content: "\e[23;1H\e[2KGo to URL: sdf.or"
+  - delay: 135
+    content: "\e[23;1H\e[2KGo to URL: sdf.org"
+  - delay: 75
+    content: "\e[2K\e[?25l\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 505
+    content: "\e[23;1H\e[?25l.\e[K\e[0m\e[?25h"
+  - delay: 501
+    content: "\e[23;1H\e[?25l..\e[K\e[0m\e[?25h"
+  - delay: 394
+    content: "\e[1;1H\e[?25l                 \e[93mWelcome to the SDF Public Access UNIX System .. est. 1987\e[0m\e[K\r\n                 \e[93m\e[0m\e[K\r\n                 \e[93mOfficial Site of the Internet Gopher Club Underground Syndicate\e[0m\e[K\r\n                 \e[93m\e[0m\e[K\r\n                 \e[93mWe offer FREE and inexpensive memberships for people interested\e[0m\e[K\r\n                 \e[93min the UNIX system and internetworking.  Personal GOPHERSPACE\e[0m\e[K\r\n                 \e[93mis available to all users as well as hundreds of UNIX utilities,\e[0m\e[K\r\n                 \e[93mgames and networking utilities.  We are a federally recognized\e[0m\e[K\r\n                 \e[93mnon-profit 501(c)7 organization and we are supported entirely\e[0m\e[K\r\n                 \e[93mby donations and membership dues.  ssh://sdf.org\e[0m\e[K\r\n                 \e[93m\e[0m\e[K\r\n           \e[1m*\e[0m \e[95m 1. \e[0m\e[94mSDF PHLOGOSPHERE (297 phlogs)\e[0m\e[K\r\n             \e[95m 2. \e[0m\e[94mSDF GOPHERSPACE (1175 ACTIVE users)\e[0m\e[K\r\n             \e[95m 3. \e[0m\e[94mSDF GOPHERSPACE (780 AGED users)\e[0m\e[K\r\n             \e[95m 4. \e[0m\e[94mSDF GOPHERSPACE (1291 ANCIENT users)\e[0m\e[K\r\n             \e[95m 5. \e[0m\e[94mSDF Frequently Asked Questions (FAQ)\e[0m\e[K\r\n             \e[95m 6. \e[0m\e[94mSDF Accredited University Courses\e[0m\e[K\r\n             \e[95m 7. \e[0m\e[94mNetBSD Production Distribution Mirror\e[0m\e[K\r\n             \e[95m 8. \e[0m\e[94mNetBSD Daily Builds Mirror\e[0m\e[K\r\n             \e[95m 9. \e[0m\e[94mSoftware and Documentation for various computers\e[0m\e[K\r\n             \e[95m10. \e[0m\e[97mGopherSpace SEARCH Engine\e[0m\e[K\r\n             \e[95m11. \e[0m\e[94mFloodgap's GOPHERSPACE\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 1015
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 501
+    content: "\e[23;1H\e[?25l.\e[K\e[0m\e[?25h"
+  - delay: 250
+    content: "\e[1;1H\e[?25l           \e[93m                                         \e[0m\e[K\r\n           \e[93m             _                 _     _   \e[0m\e[K\r\n           \e[93m ___ ___ ___| |_ ___ ___   ___| |_ _| |_ \e[0m\e[K\r\n           \e[93m| . | . | . |   | -_|  _|_|  _| | | | . |\e[0m\e[K\r\n           \e[93m|_  |___|  _|_|_|___|_| |_|___|_|___|___|\e[0m\e[K\r\n           \e[93m|___|   |_|                              \e[0m\e[K\r\n           \e[93m\"you dig it\" ..\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n           \e[93mgopher.club is a collection of featured SDF user 'phlogs' in\e[0m\e[K\r\n           \e[93mchronological order.  When you're ready to have your phlog\e[0m\e[K\r\n           \e[93mlisted here type 'phlog' at the shell.\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n     \e[1m*\e[0m \e[95m 1. \e[0m\e[94m[21-Feb-2020]        inpefess  Boris Shminke's Gopherhole\e[0m\e[K\r\n       \e[95m 2. \e[0m\e[94m[21-Feb-2020]          norris  norris' gopherspace\e[0m\e[K\r\n       \e[95m 3. \e[0m\e[94m[21-Feb-2020]         liebach  Super Dimensional Gopherhole\e[0m\e[K\r\n       \e[95m 4. \e[0m\e[94m[20-Feb-2020]       developer  Developer's gopher site\e[0m\e[K\r\n       \e[95m 5. \e[0m\e[94m[20-Feb-2020]       mutoshack  MutoShack's Spruce Forest\e[0m\e[K\r\n       \e[95m 6. \e[0m\e[94m[19-Feb-2020]             elw  Things with a a side of stuff\e[0m\e[K\r\n       \e[95m 7. \e[0m\e[94m[19-Feb-2020]            undo  Ctrl Z back to Sanity\e[0m\e[K\r\n       \e[95m 8. \e[0m\e[94m[19-Feb-2020]           xiled  THE XILED RUMINATION CONSTRUCT\e[0m\e[K\r\n       \e[95m 9. \e[0m\e[94m[17-Feb-2020]         lypanov  lypanov\e[0m\e[K\r\n       \e[95m10. \e[0m\e[94m[16-Feb-2020]         jreeves  2020\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 883
+    content: "\e[?25l\e[23;1H\e[2KFind: \e[?25h\e[0m"
+  - delay: 405
+    content: "\e[13;6H \e[?25l\e[13;6H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2KFind: b\e[?25h\e[0m"
+  - delay: 45
+    content: "\e[1;1H\e[?25l       \e[95m10. \e[0m\e[94m[16-Feb-2020]         jreeves  2020\e[0m\e[K\r\n       \e[95m11. \e[0m\e[94m[16-Feb-2020]          emilio  Gopher in Spanish\e[0m\e[K\r\n       \e[95m12. \e[0m\e[94m[16-Feb-2020]           rjcks  Richard's Gopherhole\e[0m\e[K\r\n       \e[95m13. \e[0m\e[94m[15-Feb-2020]           every  every@sdf.org\e[0m\e[K\r\n       \e[95m14. \e[0m\e[94m[14-Feb-2020]        tomasino  Tomasino's Gopher Hole\e[0m\e[K\r\n     \e[1m*\e[0m \e[95m15. \e[0m\e[94m[14-Feb-2020]          melton  Bits & Bytes\e[0m\e[K\r\n       \e[95m16. \e[0m\e[94m[14-Feb-2020]           rusty  Rhizomatix Blog\e[0m\e[K\r\n       \e[95m17. \e[0m\e[94m[13-Feb-2020]          mmeta4  under deconstruction...\e[0m\e[K\r\n       \e[95m18. \e[0m\e[94m[13-Feb-2020]            jynx  RPoD Phlog\e[0m\e[K\r\n       \e[95m19. \e[0m\e[94m[11-Feb-2020]        sparcipx  The Backroad to Civilization\e[0m\e[K\r\n       \e[95m20. \e[0m\e[94m[10-Feb-2020]         slugmax  The Lonely Cabin\e[0m\e[K\r\n       \e[95m21. \e[0m\e[94m[10-Feb-2020]          cdmnky  cd-space\e[0m\e[K\r\n       \e[95m22. \e[0m\e[94m[08-Feb-2020]       snowcrash  Snowcrash's Gopherhole\e[0m\e[K\r\n       \e[95m23. \e[0m\e[94m[05-Feb-2020]       sysdharma  sysdharma's gopherhole\e[0m\e[K\r\n       \e[95m24. \e[0m\e[94m[05-Feb-2020]       ratfactor  RGB: Ratfactor's Gopher Burrow\e[0m\e[K\r\n       \e[95m25. \e[0m\e[94m[03-Feb-2020]         clemens  Michael Clemens\e[0m\e[K\r\n       \e[95m26. \e[0m\e[94m[02-Feb-2020]              ku \e[0m\e[K\r\n       \e[95m27. \e[0m\e[94m[01-Feb-2020]         rbigelo  Plain Text is Beautiful\e[0m\e[K\r\n       \e[95m28. \e[0m\e[94m[01-Feb-2020]          ayaron  Amit Yaron's Gopherhole\e[0m\e[K\r\n       \e[95m29. \e[0m\e[94m[30-Jan-2020]           yargo  # Yargo // HB9KNS #\e[0m\e[K\r\n       \e[95m30. \e[0m\e[94m[28-Jan-2020]        dbucklin  Text Obsessed\e[0m\e[K\r\n       \e[95m31. \e[0m\e[94m[24-Jan-2020]        djringjr  Morse Code Archives and Info\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2KFind: bi\e[?25h\e[0m"
+  - delay: 121
+    content: "\e[6;6H \e[?25l\e[6;6H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2KFind: bit\e[?25h\e[0m"
+  - delay: 959
+    content: "\e[1;1H\e[?25l       \e[95m117. \e[0m\e[94m[18-Jan-2019]             scm  TGenXer\e[0m\e[K\r\n       \e[95m118. \e[0m\e[94m[15-Jan-2019]         siobhan  Terminus\e[0m\e[K\r\n       \e[95m119. \e[0m\e[94m[07-Jan-2019]        nixfloyd  nixfloyd's gopherhole\e[0m\e[K\r\n       \e[95m120. \e[0m\e[94m[05-Jan-2019]        snowdusk  snowdusk underground\e[0m\e[K\r\n       \e[95m121. \e[0m\e[94m[04-Jan-2019]           gabek  Gabe's Phlog\e[0m\e[K\r\n     \e[1m*\e[0m \e[95m122. \e[0m\e[94m[04-Jan-2019]      sshifflett  An Arbitrary Gopher Hole\e[0m\e[K\r\n       \e[95m123. \e[0m\e[94m[01-Jan-2019]        haakonda  Capybara Project\e[0m\e[K\r\n       \e[95m124. \e[0m\e[94m[25-Dec-2018]          rlopez  Ray's SDF Gopher Hole\e[0m\e[K\r\n       \e[95m125. \e[0m\e[94m[21-Dec-2018]           kirch  Kirch's Gopherspace\e[0m\e[K\r\n       \e[95m126. \e[0m\e[94m[19-Dec-2018]        lvturner  The advenutres of a fly farmer\e[0m\e[K\r\n       \e[95m127. \e[0m\e[94m[11-Dec-2018]      solderpunk  Rosin to the core\e[0m\e[K\r\n       \e[95m128. \e[0m\e[94m[26-Nov-2018]       jacobrd92  Jacob Robert Davis in GopherSpace\e[0m\e[K\r\n       \e[95m129. \e[0m\e[94m[03-Nov-2018]           zcray zcray\e[0m\e[K\r\n       \e[95m130. \e[0m\e[94m[01-Nov-2018]     bradfonseca  The Emporium of Lost Thoughts (Gopher Version)\e[0m\e[K\r\n       \e[95m131. \e[0m\e[94m[31-Oct-2018]letthewatersroar  Let The Waters Roar\e[0m\e[K\r\n       \e[95m132. \e[0m\e[94m[26-Oct-2018]       skynebula  Skypher\e[0m\e[K\r\n       \e[95m133. \e[0m\e[94m[24-Oct-2018]          strixy  strixy's gopherhole\e[0m\e[K\r\n       \e[95m134. \e[0m\e[94m[09-Oct-2018]           jirka  Jirka's Gopher Site\e[0m\e[K\r\n       \e[95m135. \e[0m\e[94m[07-Oct-2018]            stee  A Hidden Place, A Gopher's Hole\e[0m\e[K\r\n       \e[95m136. \e[0m\e[94m[30-Sep-2018]        bacterio  bacterio's gopher hole\e[0m\e[K\r\n       \e[95m137. \e[0m\e[94m[27-Sep-2018]        ricardus  RicarduSpace\e[0m\e[K\r\n       \e[95m138. \e[0m\e[94m[27-Sep-2018]             wvs  Civilized, Ordered, Advanced.\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2KFind: bit\e[?25h\e[0m"
+  - delay: 360
+    content: "\e[1;1H\e[?25l       \e[95m149. \e[0m\e[94m[14-Aug-2018]            amox  amox' space in web 0.2\e[0m\e[K\r\n       \e[95m150. \e[0m\e[94m[14-Aug-2018]             bej  Jelle Besseling's Gopher Site\e[0m\e[K\r\n       \e[95m151. \e[0m\e[94m[09-Aug-2018]          embien \e[0m\e[K\r\n       \e[95m152. \e[0m\e[94m[09-Aug-2018]          kf6gpe  KF6GPE's Gopher Space\e[0m\e[K\r\n       \e[95m153. \e[0m\e[94m[08-Aug-2018]       darksnake  The Snake Pit\e[0m\e[K\r\n     \e[1m*\e[0m \e[95m154. \e[0m\e[94m[06-Aug-2018]          kc4zvw  much deeper than Alice's rabbit hole\e[0m\e[K\r\n       \e[95m155. \e[0m\e[94m[30-Jul-2018]           nydel  nydel's gopher\e[0m\e[K\r\n       \e[95m156. \e[0m\e[94m[23-Jul-2018]         skellat skellat\e[0m\e[K\r\n       \e[95m157. \e[0m\e[94m[12-Jul-2018]             hnb  Hiro's Notebook\e[0m\e[K\r\n       \e[95m158. \e[0m\e[94m[12-Jul-2018]             mre \e[0m\e[K\r\n       \e[95m159. \e[0m\e[94m[10-Jul-2018]          kjwill  kjwill's gopherspace\e[0m\e[K\r\n       \e[95m160. \e[0m\e[94m[09-Jul-2018]             npg  Crap\e[0m\e[K\r\n       \e[95m161. \e[0m\e[94m[07-Jul-2018]            mukt  Mukt Landing\e[0m\e[K\r\n       \e[95m162. \e[0m\e[94m[03-Jul-2018] giantessgnostic  Infinity's Core\e[0m\e[K\r\n       \e[95m163. \e[0m\e[94m[02-Jul-2018]           keiya  Keiya's\e[0m\e[K\r\n       \e[95m164. \e[0m\e[94m[27-Jun-2018]         jmcgann  School Thoughts\e[0m\e[K\r\n       \e[95m165. \e[0m\e[94m[27-Jun-2018]         reppard  Reppard's Gopher Hole\e[0m\e[K\r\n       \e[95m166. \e[0m\e[94m[10-Jun-2018]           kkwoo  kkwoo's Scrapbook\e[0m\e[K\r\n       \e[95m167. \e[0m\e[94m[30-May-2018]             f6k  f6k's log\e[0m\e[K\r\n       \e[95m168. \e[0m\e[94m[29-May-2018]         txminth  nothing mind-blowing\e[0m\e[K\r\n       \e[95m169. \e[0m\e[94m[06-May-2018]        pet84rik  A plaintext world\e[0m\e[K\r\n       \e[95m170. \e[0m\e[94m[05-May-2018]            mujo \e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2KFind: bit\e[?25h\e[0m"
+  - delay: 628
+    content: "\e[1;1H\e[?25l       \e[95m117. \e[0m\e[94m[18-Jan-2019]             scm  TGenXer\e[0m\e[K\r\n       \e[95m118. \e[0m\e[94m[15-Jan-2019]         siobhan  Terminus\e[0m\e[K\r\n       \e[95m119. \e[0m\e[94m[07-Jan-2019]        nixfloyd  nixfloyd's gopherhole\e[0m\e[K\r\n       \e[95m120. \e[0m\e[94m[05-Jan-2019]        snowdusk  snowdusk underground\e[0m\e[K\r\n       \e[95m121. \e[0m\e[94m[04-Jan-2019]           gabek  Gabe's Phlog\e[0m\e[K\r\n     \e[1m*\e[0m \e[95m122. \e[0m\e[94m[04-Jan-2019]      sshifflett  An Arbitrary Gopher Hole\e[0m\e[K\r\n       \e[95m123. \e[0m\e[94m[01-Jan-2019]        haakonda  Capybara Project\e[0m\e[K\r\n       \e[95m124. \e[0m\e[94m[25-Dec-2018]          rlopez  Ray's SDF Gopher Hole\e[0m\e[K\r\n       \e[95m125. \e[0m\e[94m[21-Dec-2018]           kirch  Kirch's Gopherspace\e[0m\e[K\r\n       \e[95m126. \e[0m\e[94m[19-Dec-2018]        lvturner  The advenutres of a fly farmer\e[0m\e[K\r\n       \e[95m127. \e[0m\e[94m[11-Dec-2018]      solderpunk  Rosin to the core\e[0m\e[K\r\n       \e[95m128. \e[0m\e[94m[26-Nov-2018]       jacobrd92  Jacob Robert Davis in GopherSpace\e[0m\e[K\r\n       \e[95m129. \e[0m\e[94m[03-Nov-2018]           zcray zcray\e[0m\e[K\r\n       \e[95m130. \e[0m\e[94m[01-Nov-2018]     bradfonseca  The Emporium of Lost Thoughts (Gopher Version)\e[0m\e[K\r\n       \e[95m131. \e[0m\e[94m[31-Oct-2018]letthewatersroar  Let The Waters Roar\e[0m\e[K\r\n       \e[95m132. \e[0m\e[94m[26-Oct-2018]       skynebula  Skypher\e[0m\e[K\r\n       \e[95m133. \e[0m\e[94m[24-Oct-2018]          strixy  strixy's gopherhole\e[0m\e[K\r\n       \e[95m134. \e[0m\e[94m[09-Oct-2018]           jirka  Jirka's Gopher Site\e[0m\e[K\r\n       \e[95m135. \e[0m\e[94m[07-Oct-2018]            stee  A Hidden Place, A Gopher's Hole\e[0m\e[K\r\n       \e[95m136. \e[0m\e[94m[30-Sep-2018]        bacterio  bacterio's gopher hole\e[0m\e[K\r\n       \e[95m137. \e[0m\e[94m[27-Sep-2018]        ricardus  RicarduSpace\e[0m\e[K\r\n       \e[95m138. \e[0m\e[94m[27-Sep-2018]             wvs  Civilized, Ordered, Advanced.\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2KFind: bit\e[?25h\e[0m"
+  - delay: 300
+    content: "\e[1;1H\e[?25l       \e[95m10. \e[0m\e[94m[16-Feb-2020]         jreeves  2020\e[0m\e[K\r\n       \e[95m11. \e[0m\e[94m[16-Feb-2020]          emilio  Gopher in Spanish\e[0m\e[K\r\n       \e[95m12. \e[0m\e[94m[16-Feb-2020]           rjcks  Richard's Gopherhole\e[0m\e[K\r\n       \e[95m13. \e[0m\e[94m[15-Feb-2020]           every  every@sdf.org\e[0m\e[K\r\n       \e[95m14. \e[0m\e[94m[14-Feb-2020]        tomasino  Tomasino's Gopher Hole\e[0m\e[K\r\n     \e[1m*\e[0m \e[95m15. \e[0m\e[94m[14-Feb-2020]          melton  Bits & Bytes\e[0m\e[K\r\n       \e[95m16. \e[0m\e[94m[14-Feb-2020]           rusty  Rhizomatix Blog\e[0m\e[K\r\n       \e[95m17. \e[0m\e[94m[13-Feb-2020]          mmeta4  under deconstruction...\e[0m\e[K\r\n       \e[95m18. \e[0m\e[94m[13-Feb-2020]            jynx  RPoD Phlog\e[0m\e[K\r\n       \e[95m19. \e[0m\e[94m[11-Feb-2020]        sparcipx  The Backroad to Civilization\e[0m\e[K\r\n       \e[95m20. \e[0m\e[94m[10-Feb-2020]         slugmax  The Lonely Cabin\e[0m\e[K\r\n       \e[95m21. \e[0m\e[94m[10-Feb-2020]          cdmnky  cd-space\e[0m\e[K\r\n       \e[95m22. \e[0m\e[94m[08-Feb-2020]       snowcrash  Snowcrash's Gopherhole\e[0m\e[K\r\n       \e[95m23. \e[0m\e[94m[05-Feb-2020]       sysdharma  sysdharma's gopherhole\e[0m\e[K\r\n       \e[95m24. \e[0m\e[94m[05-Feb-2020]       ratfactor  RGB: Ratfactor's Gopher Burrow\e[0m\e[K\r\n       \e[95m25. \e[0m\e[94m[03-Feb-2020]         clemens  Michael Clemens\e[0m\e[K\r\n       \e[95m26. \e[0m\e[94m[02-Feb-2020]              ku \e[0m\e[K\r\n       \e[95m27. \e[0m\e[94m[01-Feb-2020]         rbigelo  Plain Text is Beautiful\e[0m\e[K\r\n       \e[95m28. \e[0m\e[94m[01-Feb-2020]          ayaron  Amit Yaron's Gopherhole\e[0m\e[K\r\n       \e[95m29. \e[0m\e[94m[30-Jan-2020]           yargo  # Yargo // HB9KNS #\e[0m\e[K\r\n       \e[95m30. \e[0m\e[94m[28-Jan-2020]        dbucklin  Text Obsessed\e[0m\e[K\r\n       \e[95m31. \e[0m\e[94m[24-Jan-2020]        djringjr  Morse Code Archives and Info\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2KFind: bit\e[?25h\e[0m"
+  - delay: 525
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 322
+    content: "\e[1;1H\e[?25l           \e[93mWelcome to:\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n           \e[93m ____  _ _          ___     ____        _            \e[0m\e[K\r\n           \e[93m| __ )(_) |_ ___   ( _ )   | __ ) _   _| |_ ___  ___ \e[0m\e[K\r\n           \e[93m|  _ \\| | __/ __|  / _ \\/\\ |  _ \\| | | | __/ _ \\/ __|\e[0m\e[K\r\n           \e[93m| |_) | | |_\\__ \\ | (_>  < | |_) | |_| | ||  __/\\__ \\\e[0m\e[K\r\n           \e[93m|____/|_|\\__|___/  \\___/\\/ |____/ \\__, |\\__\\___||___/\e[0m\e[K\r\n           \e[93m                                  |___/              \e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n     \e[1m*\e[0m \e[95m 1. \e[0m\e[94m Phlog (ramblings, reflections, rememberances, rants)\e[0m\e[K\r\n       \e[95m 2. \e[0m\e[94m Phlog Archives\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n           \e[93mTime to waste ----->\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n       \e[95m 3. \e[0m\e[96m Your daily fortune\e[0m\e[K\r\n       \e[95m 4. \e[0m\e[96m Phase of the moon\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n           \e[93mExternal links ----->\e[0m\e[K\r\n           \e[93m\e[0m\e[K\r\n       \e[95m 5. \e[0m\e[97m Search Veronica-2 Gopher search engine\e[0m\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 713
+    content: "\e[12;6H \e[?25l\e[13;6H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 389
+    content: "\e[13;6H \e[?25l\e[17;6H\e[0m*\e[0m\e[?25l\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 512
+    content: "\e[23;1H\e[?25l\e[K\e[0m\e[?25h"
+  - delay: 505
+    content: "\e[23;1H\e[?25l.\e[K\e[0m\e[?25h"
+  - delay: 504
+    content: "\e[23;1H\e[?25l..\e[K\e[0m\e[?25h"
+  - delay: 325
+    content: "\e[1;1H\e[?25l                  The end of the world will occur at 3:00 p.m., this Friday, with\e[K\r\n                  symposium to follow.\e[K\r\n\e[J\e[?25l\e[23;1H\e[2K\e[0m"
+  - delay: 2129
+    content: "\e[?1049l\e[0m\e[?25h"
