@@ -69,6 +69,10 @@ On macOS you can install with [Homebrew](https://brew.sh/):
 
     brew install xvxx/code/phetch
 
+On Arch Linux, install phetch with your favorite [AUR helper][aur]:
+
+    yay phetch
+
 Binaries for Linux, Raspberry Pi, and Mac are available at
 https://github.com/xvxx/phetch/releases:
 
@@ -122,7 +126,7 @@ To enable just TLS support, or just Tor support, use `--features`:
 
 - [ ] ctrl-c while telneting kills phetch
 - [ ] ctrl-c in load() not yet implemented
-- [ ] ctrl-c in download fails to return to listening state 
+- [ ] ctrl-c in download fails to return to listening state
       because of termion bug:
       https://gitlab.redox-os.org/redox-os/termion/issues/168
 
@@ -140,3 +144,4 @@ To enable just TLS support, or just Tor support, use `--features`:
 [1]: https://github.com/xvxx/phetch/releases/download/v0.9.0/phetch-v0.9.0-linux-armv7.tgz
 [2]: https://github.com/xvxx/phetch/releases/download/v0.9.0/phetch-v0.9.0-macos.zip
 [phd]: https://github.com/xvxx/phd
+[aur]: https://wiki.archlinux.org/index.php/AUR_helpers
