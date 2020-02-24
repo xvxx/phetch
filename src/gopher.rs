@@ -91,20 +91,19 @@ pub fn fetch(
     let mut stream = request(host, port, selector, tls, tor)?;
     let mut body = Vec::new();
     stream.read_to_end(&mut body)?;
-    let out = clean_response(&String::from_utf8_lossy(&body));
+    let mut out = String::from_utf8_lossy(&body).to_string();
+    clean_response(&mut out);
     Ok((stream.is_tls(), out))
 }
 
 /// Removes unprintable characters from Gopher response.
 /// https://en.wikipedia.org/wiki/Control_character#In_Unicode
-fn clean_response(res: &str) -> String {
-    res.chars()
-        .map(|c| match c {
-            '\u{007F}' => '?',
-            _ if c >= '\u{0080}' && c <= '\u{009F}' => '?',
-            c => c,
-        })
-        .collect()
+fn clean_response(res: &mut String) {
+    res.retain(|c| match c {
+        '\u{007F}' => false,
+        _ if c >= '\u{0080}' && c <= '\u{009F}' => false,
+        _ => true,
+    })
 }
 
 /// Downloads a binary to disk. Allows canceling with Ctrl-c.
@@ -451,10 +450,11 @@ mod tests {
         test.push('\u{007F}');
         test.push_str(" there!");
         test.push('\u{0082}');
-        let res = clean_response(&test);
-        assert_eq!(res, "Hi? there!?".to_string());
+        clean_response(&mut test);
+        assert_eq!(test, "Hi there!".to_string());
 
-        let res = clean_response("* \x1b[92mTitle\x1b[0m");
-        assert_eq!(res, "* \x1b[92mTitle\x1b[0m".to_string());
+        let mut test = "* \x1b[92mTitle\x1b[0m".to_string();
+        clean_response(&mut test);
+        assert_eq!(test, "* \x1b[92mTitle\x1b[0m".to_string());
     }
 }
