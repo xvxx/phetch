@@ -444,4 +444,17 @@ mod tests {
             Type::Telnet
         );
     }
+
+    #[test]
+    fn test_clean_response() {
+        let mut test = "Hi".to_string();
+        test.push('\u{007F}');
+        test.push_str(" there!");
+        test.push('\u{0082}');
+        let res = clean_response(&test);
+        assert_eq!(res, "Hi? there!?".to_string());
+
+        let res = clean_response("* \x1b[92mTitle\x1b[0m");
+        assert_eq!(res, "* \x1b[92mTitle\x1b[0m".to_string());
+    }
 }
