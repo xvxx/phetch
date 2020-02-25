@@ -129,6 +129,7 @@ To enable just TLS support, or just Tor support, use `--features`:
 - [ ] ctrl-c in download fails to return to listening state
       because of termion bug:
       https://gitlab.redox-os.org/redox-os/termion/issues/168
+- [ ] gopher://tilde.black/1/users/genin/
 
 ## future features
 
