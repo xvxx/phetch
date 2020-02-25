@@ -1,3 +1,69 @@
+## v1.0.0
+
+`phetch` is now **v1.0.0**! Major thanks to @kseistrup for design,
+testing, and documentation, @iglosiggio for supporting [GILD][gild],
+@lartu for inspiration, and @antirez for re-introducing me to Gopher
+one year ago with his blog post, [Gopher: a present for
+Redis](http://antirez.com/news/127).
+
+-----
+
+![phetch](https://raw.githubusercontent.com/xvxx/phetch/f1fe58d2483af1c64fa61aa46e5858b599f8e67b/img/start.png)
+
+-----
+
+`phetch` is a terminal Gopher client designed to help you quickly
+navigate the gophersphere. With a snappy, text-based UI, Gopher types
+distinguished by color, and built-in support for secure Gopher and Tor
+routing, `phetch` is perfect for catching up on the latest from
+sdf.org or kicking back and enjoying some Zaibatsu.
+
+Download a binary release below for Linux, Raspberry Pi, or macOS, or
+see the [Installation][install] section of the README for instructions
+on how to install for Arch Linux with AUR (`yay phetch`), macOS with
+homebrew (`brew install xvxx/code/phetch`), or how to build from
+source.
+
+-----
+
+I have fond memories of using telnet to connect to the local library
+when I was a kid, browsing their selection of books in an
+amber-colored, text-based interface. This was the mid-90s, so I was
+using some version of Windows, literally dialing into the library with
+Hyperterminal.
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/41523880/75273938-b0cb4f80-57b6-11ea-90e8-f4d759bdbbc0.png" alt="library tui">
+</p>
+
+It was futuristic. And, I thought, lost in the past. But Gopher, a
+relic of that text-based era, lives on thanks to the work of some
+amazing folks, and today there are more Gopher servers than ever.
+
+The protocol is simple, constrained, and bursting with opportunity.
+And while [MTV may not have an active Gopher server anymore][mtv], you
+can easily run your own, or find a generous host like SDF or a tilde.
+
+-----
+
+![gopher menu in phetch](https://raw.githubusercontent.com/xvxx/phetch/3ec5e3f4335a5fdf709b5643da8aa4d5abe70815/img/dos.png)
+
+-----
+
+`phetch` is my attempt to bring a little bit of that retro-nostalgia
+back into my terminal. Sure, I can acccess Gopher just fine using
+`lynx` or through a web proxy like [Floodgap][floodgap], but where's
+the fun in that?
+
+To get started just install and run `phetch`.
+
+It's not perfect, but I've had fun using it, and I hope you do too!
+
+[install]: README.md#installation
+[gild]: https://github.com/xvxx/gild
+[floodgap]: https://gopher.floodgap.com/gopher/
+[mtv]: https://tedium.co/2017/06/22/modern-day-gopher-history/
+
 ## v0.9.1
 
 This update improves the release system. The man page is now included
