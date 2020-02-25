@@ -8,7 +8,7 @@ Redis](http://antirez.com/news/127).
 
 -----
 
-![phetch](https://raw.githubusercontent.com/xvxx/phetch/f1fe58d2483af1c64fa61aa46e5858b599f8e67b/img/start.png)
+![phetch screen][phetch screen]
 
 -----
 
@@ -33,7 +33,7 @@ using some version of Windows, literally dialing into the library with
 Hyperterminal.
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/41523880/75273938-b0cb4f80-57b6-11ea-90e8-f4d759bdbbc0.png" alt="library tui">
+<img src="https://git.io/JvusG" alt="library tui">
 </p>
 
 It was futuristic. And, I thought, lost in the past. But Gopher, a
@@ -46,7 +46,7 @@ can easily run your own, or find a generous host like SDF or a tilde.
 
 -----
 
-![gopher menu in phetch](https://raw.githubusercontent.com/xvxx/phetch/3ec5e3f4335a5fdf709b5643da8aa4d5abe70815/img/dos.png)
+![gopher menu in phetch][phetch menu]
 
 -----
 
@@ -59,6 +59,8 @@ To get started just install and run `phetch`.
 
 It's not perfect, but I've had fun using it, and I hope you do too!
 
+[phetch screen]: https://raw.githubusercontent.com/xvxx/phetch/f1fe58d2483af1c64fa61aa46e5858b599f8e67b/img/start.png
+[phetch menu]: https://raw.githubusercontent.com/xvxx/phetch/3ec5e3f4335a5fdf709b5643da8aa4d5abe70815/img/dos.png
 [install]: README.md#installation
 [gild]: https://github.com/xvxx/gild
 [floodgap]: https://gopher.floodgap.com/gopher/
