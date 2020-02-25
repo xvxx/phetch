@@ -6,7 +6,7 @@
 |
 --> <p align="center"> <img src="./img/logo.png"> <br>
 <a href="https://git.io/JveQo">
-<img src="https://img.shields.io/github/v/release/xvxx/phetch?include_prereleases">
+<img src="https://img.shields.io/github/v/release/xvxx/phetch">
 </a>
 <a href="https://crates.io/crates/phetch">
 <img src="https://img.shields.io/crates/v/phetch">
