@@ -1,0 +1,2 @@
+[target.armv7-unknown-linux-gnueabihf]
+image = "rustembedded/cross:armv7-unknown-linux-gnueabihf-0.1.16"

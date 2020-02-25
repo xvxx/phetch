@@ -32,9 +32,6 @@ pre-release-replacements = [
 ]
 dev-version-ext = "dev"
 
-[target.armv7-unknown-linux-gnueabihf]
-image = "rustembedded/cross:armv7-unknown-linux-gnueabihf-0.1.16"
-
 [dev-dependencies]
 criterion = "0.3.1"
 
