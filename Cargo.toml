@@ -19,8 +19,8 @@ tor = ["tor-stream"]
 default = ["tls", "tor"]
 
 [profile.release]
-panic = 'abort' 
-lto = true 
+panic = 'abort'
+lto = true
 codegen-units = 1
 opt-level = 'z'  # Optimize for size.
 
@@ -31,6 +31,9 @@ pre-release-replacements = [
   {file="README.md", search="/v\\d+\\.\\d+\\.\\d+/", replace="/v{{version}}/"},
 ]
 dev-version-ext = "dev"
+
+[target.armv7-unknown-linux-gnueabihf]
+image = "rustembedded/cross:armv7-unknown-linux-gnueabihf-0.1.16"
 
 [dev-dependencies]
 criterion = "0.3.1"
