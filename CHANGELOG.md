@@ -1,3 +1,8 @@
+## v0.9.1
+
+This update improves the release system. The man page is now included
+in release downloads and installed with `homebrew`.
+
 ## v0.9.0
 
 This is the first release candidate for `phetch v1.0.0`. We will
