@@ -76,9 +76,9 @@ On Arch Linux, install phetch with your favorite [AUR helper][aur]:
 Binaries for Linux, Raspberry Pi, and Mac are available at
 https://github.com/xvxx/phetch/releases:
 
-- [phetch-v0.9.0-linux-x86_64.tgz][0]
-- [phetch-v0.9.0-linux-armv7.tgz (Raspberry Pi)][1]
-- [phetch-v0.9.0-macos.zip][2]
+- [phetch-v0.9.1-linux-x86_64.tgz][0]
+- [phetch-v0.9.1-linux-armv7.tgz (Raspberry Pi)][1]
+- [phetch-v0.9.1-macos.zip][2]
 
 Just unzip/untar the `phetch` program into your $PATH and get going!
 
@@ -141,8 +141,8 @@ To enable just TLS support, or just Tor support, use `--features`:
 - [ ] bookmarks: toggle instead of just prepending to the file
 - [ ] bookmarks: save the title of the current page
 
-[0]: https://github.com/xvxx/phetch/releases/download/v0.9.0/phetch-v0.9.0-linux-x86_64.tgz
-[1]: https://github.com/xvxx/phetch/releases/download/v0.9.0/phetch-v0.9.0-linux-armv7.tgz
-[2]: https://github.com/xvxx/phetch/releases/download/v0.9.0/phetch-v0.9.0-macos.zip
+[0]: https://github.com/xvxx/phetch/releases/download/v0.9.1/phetch-v0.9.1-linux-x86_64.tgz
+[1]: https://github.com/xvxx/phetch/releases/download/v0.9.1/phetch-v0.9.1-linux-armv7.tgz
+[2]: https://github.com/xvxx/phetch/releases/download/v0.9.1/phetch-v0.9.1-macos.zip
 [phd]: https://github.com/xvxx/phd
 [aur]: https://wiki.archlinux.org/index.php/AUR_helpers
