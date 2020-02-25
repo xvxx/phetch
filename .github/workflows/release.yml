@@ -38,7 +38,7 @@ jobs:
         with:
           use-cross: true
           command: build
-          args: --release --target armv7-unknown-linux-gnueabihf
+          args: --release --locked --target armv7-unknown-linux-gnueabihf
       - name: Get current version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
@@ -72,7 +72,7 @@ jobs:
           path: target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
       - name: Build release
-        run: cargo build --release
+        run: cargo build --locked --release
       - name: Get current version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
@@ -114,7 +114,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release
+          args: --locked --release
       - name: Get current version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
