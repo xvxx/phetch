@@ -304,11 +304,7 @@ impl Menu {
             }
 
             // truncate long lines, instead of wrapping
-            let text = if line.text_len() > MAX_COLS {
-                &line.text(&self.raw)[..MAX_COLS]
-            } else {
-                &line.text(&self.raw)
-            };
+            let text = line.text(&self.raw).chars().take(MAX_COLS).collect::<String>();
 
             // color the line
             if line.typ.is_download() {
