@@ -115,7 +115,7 @@ pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> 
         .sel
         .split_terminator('/')
         .rev()
-        .nth(0)
+        .next()
         .ok_or_else(|| error!("Bad download filename: {}", u.sel))?;
     let mut path = std::path::PathBuf::from(".");
     path.push(filename);
@@ -186,7 +186,7 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
             let proxy = std::env::var("TOR_PROXY")
                 .unwrap_or_else(|_| "127.0.0.1:9050".into())
                 .to_socket_addrs()?
-                .nth(0)
+                .next()
                 .unwrap();
             let mut stream = match TorStream::connect_with_address(proxy, addr.as_ref()) {
                 Ok(s) => s,
@@ -301,7 +301,7 @@ pub fn parse_url(url: &str) -> Url {
     // ignore type prefix on selector
     if typ != Type::Telnet {
         let mut chars = sel.chars();
-        if let (Some('/'), Some(c)) = (chars.nth(0), chars.nth(0)) {
+        if let (Some('/'), Some(c)) = (chars.next(), chars.next()) {
             if let Some(t) = Type::from(c) {
                 typ = t;
                 sel = &sel[2..];
