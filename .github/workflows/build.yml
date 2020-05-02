@@ -32,6 +32,7 @@ jobs:
         with:
           profile: minimal
           toolchain: stable
+          components: clippy
           override: true
       - name: check
         run: cargo check
