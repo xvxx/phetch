@@ -1,3 +1,10 @@
+## v1.0.1
+
+This is a small bugfix release. Thanks to @TheEnbyperor and @grufwub!
+
+- phetch no longer panics on multibyte characters when trying to
+  truncate Gopher content.
+
 ## v1.0.0
 
 `phetch` is now **v1.0.0**! Major thanks to @kseistrup for design,
