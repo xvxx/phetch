@@ -30,7 +30,10 @@ use std::{
     cell::RefCell,
     io::{stdin, stdout, Result, Stdout, Write},
     process::{self, Stdio},
-    sync::mpsc,
+    sync::{
+        mpsc::{channel, Receiver},
+        Arc, Mutex,
+    },
     thread,
     time::Duration,
 };
@@ -42,6 +45,9 @@ use termion::{
 
 /// Alias for a termion Key event.
 pub type Key = termion::event::Key;
+
+/// Channel to receive Key events on.
+pub type KeyReceiver = Arc<Mutex<Receiver<Key>>>;
 
 /// How many lines to jump by when using page up/down.
 pub const SCROLL_LINES: usize = 15;
@@ -78,6 +84,8 @@ pub struct UI {
     config: Config,
     /// Reference to our wrapped Stdout.
     out: RefCell<RawTerminal<Stdout>>,
+    /// Channel where UI events are sent.
+    keys: KeyReceiver,
 }
 
 impl UI {
@@ -103,6 +111,7 @@ impl UI {
             config,
             status: String::new(),
             out: RefCell::new(out),
+            keys: Self::spawn_keyboard_listener(),
         }
     }
 
@@ -212,8 +221,9 @@ impl UI {
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
         let (tls, tor) = (self.config.tls, self.config.tor);
+        let chan = self.keys.clone();
         self.spinner(&format!("Downloading {}", url), move || {
-            gopher::download_url(&url, tls, tor)
+            gopher::download_url(&url, tls, tor, chan)
         })
         .and_then(|res| res)
         .and_then(|(path, bytes)| {
@@ -292,7 +302,7 @@ impl UI {
     ) -> Result<T> {
         let req = thread::spawn(work);
 
-        let (tx, rx) = mpsc::channel();
+        let (tx, rx) = channel();
         let label = label.to_string();
         let rows = self.rows() as u16;
         thread::spawn(move || loop {
@@ -412,7 +422,7 @@ impl UI {
         .expect(ERR_STDOUT);
         out.flush().expect(ERR_STDOUT);
 
-        if let Some(Ok(key)) = stdin().keys().next() {
+        if let Ok(key) = self.keys.lock().unwrap().recv() {
             match key {
                 Key::Char('\n') => true,
                 Key::Char('y') | Key::Char('Y') => true,
@@ -442,39 +452,36 @@ impl UI {
         .expect(ERR_STDOUT);
         out.flush().expect(ERR_STDOUT);
 
-        for k in stdin().keys() {
-            if let Ok(key) = k {
-                match key {
-                    Key::Char('\n') => {
-                        write!(
-                            out,
-                            "{}{}",
-                            terminal::ClearCurrentLine,
-                            terminal::HideCursor
-                        )
-                        .expect(ERR_STDOUT);
-                        out.flush().expect(ERR_STDOUT);
-                        return Some(input);
-                    }
-                    Key::Char(c) => input.push(c),
-                    Key::Esc | Key::Ctrl('c') => {
-                        write!(
-                            out,
-                            "{}{}",
-                            terminal::ClearCurrentLine,
-                            terminal::HideCursor
-                        )
-                        .expect(ERR_STDOUT);
-                        out.flush().expect(ERR_STDOUT);
-                        return None;
-                    }
-                    Key::Backspace | Key::Delete => {
-                        input.pop();
-                    }
-                    _ => {}
+        let keys = self.keys.lock().unwrap();
+        for key in keys.iter() {
+            match key {
+                Key::Char('\n') => {
+                    write!(
+                        out,
+                        "{}{}",
+                        terminal::ClearCurrentLine,
+                        terminal::HideCursor
+                    )
+                    .expect(ERR_STDOUT);
+                    out.flush().expect(ERR_STDOUT);
+                    return Some(input);
                 }
-            } else {
-                break;
+                Key::Char(c) => input.push(c),
+                Key::Esc | Key::Ctrl('c') => {
+                    write!(
+                        out,
+                        "{}{}",
+                        terminal::ClearCurrentLine,
+                        terminal::HideCursor
+                    )
+                    .expect(ERR_STDOUT);
+                    out.flush().expect(ERR_STDOUT);
+                    return None;
+                }
+                Key::Backspace | Key::Delete => {
+                    input.pop();
+                }
+                _ => {}
             }
 
             write!(
@@ -516,18 +523,27 @@ impl UI {
     /// Asks the current View to process user input and produce an Action.
     fn process_view_input(&mut self) -> Action {
         if let Some(view) = self.views.get_mut(self.focused) {
-            if let Ok(key) = stdin()
-                .keys()
-                .nth(0)
-                .ok_or_else(|| Action::Error("stdin.keys() error".to_string()))
-            {
-                if let Ok(key) = key {
-                    return view.respond(key);
-                }
+            if let Ok(key) = self.keys.lock().unwrap().recv() {
+                return view.respond(key);
             }
         }
 
         Action::Error("No Gopher page loaded.".into())
+    }
+
+    /// Listen for keyboard events and send them along.
+    fn spawn_keyboard_listener() -> KeyReceiver {
+        let (sender, receiver) = channel();
+
+        thread::spawn(move || {
+            for event in stdin().keys() {
+                if let Ok(key) = event {
+                    sender.send(key).unwrap();
+                }
+            }
+        });
+
+        Arc::new(Mutex::new(receiver))
     }
 
     /// Ctrl-Z: Suspend Unix process w/ SIGTSTP.

@@ -4,6 +4,7 @@
 //! URL parsing that recognizes different protocols like telnet and
 //! IPv6 addresses.
 
+use crate::ui::{self, Key};
 use std::{
     fs,
     io::{Read, Result, Write},
@@ -12,7 +13,6 @@ use std::{
     os::unix::fs::OpenOptionsExt,
     time::Duration,
 };
-use termion::input::TermRead;
 
 #[cfg(feature = "tor")]
 use tor_stream::TorStream;
@@ -106,10 +106,16 @@ fn clean_response(res: &mut String) {
     })
 }
 
-/// Downloads a binary to disk. Allows canceling with Ctrl-c.
+/// Downloads a binary to disk. Allows canceling with Ctrl-c, but it's
+/// kind of hacky - needs the UI receiver passed in.
 /// Returns a tuple of:
 ///   (path it was saved to, the size in bytes)
-pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> {
+pub fn download_url(
+    url: &str,
+    tls: bool,
+    tor: bool,
+    chan: ui::KeyReceiver,
+) -> Result<(String, usize)> {
     let u = parse_url(url);
     let filename = u
         .sel
@@ -119,8 +125,6 @@ pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> 
         .ok_or_else(|| error!("Bad download filename: {}", u.sel))?;
     let mut path = std::path::PathBuf::from(".");
     path.push(filename);
-    let stdin = termion::async_stdin();
-    let mut keys = stdin.keys();
 
     let mut stream = request(u.host, u.port, u.sel, tls, tor)?;
     let mut file = fs::OpenOptions::new()
@@ -138,11 +142,13 @@ pub fn download_url(url: &str, tls: bool, tor: bool) -> Result<(String, usize)> 
         }
         bytes += count;
         file.write_all(&buf[..count])?;
-        if let Some(Ok(termion::event::Key::Ctrl('c'))) = keys.next() {
-            if path.exists() {
-                fs::remove_file(path)?;
+        if let Ok(chan) = chan.lock() {
+            if let Ok(Key::Ctrl('c')) = chan.try_recv() {
+                if path.exists() {
+                    fs::remove_file(path)?;
+                }
+                return Err(error!("Download cancelled"));
             }
-            return Err(error!("Download cancelled"));
         }
     }
     Ok((filename.to_string(), bytes))
