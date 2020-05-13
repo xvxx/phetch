@@ -26,12 +26,14 @@ use crate::{
     text::Text,
     utils, BUG_URL,
 };
+use lazy_static;
+use libc;
 use std::{
     cell::RefCell,
     io::{stdin, stdout, Result, Stdout, Write},
     process::{self, Stdio},
     sync::{
-        mpsc::{channel, Receiver},
+        mpsc::{channel, Receiver, Sender},
         Arc, Mutex,
     },
     thread,
@@ -64,6 +66,18 @@ pub const MAX_COLS: usize = 77;
 const ERR_RAW_MODE: &str = "Fatal Error using Raw Mode.";
 const ERR_SCREEN: &str = "Fatal Error using Alternate Screen.";
 const ERR_STDOUT: &str = "Fatal Error writing to STDOUT.";
+
+lazy_static! {
+    /// Channel to send SIGWINCH (resize) events on, once received.
+    static ref RESIZE_SENDER: Arc<Mutex<Option<Sender<Key>>>> = Arc::new(Mutex::new(None));
+}
+
+/// Raw resize handler that is called when SIGWINCH is receiver.
+fn resize_handler(_: i32) {
+    if let Some(sender) = &*RESIZE_SENDER.lock().unwrap() {
+        sender.send(Key::F(5)).unwrap();
+    }
+}
 
 /// UI is mainly concerned with drawing to the screen, managing the
 /// active views, and responding to user input.
@@ -535,6 +549,12 @@ impl UI {
     fn spawn_keyboard_listener() -> KeyReceiver {
         let (sender, receiver) = channel();
 
+        // Give our resize handler a channel to send events on.
+        *RESIZE_SENDER.lock().unwrap() = Some(sender.clone());
+        unsafe {
+            libc::signal(libc::SIGWINCH, resize_handler as usize);
+        }
+
         thread::spawn(move || {
             for event in stdin().keys() {
                 if let Ok(key) = event {
@@ -585,6 +605,8 @@ impl UI {
                     self.process_action(fun(response))?;
                 }
             }
+            // F5 = refresh
+            Action::Keypress(Key::F(5)) => self.dirty = true,
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
                 if self.focused > 0 {
                     self.dirty = true;
