@@ -80,7 +80,7 @@ https://github.com/xvxx/phetch/releases:
 - [phetch-v1.0.1-linux-armv7.tgz (Raspberry Pi)][1]
 - [phetch-v1.0.1-macos.zip][2]
 
-Just unzip/untar the `phetch` program into your $PATH and get going!
+Just unzip/untar the `phetch` program into your `$PATH` and get going!
 
 You can also build and install from source if you have `cargo`,
 `make`, and the other dependencies described in the next section:
@@ -100,9 +100,9 @@ Regular development uses `cargo`:
 
     cargo run -- <gopher-url>
 
-*Pro-tip:* Run a local gopher server (like [phd][phd]) on
+_Pro-tip:_ Run a local gopher server (like [phd][phd]) on
 `127.0.0.1:7070` and start phetch with `-l` or `--local` to quickly
-connect to it.
+connect to it. Useful for debugging!
 
 phetch builds with TLS and Tor support by default. To disable these
 features, or to enable only one of them, use the
@@ -120,12 +120,11 @@ To enable just TLS support, or just Tor support, use `--features`:
 
 ## todo
 
-- [ ] catch SIGWINCH
+- [ ] ctrl-c in load() not yet implemented
 
 ## bugs
 
 - [ ] ctrl-c while telneting kills phetch
-- [ ] ctrl-c in load() not yet implemented
 - [ ] gopher://tilde.black/1/users/genin/
 
 ## future features

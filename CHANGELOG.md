@@ -1,3 +1,11 @@
+## v1.0.2
+
+This release fixes a few small but irritating bugs:
+
+- Downloads can now be cancelled while in-progress with no funny
+  business.
+- Resizing your terminal now resizes phetch automatically.
+
 ## v1.0.1
 
 This is a small bugfix release. Thanks to @TheEnbyperor and @grufwub!
@@ -13,11 +21,11 @@ testing, and documentation, @iglosiggio for supporting [GILD][gild],
 one year ago with his blog post, [Gopher: a present for
 Redis](http://antirez.com/news/127).
 
------
+---
 
 ![phetch screen][phetch screen]
 
------
+---
 
 `phetch` is a terminal Gopher client designed to help you quickly
 navigate the gophersphere. With a snappy, text-based UI, Gopher types
@@ -31,7 +39,7 @@ on how to install for Arch Linux with AUR (`yay phetch`), macOS with
 homebrew (`brew install xvxx/code/phetch`), or how to build from
 source.
 
------
+---
 
 I have fond memories of using telnet to connect to the local library
 when I was a kid, browsing their selection of books in an
@@ -51,11 +59,11 @@ The protocol is simple, constrained, and bursting with opportunity.
 And while [MTV may not have an active Gopher server anymore][mtv], you
 can easily run your own, or find a generous host like SDF or a tilde.
 
------
+---
 
 ![gopher menu in phetch][phetch menu]
 
------
+---
 
 `phetch` is my attempt to bring a little bit of that retro-nostalgia
 back into my terminal. Sure, I can acccess Gopher just fine using
