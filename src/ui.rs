@@ -76,6 +76,7 @@ pub struct UI {
     status: String,
     /// User config. Command line options + phetch.conf
     config: Config,
+    /// Reference to our wrapped Stdout.
     out: RefCell<RawTerminal<Stdout>>,
 }
 
