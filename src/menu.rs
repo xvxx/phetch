@@ -924,7 +924,7 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
     // where to truncate when abidibg by `MAX_COLS`
     if *&raw[start..text_end].contains("\x1b[") {
         let mut is_color = false;
-        let mut iter = raw[start..text_end].char_indices().peekable();
+        let mut iter = raw[start..text_end].char_indices();
         visible_len = 0;
 
         while let Some((i, c)) = iter.next() {
@@ -934,8 +934,7 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
                 }
             } else {
                 if c == '\x1b' {
-                    if let Some((_, '[')) = iter.peek() {
-                        iter.next(); // skip [
+                    if let Some((_, '[')) = iter.next() {
                         is_color = true;
                     }
                 } else {
