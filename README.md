@@ -125,7 +125,6 @@ To enable just TLS support, or just Tor support, use `--features`:
 ## bugs
 
 - [ ] ctrl-c while telneting kills phetch
-- [ ] gopher://tilde.black/1/users/genin/
 
 ## future features
 
