@@ -5,6 +5,7 @@ This release fixes a few small but irritating bugs:
 - Downloads can now be cancelled while in-progress with no funny
   business.
 - Resizing your terminal now resizes phetch automatically.
+- Debug information is now properly displayed when phetch crashes.
 
 ## v1.0.1
 
