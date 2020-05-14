@@ -917,29 +917,36 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
     };
     let typ = Type::from(line.chars().nth(0)?)?;
 
-    // calculate the visible length of this line as well as where to
-    // truncate it when abiding by `MAX_COLS`
-    let mut is_color = false;
-    let mut truncated_len = 0;
-    let mut visible_len = 0;
-    let mut iter = raw[start..text_end].char_indices().peekable();
+    let mut truncated_len = text_end;
+    let mut visible_len = text_end - start;
 
-    while let Some((i, c)) = iter.next() {
-        if is_color {
-            if c == 'm' {
-                is_color = false;
-            }
-        } else {
-            if c == '\x1b' {
-                if let Some((_, '[')) = iter.peek() {
-                    iter.next(); // skip [
-                    is_color = true;
+    // if this line contains colors, calculate the visible length and
+    // where to truncate when abidibg by `MAX_COLS`
+    if *&raw[start..text_end].contains("\x1b[") {
+        let mut is_color = false;
+        let mut iter = raw[start..text_end].char_indices().peekable();
+        visible_len = 0;
+
+        while let Some((i, c)) = iter.next() {
+            if is_color {
+                if c == 'm' {
+                    is_color = false;
                 }
             } else {
-                if visible_len < MAX_COLS {
-                    truncated_len = i;
+                if c == '\x1b' {
+                    if let Some((_, '[')) = iter.peek() {
+                        iter.next(); // skip [
+                        is_color = true;
+                    }
+                } else {
+                    if visible_len < MAX_COLS {
+                        truncated_len = i;
+                        visible_len += 1;
+                    } else {
+                        visible_len = MAX_COLS + 1;
+                        break;
+                    }
                 }
-                visible_len += 1;
             }
         }
     }
