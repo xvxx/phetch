@@ -141,7 +141,15 @@ impl UI {
     /// interactive mode.
     pub fn shutdown(&mut self) {
         let mut out = self.out.borrow_mut();
-        write!(out, "{}", terminal::ToMainScreen).expect(ERR_SCREEN);
+        write!(
+            out,
+            "{}{}{}",
+            color::Reset,
+            terminal::ShowCursor,
+            terminal::ToMainScreen
+        )
+        .expect(ERR_STDOUT);
+        out.flush().expect(ERR_STDOUT);
     }
 
     /// Main loop.
@@ -686,8 +694,6 @@ impl UI {
 
 impl Drop for UI {
     fn drop(&mut self) {
-        let mut out = self.out.borrow_mut();
-        write!(out, "{}{}", color::Reset, terminal::ShowCursor).expect(ERR_STDOUT);
-        out.flush().expect(ERR_STDOUT);
+        self.shutdown();
     }
 }
