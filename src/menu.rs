@@ -88,6 +88,12 @@ impl Line {
         }
     }
 
+    /// Truncated version of the line, according to visible characters
+    /// and MAX_COLS.
+    pub fn text_truncated<'a>(&self, raw: &'a str) -> String {
+        self.text(raw).chars().take(self.truncated_len).collect()
+    }
+
     /// Get the length of this line's text field.
     pub fn text_len(&self) -> usize {
         self.visible_len
@@ -306,11 +312,7 @@ impl Menu {
             }
 
             // truncate long lines, instead of wrapping
-            let text = line
-                .text(&self.raw)
-                .chars()
-                .take(line.truncated_len)
-                .collect::<String>();
+            let text = line.text_truncated(&self.raw);
 
             // color the line
             if line.typ.is_download() {
@@ -917,11 +919,15 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
     };
     let typ = Type::from(line.chars().nth(0)?)?;
 
-    let mut truncated_len = text_end;
-    let mut visible_len = text_end - start;
+    let mut truncated_len = if text_end - start > MAX_COLS {
+        MAX_COLS + 1
+    } else {
+        text_end - start
+    };
+    let mut visible_len = truncated_len;
 
     // if this line contains colors, calculate the visible length and
-    // where to truncate when abidibg by `MAX_COLS`
+    // where to truncate when abiding by `MAX_COLS`
     if *&raw[start..text_end].contains("\x1b[") {
         let mut is_color = false;
         let mut iter = raw[start..text_end].char_indices();
@@ -942,6 +948,7 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
                         truncated_len = i;
                         visible_len += 1;
                     } else {
+                        truncated_len = i;
                         visible_len = MAX_COLS + 1;
                         break;
                     }
@@ -966,7 +973,7 @@ mod tests {
     use super::*;
 
     macro_rules! parse {
-        ($s:literal) => {
+        ($s:expr) => {
             parse("test", $s.to_string());
         };
     }
@@ -1083,5 +1090,32 @@ i	Err	bitreich.org	70
         menu.action_page_up();
         assert_eq!(menu.link, 0);
         assert_eq!(menu.link(menu.link).unwrap().link, 0);
+    }
+
+    #[test]
+    fn test_color_lines() {
+        let long_color_line = "ihi there. \x1b[1mthis\x1b[0m is a preeeeeety long line with \x1b[93mcolors \x1b[92mthat make it \x1b[91mseem longer than it is\x1b[0m	/kiosk	bitreich.org	70";
+
+        let menu = parse!(long_color_line);
+        let line = menu.lines.first().unwrap();
+        assert_eq!(long_color_line.chars().count(), 139);
+        assert_eq!(line.visible_len, MAX_COLS + 1);
+        assert_eq!(line.truncated_len, 100);
+        assert_eq!(
+            line.text_truncated(long_color_line),
+            "hi there. \x1b[1mthis\x1b[0m is a preeeeeety long line with \x1b[93mcolors \x1b[92mthat make it \x1b[91mseem longer".to_string()
+        );
+
+        let long_reg_line = "1This is a regular line that is long but also has links and stuff. You are missing a gopher client? Use our kiosk mode. Thanks for coming. Hope you enjoy the fish, it's freshly grown in our lab!	/kiosk	bitreich.org	70";
+        let menu = parse!(long_reg_line);
+        let line = menu.lines.first().unwrap();
+        assert_eq!(long_color_line.chars().count(), 139);
+        assert_eq!(line.visible_len, MAX_COLS + 1);
+        assert_eq!(line.truncated_len, MAX_COLS + 1);
+        assert_eq!(
+            line.text_truncated(long_reg_line),
+            "This is a regular line that is long but also has links and stuff. You are miss"
+                .to_string()
+        );
     }
 }
