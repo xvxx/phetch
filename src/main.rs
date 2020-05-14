@@ -2,22 +2,19 @@ use phetch::{
     args, gopher, menu,
     ui::{Mode, UI},
 };
-use std::{env, process};
+use std::{env, error::Error, io, process};
 
 fn main() {
-    process::exit(run())
+    if let Err(e) = run() {
+        eprintln!("{}", e);
+        process::exit(1);
+    }
 }
 
 /// Start the app. Returns UNIX exit code.
-fn run() -> i32 {
+fn run() -> Result<(), Box<dyn Error>> {
     let str_args = env::args().skip(1).collect::<Vec<String>>();
-    let mut cfg = match args::parse(&str_args) {
-        Ok(c) => c,
-        Err(e) => {
-            eprintln!("{}", e);
-            return 1;
-        }
-    };
+    let mut cfg = args::parse(&str_args)?;
 
     // check for simple modes
     match cfg.mode {
@@ -33,48 +30,33 @@ fn run() -> i32 {
     let start = cfg.start.clone();
     let mode = cfg.mode;
     let mut ui = UI::new(cfg);
-    if let Err(e) = ui.open(&start, &start) {
-        eprintln!("{}", e);
-        return 1;
-    }
+    ui.open(&start, &start)?;
 
     // print rendered version
     if mode == Mode::Print {
-        return match ui.render() {
-            Ok(screen) => {
-                println!("{}", screen);
-                0
-            }
-            Err(e) => {
-                eprintln!("{}", e);
-                1
-            }
-        };
+        println!("{}", ui.render()?);
+        return Ok(());
     }
 
     // run app
-    if let Err(e) = ui.run() {
-        eprintln!("{}", e);
-        return 1;
-    }
+    ui.run()?;
 
-    // and scene
-    0
+    Ok(())
 }
 
 /// --version
-fn print_version() -> i32 {
+fn print_version() -> Result<(), Box<dyn Error>> {
     println!(
         "phetch v{version} ({built})",
         built = phetch::BUILD_DATE,
         version = phetch::VERSION
     );
-    0
+    Ok(())
 }
 
 /// --help
-fn print_usage() -> i32 {
-    print_version();
+fn print_usage() -> Result<(), Box<dyn Error>> {
+    print_version()?;
     println!(
         "
 Usage:
@@ -87,14 +69,14 @@ Options:
     -s, --tls              Try to open Gopher URLs securely w/ TLS
     -o, --tor              Use local Tor proxy to open all pages
     -S, -O                 Disable TLS or Tor
-                              
+
     -r, --raw              Print raw Gopher response only
     -p, --print            Print rendered Gopher response only
     -l, --local            Connect to 127.0.0.1:7070
 
     -c, --config FILE      Use instead of ~/.config/phetch/phetch.conf
-    -C, --no-config        Don't use any config file            
-    
+    -C, --no-config        Don't use any config file
+
     -h, --help             Show this screen
     -v, --version          Show phetch version
 
@@ -102,48 +84,38 @@ Command line options always override options set in phetch.conf.
 
 Once you've launched phetch, use `ctrl-h` to view the on-line help."
     );
-    0
+    Ok(())
 }
 
 /// Print just the raw Gopher response.
-fn print_raw(url: &str, tls: bool, tor: bool) -> i32 {
-    match gopher::fetch_url(url, tls, tor) {
-        Ok((_, response)) => {
-            println!("{}", response);
-            0
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-            1
-        }
-    }
+fn print_raw(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
+    let (_, out) = gopher::fetch_url(url, tls, tor)?;
+    println!("{}", out);
+    Ok(())
 }
 
 /// Print a colorless, plain version of the response for a non-tty
 /// (like a pipe).
-fn print_plain(url: &str, tls: bool, tor: bool) -> i32 {
+fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
     let mut out = String::new();
     let typ = gopher::type_for_url(url);
-    match gopher::fetch_url(url, tls, tor) {
-        Ok((_, response)) => match typ {
-            gopher::Type::Menu => {
-                let menu = menu::parse(url, response);
-                for line in menu.lines {
-                    out.push_str(line.text(&menu.raw));
-                    out.push('\n');
-                }
+    let (_, response) = gopher::fetch_url(url, tls, tor)?;
+    match typ {
+        gopher::Type::Menu => {
+            let menu = menu::parse(url, response);
+            for line in menu.lines {
+                out.push_str(line.text(&menu.raw));
+                out.push('\n');
             }
-            gopher::Type::Text => println!("{}", response.trim_end_matches(".\r\n")),
-            _ => {
-                eprintln!("can't print gopher type: {:?}", typ);
-                return 1;
-            }
-        },
-        Err(e) => {
-            eprintln!("{}", e);
-            return 1;
         }
-    }
+        gopher::Type::Text => println!("{}", response.trim_end_matches(".\r\n")),
+        _ => {
+            return Err(Box::new(io::Error::new(
+                io::ErrorKind::Other,
+                format!("can't print gopher type: {:?}", typ),
+            )));
+        }
+    };
     print!("{}", out);
-    0
+    Ok(())
 }
