@@ -3,6 +3,7 @@
 This release fixes a few small but irritating bugs:
 
 - ANSI color codes now render properly. Full technicolor support.
+  Try it out: `phetch gopher://tilde.black/1/users/genin/`
 - Resizing your terminal now resizes phetch automatically.
 - Downloads can now be cancelled while in-progress with no funny
   business.
