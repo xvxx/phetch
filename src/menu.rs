@@ -66,6 +66,12 @@ pub struct Line {
     /// Where the text/label of this line ends. Might be the same as
     /// `end`, or might be earlier.
     text_end: usize,
+    /// Length of visible text, ignoring ANSI escape codes (colors).
+    visible_len: usize,
+    /// How many chars() to grab from text() if we want to only show
+    /// `MAX_COLS` visible chars on screen, aka ignore ANSI escape
+    /// codes and colors.
+    truncated_len: usize,
     /// Index of this link in the Menu::links vector, if it's a
     /// `gopher::Type.is_link()`
     pub link: usize,
@@ -84,11 +90,7 @@ impl Line {
 
     /// Get the length of this line's text field.
     pub fn text_len(&self) -> usize {
-        if self.text_end > self.start {
-            self.text_end - self.start
-        } else {
-            0
-        }
+        self.visible_len
     }
 
     /// Get the URL for this line, if it's a link.
@@ -304,7 +306,11 @@ impl Menu {
             }
 
             // truncate long lines, instead of wrapping
-            let text = line.text(&self.raw).chars().take(MAX_COLS).collect::<String>();
+            let text = line
+                .text(&self.raw)
+                .chars()
+                .take(line.truncated_len)
+                .collect::<String>();
 
             // color the line
             if line.typ.is_download() {
@@ -911,10 +917,39 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
     };
     let typ = Type::from(line.chars().nth(0)?)?;
 
+    // calculate the visible length of this line as well as where to
+    // truncate it when abiding by `MAX_COLS`
+    let mut is_color = false;
+    let mut truncated_len = 0;
+    let mut visible_len = 0;
+    let mut iter = raw[start..text_end].char_indices().peekable();
+
+    while let Some((i, c)) = iter.next() {
+        if is_color {
+            if c == 'm' {
+                is_color = false;
+            }
+        } else {
+            if c == '\x1b' {
+                if let Some((_, '[')) = iter.peek() {
+                    iter.next(); // skip [
+                    is_color = true;
+                }
+            } else {
+                if visible_len < MAX_COLS {
+                    truncated_len = i;
+                }
+                visible_len += 1;
+            }
+        }
+    }
+
     Some(Line {
         start,
         end,
         text_end,
+        truncated_len,
+        visible_len,
         typ,
         link: 0,
     })
