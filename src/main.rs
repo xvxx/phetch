@@ -1,8 +1,13 @@
 use phetch::{
-    args, gopher, menu,
+    args, color, gopher, menu, terminal,
     ui::{Mode, UI},
 };
-use std::{env, error::Error, io, process};
+use std::{
+    env,
+    error::Error,
+    io::{self, stdout, Write},
+    panic, process,
+};
 
 fn main() {
     if let Err(e) = run() {
@@ -39,7 +44,9 @@ fn run() -> Result<(), Box<dyn Error>> {
     }
 
     // run app
+    setup_terminal();
     ui.run()?;
+    cleanup_terminal();
 
     Ok(())
 }
@@ -118,4 +125,35 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
     };
     print!("{}", out);
     Ok(())
+}
+
+/// Put the terminal into raw mode, enter the alternate screen, and
+/// setup the panic handler.
+fn setup_terminal() {
+    let old_handler = panic::take_hook();
+    panic::set_hook(Box::new(move |info| {
+        cleanup_terminal();
+        old_handler(info);
+    }));
+
+    terminal::enable_raw_mode().expect("Fatal Error entering Raw Mode.");
+    write!(stdout(), "{}", terminal::ToAlternateScreen)
+        .expect("Fatal Error entering Alternate Mode.");
+}
+
+/// Leave raw mode. Need to always do this, even on panic.
+fn cleanup_terminal() {
+    let mut stdout = stdout();
+    write!(
+        stdout,
+        "{}{}{}{}{}",
+        color::Reset,
+        terminal::ClearAll,
+        terminal::Goto(1, 1),
+        terminal::ShowCursor,
+        terminal::ToMainScreen
+    )
+    .expect("Fatal Error cleaning up terminal.");
+    stdout.flush().expect("Fatal Error cleaning up terminal.");
+    terminal::disable_raw_mode().expect("Fatal Error leaving Raw Mode.");
 }

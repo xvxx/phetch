@@ -29,8 +29,7 @@ use crate::{
 use lazy_static;
 use libc;
 use std::{
-    cell::RefCell,
-    io::{stdin, stdout, Result, Stdout, Write},
+    io::{stdin, stdout, Result, Write},
     process::{self, Stdio},
     sync::{
         mpsc::{channel, Receiver, Sender},
@@ -39,11 +38,7 @@ use std::{
     thread,
     time::Duration,
 };
-use termion::{
-    input::TermRead,
-    raw::{IntoRawMode, RawTerminal},
-    terminal_size,
-};
+use termion::{input::TermRead, terminal_size};
 
 /// Alias for a termion Key event.
 pub type Key = termion::event::Key;
@@ -63,7 +58,6 @@ pub const MAX_COLS: usize = 77;
 /// (network, parsing gopher response, etc) and just show an error
 /// message in the status bar, but if we can't write to STDOUT or
 /// control the screen, we need to just crash.
-const ERR_RAW_MODE: &str = "Fatal Error using Raw Mode.";
 const ERR_SCREEN: &str = "Fatal Error using Alternate Screen.";
 const ERR_STDOUT: &str = "Fatal Error writing to STDOUT.";
 
@@ -96,8 +90,6 @@ pub struct UI {
     status: String,
     /// User config. Command line options + phetch.conf
     config: Config,
-    /// Reference to our wrapped Stdout.
-    out: RefCell<RawTerminal<Stdout>>,
     /// Channel where UI events are sent.
     keys: KeyReceiver,
 }
@@ -110,12 +102,6 @@ impl UI {
             size = (cols as usize, rows as usize);
         };
 
-        // Store raw terminal but don't enable it yet or switch the
-        // screen. We don't want to stare at a fully blank screen
-        // while waiting for a slow page to load.
-        let out = stdout().into_raw_mode().expect(ERR_RAW_MODE);
-        out.suspend_raw_mode().expect(ERR_RAW_MODE);
-
         UI {
             views: vec![],
             focused: 0,
@@ -124,51 +110,25 @@ impl UI {
             size,
             config,
             status: String::new(),
-            out: RefCell::new(out),
             keys: Self::spawn_keyboard_listener(),
         }
     }
 
-    /// Prepare stdout for writing. Should be used in interactive
-    /// mode, eg inside run()
-    pub fn startup(&mut self) {
-        let mut out = self.out.borrow_mut();
-        out.activate_raw_mode().expect(ERR_RAW_MODE);
-        write!(out, "{}", terminal::ToAlternateScreen).expect(ERR_SCREEN);
-    }
-
-    /// Clean up after ourselves. Should only be used after running in
-    /// interactive mode.
-    pub fn shutdown(&mut self) {
-        let mut out = self.out.borrow_mut();
-        write!(
-            out,
-            "{}{}{}",
-            color::Reset,
-            terminal::ShowCursor,
-            terminal::ToMainScreen
-        )
-        .expect(ERR_STDOUT);
-        out.flush().expect(ERR_STDOUT);
-    }
-
     /// Main loop.
     pub fn run(&mut self) -> Result<()> {
-        self.startup();
         while self.running {
             self.draw()?;
             self.update();
         }
-        self.shutdown();
         Ok(())
     }
 
     /// Print the current view to the screen in rendered form.
     pub fn draw(&mut self) -> Result<()> {
         let status = self.render_status();
+        let mut out = stdout();
         if self.dirty {
             let screen = self.render()?;
-            let mut out = self.out.borrow_mut();
             write!(
                 out,
                 "{}{}{}{}",
@@ -180,7 +140,6 @@ impl UI {
             out.flush()?;
             self.dirty = false;
         } else {
-            let mut out = self.out.borrow_mut();
             out.write_all(status.as_ref())?;
             out.flush()?;
         }
@@ -431,7 +390,7 @@ impl UI {
     fn confirm(&self, question: &str) -> bool {
         let rows = self.rows();
 
-        let mut out = self.out.borrow_mut();
+        let mut out = stdout();
         write!(
             out,
             "{}{}{}{} [Y/n]: {}",
@@ -460,7 +419,7 @@ impl UI {
         let rows = self.rows();
         let mut input = value.to_string();
 
-        let mut out = self.out.borrow_mut();
+        let mut out = stdout();
         write!(
             out,
             "{}{}{}{}{}{}",
@@ -528,8 +487,8 @@ impl UI {
     /// Opens an interactive telnet session.
     fn telnet(&mut self, url: &str) -> Result<()> {
         let gopher::Url { host, port, .. } = gopher::parse_url(url);
-        let out = self.out.borrow_mut();
-        out.suspend_raw_mode().expect(ERR_RAW_MODE);
+
+        terminal::disable_raw_mode()?;
         let mut cmd = process::Command::new("telnet")
             .arg(host)
             .arg(port)
@@ -537,8 +496,9 @@ impl UI {
             .stdout(Stdio::inherit())
             .spawn()?;
         cmd.wait()?;
-        out.activate_raw_mode().expect(ERR_RAW_MODE);
+        terminal::enable_raw_mode()?;
         self.dirty = true; // redraw when finished with session
+
         Ok(())
     }
 
@@ -576,7 +536,7 @@ impl UI {
 
     /// Ctrl-Z: Suspend Unix process w/ SIGTSTP.
     fn suspend(&mut self) {
-        let mut out = self.out.borrow_mut();
+        let mut out = stdout();
         write!(out, "{}", terminal::ToMainScreen).expect(ERR_SCREEN);
         out.flush().expect(ERR_STDOUT);
         unsafe { libc::raise(libc::SIGTSTP) };
@@ -602,7 +562,7 @@ impl UI {
             Action::Error(e) => return Err(error!(e)),
             Action::Redraw => self.dirty = true,
             Action::Draw(s) => {
-                let mut out = self.out.borrow_mut();
+                let mut out = stdout();
                 out.write_all(s.as_ref())?;
                 out.flush()?;
             }
@@ -689,11 +649,5 @@ impl UI {
             _ => (),
         }
         Ok(())
-    }
-}
-
-impl Drop for UI {
-    fn drop(&mut self) {
-        self.shutdown();
     }
 }
