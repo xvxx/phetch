@@ -1,4 +1,4 @@
-## v1.0.2-dev
+## v1.0.2
 
 This release fixes a few small but irritating bugs:
 
