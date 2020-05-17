@@ -3,7 +3,7 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
 
 jobs:
   build_armv7:
@@ -152,7 +152,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          prerelease: true
+          prerelease: false
           files: |
             phetch-macos/phetch-${{ steps.get_version.outputs.VERSION }}-macos.zip
             phetch-linux-x86_64/phetch-${{ steps.get_version.outputs.VERSION }}-linux-x86_64.tgz
