@@ -917,7 +917,7 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
     } else {
         end
     };
-    let typ = Type::from(line.chars().nth(0)?)?;
+    let typ = Type::from(line.chars().next()?).unwrap_or(Type::Binary);
 
     let mut truncated_len = if text_end - start > MAX_COLS {
         MAX_COLS + 1
