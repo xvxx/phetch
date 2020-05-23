@@ -23,6 +23,10 @@ pub enum Type {
     Info,       // i | yellow
     Sound,      // s | download
     Document,   // d | download
+    Video,      // ; | download
+    Xml,        // x | cyan
+    Calendar,   // c | download
+    Mailbox,    // M | unsupported
 }
 
 impl Type {
@@ -33,7 +37,11 @@ impl Type {
 
     /// Text document?
     pub fn is_text(self) -> bool {
-        self == Type::Text
+        match self {
+            Type::Text
+            | Type::Xml => true,
+            _ => false,
+        }
     }
 
     /// HTML link?
@@ -62,7 +70,18 @@ impl Type {
             | Type::Image
             | Type::PNG
             | Type::Sound
+            | Type::Video
+            | Type::Calendar
             | Type::Document => true,
+            _ => false,
+        }
+    }
+
+    // Check if media to open in player
+    pub fn is_media(self) -> bool {
+        match self {
+            Type::Sound
+            | Type::Video => true,
             _ => false,
         }
     }
@@ -70,7 +89,10 @@ impl Type {
     /// Is this a type phetch supports?
     pub fn is_supported(self) -> bool {
         match self {
-            Type::CSOEntity | Type::Mirror | Type::Telnet3270 => false,
+            Type::CSOEntity
+            | Type::Mirror
+            | Type::Telnet3270
+            | Type::Mailbox => false,
             _ => true,
         }
     }
@@ -97,6 +119,10 @@ impl Type {
             Type::Info => 'i',
             Type::Sound => 's',
             Type::Document => 'd',
+            Type::Video => ';',
+            Type::Calendar => 'c',
+            Type::Xml => 'x',
+            Type::Mailbox => 'M',
         })
     }
 
@@ -122,6 +148,10 @@ impl Type {
             'i' => Type::Info,
             's' => Type::Sound,
             'd' => Type::Document,
+            ';' => Type::Video,
+            'c' => Type::Calendar,
+            'x' => Type::Xml,
+            'M' => Type::Mailbox,
             _ => return None,
         })
     }
