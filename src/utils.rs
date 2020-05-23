@@ -95,3 +95,30 @@ pub fn open_external(url: &str) -> Result<()> {
         ))
     }
 }
+
+#[cfg(feature = "media")]
+/// Opens a media file with `mpv`.
+pub fn open_media(url: &str) -> Result<()> {
+    use crate::terminal;
+
+    // mpv only supports /9/
+    let url = url.replace("/;/", "/9/").replace("/s/", "/9/");
+
+    // support URL: selectors
+    let url = if let Some(idx) = url.find("URL:") {
+        url.split_at(idx).1.trim_start_matches("URL:")
+    } else {
+        &url
+    };
+
+    terminal::disable_raw_mode()?;
+    let mut cmd = process::Command::new("mpv")
+        .arg(url)
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .spawn()?;
+    cmd.wait()?;
+    terminal::enable_raw_mode()?;
+
+    Ok(())
+}
