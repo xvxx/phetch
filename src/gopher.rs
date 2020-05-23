@@ -151,7 +151,7 @@ pub fn download_url(
             }
         }
     }
-    
+
     Ok((filename.to_string(), bytes))
 }
 
@@ -341,97 +341,149 @@ mod tests {
             "ssh://kiosk@bitreich.org",
             "https://github.com/xvxx/phetch",
             "telnet://bbs.impakt.net:6502/",
+            "gopher://some.url/9/file.mp4",
+            "gopher://some.url/;/file.mp4",
+            "mtv.com/s/best-of-britney-spears.mp3",
+            "gopher://microsoft.com:7070/x/developer/sitemap.xml",
+            "gopher://mtv.com/c/kriss-kross/tour-dates.ical",
+            "gopher://protonmail.com/M/mymail/inbox.eml",
         ];
+        let mut urls = urls.iter();
 
-        let url = parse_url(urls[0]);
+        macro_rules! parse_next_url {
+            () => {
+                parse_url(urls.next().unwrap())
+            };
+        }
+
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "gopher.club");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "/phlogs/");
 
-        let url = parse_url(urls[1]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "sdf.org");
         assert_eq!(url.port, "7777");
         assert_eq!(url.sel, "/maps");
 
-        let url = parse_url(urls[2]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "gopher.floodgap.org");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "");
 
-        let url = parse_url(urls[3]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Text);
         assert_eq!(url.host, "gopher.floodgap.com");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "/gopher/relevance.txt");
 
-        let url = parse_url(urls[4]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Search);
         assert_eq!(url.host, "gopherpedia.com");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "/lookup?Gopher");
 
-        let url = parse_url(urls[5]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "dead:beef:1234:5678:9012:3456:feed:deed");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "");
 
-        let url = parse_url(urls[6]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "1234:2345:dead:4567:7890:1234:beef:1111");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "/files");
 
-        let url = parse_url(urls[7]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "2001:cdba:0000:0000:0000:0000:3257:9121");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "");
 
-        let url = parse_url(urls[8]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "2001:cdba::3257:9652");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "");
 
-        let url = parse_url(urls[9]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "9999:aaaa::abab:baba:aaaa:9999");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "");
 
-        let url = parse_url(urls[10]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Error);
         assert_eq!(url.host, "Unclosed ipv6 bracket");
         assert_eq!(url.port, "");
         assert_eq!(url.sel, "[2001:2099:dead:beef:0000");
 
-        let url = parse_url(urls[11]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Menu);
         assert_eq!(url.host, "::1");
         assert_eq!(url.port, "70");
         assert_eq!(url.sel, "");
 
-        let url = parse_url(urls[12]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::HTML);
         assert_eq!(url.host, "");
         assert_eq!(url.port, "");
         assert_eq!(url.sel, "ssh://kiosk@bitreich.org");
 
-        let url = parse_url(urls[13]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::HTML);
         assert_eq!(url.host, "");
         assert_eq!(url.port, "");
         assert_eq!(url.sel, "https://github.com/xvxx/phetch");
 
-        let url = parse_url(urls[14]);
+        let url = parse_next_url!();
         assert_eq!(url.typ, Type::Telnet);
         assert_eq!(url.host, "bbs.impakt.net");
         assert_eq!(url.port, "6502");
         assert_eq!(url.sel, "/");
+
+        let url = parse_next_url!();
+        assert_eq!(url.typ, Type::Binary);
+        assert_eq!(url.host, "some.url");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/file.mp4");
+
+        let url = parse_next_url!();
+        assert_eq!(url.typ, Type::Video);
+        assert_eq!(url.host, "some.url");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/file.mp4");
+
+        let url = parse_next_url!();
+        assert_eq!(url.typ, Type::Sound);
+        assert_eq!(url.host, "mtv.com");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/best-of-britney-spears.mp3");
+
+        let url = parse_next_url!();
+        assert_eq!(url.typ, Type::Xml);
+        assert_eq!(url.host, "microsoft.com");
+        assert_eq!(url.port, "7070");
+        assert_eq!(url.sel, "/developer/sitemap.xml");
+
+        let url = parse_next_url!();
+        assert_eq!(url.typ, Type::Calendar);
+        assert_eq!(url.host, "mtv.com");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/kriss-kross/tour-dates.ical");
+
+        let url = parse_next_url!();
+        assert_eq!(url.typ, Type::Mailbox);
+        assert_eq!(url.host, "protonmail.com");
+        assert_eq!(url.port, "70");
+        assert_eq!(url.sel, "/mymail/inbox.eml");
+
+        // make sure we got em all
+        assert_eq!(urls.next(), None);
     }
 
     #[test]
