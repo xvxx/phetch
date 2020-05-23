@@ -36,6 +36,8 @@ the gophersphere.
 
 ## usage
 
+    Usage:
+
         phetch [options]       Launch phetch in interactive mode
         phetch [options] url   Open Gopher URL in interactive mode
 
@@ -100,9 +102,9 @@ Regular development uses `cargo`:
 
     cargo run -- <gopher-url>
 
-_Pro-tip:_ Run a local gopher server (like [phd][phd]) on
-`127.0.0.1:7070` and start phetch with `-l` or `--local` to quickly
-connect to it. Useful for debugging!
+_Pro-tip:_ Run a local gopher server (like [phd]) on `0.0.0.0:7070`
+and start phetch with `-l` or `--local` to quickly connect to it.
+Useful for debugging!
 
 phetch builds with TLS and Tor support by default. To disable these
 features, or to enable only one of them, use the
@@ -118,13 +120,23 @@ To enable just TLS support, or just Tor support, use `--features`:
 
     cargo run --no-default-features --features tor -- gopher://phetch/about
 
+## media player support
+
+phetch includes experimental support for opening video files (`;` item
+type) and sound files (`s` item type) in [mpv]. To test it out,
+compile phetch using the `--features media` flag and then visit a
+compatible Gopher server (maybe one using [gophor]?). Or check out the
+"gopher types" help page by pressing `ctrl-h` then `3` in phetch:
+
+    $ cargo run --features media gopher://phetch/1/help/types
+
 ## todo
 
 - [ ] ctrl-c in load() not yet implemented
 
 ## bugs
 
-- [ ] ctrl-c while telneting kills phetch
+- [ ] telnet IO seems broken after raw_input change (1146f42)
 
 ## future features
 
@@ -141,3 +153,5 @@ To enable just TLS support, or just Tor support, use `--features`:
 [2]: https://github.com/xvxx/phetch/releases/download/v1.0.2/phetch-v1.0.2-macos.zip
 [phd]: https://github.com/xvxx/phd
 [aur]: https://wiki.archlinux.org/index.php/AUR_helpers
+[mpv]: https://github.com/mpv-player/mpv
+[gophor]: https://github.com/grufwub/gophor

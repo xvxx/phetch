@@ -294,7 +294,7 @@ gGIFs	/help/types	phetch
 Iimages downloads	/help/types	phetch
 ddocuments	/help/types	phetch
 i
-iand opening these in a media player:
+iand these media types:
 i
 ssound files	URL:https://freepd.com/music/Wakka%20Wakka.mp3	phetch
 ;video files	URL:https://www.youtube.com/watch?v=oHg5SJYRHA0	phetch
