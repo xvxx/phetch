@@ -187,6 +187,12 @@ impl UI {
 
         // binary downloads
         let typ = gopher::type_for_url(url);
+
+        #[cfg(feature = "media")]
+        if typ.is_media() {
+            return self.open_media(url);
+        }
+
         if typ.is_download() {
             self.dirty = true;
             return if self.confirm(&format!("Download {}?", url)) {
@@ -486,6 +492,32 @@ impl UI {
         } else {
             None
         }
+    }
+
+    #[cfg(feature = "media")]
+    /// Opens a media file with `mpv`.
+    fn open_media(&mut self, url: &str) -> Result<()> {
+        // mpv only supports /9/
+        let url = url.replace("/;/", "/9/").replace("/s/", "/9/");
+
+        // support URL: selectors
+        let url = if let Some (idx) = url.find("URL:") {
+            url.split_at(idx).1.trim_start_matches("URL:")
+        } else {
+            &url
+        };
+
+        terminal::disable_raw_mode()?;
+        let mut cmd = process::Command::new("mpv")
+            .arg(url)
+            .stdin(Stdio::inherit())
+            .stdout(Stdio::inherit())
+            .spawn()?;
+        cmd.wait()?;
+        terminal::enable_raw_mode()?;
+        self.dirty = true; // redraw when finished with session
+
+        Ok(())
     }
 
     /// Opens an interactive telnet session.

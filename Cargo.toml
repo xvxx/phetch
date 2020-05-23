@@ -16,6 +16,7 @@ exclude = [
 [features]
 tls = ["native-tls"]
 tor = ["tor-stream"]
+media = []
 default = ["tls", "tor"]
 
 [profile.release]

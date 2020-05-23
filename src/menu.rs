@@ -315,7 +315,10 @@ impl Menu {
             let text = line.text_truncated(&self.raw);
 
             // color the line
-            if line.typ.is_download() {
+            if line.typ.is_media() {
+                out.push_str(color!(Underline));
+                out.push_str(color!(Green));
+            } else if line.typ.is_download() {
                 out.push_str(color!(Underline));
                 out.push_str(color!(White));
             } else if !line.typ.is_supported() {

@@ -239,6 +239,7 @@ i# show emoji status indicators
 iemoji no
 ";
 
+#[cfg(not(feature = "media"))]
 const TYPES: &str = "
 i     ** gopher types **
 i
@@ -261,6 +262,42 @@ gGIFs	/help/types	phetch
 Iimages downloads	/help/types	phetch
 ssound files	/help/types	phetch
 ddocuments	/help/types	phetch
+i
+iphetch does not support:
+i
+2CSO Entries 	/help/types	phetch
++Mirrors	/help/types	phetch
+TTelnet3270	/help/types	phetch
+i
+";
+
+#[cfg(feature = "media")]
+const TYPES: &str = "
+i     ** gopher types **
+i
+iphetch supports these links:
+i
+0text files	/Mirrors/RFC/rfc1436.txt	fnord.one	65446
+1menu items	/lawn/ascii	bitreich.org
+3errors	/help/types	phetch
+7search servers	/	forthworks.com	7001
+8telnet links	/help/types	phetch
+hexternal urls	URL:https://en.wikipedia.org/wiki/Phetch	phetch
+i
+ithese download types:
+i
+4binhex	/help/types	phetch
+5dosfiles	/help/types	phetch
+6uuencoded files	/help/types	phetch
+9binaries	/help/types	phetch
+gGIFs	/help/types	phetch
+Iimages downloads	/help/types	phetch
+ddocuments	/help/types	phetch
+i
+iand opening these in a media player:
+i
+ssound files	URL:https://freepd.com/music/Wakka%20Wakka.mp3	phetch
+;video files	URL:https://www.youtube.com/watch?v=oHg5SJYRHA0	phetch
 i
 iphetch does not support:
 i

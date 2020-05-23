@@ -21,9 +21,9 @@ pub enum Type {
     Image,      // I | download
     PNG,        // p | download
     Info,       // i | yellow
-    Sound,      // s | download
+    Sound,      // s | green underline
     Document,   // d | download
-    Video,      // ; | download
+    Video,      // ; | green underline
     Xml,        // x | cyan
     Calendar,   // c | download
     Mailbox,    // M | unsupported
@@ -76,6 +76,13 @@ impl Type {
         }
     }
 
+    #[cfg(not(feature = "media"))]
+    /// Does nothing without the 'media' feature.
+    pub fn is_media(self) -> bool {
+        false
+    }
+
+    #[cfg(feature = "media")]
     /// Check if media to open in player
     pub fn is_media(self) -> bool {
         match self {
