@@ -111,13 +111,22 @@ pub fn open_media(url: &str) -> Result<()> {
         &url
     };
 
+    let errfn = |e| {
+        if let Err(e) = terminal::enable_raw_mode() {
+            error!("`mpv` error: {}", e)
+        } else {
+            error!("`mpv` error: {}", e)
+        }
+    };
+
     terminal::disable_raw_mode()?;
     let mut cmd = process::Command::new("mpv")
         .arg(url)
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
-        .spawn()?;
-    cmd.wait()?;
+        .spawn()
+        .map_err(errfn)?;
+    cmd.wait().map_err(errfn)?;
     terminal::enable_raw_mode()?;
 
     Ok(())
