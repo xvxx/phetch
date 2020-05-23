@@ -46,7 +46,7 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
             write!(
                 file,
                 "{}{}\t{}\t{}\t{}\r\n",
-                u.typ.to_char().unwrap_or('i'),
+                u.typ.to_char(),
                 label,
                 u.sel,
                 u.host,
@@ -76,7 +76,7 @@ pub fn prepend(filename: &str, label: &str, url: &str) -> Result<()> {
             write!(
                 file,
                 "{}{}\t{}\t{}\t{}\r\n",
-                url.typ.to_char().unwrap_or('i'),
+                url.typ.to_char(),
                 label,
                 url.sel,
                 url.host,

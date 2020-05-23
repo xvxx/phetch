@@ -93,8 +93,8 @@ impl Type {
     }
 
     /// Gopher Item Type to RFC char.
-    pub fn to_char(self) -> Option<char> {
-        Some(match self {
+    pub fn to_char(self) -> char {
+        match self {
             Type::Text => '0',
             Type::Menu => '1',
             Type::CSOEntity => '2',
@@ -118,7 +118,7 @@ impl Type {
             Type::Calendar => 'c',
             Type::Xml => 'x',
             Type::Mailbox => 'M',
-        })
+        }
     }
 
     /// Create a Gopher Item Type from its RFC char code.
@@ -154,10 +154,6 @@ impl Type {
 
 impl fmt::Display for Type {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if let Some(c) = self.to_char() {
-            write!(f, "{}", c)
-        } else {
-            write!(f, "?")
-        }
+        write!(f, "{}", self.to_char())
     }
 }
