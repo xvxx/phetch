@@ -66,12 +66,16 @@ lazy_static! {
     static ref RESIZE_SENDER: Arc<Mutex<Option<Sender<Key>>>> = Arc::new(Mutex::new(None));
 }
 
-/// Raw resize handler that is called when SIGWINCH is receiver.
+/// Raw resize handler that is called when SIGWINCH is received.
 fn resize_handler(_: i32) {
     if let Some(sender) = &*RESIZE_SENDER.lock().unwrap() {
         sender.send(Key::F(5)).unwrap();
     }
 }
+
+/// No-op INT handler that is called when SIGINT (ctrl-c) is
+/// received in child processes (like `telnet`).
+fn sigint_handler(_: i32) {}
 
 /// UI is mainly concerned with drawing to the screen, managing the
 /// active views, and responding to user input.
@@ -521,6 +525,7 @@ impl UI {
         *RESIZE_SENDER.lock().unwrap() = Some(sender.clone());
         unsafe {
             libc::signal(libc::SIGWINCH, resize_handler as usize);
+            libc::signal(libc::SIGINT, sigint_handler as usize);
         }
 
         thread::spawn(move || {
