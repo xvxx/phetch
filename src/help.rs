@@ -211,14 +211,14 @@ i         ** config **
 i
 iif you create a phetch.conf
 ifile in ~/.config/phetch/ it
-iwill be automatically loaded 
+iwill be automatically loaded
 iwhen phetch starts. the config
 ifile supports most command line
 ioptions, for your convenience.
 i
 ifor example, phetch will always
 ilaunch in TLS mode if `tls yes`
-iappears in the config file. 
+iappears in the config file.
 i
 ihere is an example phetch.conf
 iwith all possible keys:
@@ -318,15 +318,15 @@ i            ~ * ~
 i
 i        special thanks
 i
-ikseistrup: 
+ikseistrup:
 i    major design, testing,
 i    documentation help
 i
-iantirez: 
+iantirez:
 i    added gopher to redis
 i    and opened the door
 i
-ilartu: 
+ilartu:
 i    inspired me to add some
 i    \x1b[95mcolor\x1b[0m
 i
