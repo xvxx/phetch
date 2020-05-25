@@ -128,7 +128,7 @@ compile phetch using the `--features media` flag and then visit a
 compatible Gopher server (maybe one using [gophor]?). Or check out the
 "gopher types" help page by pressing `ctrl-h` then `3` in phetch:
 
-    $ cargo run --features media gopher://phetch/1/help/types
+    cargo run --features media gopher://phetch/1/help/types
 
 ## todo
 
