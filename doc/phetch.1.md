@@ -49,6 +49,14 @@ If no URL is given, however, *phetch* will launch and open its default
 *-O*, *--no-tor*
 	Disable Tor.
 
+*-m*, *--media* _PATH_
+	Use program at _PATH_ to open media files (movies and sounds).
+	Default: mpv
+
+*-M*, *--no-media*
+	Don't try to open media files. Download them like regular binary
+	Gopher items.
+
 *-c*, *--config* _FILE_
 	Use _FILE_ instead of _~/.config/phetch/phetch.conf_
 
@@ -169,7 +177,7 @@ If you create a _history.gph_ file in _~/.config/phetch/_, each Gopher
 URL you open will be stored there.
 
 New URLs are appended to the bottom, but loaded in reverse order, so
-you'll see all the most recently visited pages first when you press 
+you'll see all the most recently visited pages first when you press
 the *a* key.
 
 Feel free to edit your history file directly, or share it with your
@@ -198,6 +206,9 @@ tor no
 
 # Always start in wide mode.
 wide no
+
+# Program to use to open media files.
+media mpv
 
 # Use emoji indicators for TLS & Tor.
 emoji no

@@ -16,6 +16,9 @@ const CONFIG_FILE: &str = "phetch.conf";
 /// Default start page.
 const DEFAULT_START: &str = "gopher://phetch/1/home";
 
+/// Default media player.
+const DEFAULT_MEDIA_PLAYER: &str = "mpv";
+
 /// Example of what a default phetch.conf would be.
 pub const DEFAULT_CONFIG: &str = "## default config file for the phetch gopher client
 ## gopher://phkt.io/1/phetch
@@ -31,6 +34,9 @@ tor no
 
 # Always start in wide mode. (--wide)
 wide no
+
+# Program to use to open media files.
+media mpv
 
 # Use emoji indicators for TLS & Tor. (--emoji)
 emoji no
@@ -51,6 +57,8 @@ pub struct Config {
     pub wide: bool,
     /// Render connection status as emoji
     pub emoji: bool,
+    /// Media player to use.
+    pub media: Option<String>,
     /// UI mode. Can't be set in conf file.
     pub mode: ui::Mode,
 }
@@ -63,6 +71,7 @@ impl Default for Config {
             tor: false,
             wide: false,
             emoji: false,
+            media: Some(DEFAULT_MEDIA_PLAYER.into()),
             mode: ui::Mode::default(),
         }
     }
@@ -127,6 +136,12 @@ pub fn parse(text: &str) -> Result<Config> {
             "tls" => cfg.tls = to_bool(val)?,
             "tor" => cfg.tor = to_bool(val)?,
             "wide" => cfg.wide = to_bool(val)?,
+            "media" => {
+                cfg.media = match val.to_lowercase().as_ref() {
+                    "false" | "none" => None,
+                    _ => Some(val.into()),
+                }
+            }
             _ => return Err(error!("Unknown key on line {}: {}", linenum, key)),
         }
         keys.insert(key, true);
@@ -157,6 +172,7 @@ mod tests {
         assert_eq!(config.wide, false);
         assert_eq!(config.emoji, false);
         assert_eq!(config.start, "gopher://phetch/1/home");
+        assert_eq!(config.media, Some("mpv".to_string()));
     }
 
     #[test]
@@ -183,6 +199,21 @@ mod tests {
         let cfg = parse("tls yes\nwide true").unwrap();
         assert_eq!(cfg.tls, true);
         assert_eq!(cfg.wide, true);
+    }
+
+    #[test]
+    fn test_media() {
+        let cfg = parse("media FALSE").unwrap();
+        assert_eq!(cfg.media, None);
+
+        let cfg = parse("media None").unwrap();
+        assert_eq!(cfg.media, None);
+
+        let cfg = parse("media /path/to/media-player").unwrap();
+        assert_eq!(cfg.media, Some("/path/to/media-player".to_string()));
+
+        let cfg = parse("media vlc").unwrap();
+        assert_eq!(cfg.media, Some("vlc".to_string()));
     }
 
     #[test]

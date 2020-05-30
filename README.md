@@ -47,6 +47,9 @@ the gophersphere.
         -o, --tor              Use local Tor proxy to open all pages
         -S, -O                 Disable TLS or Tor
 
+        -m, --media PROGRAM    Use to open media files. Default: mpv
+        -M, --no-media         Just download media files, don't download
+
         -r, --raw              Print raw Gopher response only
         -p, --print            Print rendered Gopher response only
         -l, --local            Connect to 127.0.0.1:7070
