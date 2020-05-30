@@ -1,5 +1,6 @@
 //! Helper functions and macros.
 use std::{
+    borrow::Cow,
     io::{Result, Write},
     process::{self, Stdio},
 };
@@ -96,12 +97,16 @@ pub fn open_external(url: &str) -> Result<()> {
     }
 }
 
-/// Opens a media file with `mpv`.
-pub fn open_media(url: &str) -> Result<()> {
+/// Opens a media file with `mpv` or `--media`.
+pub fn open_media(program: &str, url: &str) -> Result<()> {
     use {crate::terminal, std::io};
 
     // mpv only supports /9/
-    let url = url.replace("/;/", "/9/").replace("/s/", "/9/");
+    let url = if program.ends_with("mpv") {
+        Cow::from(url.replace("/;/", "/9/").replace("/s/", "/9/"))
+    } else {
+        Cow::from(url)
+    };
 
     // support URL: selectors
     let url = if let Some(idx) = url.find("URL:") {
@@ -111,11 +116,8 @@ pub fn open_media(url: &str) -> Result<()> {
     };
 
     let errfn = |e| {
-        if let Err(e) = terminal::enable_raw_mode() {
-            error!("`mpv` error: {}", e)
-        } else {
-            error!("`mpv` error: {}", e)
-        }
+        terminal::enable_raw_mode().unwrap();
+        error!("Media player error: {}", e)
     };
 
     // clear screen first
@@ -124,7 +126,7 @@ pub fn open_media(url: &str) -> Result<()> {
     stdout.flush()?;
 
     terminal::disable_raw_mode()?;
-    let mut cmd = process::Command::new("mpv")
+    let mut cmd = process::Command::new(program)
         .arg(url)
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())

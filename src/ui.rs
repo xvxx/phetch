@@ -188,10 +188,10 @@ impl UI {
         // binary downloads
         let typ = gopher::type_for_url(url);
 
-        if typ.is_media() {
+        if typ.is_media() && self.config.media.is_some() {
             self.dirty = true;
             return if self.confirm(&format!("Open in media player? {}", url)) {
-                utils::open_media(url)
+                utils::open_media(self.config.media.as_ref().unwrap(), url)
             } else {
                 Ok(())
             };

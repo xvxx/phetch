@@ -106,6 +106,9 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
     let mut set_notls = false;
     let mut set_tor = false;
     let mut set_notor = false;
+    let mut set_media = false;
+    let mut set_nomedia = false;
+
     while let Some(arg) = iter.next() {
         match arg.as_ref() {
             "-v" | "--version" | "-version" => {
@@ -161,6 +164,24 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
                 }
                 set_notor = true;
                 cfg.tor = false;
+            }
+            "-m" | "--media" | "-media" => {
+                if set_nomedia {
+                    return Err(ArgError::new("can't set both --media and --no-media"));
+                }
+                set_media = true;
+                if let Some(player) = iter.next() {
+                    cfg.media = Some(player.as_ref().to_string());
+                } else {
+                    return Err(ArgError::new("--media expects a PROGRAM arg"));
+                }
+            }
+            "-M" | "--no-media" | "-no-media" => {
+                if set_media {
+                    return Err(ArgError::new("can't set both --media and --no-media"));
+                }
+                set_nomedia = true;
+                cfg.media = None;
             }
             arg => {
                 if arg.starts_with('-') {
