@@ -23,8 +23,9 @@ use std::fmt;
 pub struct Menu {
     /// Gopher URL
     pub url: String,
-    /// Lines in the menu. Not all are links.
-    pub lines: Vec<Line>,
+    /// Lines in the menu. Not all are links. Use the `lines()` iter
+    /// or `line(N)` or `link(N)` to access one.
+    spans: Vec<LineSpan>,
     /// Indexes of links in the `lines` vector. Pauper's pointers.
     pub links: Vec<usize>,
     /// Currently selected link. Index of the `links` vec.
@@ -51,38 +52,23 @@ pub struct Menu {
     wide: bool,
 }
 
-/// The Line represents a single line in a Gopher menu.
-/// It must exist in the context of a Menu struct - its `link`
-/// field is its index in the Menu's `links` Vec, and
-/// start/end/text_end point to locations in Menu's `raw` Gopher
-/// response.
-pub struct Line {
-    /// Gopher Item Type.
-    pub typ: Type,
-    /// Where this line starts in its Menu's `raw` Gopher response.
-    start: usize,
-    /// Where this line ends in Menu.raw.
-    end: usize,
-    /// Where the text/label of this line ends. Might be the same as
-    /// `end`, or might be earlier.
-    text_end: usize,
-    /// Length of visible text, ignoring ANSI escape codes (colors).
-    visible_len: usize,
-    /// How many chars() to grab from text() if we want to only show
-    /// `MAX_COLS` visible chars on screen, aka ignore ANSI escape
-    /// codes and colors.
-    truncated_len: usize,
-    /// Index of this link in the Menu::links vector, if it's a
-    /// `gopher::Type.is_link()`
-    pub link: usize,
+/// Represents a line in a Gopher menu. Provides the actual text of
+/// the line, vs LineSpan which is just location data.
+pub struct Line<'line, 'txt: 'line> {
+    span: &'line LineSpan,
+    text: &'txt str,
 }
 
-impl Line {
-    /// Returns the text field of this line, given a raw Gopher response.
-    /// The same Line must always be used with the same Gopher response.
-    pub fn text<'a>(&self, raw: &'a str) -> &'a str {
+impl<'line, 'txt> Line<'line, 'txt> {
+    fn new(span: &'line LineSpan, text: &'txt str) -> Line<'line, 'txt> {
+        Line { span, text }
+    }
+
+    /// Visible line as text. What appeared in the raw Gopher
+    /// response.
+    pub fn text(&self) -> &str {
         if self.start < self.text_end {
-            &raw[self.start + 1..self.text_end]
+            &self.text[self.start + 1..self.text_end]
         } else {
             ""
         }
@@ -90,22 +76,17 @@ impl Line {
 
     /// Truncated version of the line, according to visible characters
     /// and MAX_COLS.
-    pub fn text_truncated<'a>(&self, raw: &'a str) -> String {
-        self.text(raw).chars().take(self.truncated_len).collect()
+    pub fn text_truncated(&self) -> String {
+        self.text().chars().take(self.truncated_len).collect()
     }
 
-    /// Get the length of this line's text field.
-    pub fn text_len(&self) -> usize {
-        self.visible_len
-    }
-
-    /// Get the URL for this line, if it's a link.
-    pub fn url(&self, raw: &str) -> String {
+    /// URL for this line, if it's a link.
+    pub fn url(&self) -> String {
         if !self.typ.is_link() || self.text_end >= self.end {
             return String::from("");
         }
 
-        let line = &raw[self.text_end..self.end].trim_end_matches('\r');
+        let line = &self.text[self.text_end..self.end].trim_end_matches('\r');
         let mut sel = "(null)";
         let mut host = "localhost";
         let mut port = "70";
@@ -135,6 +116,80 @@ impl Line {
             } else {
                 format!("gopher://{}:{}{}", host, port, path)
             }
+        }
+    }
+}
+
+/// Line wraps LineSpan.
+impl<'line, 'txt: 'line> std::ops::Deref for Line<'line, 'txt> {
+    type Target = LineSpan;
+    fn deref(&self) -> &Self::Target {
+        &self.span
+    }
+}
+
+/// The LineSpan represents a single line's location in a Gopher menu.
+/// It only exists in the context of a Menu struct - its `link`
+/// field is its index in the Menu's `links` Vec, and
+/// start/end/text_end point to locations in Menu's `raw` Gopher
+/// response.
+/// You won't really interact with this directly, instead call
+/// `menu.lines()` get an iter over `Line` or `menu.line(idx)` to get
+/// a single Line.
+pub struct LineSpan {
+    /// Gopher Item Type.
+    pub typ: Type,
+    /// Where this line starts in its Menu's `raw` Gopher response.
+    start: usize,
+    /// Where this line ends in Menu.raw.
+    end: usize,
+    /// Where the text/label of this line ends. Might be the same as
+    /// `end`, or might be earlier.
+    text_end: usize,
+    /// Length of visible text, ignoring ANSI escape codes (colors).
+    visible_len: usize,
+    /// How many chars() to grab from text() if we want to only show
+    /// `MAX_COLS` visible chars on screen, aka ignore ANSI escape
+    /// codes and colors.
+    truncated_len: usize,
+    /// Index of this link in the Menu::links vector, if it's a
+    /// `gopher::Type.is_link()`
+    pub link: usize,
+}
+
+impl LineSpan {
+    /// Get the length of this line's text field.
+    pub fn text_len(&self) -> usize {
+        self.visible_len
+    }
+}
+
+/// Iterator over (dynamically created) Line structs.
+pub struct LinesIter<'menu> {
+    spans: &'menu [LineSpan],
+    text: &'menu str,
+    curr: usize,
+}
+
+impl<'menu> LinesIter<'menu> {
+    fn new(spans: &'menu [LineSpan], text: &'menu str) -> LinesIter<'menu> {
+        LinesIter {
+            spans,
+            text,
+            curr: 0,
+        }
+    }
+}
+
+impl<'menu> Iterator for LinesIter<'menu> {
+    type Item = Line<'menu, 'menu>;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.curr >= self.spans.len() {
+            None
+        } else {
+            let line_with = Line::new(&self.spans[self.curr], self.text);
+            self.curr += 1;
+            Some(line_with)
         }
     }
 }
@@ -204,6 +259,26 @@ impl Menu {
         }
     }
 
+    /// Lines in this menu. Main iterator for getting Line with text.
+    pub fn lines(&self) -> LinesIter {
+        LinesIter::new(&self.spans, &self.raw)
+    }
+
+    /// Get a single Line in this menu by index.
+    pub fn line(&self, idx: usize) -> Option<Line> {
+        if idx >= self.spans.len() {
+            None
+        } else {
+            Some(Line::new(&self.spans[idx], &self.raw))
+        }
+    }
+
+    /// Find a link by its link index.
+    pub fn link(&self, idx: usize) -> Option<Line> {
+        let line = self.links.get(idx)?;
+        self.line(*line)
+    }
+
     fn cols(&self) -> usize {
         self.size.0
     }
@@ -233,12 +308,6 @@ impl Menu {
                 0
             }
         }
-    }
-
-    /// Find a link by its link index.
-    fn link(&self, i: usize) -> Option<&Line> {
-        let line = self.links.get(i)?;
-        self.lines.get(*line)
     }
 
     /// Is the given link visible on screen?
@@ -281,9 +350,9 @@ impl Menu {
             // (status bar is always last line)
             self.rows() - 1
         } else {
-            self.lines.len()
+            self.spans.len()
         };
-        let iter = self.lines.iter().skip(self.scroll).take(limit);
+        let iter = self.lines().skip(self.scroll).take(limit);
         let indent = self.indent();
         let left_margin = " ".repeat(indent);
 
@@ -312,7 +381,7 @@ impl Menu {
             }
 
             // truncate long lines, instead of wrapping
-            let text = line.text_truncated(&self.raw);
+            let text = line.text_truncated();
 
             // color the line
             if line.typ.is_media() {
@@ -410,7 +479,7 @@ impl Menu {
     fn action_page_down(&mut self) -> Action {
         // If there are fewer menu items than screen lines, just
         // select the final link and do nothing else.
-        if self.lines.len() < self.rows() {
+        if self.spans.len() < self.rows() {
             if !self.links.is_empty() {
                 self.link = self.links.len() - 1;
                 return Action::Redraw;
@@ -445,7 +514,7 @@ impl Menu {
                 .skip(self.link + 1)
                 .find(|&&i| i >= self.scroll)
             {
-                if let Some(next_link_line) = self.lines.get(next_link_pos) {
+                if let Some(next_link_line) = self.line(next_link_pos) {
                     self.link = next_link_line.link;
                 }
             }
@@ -475,7 +544,7 @@ impl Menu {
                             .rev()
                             .find(|&&i| i < (self.rows() + scroll - 1))
                         {
-                            self.link = self.lines.get(pos).unwrap().link;
+                            self.link = self.line(pos).unwrap().link;
                         }
                     }
                     LinkPos::Above => {}
@@ -559,8 +628,8 @@ impl Menu {
     /// Final `self.scroll` value.
     fn final_scroll(&self) -> usize {
         let padding = (self.rows() as f64 * 0.9) as usize;
-        if self.lines.len() > padding {
-            self.lines.len() - padding
+        if self.spans.len() > padding {
+            self.spans.len() - padding
         } else {
             0
         }
@@ -583,8 +652,8 @@ impl Menu {
     {
         let pattern = pattern.to_ascii_lowercase();
         for &pos in it {
-            let line = self.lines.get(pos)?;
-            if line.text(&self.raw).to_ascii_lowercase().contains(&pattern) {
+            let line = self.line(pos)?;
+            if line.text().to_ascii_lowercase().contains(&pattern) {
                 return Some(line.link);
             }
         }
@@ -597,7 +666,7 @@ impl Menu {
         // no links or final link selected already
         if self.links.is_empty() || new_link >= self.links.len() {
             // if there are more rows, scroll down
-            if self.lines.len() >= self.rows() && self.scroll < self.final_scroll() {
+            if self.spans.len() >= self.rows() && self.scroll < self.final_scroll() {
                 self.scroll += 1;
                 return Action::Redraw;
             } else if !self.links.is_empty() {
@@ -642,7 +711,7 @@ impl Menu {
                             self.link = new_link;
 
                             // scroll if we are within 5 lines of the end
-                            if self.lines.len() >= self.rows() // dont scroll if content too small
+                            if self.spans.len() >= self.rows() // dont scroll if content too small
                                 && pos >= self.scroll + self.rows() - 6
                             {
                                 self.scroll += 1;
@@ -725,11 +794,11 @@ impl Menu {
         self.input.clear();
 
         if let Some(line) = self.link(self.link) {
-            let url = line.url(&self.raw);
+            let url = line.url();
             let typ = gopher::type_for_url(&url);
             match typ {
                 Type::Search => {
-                    let prompt = format!("{}> ", line.text(&self.raw));
+                    let prompt = format!("{}> ", line.text());
                     Action::Prompt(
                         prompt.clone(),
                         Box::new(move |query| {
@@ -740,9 +809,9 @@ impl Menu {
                         }),
                     )
                 }
-                Type::Error => Action::Error(line.text(&self.raw).to_string()),
+                Type::Error => Action::Error(line.text().to_string()),
                 t if !t.is_supported() => Action::Error(format!("{:?} not supported", t)),
-                _ => Action::Open(line.text(&self.raw).to_string(), url),
+                _ => Action::Open(line.text().to_string(), url),
             }
         } else {
             Action::None
@@ -856,7 +925,7 @@ impl Menu {
 
 /// Parse gopher response into a Menu object.
 pub fn parse(url: &str, raw: String) -> Menu {
-    let mut lines = vec![];
+    let mut spans = vec![];
     let mut links = vec![];
     let mut longest = 0;
     let mut start = 0;
@@ -872,15 +941,15 @@ pub fn parse(url: &str, raw: String) -> Menu {
             continue;
         }
 
-        if let Some(mut line) = parse_line(start, &raw) {
-            if line.text_len() > longest {
-                longest = line.text_len();
+        if let Some(mut span) = parse_line(start, &raw) {
+            if span.text_len() > longest {
+                longest = span.text_len();
             }
-            if line.typ.is_link() {
-                line.link = links.len();
-                links.push(lines.len());
+            if span.typ.is_link() {
+                span.link = links.len();
+                links.push(spans.len());
             }
-            lines.push(line);
+            spans.push(span);
         }
 
         start += line.len() + 1;
@@ -888,7 +957,7 @@ pub fn parse(url: &str, raw: String) -> Menu {
 
     Menu {
         url: url.into(),
-        lines,
+        spans,
         links,
         longest,
         raw,
@@ -904,8 +973,8 @@ pub fn parse(url: &str, raw: String) -> Menu {
     }
 }
 
-/// Parses a single line from a Gopher menu into a `Line` struct.
-pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
+/// Parses a single line from a Gopher menu into a `LineSpan` struct.
+pub fn parse_line(start: usize, raw: &str) -> Option<LineSpan> {
     if raw.is_empty() || start >= raw.len() {
         return None;
     }
@@ -960,7 +1029,7 @@ pub fn parse_line(start: usize, raw: &str) -> Option<Line> {
         }
     }
 
-    Some(Line {
+    Some(LineSpan {
         start,
         end,
         text_end,
@@ -997,29 +1066,41 @@ i-----------	spacer	localhost	70
 i---------------------------------------------------------
 "
         );
-        assert_eq!(menu.lines.len(), 10);
+        assert_eq!(menu.spans.len(), 10);
         assert_eq!(menu.links.len(), 5);
         assert_eq!(
-            menu.lines[1].url(&menu.raw),
+            menu.lines().nth(1).unwrap().url(),
             "gopher://gopher.club/1/phlogs/"
         );
-        assert_eq!(menu.lines[2].url(&menu.raw), "gopher://sdf.org/1/maps/");
         assert_eq!(
-            menu.lines[3].url(&menu.raw),
+            menu.lines().nth(2).unwrap().url(),
+            "gopher://sdf.org/1/maps/"
+        );
+        assert_eq!(
+            menu.lines().nth(3).unwrap().url(),
             "gopher://earth.rice.edu/1Geosphere"
         );
-        assert_eq!(menu.lines[4].text(&menu.raw), "wacky links");
-        assert_eq!(menu.lines[5].text(&menu.raw), "-----------");
-        assert_eq!(menu.lines[6].url(&menu.raw), "telnet://bbs.impakt.net:6502");
-        assert_eq!(menu.lines[7].url(&menu.raw), "https://github.com/my/code");
-        assert_eq!(menu.lines[8].text(&menu.raw), "-----------");
+        assert_eq!(menu.lines().nth(4).unwrap().text(), "wacky links");
+        assert_eq!(menu.lines().nth(5).unwrap().text(), "-----------");
+        assert_eq!(
+            menu.lines().nth(6).unwrap().url(),
+            "telnet://bbs.impakt.net:6502"
+        );
+        assert_eq!(
+            menu.lines().nth(7).unwrap().url(),
+            "https://github.com/my/code"
+        );
+        assert_eq!(menu.lines().nth(8).unwrap().text(), "-----------");
     }
 
     #[test]
     fn test_no_path() {
         let menu = parse!("1Circumlunar Space		circumlunar.space	70");
         assert_eq!(menu.links.len(), 1);
-        assert_eq!(menu.lines[0].url(&menu.raw), "gopher://circumlunar.space");
+        assert_eq!(
+            menu.lines().next().unwrap().url(),
+            "gopher://circumlunar.space"
+        );
     }
 
     #[test]
@@ -1051,26 +1132,17 @@ i	Err	bitreich.org	70
         menu.term_size(80, 40);
 
         assert_eq!(menu.links.len(), 9);
+        assert_eq!(menu.link(0).unwrap().url(), "gopher://bitreich.org/1/lawn");
         assert_eq!(
-            menu.link(0).unwrap().url(&menu.raw),
-            "gopher://bitreich.org/1/lawn"
-        );
-        assert_eq!(
-            menu.link(1).unwrap().url(&menu.raw),
+            menu.link(1).unwrap().url(),
             "gopher://bitreich.org/1/tutorials"
         );
-        assert_eq!(
-            menu.link(2).unwrap().url(&menu.raw),
-            "gopher://bitreich.org/1/onion"
-        );
-        assert_eq!(
-            menu.link(3).unwrap().url(&menu.raw),
-            "gopher://bitreich.org/1/kiosk"
-        );
+        assert_eq!(menu.link(2).unwrap().url(), "gopher://bitreich.org/1/onion");
+        assert_eq!(menu.link(3).unwrap().url(), "gopher://bitreich.org/1/kiosk");
         assert_eq!(menu.link, 0);
 
         let ssh = menu.link(4).unwrap();
-        assert_eq!(ssh.url(&menu.raw), "ssh://kiosk@bitreich.org");
+        assert_eq!(ssh.url(), "ssh://kiosk@bitreich.org");
         assert_eq!(ssh.typ, Type::HTML);
 
         menu.action_down();
@@ -1100,23 +1172,23 @@ i	Err	bitreich.org	70
         let long_color_line = "ihi there. \x1b[1mthis\x1b[0m is a preeeeeety long line with \x1b[93mcolors \x1b[92mthat make it \x1b[91mseem longer than it is\x1b[0m	/kiosk	bitreich.org	70";
 
         let menu = parse!(long_color_line);
-        let line = menu.lines.first().unwrap();
+        let line = menu.lines().next().unwrap();
         assert_eq!(long_color_line.chars().count(), 139);
         assert_eq!(line.visible_len, MAX_COLS + 1);
         assert_eq!(line.truncated_len, 100);
         assert_eq!(
-            line.text_truncated(long_color_line),
+            line.text_truncated(),
             "hi there. \x1b[1mthis\x1b[0m is a preeeeeety long line with \x1b[93mcolors \x1b[92mthat make it \x1b[91mseem longer".to_string()
         );
 
         let long_reg_line = "1This is a regular line that is long but also has links and stuff. You are missing a gopher client? Use our kiosk mode. Thanks for coming. Hope you enjoy the fish, it's freshly grown in our lab!	/kiosk	bitreich.org	70";
         let menu = parse!(long_reg_line);
-        let line = menu.lines.first().unwrap();
+        let line = menu.lines().next().unwrap();
         assert_eq!(long_color_line.chars().count(), 139);
         assert_eq!(line.visible_len, MAX_COLS + 1);
         assert_eq!(line.truncated_len, MAX_COLS + 1);
         assert_eq!(
-            line.text_truncated(long_reg_line),
+            line.text_truncated(),
             "This is a regular line that is long but also has links and stuff. You are miss"
                 .to_string()
         );

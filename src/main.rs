@@ -110,8 +110,8 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
     match typ {
         gopher::Type::Menu => {
             let menu = menu::parse(url, response);
-            for line in menu.lines {
-                out.push_str(line.text(&menu.raw));
+            for line in menu.lines() {
+                out.push_str(line.text());
                 out.push('\n');
             }
         }
