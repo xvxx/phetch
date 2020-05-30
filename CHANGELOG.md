@@ -1,7 +1,7 @@
 ## v1.0.3
 
 This release adds support for the `;` and `s` Gopher item types,
-as well as the ability to play them in a media player.  meaning
+as well as the ability to play them in a media player - meaning
 you can now run Gopher-powered media servers! As seen here:
 
 https://twitter.com/grufwub/status/1264296292764856320
