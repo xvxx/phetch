@@ -214,6 +214,14 @@ media mpv
 emoji no
 ```
 
+# MEDIA PLAYER SUPPORT
+
+*phetch* includes support for opening video files (`;` item type) and
+sound files (`s` item type) in `mpv` or an application of your choice
+using the `-m` command line flag. To test it out, visit a compatible
+Gopher server or check out the "gopher types" help page by lauching
+*phetch* and then pressing `ctrl-h` then `3`.
+
 # ABOUT
 
 *phetch* is maintained by chris west, and released under the MIT license.

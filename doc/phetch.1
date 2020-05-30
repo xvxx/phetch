@@ -4,7 +4,7 @@
 .nh
 .ad l
 .\" Begin generated content:
-.TH "PHETCH" "1" "2020-01-12"
+.TH "PHETCH" "1" "2020-05-30"
 .P
 .SH NAME
 .P
@@ -69,6 +69,18 @@ Tor default of 127.0.0.1:9050.
 \fB-O\fR, \fB--no-tor\fR
 .RS 4
 Disable Tor.
+.P
+.RE
+\fB-m\fR, \fB--media\fR \fIPATH\fR
+.RS 4
+Use program at \fIPATH\fR to open media files (movies and sounds).
+Default: mpv
+.P
+.RE
+\fB-M\fR, \fB--no-media\fR
+.RS 4
+Don't try to open media files. Download them like regular binary
+Gopher items.
 .P
 .RE
 \fB-c\fR, \fB--config\fR \fIFILE\fR
@@ -251,7 +263,7 @@ If you create a \fIhistory.gph\fR file in \fI~/.config/phetch/\fR, each Gopher
 URL you open will be stored there.
 .P
 New URLs are appended to the bottom, but loaded in reverse order, so
-you'll see all the most recently visited pages first when you press 
+you'll see all the most recently visited pages first when you press
 the \fBa\fR key.
 .P
 Feel free to edit your history file directly, or share it with your
@@ -282,10 +294,21 @@ tor no
 # Always start in wide mode\&.
 wide no
 
+# Program to use to open media files\&.
+media mpv
+
 # Use emoji indicators for TLS & Tor\&.
 emoji no
 .fi
 .RE
+.P
+.SH MEDIA PLAYER SUPPORT
+.P
+\fBphetch\fR includes support for opening video files (`;` item type) and
+sound files (`s` item type) in `mpv` or an application of your choice
+using the `-m` command line flag. To test it out, visit a compatible
+Gopher server or check out the "gopher types" help page by lauching
+\fBphetch\fR and then pressing `ctrl-h` then `3`.
 .P
 .SH ABOUT
 .P
