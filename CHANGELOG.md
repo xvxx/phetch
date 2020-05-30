@@ -1,3 +1,21 @@
+## v1.0.3-dev
+
+This release adds support for the `;` and `s` Gopher item types,
+as well as the ability to play them in a media player.  meaning
+you can now run Gopher-powered media servers! As seen here:
+
+https://twitter.com/grufwub/status/1264296292764856320
+
+`mpv` is used by default, but you can specify a custom player
+or disable the feature using the `-m` and `-M` flags. Info has
+been added to `--help` and the phetch manual.
+
+Special thanks to @grufwub for the feature request and getting
+the code rolling!
+
+Enjoy!
+
+
 ## v1.0.2
 
 This release fixes a few small but irritating bugs:
