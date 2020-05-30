@@ -96,7 +96,6 @@ pub fn open_external(url: &str) -> Result<()> {
     }
 }
 
-#[cfg(feature = "media")]
 /// Opens a media file with `mpv`.
 pub fn open_media(url: &str) -> Result<()> {
     use {crate::terminal, std::io};

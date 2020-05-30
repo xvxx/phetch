@@ -76,13 +76,6 @@ impl Type {
         }
     }
 
-    #[cfg(not(feature = "media"))]
-    /// Does nothing without the 'media' feature.
-    pub fn is_media(self) -> bool {
-        false
-    }
-
-    #[cfg(feature = "media")]
     /// Check if media to open in player
     pub fn is_media(self) -> bool {
         match self {

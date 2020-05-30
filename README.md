@@ -125,13 +125,11 @@ To enable just TLS support, or just Tor support, use `--features`:
 
 ## media player support
 
-phetch includes experimental support for opening video files (`;` item
-type) and sound files (`s` item type) in [mpv]. To test it out,
-compile phetch using the `--features media` flag and then visit a
-compatible Gopher server (maybe one using [gophor]?). Or check out the
-"gopher types" help page by pressing `ctrl-h` then `3` in phetch:
-
-    cargo run --features media gopher://phetch/1/help/types
+phetch includes support for opening video files (`;` item type) and
+sound files (`s` item type) in [mpv] or an application of your choice
+using the `-m` command line flag. To test it out, visit a compatible
+Gopher server (maybe one using [Gophor]?). Or check out the "gopher
+types" help page by pressing `ctrl-h` then `3` in phetch.
 
 ## todo
 
