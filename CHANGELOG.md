@@ -1,4 +1,4 @@
-## v1.0.3-dev
+## v1.0.3
 
 This release adds support for the `;` and `s` Gopher item types,
 as well as the ability to play them in a media player.  meaning
