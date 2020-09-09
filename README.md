@@ -25,7 +25,7 @@ the gophersphere.
 
 ## features
 
-- <1MB executable for Linux and Mac
+- <1MB executable for Linux, Mac, and NetBSD
 - Technicolor design (based on [GILD](https://github.com/xvxx/gild))
 - No-nonsense keyboard navigation
 - Supports Gopher searches, text and menu pages, and downloads
@@ -77,6 +77,10 @@ On macOS you can install with [Homebrew](https://brew.sh/):
 On Arch Linux, install phetch with your favorite [AUR helper][aur]:
 
     yay phetch
+
+On NetBSD, phetch is included in the main pkgsrc repo:
+
+    pkgin install phetch
 
 Binaries for Linux, Raspberry Pi, and Mac are available at
 https://github.com/xvxx/phetch/releases:
