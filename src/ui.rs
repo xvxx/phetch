@@ -604,7 +604,12 @@ impl UI {
                 }
             }
             // F5 = refresh
-            Action::Keypress(Key::F(5)) => self.dirty = true,
+            Action::Keypress(Key::F(5)) => {
+                if let Some(view) = self.views.get(self.focused) {
+                    let current_url = view.url().to_owned();
+                    self.open(&current_url, &current_url)?
+                }
+            }
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
                 if self.focused > 0 {
                     self.dirty = true;
