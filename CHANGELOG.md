@@ -1,3 +1,8 @@
+## v1.0.4-dev
+
+- The `ctrl-u` and `ctrl-g` keyboard shortcuts can now be used
+  to reload the current page.
+
 ## v1.0.3
 
 This release adds support for the `;` and `s` Gopher item types,
