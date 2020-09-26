@@ -161,12 +161,27 @@ impl UI {
         }
     }
 
+    /// Reload the currently focused view while preserving history.
+    pub fn reload(&mut self, title: &str, url: &str) -> Result<()> {
+        let mut rest = if self.views.len() > self.focused + 1 {
+            self.focused -= 1;
+            self.views.drain(self.focused + 1..).collect()
+        } else {
+            vec![]
+        };
+        self.open(title, url)?;
+        if rest.len() > 1 {
+            rest.remove(0); // drop the view we're reloading
+            self.views.append(&mut rest);
+        }
+        Ok(())
+    }
+
     /// Open a URL - Gopher, internal, telnet, or something else.
     pub fn open(&mut self, title: &str, url: &str) -> Result<()> {
-        // no open loops
         if let Some(view) = self.views.get(self.focused) {
             if view.url() == url {
-                return Ok(());
+                return self.reload(title, url);
             }
         }
 
@@ -636,9 +651,7 @@ impl UI {
                     if let Some(view) = self.views.get(self.focused) {
                         let current_url = view.url();
                         if let Some(url) = self.prompt("Current URL: ", &current_url) {
-                            if url != current_url {
-                                self.open(&url, &url)?;
-                            }
+                            self.open(&url, &url)?;
                         }
                     }
                 }
