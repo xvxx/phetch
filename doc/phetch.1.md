@@ -118,7 +118,7 @@ and *Ctrl-h* are synonyms.
 *g*
 	Go to Gopher URL.
 *u*
-	Edit URL.
+	Edit URL. (Can be used to reload the current page.)
 *y*
 	Copy URL.
 
