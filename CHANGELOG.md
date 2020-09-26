@@ -1,4 +1,4 @@
-## v1.0.4-dev
+## v1.0.4
 
 - The `ctrl-u` and `ctrl-g` keyboard shortcuts can now be used
   to reload the current page.
