@@ -603,7 +603,7 @@ impl UI {
                     self.process_action(fun(response))?;
                 }
             }
-            // F5 = refresh
+            // F5 = redraw the display on resize
             Action::Keypress(Key::F(5)) => self.dirty = true,
             Action::Keypress(Key::Left) | Action::Keypress(Key::Backspace) => {
                 if self.focused > 0 {
