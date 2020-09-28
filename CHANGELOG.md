@@ -1,3 +1,7 @@
+## v1.0.5-dev
+
+Fix a crash introduced in 1.0.4.
+
 ## v1.0.4
 
 - The `ctrl-u` and `ctrl-g` keyboard shortcuts can now be used
