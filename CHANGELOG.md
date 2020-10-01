@@ -1,4 +1,4 @@
-## v1.0.6-dev
+## v1.0.6
 
 - More "reload" bugfixes.
 
