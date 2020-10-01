@@ -160,7 +160,7 @@ dependencies = [
 
 [[package]]
 name = "phetch"
-version = "1.0.6"
+version = "1.0.7-dev"
 dependencies = [
  "atty 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
