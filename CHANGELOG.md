@@ -1,3 +1,7 @@
+## v1.0.6-dev
+
+- More "reload" bugfixes.
+
 ## v1.0.5
 
 Fix a crash introduced in 1.0.4.
