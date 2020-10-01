@@ -164,11 +164,13 @@ impl UI {
     /// Reload the currently focused view while preserving history.
     pub fn reload(&mut self, title: &str, url: &str) -> Result<()> {
         let mut rest = if self.views.len() > self.focused + 1 {
-            self.focused -= 1;
-            self.views.drain(self.focused + 1..).collect()
+            self.views.drain(self.focused..).collect()
         } else {
-            vec![]
+            vec![self.views.remove(self.views.len() - 1)]
         };
+        if self.focused > 0 {
+            self.focused -= 1;
+        }
         self.open(title, url)?;
         if rest.len() > 1 {
             rest.remove(0); // drop the view we're reloading
