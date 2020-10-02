@@ -209,10 +209,10 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
     }
 
     // no tls or tor, try regular connection
-    let sock = addr
-        .to_socket_addrs()
-        .and_then(|mut socks| socks.next().ok_or_else(|| error!("Can't create socket")))?;
-    let mut stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
+    let mut stream = addr
+        .to_socket_addrs()?
+        .find_map(|s| TcpStream::connect_timeout(&s, TCP_TIMEOUT_DURATION).ok())
+        .ok_or_else(|| error!("Can't create socket"))?;
     stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
     stream.write_all(selector.as_ref())?;
     stream.write_all("\r\n".as_ref())?;
