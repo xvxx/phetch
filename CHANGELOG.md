@@ -1,4 +1,4 @@
-## v1.0.7-dev
+## v1.0.7
 
 This release fixes https://github.com/xvxx/phetch/issues/19
 

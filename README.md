@@ -85,9 +85,9 @@ On NetBSD, phetch is included in the main pkgsrc repo:
 Binaries for Linux, Raspberry Pi, and Mac are available at
 https://github.com/xvxx/phetch/releases:
 
-- [phetch-v1.0.6-linux-x86_64.tgz][0]
-- [phetch-v1.0.6-linux-armv7.tgz (Raspberry Pi)][1]
-- [phetch-v1.0.6-macos.zip][2]
+- [phetch-v1.0.7-linux-x86_64.tgz][0]
+- [phetch-v1.0.7-linux-armv7.tgz (Raspberry Pi)][1]
+- [phetch-v1.0.7-macos.zip][2]
 
 Just unzip/untar the `phetch` program into your `$PATH` and get going!
 
@@ -153,9 +153,9 @@ types" help page by pressing `ctrl-h` then `3` in phetch.
 - [ ] bookmarks: toggle instead of just prepending to the file
 - [ ] bookmarks: save the title of the current page
 
-[0]: https://github.com/xvxx/phetch/releases/download/v1.0.6/phetch-v1.0.6-linux-x86_64.tgz
-[1]: https://github.com/xvxx/phetch/releases/download/v1.0.6/phetch-v1.0.6-linux-armv7.tgz
-[2]: https://github.com/xvxx/phetch/releases/download/v1.0.6/phetch-v1.0.6-macos.zip
+[0]: https://github.com/xvxx/phetch/releases/download/v1.0.7/phetch-v1.0.7-linux-x86_64.tgz
+[1]: https://github.com/xvxx/phetch/releases/download/v1.0.7/phetch-v1.0.7-linux-armv7.tgz
+[2]: https://github.com/xvxx/phetch/releases/download/v1.0.7/phetch-v1.0.7-macos.zip
 [phd]: https://github.com/xvxx/phd
 [aur]: https://wiki.archlinux.org/index.php/AUR_helpers
 [mpv]: https://github.com/mpv-player/mpv
