@@ -168,10 +168,10 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
         {
             {
                 if let Ok(connector) = TlsConnector::new() {
-                    let sock = addr.to_socket_addrs().and_then(|mut socks| {
-                        socks.next().ok_or_else(|| error!("Can't create socket"))
-                    })?;
-                    let stream = TcpStream::connect_timeout(&sock, TCP_TIMEOUT_DURATION)?;
+                    let stream = addr
+                        .to_socket_addrs()?
+                        .find_map(|s| TcpStream::connect_timeout(&s, TCP_TIMEOUT_DURATION).ok())
+                        .ok_or_else(|| error!("Can't create socket"))?;
                     stream.set_read_timeout(Some(TCP_TIMEOUT_DURATION))?;
                     if let Ok(mut stream) = connector.connect(host, stream) {
                         stream.write_all(selector.as_ref())?;
@@ -190,15 +190,11 @@ pub fn request(host: &str, port: &str, selector: &str, tls: bool, tor: bool) -> 
     if tor {
         #[cfg(feature = "tor")]
         {
-            let proxy = std::env::var("TOR_PROXY")
+            let mut stream = std::env::var("TOR_PROXY")
                 .unwrap_or_else(|_| "127.0.0.1:9050".into())
                 .to_socket_addrs()?
-                .next()
-                .unwrap();
-            let mut stream = match TorStream::connect_with_address(proxy, addr.as_ref()) {
-                Ok(s) => s,
-                Err(e) => return Err(error!("Tor error: {}", e)),
-            };
+                .find_map(|s| TorStream::connect_with_address(s, addr.as_ref()).ok())
+                .ok_or_else(|| error!("Can't create socket"))?;
             stream.write_all(selector.as_ref())?;
             stream.write_all("\r\n".as_ref())?;
             return Ok(Stream {
