@@ -1,3 +1,12 @@
+## v1.0.7-dev
+
+This release fixes https://github.com/xvxx/phetch/issues/19
+
+phetch was aborting whenever it encountered a connection error
+instead of trying the alternate socket addrs it was given.
+
+Special thanks to @Ramiferous and @voidpin and **rvp**!
+
 ## v1.0.6
 
 - More "reload" bugfixes.
