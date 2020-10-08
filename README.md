@@ -11,6 +11,9 @@
 <a href="https://crates.io/crates/phetch">
 <img src="https://img.shields.io/crates/v/phetch">
 </a>
+<a href="https://aur.archlinux.org/packages/phetch/">
+<img src="https://img.shields.io/aur/version/phetch">
+</a>
 <a href="https://git.io/JvR5g">
 <img src="https://github.com/xvxx/phetch/workflows/build/badge.svg">
 </a>
