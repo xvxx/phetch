@@ -129,7 +129,9 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
             "-p" | "--print" | "-print" => cfg.mode = Mode::Print,
             "-l" | "--local" | "-local" => cfg.start = "gopher://127.0.0.1:7070".into(),
             "-C" | "--no-config" | "-no-config" => {}
-            "-c" | "--config" | "-config" => {}
+            "-c" | "--config" | "-config" => {
+                iter.next(); // skip arg
+            }
             arg if arg.starts_with("--config=") || arg.starts_with("-config=") => {}
             "-s" | "--tls" | "-tls" => {
                 if set_notls {
