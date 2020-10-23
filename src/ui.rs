@@ -27,7 +27,6 @@ use crate::{
     utils, BUG_URL,
 };
 use lazy_static;
-use libc;
 use std::{
     io::{stdin, stdout, Result, Write},
     process::{self, Stdio},
@@ -223,9 +222,8 @@ impl UI {
             };
         }
 
-        self.load(title, url).and_then(|view| {
+        self.load(title, url).map(|view| {
             self.add_view(view);
-            Ok(())
         })
     }
 

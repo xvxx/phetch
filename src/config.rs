@@ -117,7 +117,7 @@ pub fn parse(text: &str) -> Result<Config> {
         }
 
         // skip comments
-        if let Some('#') = line.chars().nth(0) {
+        if let Some('#') = line.chars().next() {
             continue;
         }
 
