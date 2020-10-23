@@ -72,6 +72,8 @@ pub struct Config {
     pub encoding: Encoding,
     /// UI mode. Can't be set in conf file.
     pub mode: ui::Mode,
+    /// Column to wrap lines. 0 = off
+    pub wrap: usize,
 }
 
 impl Default for Config {
@@ -85,6 +87,7 @@ impl Default for Config {
             media: Some(DEFAULT_MEDIA_PLAYER.into()),
             encoding: Encoding::default(),
             mode: ui::Mode::default(),
+            wrap: 0,
         }
     }
 }
@@ -151,6 +154,16 @@ fn parse(text: &str) -> Result<Config> {
             "tls" => cfg.tls = to_bool(val)?,
             "tor" => cfg.tor = to_bool(val)?,
             "wide" => cfg.wide = to_bool(val)?,
+            "wrap" => {
+                if let Ok(num) = val.parse() {
+                    cfg.wrap = num;
+                } else {
+                    return Err(error!(
+                        "`wrap` expects a number value on line {}: {}",
+                        linenum, val
+                    ));
+                }
+            }
             "media" => {
                 cfg.media = match val.to_lowercase().as_ref() {
                     "false" | "none" => None,

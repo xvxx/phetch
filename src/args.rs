@@ -163,6 +163,17 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
                 set_notor = true;
                 cfg.tor = false;
             }
+            "-w" | "--wrap" | "-wrap" => {
+                if let Some(column) = iter.next() {
+                    if let Ok(col) = column.as_ref().parse() {
+                        cfg.wrap = col;
+                    } else {
+                        return Err(ArgError::new("--wrap expects a COLUMN arg"));
+                    }
+                } else {
+                    return Err(ArgError::new("--wrap expects a COLUMN arg"));
+                }
+            }
             "-m" | "--media" | "-media" => {
                 if set_nomedia {
                     return Err(ArgError::new("can't set both --media and --no-media"));

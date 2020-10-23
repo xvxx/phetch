@@ -49,6 +49,10 @@ If no URL is given, however, *phetch* will launch and open its default
 *-O*, *--no-tor*
 	Disable Tor.
 
+*-w*, *--wrap* _COLUMN_
+	Wrap long lines in Gopher "text" views at _COLUMN_.
+	Default: 0 (off)
+
 *-m*, *--media* _PATH_
 	Use program at _PATH_ to open media files (movies and sounds).
 	Default: mpv
