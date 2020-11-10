@@ -49,6 +49,9 @@ emoji no
 
 # Encoding. Only CP437 and UTF8 are supported.
 encoding utf8
+
+# Wrap text at N columns. 0 = off (--wrap)
+wrap 0
 ";
 
 /// Not all the config options are available in the phetch.conf. We
