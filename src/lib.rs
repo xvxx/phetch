@@ -43,6 +43,7 @@ pub mod color;
 pub mod args;
 pub mod bookmarks;
 pub mod config;
+mod encoding;
 pub mod gopher;
 pub mod help;
 pub mod history;

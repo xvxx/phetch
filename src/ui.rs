@@ -268,7 +268,12 @@ impl UI {
         };
         let typ = gopher::type_for_url(&url);
         match typ {
-            Type::Menu | Type::Search => Ok(Box::new(Menu::from(url, res, &self.config, tls))),
+            Type::Menu | Type::Search => Ok(Box::new(Menu::from(
+                url,
+                gopher::response_to_string(&res),
+                &self.config,
+                tls,
+            ))),
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, &self.config, tls))),
             _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
@@ -627,8 +632,8 @@ impl UI {
                 'r' => {
                     if let Some(view) = self.views.get(self.focused) {
                         let url = view.url();
-                        let raw = view.raw().to_string();
-                        let mut text = Text::from(url, raw, &self.config, view.is_tls());
+                        let mut text =
+                            Text::from(url, view.raw().into(), &self.config, view.is_tls());
                         text.wide = true;
                         self.add_view(Box::new(text));
                     }

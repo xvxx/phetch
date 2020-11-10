@@ -74,7 +74,7 @@ pub struct Url<'a> {
 
 /// Fetches a gopher URL and returns a tuple of:
 ///   (did tls work?, raw Gopher response)
-pub fn fetch_url(url: &str, tls: bool, tor: bool) -> Result<(bool, String)> {
+pub fn fetch_url(url: &str, tls: bool, tor: bool) -> Result<(bool, Vec<u8>)> {
     let u = parse_url(url);
     fetch(u.host, u.port, u.sel, tls, tor)
 }
@@ -87,13 +87,19 @@ pub fn fetch(
     selector: &str,
     tls: bool,
     tor: bool,
-) -> Result<(bool, String)> {
+) -> Result<(bool, Vec<u8>)> {
     let mut stream = request(host, port, selector, tls, tor)?;
     let mut body = Vec::new();
     stream.read_to_end(&mut body)?;
-    let mut out = String::from_utf8_lossy(&body).to_string();
-    clean_response(&mut out);
-    Ok((stream.is_tls(), out))
+    Ok((stream.is_tls(), body))
+}
+
+/// Turn a Gopher response from `fetch` into a UTF8 String, cleaning
+/// up unprintable characters along the way.
+pub fn response_to_string(res: &[u8]) -> String {
+    let mut s = String::from_utf8_lossy(res).to_string();
+    clean_response(&mut s);
+    s
 }
 
 /// Removes unprintable characters from Gopher response.

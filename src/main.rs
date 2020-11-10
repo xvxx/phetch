@@ -6,7 +6,7 @@ use std::{
     env,
     error::Error,
     io::{self, stdout, Write},
-    panic, process,
+    panic, process, str,
 };
 
 fn main() {
@@ -100,7 +100,7 @@ Once you've launched phetch, use `ctrl-h` to view the on-line help."
 /// Print just the raw Gopher response.
 fn print_raw(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
     let (_, out) = gopher::fetch_url(url, tls, tor)?;
-    println!("{}", out);
+    println!("{}", gopher::response_to_string(&out));
     Ok(())
 }
 
@@ -110,6 +110,7 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
     let mut out = String::new();
     let typ = gopher::type_for_url(url);
     let (_, response) = gopher::fetch_url(url, tls, tor)?;
+    let response = gopher::response_to_string(&response);
     match typ {
         gopher::Type::Menu => {
             let menu = menu::parse(url, response);

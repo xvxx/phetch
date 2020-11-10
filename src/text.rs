@@ -4,10 +4,11 @@
 
 use crate::{
     config::Config,
+    encoding::Encoding,
     terminal,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
 };
-use std::fmt;
+use std::{borrow::Cow, fmt, str};
 
 /// The Text View holds the raw Gopher response as well as information
 /// about which lines should currently be displayed on screen.
@@ -15,7 +16,7 @@ pub struct Text {
     /// Gopher URL
     url: String,
     /// Gopher response
-    raw_response: String,
+    raw_response: Vec<u8>,
     /// Current scroll offset, in rows
     scroll: usize,
     /// Number of lines
@@ -30,6 +31,8 @@ pub struct Text {
     pub tor: bool,
     /// UI mode. Interactive (Run), Printing, Raw mode...
     mode: ui::Mode,
+    /// Text Encoding of Response
+    encoding: Encoding,
     /// Currently in wide mode?
     pub wide: bool,
 }
@@ -54,7 +57,7 @@ impl View for Text {
     }
 
     fn raw(&self) -> &str {
-        self.raw_response.as_ref()
+        str::from_utf8(&self.raw_response).unwrap_or_default()
     }
 
     fn term_size(&mut self, cols: usize, rows: usize) {
@@ -79,6 +82,7 @@ impl View for Text {
                 self.scroll = self.final_scroll();
                 Action::Redraw
             }
+            Key::Ctrl('e') => self.toggle_encoding(),
             Key::Down | Key::Ctrl('n') | Key::Char('n') | Key::Ctrl('j') | Key::Char('j') => {
                 if self.scroll < self.final_scroll() {
                     self.scroll += 1;
@@ -138,8 +142,8 @@ impl View for Text {
         } else {
             self.lines
         };
-        let iter = self
-            .raw_response
+        let response = self.encoded_response();
+        let iter = response
             .split_terminator('\n')
             .skip(self.scroll)
             .take(limit);
@@ -170,15 +174,19 @@ impl View for Text {
 
 impl Text {
     /// Create a Text View from a raw Gopher response and a few options.
-    pub fn from(url: &str, response: String, config: &Config, tls: bool) -> Text {
+    pub fn from(url: &str, response: Vec<u8>, config: &Config, tls: bool) -> Text {
         let mut lines = 0;
         let mut longest = 0;
+        let mut line_len = 0;
 
-        for line in response.split_terminator('\n') {
-            lines += 1;
-            let count = line.chars().count();
-            if count > longest {
-                longest = count;
+        for &b in &response {
+            line_len += 1;
+            if b == b'\n' {
+                if line_len > longest {
+                    longest = line_len;
+                }
+                line_len = 0;
+                lines += 1;
             }
         }
 
@@ -192,7 +200,31 @@ impl Text {
             mode: config.mode,
             tls,
             tor: config.tor,
+            encoding: Encoding::UTF8,
             wide: config.wide,
+        }
+    }
+
+    /// Toggle between our two encodings.
+    fn toggle_encoding(&mut self) -> Action {
+        if matches!(self.encoding, Encoding::UTF8) {
+            self.encoding = Encoding::CP437;
+        } else {
+            self.encoding = Encoding::UTF8;
+        }
+        Action::Redraw
+    }
+
+    /// Interpret `self.raw_response` according to `self.encoding`.
+    fn encoded_response(&self) -> Cow<str> {
+        if matches!(self.encoding, Encoding::CP437) {
+            let mut converted = String::with_capacity(self.raw_response.len());
+            for b in &self.raw_response {
+                converted.push_str(cp437::convert_byte(&b));
+            }
+            Cow::from(converted)
+        } else {
+            String::from_utf8_lossy(&self.raw_response)
         }
     }
 
