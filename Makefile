@@ -31,7 +31,7 @@ $(PHETCH_RELEASE): $(RSFILES)
 
 # Build the debug version
 $(PHETCH_DEBUG): $(RSFILES)
-	cargo build
+	cargo build --no-default-features
 
 # Install phetch and its manual.
 install: all
