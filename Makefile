@@ -20,6 +20,7 @@ release: $(PHETCH_RELEASE)
 
 # Binary with debugging info
 debug: $(PHETCH_DEBUG)
+	./target/debug/phetch
 
 # Remove the release directory and its contents
 clean:
