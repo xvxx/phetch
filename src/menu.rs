@@ -1000,7 +1000,7 @@ pub fn parse_line(start: usize, raw: &str) -> Option<LineSpan> {
 
     // if this line contains colors, calculate the visible length and
     // where to truncate when abiding by `MAX_COLS`
-    if *&raw[start..text_end].contains("\x1b[") {
+    if raw[start..text_end].contains("\x1b[") {
         let mut is_color = false;
         let mut iter = raw[start..text_end].char_indices();
         visible_len = 0;
@@ -1010,21 +1010,17 @@ pub fn parse_line(start: usize, raw: &str) -> Option<LineSpan> {
                 if c == 'm' {
                     is_color = false;
                 }
-            } else {
-                if c == '\x1b' {
-                    if let Some((_, '[')) = iter.next() {
-                        is_color = true;
-                    }
-                } else {
-                    if visible_len < MAX_COLS {
-                        truncated_len = i;
-                        visible_len += 1;
-                    } else {
-                        truncated_len = i;
-                        visible_len = MAX_COLS + 1;
-                        break;
-                    }
+            } else if c == '\x1b' {
+                if let Some((_, '[')) = iter.next() {
+                    is_color = true;
                 }
+            } else if visible_len < MAX_COLS {
+                truncated_len = i;
+                visible_len += 1;
+            } else {
+                truncated_len = i;
+                visible_len = MAX_COLS + 1;
+                break;
             }
         }
     }

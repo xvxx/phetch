@@ -33,11 +33,7 @@ pub enum Action {
 impl Action {
     /// Is it Action::None?
     pub fn is_none(&self) -> bool {
-        if let Action::None = self {
-            true
-        } else {
-            false
-        }
+        matches!(self, Action::None)
     }
 }
 

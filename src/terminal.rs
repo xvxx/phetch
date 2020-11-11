@@ -5,7 +5,6 @@
 use lazy_static::lazy_static;
 use libc::{cfmakeraw, tcgetattr, tcsetattr, termios as Termios, STDIN_FILENO, TCSANOW};
 use std::{io, sync::Mutex};
-use termion;
 
 pub use termion::cursor::Goto;
 pub use termion::cursor::Hide as HideCursor;

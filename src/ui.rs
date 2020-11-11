@@ -26,7 +26,6 @@ use crate::{
     text::Text,
     utils, BUG_URL,
 };
-use lazy_static;
 use std::{
     io::{stdin, stdout, Result, Write},
     process::{self, Stdio},
@@ -236,7 +235,7 @@ impl UI {
             gopher::download_url(&url, tls, tor, chan)
         })
         .and_then(|res| res)
-        .and_then(|(path, bytes)| {
+        .map(|(path, bytes)| {
             self.set_status(
                 format!(
                     "Download complete! {} saved to {}",
@@ -245,7 +244,6 @@ impl UI {
                 )
                 .as_ref(),
             );
-            Ok(())
         })
     }
 

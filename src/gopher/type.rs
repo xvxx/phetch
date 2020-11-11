@@ -37,10 +37,7 @@ impl Type {
 
     /// Text document?
     pub fn is_text(self) -> bool {
-        match self {
-            Type::Text | Type::Xml => true,
-            _ => false,
-        }
+        matches!(self, Type::Text | Type::Xml)
     }
 
     /// HTML link?
@@ -60,36 +57,33 @@ impl Type {
 
     /// Is this something we can download?
     pub fn is_download(self) -> bool {
-        match self {
+        matches!(
+            self,
             Type::Binhex
-            | Type::DOSFile
-            | Type::UUEncoded
-            | Type::Binary
-            | Type::GIF
-            | Type::Image
-            | Type::PNG
-            | Type::Sound
-            | Type::Video
-            | Type::Calendar
-            | Type::Document => true,
-            _ => false,
-        }
+                | Type::DOSFile
+                | Type::UUEncoded
+                | Type::Binary
+                | Type::GIF
+                | Type::Image
+                | Type::PNG
+                | Type::Sound
+                | Type::Video
+                | Type::Calendar
+                | Type::Document
+        )
     }
 
     /// Check if media to open in player
     pub fn is_media(self) -> bool {
-        match self {
-            Type::Sound | Type::Video => true,
-            _ => false,
-        }
+        matches!(self, Type::Sound | Type::Video)
     }
 
     /// Is this a type phetch supports?
     pub fn is_supported(self) -> bool {
-        match self {
-            Type::CSOEntity | Type::Mirror | Type::Telnet3270 | Type::Mailbox => false,
-            _ => true,
-        }
+        !matches!(
+            self,
+            Type::CSOEntity | Type::Mirror | Type::Telnet3270 | Type::Mailbox
+        )
     }
 
     /// Gopher Item Type to RFC char.
