@@ -133,6 +133,8 @@ and *Ctrl-h* are synonyms.
 	View raw source.
 *w*
 	Toggle wide mode.
+*e*
+	Toggle encoding between UTF8 and CP437.
 
 ## MENU NAVIGATION
 

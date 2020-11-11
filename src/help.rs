@@ -122,6 +122,7 @@ ia          show history
 i
 ir          view raw source
 iw          toggle wide mode
+ie          toggle encoding (cp437 & utf8)
 iq          quit phetch
 ih          show help
 i
