@@ -77,3 +77,8 @@ pub const TOR_SUPPORT: bool = true;
 #[cfg(not(feature = "tor"))]
 /// Whether we compiled with Tor support.
 pub const TOR_SUPPORT: bool = false;
+
+lazy_static! {
+    /// Is the NO_COLOR env variable set? https://no-color.org/
+    pub static ref NO_COLOR: bool = std::env::var("NO_COLOR").is_ok();
+}

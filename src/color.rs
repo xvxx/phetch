@@ -11,12 +11,16 @@ use std::fmt;
 ///   let x = color_string!("Hyperlink-ish", Blue, Underline);
 macro_rules! color_string {
     ($s:expr, $( $color:ident ),+) => {{
-        let mut out = String::from("\x1b[");
-        $( out.push_str(crate::color::$color::code()); out.push_str(";"); )+
-        out.push('m');
-        out.push_str(&$s);
-        out.push_str(crate::color::Reset.as_ref());
-        out.replace(";m", "m")
+        if *crate::NO_COLOR {
+            $s.to_string()
+        } else {
+            let mut out = String::from("\x1b[");
+            $( out.push_str(crate::color::$color::code()); out.push_str(";"); )+
+            out.push('m');
+            out.push_str(&$s);
+            out.push_str(crate::color::Reset.as_ref());
+            out.replace(";m", "m")
+        }
     }};
 }
 
@@ -29,7 +33,11 @@ macro_rules! color_string {
 ///   o.push_str(color!(Reset));
 macro_rules! color {
     ($color:ident) => {
-        crate::color::$color.as_ref()
+        if *crate::NO_COLOR {
+            ""
+        } else {
+            crate::color::$color.as_ref()
+        }
     };
 }
 
