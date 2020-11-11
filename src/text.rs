@@ -242,3 +242,28 @@ impl Text {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_cp437() {
+        let body = include_bytes!("../tests/CP437.txt");
+        let mut text = Text::from("", body.to_vec(), &Config::default(), false);
+        text.mode = ui::Mode::Print;
+
+        let res = text.render();
+        assert!(!res.contains("╟"));
+        assert!(!res.contains("≈"));
+        assert!(!res.contains("Ω"));
+        assert!(!res.contains("Θ"));
+
+        text.toggle_encoding();
+        let res = text.render();
+        assert!(res.contains("╟"));
+        assert!(res.contains("≈"));
+        assert!(res.contains("Ω"));
+        assert!(res.contains("Θ"));
+    }
+}
