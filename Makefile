@@ -26,6 +26,11 @@ debug: $(PHETCH_DEBUG)
 clean:
 	@rm -rf target
 
+# Run tests
+test:
+	cargo clippy --all-features
+	cargo test --all-features
+
 # Build the release version
 $(PHETCH_RELEASE): $(RSFILES)
 	cargo build --release
