@@ -19,6 +19,7 @@ pub use self::{action::Action, mode::Mode, view::View};
 use crate::{
     bookmarks, color,
     config::Config,
+    encoding::Encoding,
     gopher::{self, Type},
     help, history,
     menu::Menu,
@@ -375,22 +376,41 @@ impl UI {
     /// Render the connection status (TLS or Tor).
     fn render_conn_status(&self) -> Option<String> {
         let view = self.views.get(self.focused)?;
-        if view.is_tls() {
-            let status = color_string!("TLS", Black, GreenBG);
-            return Some(format!(
-                "{}{}",
-                terminal::Goto(self.cols() - 3, self.rows()),
-                if self.config.emoji { "🔐" } else { &status },
-            ));
-        } else if view.is_tor() {
-            let status = color_string!("TOR", Bold, White, MagentaBG);
-            return Some(format!(
-                "{}{}",
-                terminal::Goto(self.cols() - 3, self.rows()),
-                if self.config.emoji { "🧅" } else { &status },
-            ));
+        let mut status = vec![];
+
+        if matches!(view.encoding(), Encoding::CP437) {
+            status.push("CP439");
         }
-        None
+
+        if view.is_tls() {
+            if self.config.emoji {
+                status.push("🔐");
+            } else {
+                status.push("TLS");
+            }
+        } else if view.is_tor() {
+            if self.config.emoji {
+                status.push("🧅");
+            } else {
+                status.push("TOR");
+            }
+        }
+
+        if status.is_empty() {
+            None
+        } else {
+            let len = status.iter().fold(0, |a, s| a + s.len());
+            let len = len + status.len();
+            Some(format!(
+                "{}{}",
+                terminal::Goto(self.cols() - len as u16, self.rows()),
+                status
+                    .iter()
+                    .map(|s| color_string!(s, Bold, White))
+                    .collect::<Vec<_>>()
+                    .join(" "),
+            ))
+        }
     }
 
     /// Render the status line.
