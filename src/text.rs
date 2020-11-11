@@ -72,6 +72,10 @@ impl View for Text {
         self.wide
     }
 
+    fn encoding(&self) -> Encoding {
+        self.encoding
+    }
+
     fn respond(&mut self, c: Key) -> Action {
         match c {
             Key::Home => {
@@ -200,7 +204,7 @@ impl Text {
             mode: config.mode,
             tls,
             tor: config.tor,
-            encoding: Encoding::UTF8,
+            encoding: Encoding::default(),
             wide: config.wide,
         }
     }

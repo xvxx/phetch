@@ -1,5 +1,7 @@
-use crate::ui;
-use std::fmt;
+use {
+    crate::{encoding::Encoding, ui},
+    std::fmt,
+};
 
 /// Views represent what's on screen, a Gopher Menu/Text/etc item.
 pub trait View: fmt::Display {
@@ -23,4 +25,8 @@ pub trait View: fmt::Display {
     fn wide(&mut self) -> bool;
     /// Set the current screen size.
     fn term_size(&mut self, cols: usize, rows: usize);
+    /// The current encoding.
+    fn encoding(&self) -> Encoding {
+        Encoding::default()
+    }
 }
