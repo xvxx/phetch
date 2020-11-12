@@ -204,7 +204,7 @@ impl Text {
             mode: config.mode,
             tls,
             tor: config.tor,
-            encoding: Encoding::default(),
+            encoding: config.encoding,
             wide: config.wide,
         }
     }
