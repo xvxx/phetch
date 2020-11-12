@@ -1,3 +1,56 @@
+## v1.1.0-dev
+
+Three new features in this release, plus an unknown number of new
+bugs. I apologize in advance.
+
+1. phetch will now disable color in menus when the `NO_COLOR` env
+  variable is set. See https://no-color.org/ for more information.
+2. phetch has added support for the CP437 encoding! You can toggle it
+  on or off using `ctrl-e` (for encoding). See
+   https://en.wikipedia.org/wiki/Code_page_437 for information. Huuuge
+   thanks to Kjell for suggesting this feature and providing some
+   great test data!
+3. phetch now supports a primitive form of wrapping long lines in text
+  views. It won't reflow the text, but it will make some phlogs and
+  other documents slightly more readable.
+
+----
+
+You may have run into long lines that don't break at the margins,
+making the page hard to scroll and read:
+
+![not wrapped](https://user-images.githubusercontent.com/41523880/97058194-f73d9d80-1541-11eb-8fc8-910489fafcc3.png)
+
+Now, by either passing `--wrap NUM` or adding `wrap NUM` to your
+`phetch.conf` file, phetch will attempt to wrap long lines at the
+nearest hypen or space:
+
+ ![wrapped](https://user-images.githubusercontent.com/41523880/97058201-fa388e00-1541-11eb-84ef-c539304870a6.png)
+
+This is really useful if you want to browse, say, a directory of
+Markdown files over Gopher. Modern Markdown is often written with the
+assumption that the client will do the wrapping, so it can end up
+looking pretty messy in an ananchronistic client like phetch. Reading
+those files is now a bit easier:
+
+| not wrapped   | wrapped  |
+|---|---|
+| ![not wrapped](https://user-images.githubusercontent.com/41523880/97057857-1556ce00-1541-11eb-9cc1-6c6d438529ea.png) | ![wrapped](https://user-images.githubusercontent.com/41523880/97057869-1ee03600-1541-11eb-8e7b-ae47ff9ec871.png) |
+
+This also works nicely on native Gopher content: phlog entries
+sometimes have long URLs in their footnotes, and that could screw up
+phetch's margin calculations.
+
+Note that this doesn't do any *reflow* of text, so documents with long
+lines will still look a bit wonky, as you can see above. Some lines
+will be too short. But it's a lot more usable, so we'll take it!
+
+PS You can use smaller values to get weird with it:
+
+![weird](https://user-images.githubusercontent.com/41523880/97057878-269fda80-1541-11eb-9435-89f97cce8825.png)
+
+Enjoy!
+
 ## v1.0.7
 
 This release fixes https://github.com/xvxx/phetch/issues/19
