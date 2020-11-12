@@ -217,6 +217,9 @@ media mpv
 
 # Use emoji indicators for TLS & Tor.
 emoji no
+
+# Encoding. Only CP437 and UTF8 are supported.
+encoding utf8
 ```
 
 # MEDIA PLAYER SUPPORT

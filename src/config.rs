@@ -3,11 +3,13 @@
 //!
 //! An example default config is provided but unused by this module.
 
-use crate::{phetchdir, ui};
-use std::{
-    collections::HashMap,
-    fs::OpenOptions,
-    io::{Read, Result},
+use {
+    crate::{encoding::Encoding, phetchdir, ui},
+    std::{
+        collections::HashMap,
+        fs::OpenOptions,
+        io::{Read, Result},
+    },
 };
 
 /// phetch will look for this file on load.
@@ -40,6 +42,9 @@ media mpv
 
 # Use emoji indicators for TLS & Tor. (--emoji)
 emoji no
+
+# Encoding. Only CP437 and UTF8 are supported.
+encoding utf8
 ";
 
 /// Not all the config options are available in the phetch.conf. We
@@ -59,6 +64,8 @@ pub struct Config {
     pub emoji: bool,
     /// Media player to use.
     pub media: Option<String>,
+    /// Default encoding
+    pub encoding: Encoding,
     /// UI mode. Can't be set in conf file.
     pub mode: ui::Mode,
 }
@@ -72,6 +79,7 @@ impl Default for Config {
             wide: false,
             emoji: false,
             media: Some(DEFAULT_MEDIA_PLAYER.into()),
+            encoding: Encoding::default(),
             mode: ui::Mode::default(),
         }
     }
@@ -141,6 +149,11 @@ pub fn parse(text: &str) -> Result<Config> {
                     "false" | "none" => None,
                     _ => Some(val.into()),
                 }
+            }
+            "encoding" => {
+                cfg.encoding = Encoding::from_str(val).map_err(|e|{
+                    error!("{} on line {}: {:?}",e, linenum, line)
+                })?;
             }
             _ => return Err(error!("Unknown key on line {}: {}", linenum, key)),
         }
@@ -229,5 +242,23 @@ mod tests {
         assert_eq!(res.is_err(), true);
         let e = res.unwrap_err();
         assert_eq!(format!("{}", e), "Duplicate key on line 4: tls");
+    }
+
+    #[test]
+    fn test_encoding() {
+        let cfg = parse("tls true\nwide no\nemoji yes").unwrap();
+        assert_eq!(cfg.tls, true);
+        assert_eq!(cfg.encoding, Encoding::default());
+
+        let cfg = parse("tls true\nencoding utf8\n").unwrap();
+        assert_eq!(cfg.tls, true);
+        assert_eq!(cfg.encoding, Encoding::UTF8);
+
+        let cfg = parse("tls true\nencoding CP437\n").unwrap();
+        assert_eq!(cfg.tls, true);
+        assert_eq!(cfg.encoding, Encoding::CP437);
+
+        let res = parse("tls true\nencoding what\n");
+        assert!(res.is_err());
     }
 }
