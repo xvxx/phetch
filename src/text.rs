@@ -3,7 +3,7 @@
 //! to the main UI to perform.
 
 use crate::{
-    config::Config,
+    config::SharedConfig as Config,
     encoding::Encoding,
     terminal,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
@@ -13,6 +13,8 @@ use std::{borrow::Cow, fmt, str};
 /// The Text View holds the raw Gopher response as well as information
 /// about which lines should currently be displayed on screen.
 pub struct Text {
+    /// Ref to our global config
+    config: Config,
     /// Gopher URL
     url: String,
     /// Gopher response
@@ -222,6 +224,7 @@ impl Text {
         } else {
             self.encoding = Encoding::UTF8;
         }
+        self.config.write().unwrap().encoding = self.encoding;
         Action::Redraw
     }
 
