@@ -18,7 +18,7 @@ pub use self::{action::Action, mode::Mode, view::View};
 
 use crate::{
     bookmarks, color,
-    config::Config,
+    config::{Config, SharedConfig},
     encoding::Encoding,
     gopher::{self, Type},
     help, history,
@@ -32,7 +32,7 @@ use std::{
     process::{self, Stdio},
     sync::{
         mpsc::{channel, Receiver, Sender},
-        Arc, Mutex,
+        Arc, Mutex, RwLock,
     },
     thread,
     time::Duration,
@@ -92,7 +92,7 @@ pub struct UI {
     /// Status message to display on screen, if any
     status: String,
     /// User config. Command line options + phetch.conf
-    config: Config,
+    config: SharedConfig,
     /// Channel where UI events are sent.
     keys: KeyReceiver,
 }
@@ -111,7 +111,7 @@ impl UI {
             dirty: true,
             running: true,
             size,
-            config,
+            config: Arc::new(RwLock::new(config)),
             status: String::new(),
             keys: Self::spawn_keyboard_listener(),
         }
@@ -204,10 +204,10 @@ impl UI {
         // binary downloads
         let typ = gopher::type_for_url(url);
 
-        if typ.is_media() && self.config.media.is_some() {
+        if typ.is_media() && self.config.read().unwrap().media.is_some() {
             self.dirty = true;
             return if self.confirm(&format!("Open in media player? {}", url)) {
-                utils::open_media(self.config.media.as_ref().unwrap(), url)
+                utils::open_media(self.config.read().unwrap().media.as_ref().unwrap(), url)
             } else {
                 Ok(())
             };
@@ -230,7 +230,10 @@ impl UI {
     /// Download a binary file. Used by `open()` internally.
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
-        let (tls, tor) = (self.config.tls, self.config.tor);
+        let (tls, tor) = (
+            self.config.read().unwrap().tls,
+            self.config.read().unwrap().tor,
+        );
         let chan = self.keys.clone();
         self.spinner(&format!("Downloading {}", url), move || {
             gopher::download_url(&url, tls, tor, chan)
@@ -260,7 +263,10 @@ impl UI {
         thread::spawn(move || history::save(&hname, &hurl));
         // request thread
         let thread_url = url.to_string();
-        let (tls, tor) = (self.config.tls, self.config.tor);
+        let (tls, tor) = (
+            self.config.read().unwrap().tls,
+            self.config.read().unwrap().tor,
+        );
         // don't spin on first ever request
         let (tls, res) = if self.views.is_empty() {
             gopher::fetch_url(&thread_url, tls, tor)?
@@ -272,10 +278,10 @@ impl UI {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(
                 url,
                 gopher::response_to_string(&res),
-                &self.config,
+                self.config.clone(),
                 tls,
             ))),
-            Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, &self.config, tls))),
+            Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, self.config.clone(), tls))),
             _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
     }
@@ -286,7 +292,12 @@ impl UI {
             &url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
         ) {
-            Ok(Box::new(Menu::from(url, source, &self.config, false)))
+            Ok(Box::new(Menu::from(
+                url,
+                source,
+                self.config.clone(),
+                false,
+            )))
         } else {
             Err(error!("phetch URL not found: {}", url))
         }
@@ -383,13 +394,13 @@ impl UI {
         }
 
         if view.is_tls() {
-            if self.config.emoji {
+            if self.config.read().unwrap().emoji {
                 status.push("🔐");
             } else {
                 status.push("TLS");
             }
         } else if view.is_tor() {
-            if self.config.emoji {
+            if self.config.read().unwrap().emoji {
                 status.push("🧅");
             } else {
                 status.push("TOR");
@@ -653,7 +664,7 @@ impl UI {
                     if let Some(view) = self.views.get(self.focused) {
                         let url = view.url();
                         let mut text =
-                            Text::from(url, view.raw().into(), &self.config, view.is_tls());
+                            Text::from(url, view.raw().into(), self.config.clone(), view.is_tls());
                         text.wide = true;
                         self.add_view(Box::new(text));
                     }
@@ -687,7 +698,8 @@ impl UI {
                     }
                 }
                 'w' => {
-                    self.config.wide = !self.config.wide;
+                    let wide = self.config.read().unwrap().wide;
+                    self.config.write().unwrap().wide = !wide;
                     if let Some(view) = self.views.get_mut(self.focused) {
                         let w = view.wide();
                         view.set_wide(!w);

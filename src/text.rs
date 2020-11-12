@@ -178,7 +178,7 @@ impl View for Text {
 
 impl Text {
     /// Create a Text View from a raw Gopher response and a few options.
-    pub fn from(url: &str, response: Vec<u8>, config: &Config, tls: bool) -> Text {
+    pub fn from(url: &str, response: Vec<u8>, config: Config, tls: bool) -> Text {
         let mut lines = 0;
         let mut longest = 0;
         let mut line_len = 0;
@@ -194,18 +194,24 @@ impl Text {
             }
         }
 
+        let mode = config.read().unwrap().mode;
+        let tor = config.read().unwrap().tor;
+        let encoding = config.read().unwrap().encoding;
+        let wide = config.read().unwrap().wide;
+
         Text {
+            config,
             url: url.into(),
             raw_response: response,
             scroll: 0,
             lines,
             longest,
             size: (0, 0),
-            mode: config.mode,
+            mode,
             tls,
-            tor: config.tor,
-            encoding: config.encoding,
-            wide: config.wide,
+            tor,
+            encoding,
+            wide,
         }
     }
 
@@ -250,7 +256,7 @@ mod test {
     #[test]
     fn test_cp437() {
         let body = include_bytes!("../tests/CP437.txt");
-        let mut text = Text::from("", body.to_vec(), &Config::default(), false);
+        let mut text = Text::from("", body.to_vec(), Config::default(), false);
         text.mode = ui::Mode::Print;
 
         let res = text.render();

@@ -43,7 +43,7 @@ impl Error for ArgError {
 pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
     let mut set_nocfg = false;
     let mut set_cfg = false;
-    let mut cfg = config::default();
+    let mut cfg = Config::default();
 
     // check for config to load / not load first
     let mut iter = args.iter();
@@ -61,12 +61,8 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
                 }
                 set_cfg = true;
                 if let Some(arg) = iter.next() {
-                    cfg = match config::load_file(arg.as_ref()) {
-                        Ok(c) => c,
-                        Err(e) => {
-                            return Err(ArgError::new(format!("error loading config: {}", e)));
-                        }
-                    };
+                    cfg = config::load_file(arg.as_ref())
+                        .map_err(|e| ArgError::new(format!("error loading config: {}", e)))?;
                 } else {
                     return Err(ArgError::new("need a config file"));
                 }

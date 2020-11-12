@@ -7,7 +7,7 @@
 //! it returns an Action to the UI representing its intent.
 
 use crate::{
-    config::Config,
+    config::SharedConfig as Config,
     gopher::{self, Type},
     terminal,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
@@ -249,12 +249,12 @@ impl View for Menu {
 impl Menu {
     /// Create a representation of a Gopher Menu from a raw Gopher
     /// response and a few options.
-    pub fn from(url: &str, response: String, config: &Config, tls: bool) -> Menu {
+    pub fn from(url: &str, response: String, config: Config, tls: bool) -> Menu {
         Menu {
             tls,
-            tor: config.tor,
-            wide: config.wide,
-            mode: config.mode,
+            tor: config.read().unwrap().tor,
+            wide: config.read().unwrap().wide,
+            mode: config.read().unwrap().mode,
             ..parse(url, response)
         }
     }

@@ -9,8 +9,12 @@ use {
         collections::HashMap,
         fs::OpenOptions,
         io::{Read, Result},
+        sync::{Arc, RwLock},
     },
 };
+
+/// Global, shared config.
+pub type SharedConfig = Arc<RwLock<Config>>;
 
 /// phetch will look for this file on load.
 const CONFIG_FILE: &str = "phetch.conf";
@@ -113,8 +117,8 @@ pub fn exists() -> bool {
 }
 
 /// Parses a phetch config file into a Config struct.
-pub fn parse(text: &str) -> Result<Config> {
-    let mut cfg = default();
+fn parse(text: &str) -> Result<Config> {
+    let mut cfg = Config::default();
     let mut keys: HashMap<&str, bool> = HashMap::new();
 
     for (mut linenum, line) in text.split_terminator('\n').enumerate() {
@@ -154,9 +158,8 @@ pub fn parse(text: &str) -> Result<Config> {
                 }
             }
             "encoding" => {
-                cfg.encoding = Encoding::from_str(val).map_err(|e|{
-                    error!("{} on line {}: {:?}",e, linenum, line)
-                })?;
+                cfg.encoding = Encoding::from_str(val)
+                    .map_err(|e| error!("{} on line {}: {:?}", e, linenum, line))?;
             }
             _ => return Err(error!("Unknown key on line {}: {}", linenum, key)),
         }
