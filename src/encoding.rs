@@ -1,5 +1,7 @@
+use std::io::Result;
+
 /// Encoding of Gopher response. Only UTF8 and CP437 are supported.
-#[derive(Copy, Clone)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum Encoding {
     /// Unicode
     UTF8,
@@ -10,5 +12,19 @@ pub enum Encoding {
 impl Default for Encoding {
     fn default() -> Self {
         Encoding::UTF8
+    }
+}
+
+impl Encoding {
+    /// Accepts a string like "UTF8" or "CP437" and returns the
+    /// appropriate `Encoding`, or an `Err`.
+    pub fn from_str(s: &str) -> Result<Self> {
+        match s.to_lowercase().as_ref() {
+            "utf8" | "utf-8" | "utf 8" => Ok(Encoding::UTF8),
+            "cp437" | "cp-437" | "cp 437" | "pc8" | "pc-8" | "oem us" | "oem-us" => {
+                Ok(Encoding::CP437)
+            }
+            _ => Err(error!("Expected CP437 or UTF8 encoding")),
+        }
     }
 }

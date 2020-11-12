@@ -63,6 +63,9 @@ If no URL is given, however, *phetch* will launch and open its default
 *-C*, *--no-config*
 	Do not use any config file.
 
+*-e*, *--encoding* _ENCODING_
+	Render text views in CP437 or UTF8 (default) encoding.
+
 *-h*, *--help*
 	Print a help summary and exit.
 

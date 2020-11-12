@@ -1,11 +1,14 @@
 //! args::parse() is used to parse command line arguments into a
 //! Config structure.
 
-use crate::{
-    config::{self, Config},
-    ui::Mode,
+use {
+    crate::{
+        config::{self, Config},
+        encoding::Encoding,
+        ui::Mode,
+    },
+    std::{error::Error, fmt, result::Result},
 };
-use std::{error::Error, fmt, result::Result};
 
 /// The error returned if something goes awry while parsing the
 /// command line arguments.
@@ -181,6 +184,14 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
                 }
                 set_nomedia = true;
                 cfg.media = None;
+            }
+            "-e" | "--encoding" | "-encoding" => {
+                if let Some(encoding) = iter.next() {
+                    cfg.encoding = Encoding::from_str(encoding.as_ref())
+                        .map_err(|e| ArgError::new(e.to_string()))?;
+                } else {
+                    return Err(ArgError::new("--encoding expects an ENCODING arg"));
+                }
             }
             arg => {
                 if arg.starts_with('-') {
