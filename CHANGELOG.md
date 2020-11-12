@@ -4,18 +4,18 @@ Three new features in this release, plus an unknown number of new
 bugs. I apologize in advance.
 
 1. phetch will now disable color in menus when the `NO_COLOR` env
-  variable is set. See https://no-color.org/ for more information.
+   variable is set. See https://no-color.org/ for more information.
 2. phetch has added support for the CP437 encoding! You can toggle it
-  on or off using `ctrl-e` (for encoding). See
+   on or off using `ctrl-e` (for encoding). See
    https://en.wikipedia.org/wiki/Code_page_437 for information. Huuuge
    thanks to Kjell for suggesting this feature and providing some
    great test data!
 3. phetch now supports a primitive form of wrapping long lines in text
-  views. It won't reflow the text, but it will make some phlogs and
+   views. It won't reflow the text, but it will make some phlogs and
    other documents slightly more readable. Enable it with `--wrap NUM`
    or by adding `wrap NUM` to your `phetch.conf`.
 
-----
+---
 
 You may have run into long lines that don't break at the margins,
 making the page hard to scroll and read:
@@ -26,7 +26,7 @@ Now, by either passing `--wrap NUM` or adding `wrap NUM` to your
 `phetch.conf` file, phetch will attempt to wrap long lines at the
 nearest hypen or space:
 
- ![wrapped](https://user-images.githubusercontent.com/41523880/97058201-fa388e00-1541-11eb-84ef-c539304870a6.png)
+![wrapped](https://user-images.githubusercontent.com/41523880/97058201-fa388e00-1541-11eb-84ef-c539304870a6.png)
 
 This is really useful if you want to browse, say, a directory of
 Markdown files over Gopher. Modern Markdown is often written with the
@@ -90,7 +90,6 @@ Special thanks to @grufwub for the feature request and getting
 the code rolling!
 
 Enjoy!
-
 
 ## v1.0.2
 
