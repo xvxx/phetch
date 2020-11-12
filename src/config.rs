@@ -132,7 +132,10 @@ pub fn parse(text: &str) -> Result<Config> {
         // line format: "KEY VALUE"
         let parts: Vec<&str> = line.splitn(2, ' ').collect();
         if parts.len() != 2 {
-            return Err(error!("Wrong format for line {}: {:?}", linenum, line));
+            return Err(error!(
+                r#"Expected "key value" format on line {}: {:?}"#,
+                linenum, line
+            ));
         }
         let (key, val) = (parts[0], parts[1]);
         if keys.contains_key(key) {
