@@ -12,7 +12,8 @@ bugs. I apologize in advance.
    great test data!
 3. phetch now supports a primitive form of wrapping long lines in text
   views. It won't reflow the text, but it will make some phlogs and
-  other documents slightly more readable.
+   other documents slightly more readable. Enable it with `--wrap NUM`
+   or by adding `wrap NUM` to your `phetch.conf`.
 
 ----
 
