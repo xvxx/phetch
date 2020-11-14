@@ -8,7 +8,7 @@ use crate::{
     terminal,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
 };
-use std::{borrow::Cow, fmt, str};
+use std::{fmt, str};
 
 /// The Text View holds the raw Gopher response as well as information
 /// about which lines should currently be displayed on screen.
@@ -19,6 +19,8 @@ pub struct Text {
     url: String,
     /// Gopher response
     raw_response: Vec<u8>,
+    /// Encoded response
+    encoded_response: String,
     /// Current scroll offset, in rows
     scroll: usize,
     /// Number of lines
@@ -150,8 +152,8 @@ impl View for Text {
         } else {
             self.lines
         };
-        let response = self.encoded_response();
-        let iter = wrap_text(&response, wrap)
+
+        let iter = wrap_text(&self.encoded_response, wrap)
             .into_iter()
             .skip(self.scroll)
             .take(limit);
@@ -183,40 +185,28 @@ impl View for Text {
 impl Text {
     /// Create a Text View from a raw Gopher response and a few options.
     pub fn from(url: &str, response: Vec<u8>, config: Config, tls: bool) -> Text {
-        let mut lines = 0;
-        let mut longest = 0;
-        let mut line_len = 0;
-
-        for &b in &response {
-            line_len += 1;
-            if b == b'\n' {
-                if line_len > longest {
-                    longest = line_len;
-                }
-                line_len = 0;
-                lines += 1;
-            }
-        }
-
         let mode = config.read().unwrap().mode;
         let tor = config.read().unwrap().tor;
         let encoding = config.read().unwrap().encoding;
         let wide = config.read().unwrap().wide;
 
-        Text {
+        let mut new = Text {
             config,
             url: url.into(),
+            encoded_response: String::new(),
             raw_response: response,
             scroll: 0,
-            lines,
-            longest,
+            lines: 0,
+            longest: 0,
             size: (0, 0),
             mode,
             tls,
             tor,
             encoding,
             wide,
-        }
+        };
+        new.encode_response();
+        new
     }
 
     /// Toggle between our two encodings.
@@ -227,20 +217,20 @@ impl Text {
             self.encoding = Encoding::UTF8;
         }
         self.config.write().unwrap().encoding = self.encoding;
+        self.encode_response();
         Action::Redraw
     }
 
-    /// Interpret `self.raw_response` according to `self.encoding`.
-    fn encoded_response(&self) -> Cow<str> {
-        if matches!(self.encoding, Encoding::CP437) {
-            let mut converted = String::with_capacity(self.raw_response.len());
-            for b in &self.raw_response {
-                converted.push_str(cp437::convert_byte(&b));
-            }
-            Cow::from(converted)
-        } else {
-            String::from_utf8_lossy(&self.raw_response)
-        }
+    /// Convert the response to a Rust String and cache metadata like
+    /// the number of lines.
+    fn encode_response(&mut self) {
+        self.encoded_response = self.encoding.encode(&self.raw_response).into();
+        let wrapped = wrap_text(
+            self.encoded_response.as_ref(),
+            self.config.read().unwrap().wrap,
+        );
+        self.lines = wrapped.len();
+        self.longest = wrapped.iter().map(|line| line.len()).max().unwrap_or(0) as usize;
     }
 
     /// Final `self.scroll` value.
@@ -256,7 +246,7 @@ impl Text {
 
 /// Splits a chunk of text into a vector of strings with at most
 /// `wrap` characters each. Tries to be smart and wrap at punctuation,
-/// otherwise just wraps at `wrap`. 
+/// otherwise just wraps at `wrap`.
 fn wrap_text(lines: &str, wrap: usize) -> Vec<&str> {
     if wrap == 0 {
         return lines.split('\n').collect();
@@ -280,8 +270,13 @@ fn wrap_text(lines: &str, wrap: usize) -> Vec<&str> {
                         .find(|(_, c)| matches!(c, ' ' | '-' | ',' | '.' | ':'))
                     {
                         out.push(&line[..=end]);
-                        line = &line[end + 1..];
-                        len -= end;
+                        if end + 1 < line.len() {
+                            line = &line[end + 1..];
+                            len -= end;
+                        } else {
+                            len = 0;
+                            break;
+                        }
                         continue;
                     }
                 }

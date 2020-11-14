@@ -1,4 +1,4 @@
-use std::io::Result;
+use std::{borrow::Cow, io::Result};
 
 /// Encoding of Gopher response. Only UTF8 and CP437 are supported.
 #[derive(Debug, PartialEq, Copy, Clone)]
@@ -25,6 +25,19 @@ impl Encoding {
                 Ok(Encoding::CP437)
             }
             _ => Err(error!("Expected CP437 or UTF8 encoding")),
+        }
+    }
+
+    /// Convert `response` into a String according to `encoding`.
+    pub fn encode<'res>(&self, response: &'res [u8]) -> Cow<'res, str> {
+        if matches!(self, Encoding::CP437) {
+            let mut converted = String::with_capacity(response.len());
+            for b in response {
+                converted.push_str(cp437::convert_byte(&b));
+            }
+            Cow::from(converted)
+        } else {
+            String::from_utf8_lossy(response)
         }
     }
 }
