@@ -254,6 +254,9 @@ impl Text {
     }
 }
 
+/// Splits a chunk of text into a vector of strings with at most
+/// `wrap` characters each. Tries to be smart and wrap at punctuation,
+/// otherwise just wraps at `wrap`. 
 fn wrap_text(lines: &str, wrap: usize) -> Vec<&str> {
     if wrap == 0 {
         return lines.split('\n').collect();
@@ -265,6 +268,24 @@ fn wrap_text(lines: &str, wrap: usize) -> Vec<&str> {
         if len > wrap {
             while len > wrap {
                 let (end, _) = line.char_indices().take(wrap + 1).last().unwrap();
+
+                if !matches!(&line[end - 1..end], " " | "-" | "," | "." | ":") {
+                    if let Some(&(end, _)) = line
+                        .char_indices()
+                        .take(wrap + 1)
+                        .collect::<Vec<_>>()
+                        .iter()
+                        .rev()
+                        .skip(1)
+                        .find(|(_, c)| matches!(c, ' ' | '-' | ',' | '.' | ':'))
+                    {
+                        out.push(&line[..=end]);
+                        line = &line[end + 1..];
+                        len -= end;
+                        continue;
+                    }
+                }
+
                 out.push(&line[..end]);
                 line = &line[end..];
                 len -= wrap;
@@ -311,7 +332,7 @@ super duper extra scooper hoopa loopa double doopa maxi paxi giga baxi very very
 Qua nova re oblata omnis administratio belliconsistit militesque aversi a proelio ad studium audiendi et cognoscendi feruntur ubi hostes ad legatosexercitumque pervenerunt universi se ad pedes proiciunt orant ut adventus Caesaris expectetur captamsuam urbem videre...
 really really really really really really really really really kinda-but-not-really long line
 another regular line
-        ";
+";
 
         let lines = wrap_text(text, 70);
 
@@ -321,7 +342,11 @@ another regular line
             lines[1].trim()
         );
         assert_eq!("long line", lines[2].trim());
-        assert_eq!("very very long line", lines[4].trim());
+        assert_eq!(
+            "super duper extra scooper hoopa loopa double doopa maxi paxi giga",
+            lines[3].trim()
+        );
+        assert_eq!("baxi very very long line", lines[4].trim());
 
         assert_eq!(
             "Qua nova re oblata omnis administratio belliconsistit militesque",
