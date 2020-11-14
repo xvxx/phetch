@@ -275,4 +275,45 @@ mod test {
         assert!(res.contains("Ω"));
         assert!(res.contains("Θ"));
     }
+
+    #[test]
+    fn test_wrapping() {
+        let text = "regular line
+really really really really really really really really really really long line
+super duper extra scooper hoopa loopa double doopa maxi paxi giga baxi very very long line
+Qua nova re oblata omnis administratio belliconsistit militesque aversi a proelio ad studium audiendi et cognoscendi feruntur ubi hostes ad legatosexercitumque pervenerunt universi se ad pedes proiciunt orant ut adventus Caesaris expectetur captamsuam urbem videre...
+really really really really really really really really really kinda-but-not-really long line
+another regular line
+        ";
+
+        let lines = wrap_lines(text, 70);
+
+        assert_eq!("regular line", lines[0]);
+        assert_eq!(
+            "really really really really really really really really really really",
+            lines[1].trim()
+        );
+        assert_eq!("long line", lines[2].trim());
+        assert_eq!("very very long line", lines[4].trim());
+
+        assert_eq!(
+            "Qua nova re oblata omnis administratio belliconsistit militesque",
+            lines[5].trim()
+        );
+        assert_eq!(
+            "aversi a proelio ad studium audiendi et cognoscendi feruntur ubi",
+            lines[6].trim()
+        );
+        assert_eq!(
+            "hostes ad legatosexercitumque pervenerunt universi se ad pedes",
+            lines[7].trim()
+        );
+        assert_eq!(
+            "really really really really really really really really really kinda-",
+            lines[10].trim()
+        );
+        assert_eq!("but-not-really long line", lines[11].trim());
+
+        assert_eq!(13, lines.len());
+    }
 }
