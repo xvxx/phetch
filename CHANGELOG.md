@@ -1,15 +1,17 @@
 ## v1.1.0-dev
 
 Three new features in this release, plus an unknown number of new
-bugs. I apologize in advance.
+bugs.
 
 1. phetch will now disable color in menus when the `NO_COLOR` env
    variable is set. See https://no-color.org/ for more information.
+
 2. phetch has added support for the CP437 encoding! You can toggle it
    on or off using `ctrl-e` (for encoding). See
    https://en.wikipedia.org/wiki/Code_page_437 for information. Huuuge
    thanks to Kjell for suggesting this feature and providing some
    great test data!
+
 3. phetch now supports a primitive form of wrapping long lines in text
    views. It won't reflow the text, but it will make some phlogs and
    other documents slightly more readable. Enable it with `--wrap NUM`
