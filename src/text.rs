@@ -136,10 +136,11 @@ impl View for Text {
         let wrap = self.config.read().unwrap().wrap;
         let longest = if self.longest > MAX_COLS {
             MAX_COLS
+        } else if wrap < self.longest {
+            wrap
         } else {
             self.longest
         };
-        let longest = if wrap < longest { wrap } else { longest };
         let indent = if cols >= longest && cols - longest <= 6 {
             String::from("")
         } else if cols >= longest {
