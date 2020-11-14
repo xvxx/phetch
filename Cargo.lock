@@ -187,7 +187,7 @@ dependencies = [
 
 [[package]]
 name = "phetch"
-version = "1.0.8-dev"
+version = "1.1.0-dev"
 dependencies = [
  "atty",
  "cp437",
