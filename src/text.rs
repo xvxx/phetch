@@ -131,11 +131,13 @@ impl View for Text {
     fn render(&mut self) -> String {
         let (cols, rows) = self.size;
         let mut out = String::new();
+        let wrap = self.config.read().unwrap().wrap;
         let longest = if self.longest > MAX_COLS {
             MAX_COLS
         } else {
             self.longest
         };
+        let longest = if wrap < longest { wrap } else { longest };
         let indent = if cols >= longest && cols - longest <= 6 {
             String::from("")
         } else if cols >= longest {
@@ -149,8 +151,8 @@ impl View for Text {
             self.lines
         };
         let response = self.encoded_response();
-        let iter = response
-            .split_terminator('\n')
+        let iter = wrap_text(&response, wrap)
+            .into_iter()
             .skip(self.scroll)
             .take(limit);
 
@@ -252,6 +254,31 @@ impl Text {
     }
 }
 
+fn wrap_text(lines: &str, wrap: usize) -> Vec<&str> {
+    if wrap == 0 {
+        return lines.split('\n').collect();
+    }
+
+    let mut out = vec![];
+    for mut line in lines.lines() {
+        let mut len = line.chars().count();
+        if len > wrap {
+            while len > wrap {
+                let (end, _) = line.char_indices().take(wrap + 1).last().unwrap();
+                out.push(&line[..end]);
+                line = &line[end..];
+                len -= wrap;
+            }
+            if len > 0 {
+                out.push(line);
+            }
+        } else {
+            out.push(line);
+        }
+    }
+    out
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -286,7 +313,7 @@ really really really really really really really really really kinda-but-not-rea
 another regular line
         ";
 
-        let lines = wrap_lines(text, 70);
+        let lines = wrap_text(text, 70);
 
         assert_eq!("regular line", lines[0]);
         assert_eq!(
