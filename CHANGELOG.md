@@ -1,4 +1,4 @@
-## v1.1.0-dev
+## v1.1.0
 
 Three new features in this release, plus an unknown number of new
 bugs:
