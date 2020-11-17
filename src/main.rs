@@ -84,6 +84,7 @@ Options:
     -r, --raw              Print raw Gopher response only
     -p, --print            Print rendered Gopher response only
     -l, --local            Connect to 127.0.0.1:7070
+    -e, --encoding         Render text documents in CP437 or UTF8.
 
     -c, --config FILE      Use instead of ~/.config/phetch/phetch.conf
     -C, --no-config        Don't use any config file
