@@ -7,11 +7,15 @@ bugs:
    when rendering menus. See https://no-color.org/ for more information.
 
 2. CP437 encoding support! You can toggle it on or off using `ctrl-e`
-   (for encoding) when viewing a Gopher document, or using the
+   (for encoding) when viewing a Gopher text document, or using the
    `--encoding` command line flag. See
-   https://en.wikipedia.org/wiki/Code_page_437 for information. Huge
-   thanks to Kjell for suggesting this feature and providing some
+   https://en.wikipedia.org/wiki/Code_page_437.
+
+   Huge thanks to Kjell for suggesting this feature and providing some
    great test data!
+
+   _NOTE: This only works for text documents since there's no `TAB`
+   character in CP437._
 
 3. phetch now supports a primitive form of wrapping long lines when
    rendering Gopher text documents. It won't reflow the text, but it
