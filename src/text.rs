@@ -90,7 +90,7 @@ impl View for Text {
                 self.scroll = self.final_scroll();
                 Action::Redraw
             }
-            Key::Ctrl('e') => self.toggle_encoding(),
+            Key::Ctrl('e') | Key::Char('e') => self.toggle_encoding(),
             Key::Down | Key::Ctrl('n') | Key::Char('n') | Key::Ctrl('j') | Key::Char('j') => {
                 if self.scroll < self.final_scroll() {
                     self.scroll += 1;
