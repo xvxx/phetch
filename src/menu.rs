@@ -8,11 +8,12 @@
 
 use crate::{
     config::SharedConfig as Config,
+    encoding::Encoding,
     gopher::{self, Type},
     terminal,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
 };
-use std::fmt;
+use std::{fmt, str};
 
 /// The Menu holds our Gopher Lines, a list of links, and maintains
 /// both where the cursor is on screen and which lines need to be
@@ -23,6 +24,8 @@ use std::fmt;
 pub struct Menu {
     /// Gopher URL
     pub url: String,
+    /// Ref to our global config
+    config: Config,
     /// Lines in the menu. Not all are links. Use the `lines()` iter
     /// or `line(N)` or `link(N)` to access one.
     spans: Vec<LineSpan>,
@@ -33,7 +36,9 @@ pub struct Menu {
     /// Size of the longest line, for wrapping purposes
     pub longest: usize,
     /// Actual Gopher response
-    pub raw: String,
+    raw: Vec<u8>,
+    /// Encoded Gopher response
+    encoded_response: String,
     /// User input on a prompt() line
     pub input: String,
     /// UI mode. Interactive (Run), Printing, Raw mode...
@@ -48,6 +53,8 @@ pub struct Menu {
     tor: bool,
     /// Size of the screen currently, cols and rows
     pub size: (usize, usize),
+    /// Text Encoding of Response
+    encoding: Encoding,
     /// Wide mode?
     wide: bool,
 }
@@ -217,8 +224,12 @@ impl View for Menu {
         self.tor
     }
 
+    fn encoding(&self) -> Encoding {
+        self.encoding
+    }
+
     fn raw(&self) -> &str {
-        self.raw.as_ref()
+        str::from_utf8(&self.raw).unwrap_or_default()
     }
 
     fn render(&mut self) -> String {
@@ -249,19 +260,34 @@ impl View for Menu {
 impl Menu {
     /// Create a representation of a Gopher Menu from a raw Gopher
     /// response and a few options.
-    pub fn from(url: &str, response: String, config: Config, tls: bool) -> Menu {
-        Menu {
+    pub fn from(url: &str, response: Vec<u8>, config: Config, tls: bool) -> Menu {
+        let encoding = config.read().unwrap().encoding;
+        let mut menu = Menu {
+            url: url.into(),
+            encoded_response: encoding.encode(&response).into(),
+            raw: response,
             tls,
             tor: config.read().unwrap().tor,
             wide: config.read().unwrap().wide,
             mode: config.read().unwrap().mode,
-            ..parse(url, response)
-        }
+            encoding,
+            config: config.clone(),
+            input: String::new(),
+            spans: vec![],
+            links: vec![],
+            link: 0,
+            longest: 0,
+            scroll: 0,
+            searching: false,
+            size: (0, 0),
+        };
+        menu.parse();
+        menu
     }
 
     /// Lines in this menu. Main iterator for getting Line with text.
     pub fn lines(&self) -> LinesIter {
-        LinesIter::new(&self.spans, &self.raw)
+        LinesIter::new(&self.spans, self.raw())
     }
 
     /// Get a single Line in this menu by index.
@@ -269,7 +295,7 @@ impl Menu {
         if idx >= self.spans.len() {
             None
         } else {
-            Some(Line::new(&self.spans[idx], &self.raw))
+            Some(Line::new(&self.spans[idx], self.raw()))
         }
     }
 
@@ -341,6 +367,59 @@ impl Menu {
         };
 
         Some((x as u16, y as u16))
+    }
+
+    /// Parse our `encoded_response` and cache information, like the
+    /// number of links.
+    fn parse(&mut self) {
+        let mut spans = vec![];
+        let mut links = vec![];
+        let mut longest = 0;
+        let mut start = 0;
+
+        for line in self.encoded_response.split_terminator('\n') {
+            // Check for Gopher's weird "end of response" message.
+            if line == ".\r" || line == "." {
+                break;
+            }
+
+            if line == "" {
+                start += 1;
+                continue;
+            }
+
+            if let Some(mut span) = parse_line(start, &self.encoded_response) {
+                if span.text_len() > longest {
+                    longest = span.text_len();
+                }
+                if span.typ.is_link() {
+                    span.link = links.len();
+                    links.push(spans.len());
+                }
+                spans.push(span);
+            }
+
+            start += line.len() + 1;
+        }
+
+        self.spans = spans;
+        self.links = links;
+        self.longest = longest;
+        self.link = 0;
+        self.scroll = 0;
+    }
+
+    /// Toggle between our two encodings.
+    fn toggle_encoding(&mut self) -> Action {
+        if matches!(self.encoding, Encoding::UTF8) {
+            self.encoding = Encoding::CP437;
+        } else {
+            self.encoding = Encoding::UTF8;
+        }
+        self.config.write().unwrap().encoding = self.encoding;
+        self.encoded_response = self.encoding.encode(&self.raw).into();
+        self.parse();
+        Action::Redraw
     }
 
     fn render_lines(&mut self) -> String {
@@ -849,6 +928,7 @@ impl Menu {
 
         match key {
             Key::Char('\n') => self.action_open(),
+            Key::Ctrl('e') => self.toggle_encoding(),
             Key::Up | Key::Ctrl('p') | Key::Char('p') | Key::Ctrl('k') | Key::Char('k') => {
                 self.action_up()
             }
@@ -924,53 +1004,8 @@ impl Menu {
 }
 
 /// Parse gopher response into a Menu object.
-pub fn parse(url: &str, raw: String) -> Menu {
-    let mut spans = vec![];
-    let mut links = vec![];
-    let mut longest = 0;
-    let mut start = 0;
-
-    for line in raw.split_terminator('\n') {
-        // Check for Gopher's weird "end of response" message.
-        if line == ".\r" || line == "." {
-            break;
-        }
-
-        if line == "" {
-            start += 1;
-            continue;
-        }
-
-        if let Some(mut span) = parse_line(start, &raw) {
-            if span.text_len() > longest {
-                longest = span.text_len();
-            }
-            if span.typ.is_link() {
-                span.link = links.len();
-                links.push(spans.len());
-            }
-            spans.push(span);
-        }
-
-        start += line.len() + 1;
-    }
-
-    Menu {
-        url: url.into(),
-        spans,
-        links,
-        longest,
-        raw,
-        input: String::new(),
-        link: 0,
-        mode: Default::default(),
-        scroll: 0,
-        searching: false,
-        size: (0, 0),
-        tls: false,
-        tor: false,
-        wide: false,
-    }
+pub fn parse(url: &str, raw: Vec<u8>) -> Menu {
+    Menu::from(url, raw, Config::default(), false)
 }
 
 /// Parses a single line from a Gopher menu into a `LineSpan` struct.
@@ -1042,7 +1077,7 @@ mod tests {
 
     macro_rules! parse {
         ($s:expr) => {
-            parse("test", $s.to_string());
+            parse("test", $s.as_bytes().to_vec());
         };
     }
 

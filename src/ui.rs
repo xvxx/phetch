@@ -275,12 +275,9 @@ impl UI {
         };
         let typ = gopher::type_for_url(&url);
         match typ {
-            Type::Menu | Type::Search => Ok(Box::new(Menu::from(
-                url,
-                gopher::response_to_string(&res),
-                self.config.clone(),
-                tls,
-            ))),
+            Type::Menu | Type::Search => {
+                Ok(Box::new(Menu::from(url, res, self.config.clone(), tls)))
+            }
             Type::Text | Type::HTML => Ok(Box::new(Text::from(url, res, self.config.clone(), tls))),
             _ => Err(error!("Unsupported Gopher Response: {:?}", typ)),
         }
@@ -294,7 +291,7 @@ impl UI {
         ) {
             Ok(Box::new(Menu::from(
                 url,
-                source,
+                source.as_bytes().to_vec(),
                 self.config.clone(),
                 false,
             )))

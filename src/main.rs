@@ -111,7 +111,6 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
     let mut out = String::new();
     let typ = gopher::type_for_url(url);
     let (_, response) = gopher::fetch_url(url, tls, tor)?;
-    let response = gopher::response_to_string(&response);
     match typ {
         gopher::Type::Menu => {
             let menu = menu::parse(url, response);
@@ -120,7 +119,10 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
                 out.push('\n');
             }
         }
-        gopher::Type::Text => println!("{}", response.trim_end_matches(".\r\n")),
+        gopher::Type::Text => println!(
+            "{}",
+            gopher::response_to_string(&response).trim_end_matches(".\r\n")
+        ),
         _ => {
             return Err(Box::new(io::Error::new(
                 io::ErrorKind::Other,
