@@ -8,7 +8,7 @@ use crate::{
     terminal,
     ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
 };
-use std::{fmt, str};
+use std::{borrow::Cow, fmt, str};
 
 /// The Text View holds the raw Gopher response as well as information
 /// about which lines should currently be displayed on screen.
@@ -131,26 +131,10 @@ impl View for Text {
     }
 
     fn render(&mut self) -> String {
-        let (cols, rows) = self.size;
+        let (_cols, rows) = self.size;
         let mut out = String::new();
         let wrap = self.config.read().unwrap().wrap;
-        let longest = if self.longest > MAX_COLS {
-            MAX_COLS
-        } else {
-            self.longest
-        };
-        let longest = if wrap > 0 && self.longest > wrap {
-            wrap
-        } else {
-            longest
-        };
-        let indent = if cols >= longest && cols - longest <= 6 {
-            String::from("")
-        } else if cols >= longest {
-            " ".repeat((cols - longest) / 2)
-        } else {
-            String::from("")
-        };
+        let indent = self.indent_str(wrap);
         let limit = if self.mode == ui::Mode::Run {
             rows - 1
         } else {
@@ -244,6 +228,37 @@ impl Text {
             self.lines - padding
         } else {
             0
+        }
+    }
+
+    /// Determine the longest line, considering any line wrapping and
+    /// `MAX_COL`.
+    fn longest_line_with_wrap(&self, wrap: usize) -> usize {
+        let longest = if self.longest > MAX_COLS {
+            MAX_COLS
+        } else {
+            self.longest
+        };
+
+        if wrap > 0 && longest > wrap {
+            wrap
+        } else {
+            longest
+        }
+    }
+
+    /// Produce the string to use for indentation, or the left margin,
+    /// for a given text document.
+    fn indent_str(&self, wrap: usize) -> Cow<str> {
+        let (cols, _) = self.size;
+        let longest = self.longest_line_with_wrap(wrap);
+
+        if cols >= longest && cols - longest <= 6 {
+            Cow::from("")
+        } else if cols >= longest {
+            Cow::from(" ".repeat((cols - longest) / 2))
+        } else {
+            Cow::from("")
         }
     }
 }
