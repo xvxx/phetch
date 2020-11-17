@@ -390,7 +390,7 @@ impl UI {
         let mut status = vec![];
 
         if matches!(view.encoding(), Encoding::CP437) {
-            status.push("CP439");
+            status.push("CP437");
         }
 
         if view.is_tls() {
