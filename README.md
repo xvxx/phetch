@@ -75,9 +75,16 @@ If you already have a Gopher client, download `phetch` here:
 
     gopher://phkt.io/1/phetch/latest
 
-On macOS you can install with [Homebrew](https://brew.sh/):
+On macOS you can install with [Homebrew](https://brew.sh/)
+or [MacPorts](https://macports.org).
+
+If you're using Homebrew, open the Terminal and type:
 
     brew install xvxx/code/phetch
+
+For MacPorts:
+
+    sudo port install phetch
 
 On Arch Linux, install phetch with your favorite [AUR helper][aur]:
 
