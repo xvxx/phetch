@@ -44,6 +44,9 @@ wide no
 # Program to use to open media files.
 media mpv
 
+# Whether to auto play media
+autoplay no
+
 # Use emoji indicators for TLS & Tor. (--emoji)
 emoji no
 
@@ -71,6 +74,8 @@ pub struct Config {
     pub emoji: bool,
     /// Media player to use.
     pub media: Option<String>,
+    /// Whether to automatically play media
+    pub autoplay: bool,
     /// Default encoding
     pub encoding: Encoding,
     /// UI mode. Can't be set in conf file.
@@ -88,6 +93,7 @@ impl Default for Config {
             wide: false,
             emoji: false,
             media: Some(DEFAULT_MEDIA_PLAYER.into()),
+            autoplay: false,
             encoding: Encoding::default(),
             mode: ui::Mode::default(),
             wrap: 0,
@@ -172,6 +178,9 @@ fn parse(text: &str) -> Result<Config> {
                     "false" | "none" => None,
                     _ => Some(val.into()),
                 }
+            }
+            "autoplay" => {
+                cfg.autoplay = to_bool(val)?
             }
             "encoding" => {
                 cfg.encoding = Encoding::from_str(val)
