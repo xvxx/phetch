@@ -206,7 +206,7 @@ impl UI {
 
         if typ.is_media() && self.config.read().unwrap().media.is_some() {
             self.dirty = true;
-            return if self.confirm(&format!("Open in media player? {}", url)) {
+            return if self.config.read().unwrap().autoplay || self.confirm(&format!("Open in media player? {}", url)) {
                 utils::open_media(self.config.read().unwrap().media.as_ref().unwrap(), url)
             } else {
                 Ok(())

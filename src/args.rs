@@ -104,6 +104,8 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
     let mut set_notor = false;
     let mut set_media = false;
     let mut set_nomedia = false;
+    let mut set_autoplay = false;
+    let mut set_noautoplay = false;
 
     while let Some(arg) = iter.next() {
         match arg.as_ref() {
@@ -191,6 +193,23 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
                 }
                 set_nomedia = true;
                 cfg.media = None;
+            }
+            "-a" | "--autoplay" | "-autoplay" => {
+                if set_nomedia {
+                    return Err(ArgError::new("can't set both --no-media and --autoplay"))
+                }
+                if set_noautoplay {
+                    return Err(ArgError::new("can't set both --autoplay and --no-autoplay"))
+                }
+                set_autoplay = true;
+                cfg.autoplay = true;
+            }
+            "-A" | "--no-autoplay" | "-no-autoplay" => {
+                if set_autoplay {
+                    return Err(ArgError::new("can't set both --autoplay and --no-autoplay"))
+                }
+                cfg.autoplay = false;
+                set_noautoplay = true;
             }
             "-e" | "--encoding" | "-encoding" => {
                 if let Some(encoding) = iter.next() {
