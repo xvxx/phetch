@@ -2,7 +2,7 @@ use std::fmt;
 
 /// Gopher types are defined according to RFC 1436.
 #[allow(missing_docs)]
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum Type {
     Text,       // 0 | cyan
     Menu,       // 1 | blue

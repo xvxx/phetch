@@ -107,7 +107,7 @@ pub fn response_to_string(res: &[u8]) -> String {
 fn clean_response(res: &mut String) {
     res.retain(|c| match c {
         '\u{007F}' => false,
-        _ if c >= '\u{0080}' && c <= '\u{009F}' => false,
+        _ if ('\u{0080}'..='\u{009F}').contains(&c) => false,
         _ => true,
     })
 }
@@ -283,7 +283,7 @@ pub fn parse_url(url: &str) -> Url {
         host = &url[..idx];
         sel = &url[idx..];
     } else {
-        host = &url;
+        host = url;
     }
 
     // ipv6

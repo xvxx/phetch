@@ -1,6 +1,6 @@
 /// The mode our text UI is in. Run mode is the default while
 /// Print doesn't show the cursor, among other things.
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum Mode {
     /// Default, interactive mode.
     ///   phetch URL

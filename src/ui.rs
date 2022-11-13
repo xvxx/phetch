@@ -273,7 +273,7 @@ impl UI {
         } else {
             self.spinner("", move || gopher::fetch_url(&thread_url, tls, tor))??
         };
-        let typ = gopher::type_for_url(&url);
+        let typ = gopher::type_for_url(url);
         match typ {
             Type::Menu | Type::Search => Ok(Box::new(Menu::from(
                 url,
@@ -289,7 +289,7 @@ impl UI {
     /// Get Menu for on-line help, home page, etc, ex: gopher://phetch/1/help/types
     fn load_internal(&mut self, url: &str) -> Result<Box<dyn View>> {
         if let Some(source) = help::lookup(
-            &url.trim_start_matches("gopher://phetch/")
+            url.trim_start_matches("gopher://phetch/")
                 .trim_start_matches("1/"),
         ) {
             Ok(Box::new(Menu::from(
@@ -467,11 +467,7 @@ impl UI {
         out.flush().expect(ERR_STDOUT);
 
         if let Ok(key) = self.keys.lock().unwrap().recv() {
-            match key {
-                Key::Char('\n') => true,
-                Key::Char('y') | Key::Char('Y') => true,
-                _ => false,
-            }
+            matches!(key, Key::Char('\n') | Key::Char('y') | Key::Char('Y'))
         } else {
             false
         }
@@ -588,10 +584,8 @@ impl UI {
         }
 
         thread::spawn(move || {
-            for event in stdin().keys() {
-                if let Ok(key) = event {
-                    sender.send(key).unwrap();
-                }
+            for key in stdin().keys().flatten() {
+                sender.send(key).unwrap();
             }
         });
 
@@ -672,7 +666,7 @@ impl UI {
                 's' => {
                     if let Some(view) = self.views.get(self.focused) {
                         let url = view.url();
-                        match bookmarks::save(&url, &url) {
+                        match bookmarks::save(url, url) {
                             Ok(()) => {
                                 let msg = format!("Saved bookmark: {}", url);
                                 self.set_status(&msg);
@@ -684,7 +678,7 @@ impl UI {
                 'u' => {
                     if let Some(view) = self.views.get(self.focused) {
                         let current_url = view.url();
-                        if let Some(url) = self.prompt("Current URL: ", &current_url) {
+                        if let Some(url) = self.prompt("Current URL: ", current_url) {
                             self.open(&url, &url)?;
                         }
                     }
@@ -692,7 +686,7 @@ impl UI {
                 'y' => {
                     if let Some(view) = self.views.get(self.focused) {
                         let url = view.url();
-                        utils::copy_to_clipboard(&url)?;
+                        utils::copy_to_clipboard(url)?;
                         let msg = format!("Copied {} to clipboard.", url);
                         self.set_status(&msg);
                     }

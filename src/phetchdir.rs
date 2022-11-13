@@ -42,7 +42,7 @@ pub fn append(filename: &str, label: &str, url: &str) -> Result<()> {
     path().and_then(|dotdir| {
         let path = dotdir.join(filename);
         if let Ok(mut file) = OpenOptions::new().append(true).create(true).open(path) {
-            let u = gopher::parse_url(&url);
+            let u = gopher::parse_url(url);
             write!(
                 file,
                 "{}{}\t{}\t{}\t{}\r\n",
@@ -69,7 +69,7 @@ pub fn prepend(filename: &str, label: &str, url: &str) -> Result<()> {
             .create(true)
             .open(path)
         {
-            let url = gopher::parse_url(&url);
+            let url = gopher::parse_url(url);
             let mut buf = vec![];
             file.read_to_end(&mut buf)?;
             file.seek(std::io::SeekFrom::Start(0))?;

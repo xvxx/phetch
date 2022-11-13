@@ -117,7 +117,7 @@ pub fn load() -> Result<Config> {
 
 /// Attempt to load a config from disk.
 pub fn load_file(path: &str) -> Result<Config> {
-    let mut reader = OpenOptions::new().read(true).open(&path)?;
+    let mut reader = OpenOptions::new().read(true).open(path)?;
     let mut file = String::new();
     reader.read_to_string(&mut file)?;
     parse(&file)

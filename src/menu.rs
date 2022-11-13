@@ -124,7 +124,7 @@ impl<'line, 'txt> Line<'line, 'txt> {
 impl<'line, 'txt: 'line> std::ops::Deref for Line<'line, 'txt> {
     type Target = LineSpan;
     fn deref(&self) -> &Self::Target {
-        &self.span
+        self.span
     }
 }
 
@@ -394,7 +394,7 @@ impl Menu {
                 out.push_str(color!(WhiteBG));
                 out.push_str(color!(Red));
             } else {
-                out.push_str(&match line.typ {
+                out.push_str(match line.typ {
                     Type::Text => color!(Cyan),
                     Type::Menu => color!(Blue),
                     Type::Info => color!(Yellow),
@@ -895,7 +895,7 @@ impl Menu {
                 }
             }
             Key::Char(c) => {
-                if !c.is_digit(10) {
+                if !c.is_ascii_digit() {
                     return Action::Keypress(key);
                 }
 
@@ -936,7 +936,7 @@ pub fn parse(url: &str, raw: String) -> Menu {
             break;
         }
 
-        if line == "" {
+        if line.is_empty() {
             start += 1;
             continue;
         }

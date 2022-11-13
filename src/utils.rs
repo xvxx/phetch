@@ -36,7 +36,7 @@ macro_rules! error {
         std::io::Error::new(std::io::ErrorKind::Other, $e)
     };
     ($e:expr, $($y:expr),*) => {
-        error!(format!($e, $($y),*));
+        error!(format!($e, $($y),*))
     };
 }
 
