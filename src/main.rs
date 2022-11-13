@@ -81,8 +81,8 @@ Options:
     -m, --media PROGRAM    Use to open media files. Default: mpv
     -M, --no-media         Just download media files, don't download
 
-    -a, --autoplay         Skip the play media prompy
-    -A, --no-autoplay      Do not skip the media prompt
+    -a, --autoplay         Autoplay media without prompting.
+    -A, --no-autoplay      Prompt before playing media.
 
     -r, --raw              Print raw Gopher response only
     -p, --print            Print rendered Gopher response only

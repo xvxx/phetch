@@ -61,6 +61,12 @@ If no URL is given, however, *phetch* will launch and open its default
 	Don't try to open media files. Download them like regular binary
 	Gopher items.
 
+*-a*, *--autoplay*
+	Autoplay media files instead of prompting.
+
+*-A*, *--no-autoplay*
+	Don't autoplay media files. Prompt instead.
+
 *-c*, *--config* _FILE_
 	Use _FILE_ instead of _~/.config/phetch/phetch.conf_
 

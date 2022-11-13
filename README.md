@@ -53,6 +53,8 @@ the gophersphere.
         -w, --wrap COLUMN      Wrap long lines in "text" views at COLUMN.
         -m, --media PROGRAM    Use to open media files. Default: mpv
         -M, --no-media         Just download media files, don't download
+        -a, --autoplay         Autoplay media files without prompting.
+        -A, --no-autoplay      Prompt before playing media files.
 
         -r, --raw              Print raw Gopher response only
         -p, --print            Print rendered Gopher response only
