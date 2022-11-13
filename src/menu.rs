@@ -10,7 +10,7 @@ use crate::{
     config::SharedConfig as Config,
     gopher::{self, Type},
     terminal,
-    ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
+    ui::{self, Action, Key, View, MAX_COLS},
 };
 use std::fmt;
 
@@ -38,8 +38,8 @@ pub struct Menu {
     pub input: String,
     /// UI mode. Interactive (Run), Printing, Raw mode...
     pub mode: ui::Mode,
-    /// Scrolling offset, in rows.
-    pub scroll: usize,
+    /// Scrolling offset, in rows. 0 = full screen
+    pub offset: usize,
     /// Incremental search mode?
     pub searching: bool,
     /// Was this menu retrieved via TLS?
@@ -50,6 +50,8 @@ pub struct Menu {
     pub size: (usize, usize),
     /// Wide mode?
     wide: bool,
+    /// Scroll by how many lines?
+    scroll: usize,
 }
 
 /// Represents a line in a Gopher menu. Provides the actual text of
@@ -254,6 +256,7 @@ impl Menu {
             tls,
             tor: config.read().unwrap().tor,
             wide: config.read().unwrap().wide,
+            scroll: config.read().unwrap().scroll,
             mode: config.read().unwrap().mode,
             ..parse(url, response)
         }
@@ -287,6 +290,14 @@ impl Menu {
         self.size.1
     }
 
+    fn scroll_by(&self) -> usize {
+        if self.scroll == 0 {
+            self.rows() - 1
+        } else {
+            self.scroll
+        }
+    }
+
     /// Calculated size of left margin.
     fn indent(&self) -> usize {
         if self.wide {
@@ -318,9 +329,9 @@ impl Menu {
     /// Where is the given link relative to the screen?
     fn link_visibility(&self, i: usize) -> Option<LinkPos> {
         let &pos = self.links.get(i)?;
-        Some(if pos < self.scroll {
+        Some(if pos < self.offset {
             LinkPos::Above
-        } else if pos >= self.scroll + self.rows() - 1 {
+        } else if pos >= self.offset + self.rows() - 1 {
             LinkPos::Below
         } else {
             LinkPos::Visible
@@ -334,10 +345,10 @@ impl Menu {
         }
         let &pos = self.links.get(link)?;
         let x = self.indent() + 1;
-        let y = if self.scroll > pos {
+        let y = if self.offset > pos {
             pos + 1
         } else {
-            pos + 1 - self.scroll
+            pos + 1 - self.offset
         };
 
         Some((x as u16, y as u16))
@@ -352,7 +363,7 @@ impl Menu {
         } else {
             self.spans.len()
         };
-        let iter = self.lines().skip(self.scroll).take(limit);
+        let iter = self.lines().skip(self.offset).take(limit);
         let indent = self.indent();
         let left_margin = " ".repeat(indent);
 
@@ -475,7 +486,7 @@ impl Menu {
         }
     }
 
-    /// Scroll down by SCROLL_LINES, if possible.
+    /// Scroll down by a page, if possible.
     fn action_page_down(&mut self) -> Action {
         // If there are fewer menu items than screen lines, just
         // select the final link and do nothing else.
@@ -489,8 +500,8 @@ impl Menu {
 
         // If we've already scrolled too far, select the final link
         // and do nothing.
-        if self.scroll >= self.final_scroll() {
-            self.scroll = self.final_scroll();
+        if self.offset >= self.final_offset() {
+            self.offset = self.final_offset();
             if !self.links.is_empty() {
                 self.link = self.links.len() - 1;
             }
@@ -498,11 +509,11 @@ impl Menu {
         }
 
         // Scroll...
-        self.scroll += SCROLL_LINES;
+        self.offset += self.scroll_by();
 
         // ...but don't go past the final line.
-        if self.scroll > self.final_scroll() {
-            self.scroll = self.final_scroll();
+        if self.offset > self.final_offset() {
+            self.offset = self.final_offset();
         }
 
         // If the selected link isn't visible...
@@ -512,7 +523,7 @@ impl Menu {
                 .links
                 .iter()
                 .skip(self.link + 1)
-                .find(|&&i| i >= self.scroll)
+                .find(|&&i| i >= self.offset)
             {
                 if let Some(next_link_line) = self.line(next_link_pos) {
                     self.link = next_link_line.link;
@@ -524,11 +535,11 @@ impl Menu {
     }
 
     fn action_page_up(&mut self) -> Action {
-        if self.scroll > 0 {
-            if self.scroll > SCROLL_LINES {
-                self.scroll -= SCROLL_LINES;
+        if self.offset > 0 {
+            if self.offset > self.scroll_by() {
+                self.offset -= self.scroll_by();
             } else {
-                self.scroll = 0;
+                self.offset = 0;
             }
             if self.link == 0 {
                 return Action::Redraw;
@@ -536,7 +547,7 @@ impl Menu {
             if let Some(dir) = self.link_visibility(self.link) {
                 match dir {
                     LinkPos::Below => {
-                        let scroll = self.scroll;
+                        let scroll = self.offset;
                         if let Some(&pos) = self
                             .links
                             .iter()
@@ -563,8 +574,8 @@ impl Menu {
     fn action_up(&mut self) -> Action {
         // no links, just scroll up
         if self.link == 0 {
-            return if self.scroll > 0 {
-                self.scroll -= 1;
+            return if self.offset > 0 {
+                self.offset -= 1;
                 Action::Redraw
             } else if !self.links.is_empty() {
                 self.link = self.links.len() - 1;
@@ -589,8 +600,8 @@ impl Menu {
             match dir {
                 LinkPos::Above => {
                     // scroll up by 1
-                    if self.scroll > 0 {
-                        self.scroll -= 1;
+                    if self.offset > 0 {
+                        self.offset -= 1;
                     }
                     // select it if it's visible now
                     if self.is_visible(new_link) {
@@ -600,7 +611,7 @@ impl Menu {
                 LinkPos::Below => {
                     // jump to link....
                     if let Some(&pos) = self.links.get(new_link) {
-                        self.scroll = pos;
+                        self.offset = pos;
                         self.link = new_link;
                     }
                 }
@@ -610,8 +621,8 @@ impl Menu {
                     self.link = new_link;
                     // scroll if we are within 5 lines of the top
                     if let Some(&pos) = self.links.get(self.link) {
-                        if self.scroll > 0 && pos < self.scroll + 5 {
-                            self.scroll -= 1;
+                        if self.offset > 0 && pos < self.offset + 5 {
+                            self.offset -= 1;
                         } else {
                             // otherwise redraw just the cursor
                             return self.reset_cursor(old_link);
@@ -625,8 +636,8 @@ impl Menu {
         }
     }
 
-    /// Final `self.scroll` value.
-    fn final_scroll(&self) -> usize {
+    /// Final `self.offset` value.
+    fn final_offset(&self) -> usize {
         let padding = (self.rows() as f64 * 0.9) as usize;
         if self.spans.len() > padding {
             self.spans.len() - padding
@@ -666,13 +677,13 @@ impl Menu {
         // no links or final link selected already
         if self.links.is_empty() || new_link >= self.links.len() {
             // if there are more rows, scroll down
-            if self.spans.len() >= self.rows() && self.scroll < self.final_scroll() {
-                self.scroll += 1;
+            if self.spans.len() >= self.rows() && self.offset < self.final_offset() {
+                self.offset += 1;
                 return Action::Redraw;
             } else if !self.links.is_empty() {
                 // wrap around
                 self.link = 0;
-                self.scroll = 0;
+                self.offset = 0;
                 return Action::Redraw;
             }
         }
@@ -692,13 +703,13 @@ impl Menu {
                     LinkPos::Above => {
                         // jump to link....
                         if let Some(&pos) = self.links.get(new_link) {
-                            self.scroll = pos;
+                            self.offset = pos;
                             self.link = new_link;
                         }
                     }
                     LinkPos::Below => {
                         // scroll down by 1
-                        self.scroll += 1;
+                        self.offset += 1;
                         // select it if it's visible now
                         if self.is_visible(new_link) {
                             self.link = new_link;
@@ -712,9 +723,9 @@ impl Menu {
 
                             // scroll if we are within 5 lines of the end
                             if self.spans.len() >= self.rows() // dont scroll if content too small
-                                && pos >= self.scroll + self.rows() - 6
+                                && pos >= self.offset + self.rows() - 6
                             {
-                                self.scroll += 1;
+                                self.offset += 1;
                             } else {
                                 // otherwise try to just re-draw the cursor
                                 return self.reset_cursor(old_link);
@@ -744,9 +755,9 @@ impl Menu {
                 }
             } else {
                 if pos > 5 {
-                    self.scroll = pos - 5;
+                    self.offset = pos - 5;
                 } else {
-                    self.scroll = 0;
+                    self.offset = 0;
                 }
                 if !self.input.is_empty() {
                     Action::List(vec![self.redraw_input(), Action::Redraw])
@@ -770,12 +781,12 @@ impl Menu {
         if !self.is_visible(link) {
             if let Some(&pos) = self.links.get(link) {
                 if pos > 5 {
-                    self.scroll = pos - 5;
+                    self.offset = pos - 5;
                 } else {
-                    self.scroll = 0;
+                    self.offset = 0;
                 }
-                if self.scroll > self.final_scroll() {
-                    self.scroll = self.final_scroll();
+                if self.offset > self.final_offset() {
+                    self.offset = self.final_offset();
                 }
                 return Action::Redraw;
             }
@@ -858,12 +869,12 @@ impl Menu {
             Key::PageUp | Key::Ctrl('-') | Key::Char('-') => self.action_page_up(),
             Key::PageDown | Key::Ctrl(' ') | Key::Char(' ') => self.action_page_down(),
             Key::Home => {
-                self.scroll = 0;
+                self.offset = 0;
                 self.link = 0;
                 Action::Redraw
             }
             Key::End => {
-                self.scroll = self.final_scroll();
+                self.offset = self.final_offset();
                 if !self.links.is_empty() {
                     self.link = self.links.len() - 1;
                 }
@@ -964,12 +975,13 @@ pub fn parse(url: &str, raw: String) -> Menu {
         input: String::new(),
         link: 0,
         mode: Default::default(),
-        scroll: 0,
+        offset: 0,
         searching: false,
         size: (0, 0),
         tls: false,
         tor: false,
         wide: false,
+        scroll: 0,
     }
 }
 
@@ -1157,7 +1169,7 @@ i	Err	bitreich.org	70
         assert_eq!(menu.link, 7);
         assert_eq!(menu.link(menu.link).unwrap().link, 7);
 
-        assert_eq!(menu.scroll, 0);
+        assert_eq!(menu.offset, 0);
         menu.action_page_up();
         assert_eq!(menu.link, 0);
         assert_eq!(menu.link(menu.link).unwrap().link, 0);

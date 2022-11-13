@@ -45,9 +45,6 @@ pub type Key = termion::event::Key;
 /// Channel to receive Key events on.
 pub type KeyReceiver = Arc<Mutex<Receiver<Key>>>;
 
-/// How many lines to jump by when using page up/down.
-pub const SCROLL_LINES: usize = 15;
-
 /// How big the longest line can be, for the purposes of calculating
 /// margin sizes. We often draw longer lines than this and allow
 /// wrapping in text views.

@@ -235,6 +235,9 @@ encoding utf8
 
 # Wrap text at N columns. 0 = off (--wrap)
 wrap 0
+
+# How many lines to page up/down by? 0 = full screen
+scroll 0
 ```
 
 # MEDIA PLAYER SUPPORT

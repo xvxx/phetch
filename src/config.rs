@@ -55,6 +55,9 @@ encoding utf8
 
 # Wrap text at N columns. 0 = off (--wrap)
 wrap 0
+
+# How many lines to page up/down by? 0 = full screen
+scroll 0
 ";
 
 /// Not all the config options are available in the phetch.conf. We
@@ -82,6 +85,8 @@ pub struct Config {
     pub mode: ui::Mode,
     /// Column to wrap lines. 0 = off
     pub wrap: usize,
+    /// Scroll by how many lines? 0 = full screen
+    pub scroll: usize,
 }
 
 impl Default for Config {
@@ -97,6 +102,7 @@ impl Default for Config {
             encoding: Encoding::default(),
             mode: ui::Mode::default(),
             wrap: 0,
+            scroll: 0,
         }
     }
 }
@@ -173,15 +179,23 @@ fn parse(text: &str) -> Result<Config> {
                     ));
                 }
             }
+            "scroll" => {
+                if let Ok(num) = val.parse() {
+                    cfg.scroll = num;
+                } else {
+                    return Err(error!(
+                        "`scroll` expects a number value on line {}: {}",
+                        linenum, val
+                    ));
+                }
+            }
             "media" => {
                 cfg.media = match val.to_lowercase().as_ref() {
                     "false" | "none" => None,
                     _ => Some(val.into()),
                 }
             }
-            "autoplay" => {
-                cfg.autoplay = to_bool(val)?
-            }
+            "autoplay" => cfg.autoplay = to_bool(val)?,
             "encoding" => {
                 cfg.encoding = Encoding::from_str(val)
                     .map_err(|e| error!("{} on line {}: {:?}", e, linenum, line))?;

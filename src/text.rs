@@ -6,7 +6,7 @@ use crate::{
     config::SharedConfig as Config,
     encoding::Encoding,
     terminal,
-    ui::{self, Action, Key, View, MAX_COLS, SCROLL_LINES},
+    ui::{self, Action, Key, View, MAX_COLS},
 };
 use std::{borrow::Cow, fmt, str};
 
@@ -22,7 +22,7 @@ pub struct Text {
     /// Encoded response
     encoded_response: String,
     /// Current scroll offset, in rows
-    scroll: usize,
+    offset: usize,
     /// Number of lines
     lines: usize,
     /// Size of longest line
@@ -39,6 +39,8 @@ pub struct Text {
     encoding: Encoding,
     /// Currently in wide mode?
     pub wide: bool,
+    /// How many lines to scroll by. 0 = full screen
+    scroll: usize,
 }
 
 impl fmt::Display for Text {
@@ -83,36 +85,36 @@ impl View for Text {
     fn respond(&mut self, c: Key) -> Action {
         match c {
             Key::Home => {
-                self.scroll = 0;
+                self.offset = 0;
                 Action::Redraw
             }
             Key::End => {
-                self.scroll = self.final_scroll();
+                self.offset = self.final_scroll();
                 Action::Redraw
             }
             Key::Ctrl('e') | Key::Char('e') => self.toggle_encoding(),
             Key::Down | Key::Ctrl('n') | Key::Char('n') | Key::Ctrl('j') | Key::Char('j') => {
-                if self.scroll < self.final_scroll() {
-                    self.scroll += 1;
+                if self.offset < self.final_scroll() {
+                    self.offset += 1;
                     Action::Redraw
                 } else {
                     Action::None
                 }
             }
             Key::Up | Key::Ctrl('p') | Key::Char('p') | Key::Ctrl('k') | Key::Char('k') => {
-                if self.scroll > 0 {
-                    self.scroll -= 1;
+                if self.offset > 0 {
+                    self.offset -= 1;
                     Action::Redraw
                 } else {
                     Action::None
                 }
             }
             Key::PageUp | Key::Char('-') => {
-                if self.scroll > 0 {
-                    if self.scroll >= SCROLL_LINES {
-                        self.scroll -= SCROLL_LINES;
+                if self.offset > 0 {
+                    if self.offset >= self.scroll_by() {
+                        self.offset -= self.scroll_by();
                     } else {
-                        self.scroll = 0;
+                        self.offset = 0;
                     }
                     Action::Redraw
                 } else {
@@ -120,9 +122,9 @@ impl View for Text {
                 }
             }
             Key::PageDown | Key::Char(' ') => {
-                self.scroll += SCROLL_LINES;
-                if self.scroll > self.final_scroll() {
-                    self.scroll = self.final_scroll();
+                self.offset += self.scroll_by();
+                if self.offset > self.final_scroll() {
+                    self.offset = self.final_scroll();
                 }
                 Action::Redraw
             }
@@ -143,7 +145,7 @@ impl View for Text {
 
         let iter = wrap_text(&self.encoded_response, wrap)
             .into_iter()
-            .skip(self.scroll)
+            .skip(self.offset)
             .take(limit);
 
         for line in iter {
@@ -177,13 +179,14 @@ impl Text {
         let tor = config.read().unwrap().tor;
         let encoding = config.read().unwrap().encoding;
         let wide = config.read().unwrap().wide;
+        let scroll = config.read().unwrap().scroll;
 
         let mut new = Text {
             config,
             url: url.into(),
             encoded_response: String::new(),
             raw_response: response,
-            scroll: 0,
+            offset: 0,
             lines: 0,
             longest: 0,
             size: (0, 0),
@@ -192,6 +195,7 @@ impl Text {
             tor,
             encoding,
             wide,
+            scroll,
         };
         new.encode_response();
         new
@@ -228,6 +232,15 @@ impl Text {
             self.lines - padding
         } else {
             0
+        }
+    }
+
+    /// How many lines to scroll by when paging up or down.
+    fn scroll_by(&self) -> usize {
+        if self.scroll == 0 {
+            self.size.1 - 1
+        } else {
+            self.scroll
         }
     }
 
