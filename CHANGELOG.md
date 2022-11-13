@@ -6,6 +6,10 @@ This release adds a few new config options, for your convenience:
   or not. By default it's false, but one might find it handy to set
   to `true` if hosting, say, a Gopher-powered music server.
 
+And a bonus:
+
+- `R` keyboard shortcut to refresh the current page.
+
 ## v1.1.0
 
 Three new features in this release, plus an unknown number of new

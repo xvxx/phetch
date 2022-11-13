@@ -663,6 +663,12 @@ impl UI {
                         self.add_view(Box::new(text));
                     }
                 }
+                'R' => {
+                    if let Some(view) = self.views.get(self.focused) {
+                        let url = view.url().to_owned();
+                        self.open(&url, &url)?;
+                    }
+                }
                 's' => {
                     if let Some(view) = self.views.get(self.focused) {
                         let url = view.url();
