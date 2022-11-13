@@ -1042,7 +1042,7 @@ mod tests {
 
     macro_rules! parse {
         ($s:expr) => {
-            parse("test", $s.to_string());
+            parse("test", $s.to_string())
         };
     }
 

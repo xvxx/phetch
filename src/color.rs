@@ -6,7 +6,7 @@ use std::fmt;
 
 /// Shortcut to produce a String colored with one or more colors.
 /// Example:
-/// ```
+/// ```ignore
 ///   let s = color_string!("Red string", Red);
 ///   let x = color_string!("Hyperlink-ish", Blue, Underline);
 macro_rules! color_string {
@@ -25,7 +25,7 @@ macro_rules! color_string {
 }
 
 /// Shortcut to produce a color's ANSI escape code. Don't forget to Reset!
-/// ```
+/// ```ignore
 ///   let mut o = String::new();
 ///   o.push_str(color!(Blue));
 ///   o.push_str(color!(Underline));
@@ -43,7 +43,7 @@ macro_rules! color {
 
 /// Create a color:: struct that can be used with format!.
 /// Example:
-/// ```
+/// ```ignore
 ///   define_color(Red, 91);
 ///   define_color(Reset, 0);
 ///
