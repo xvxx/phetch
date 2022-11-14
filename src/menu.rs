@@ -463,8 +463,8 @@ impl Menu {
         let (x, y) = self.screen_coords(self.link)?;
         Some(format!(
             "{}{}*\x1b[0m{}",
-            self.config.read().unwrap().theme.ui_cursor,
             terminal::Goto(x, y),
+            self.config.read().unwrap().theme.ui_cursor,
             terminal::HideCursor
         ))
     }
