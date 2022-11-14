@@ -983,7 +983,7 @@ pub fn parse(url: &str, raw: String, config: Config) -> Menu {
         tor: false,
         wide: false,
         scroll: 0,
-        config: config,
+        config,
     }
 }
 

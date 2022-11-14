@@ -1,5 +1,6 @@
 //! Terminal color scheme.
 //! Provides the Theme struct and functions/macros for making use of it.
+use std::fmt;
 
 /// Provides a shortcut to the Reset color code.
 pub mod color {
@@ -59,28 +60,28 @@ pub struct Theme {
 impl Default for Theme {
     fn default() -> Theme {
         Theme {
-            ui_cursor: to_color("white bold").into(),
-            ui_number: to_color("magenta").into(),
-            ui_menu: to_color("yellow").into(),
-            ui_text: to_color("white").into(),
+            ui_cursor: to_color("white bold"),
+            ui_number: to_color("magenta"),
+            ui_menu: to_color("yellow"),
+            ui_text: to_color("white"),
 
-            item_text: to_color("cyan").into(),
-            item_menu: to_color("blue").into(),
-            item_error: to_color("red").into(),
-            item_search: to_color("white").into(),
-            item_telnet: to_color("grey").into(),
-            item_external: to_color("green").into(),
-            item_download: to_color("white underline").into(),
-            item_media: to_color("green underline").into(),
-            item_unsupported: to_color("whitebg red").into(),
+            item_text: to_color("cyan"),
+            item_menu: to_color("blue"),
+            item_error: to_color("red"),
+            item_search: to_color("white"),
+            item_telnet: to_color("grey"),
+            item_external: to_color("green"),
+            item_download: to_color("white underline"),
+            item_media: to_color("green underline"),
+            item_unsupported: to_color("whitebg red"),
         }
     }
 }
 
-impl Theme {
-    /// Return theme file for this theme
-    pub fn to_string(&self) -> String {
-        format!(
+impl fmt::Display for Theme {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
             "# phetch theme
 ui.cursor {ui_cursor}
 ui.number {ui_number}

@@ -143,7 +143,7 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
 
 /// Print current theme as plaintext
 fn print_theme(cfg: Config) -> Result<(), Box<dyn Error>> {
-    println!("{}", cfg.theme.to_string());
+    println!("{}", cfg.theme);
     Ok(())
 }
 
