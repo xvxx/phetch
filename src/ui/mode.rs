@@ -21,6 +21,9 @@ pub enum Mode {
     /// Show command line help.
     ///   phetch --help
     Help,
+    /// Print current theme
+    ///   phetch --theme
+    PrintTheme,
 }
 
 impl Default for Mode {

@@ -63,6 +63,8 @@ the gophersphere.
 
         -c, --config FILE      Use instead of ~/.config/phetch/phetch.conf
         -C, --no-config        Don't use any config file
+        -t, --theme FILE       Use FILE for color theme or print current theme.
+        --print-theme          Print current theme.
 
         -h, --help             Show this screen
         -v, --version          Show phetch version

@@ -73,6 +73,12 @@ If no URL is given, however, *phetch* will launch and open its default
 *-C*, *--no-config*
 	Do not use any config file.
 
+*-t*, *--theme* _FILE_
+	Use _FILE_ for color theme.
+
+*--print-theme*
+	Print current theme.
+
 *-e*, *--encoding* _ENCODING_
 	Render text views in CP437 or UTF8 (default) encoding.
 
@@ -238,6 +244,71 @@ wrap 0
 
 # How many lines to page up/down by? 0 = full screen
 scroll 0
+
+# Path to theme file, if you want to use one
+theme ~/.config/phetch/dark.theme
+```
+
+# THEMES
+
+You can change phetch's color scheme by supplying your own theme
+file with `--theme`/`-t` or by setting `theme FILE` in your
+phetch.conf.
+
+You can also view the current theme with:
+
+	$ phetch --print-theme
+
+Theme files look like this:
+
+```
+ui.cursor white bold
+ui.number magenta
+ui.menu yellow
+ui.text white
+item.text cyan
+item.menu blue
+item.error red
+item.search white
+item.telnet grey
+item.external green
+item.download white underline
+item.media green underline
+item.unsupported whitebg red
+```
+
+Valid colors for use in phetch themes:
+
+```
+bold
+underline
+
+grey
+red
+green
+yellow
+blue
+magenta
+cyan
+white
+black
+
+darkred
+darkgreen
+darkyellow
+darkblue
+darkmagenta
+darkcyan
+darkwhite
+
+blackbg
+redbg
+greenbg
+yellowbg
+bluebg
+magentabg
+cyanbg
+whitebg
 ```
 
 # MEDIA PLAYER SUPPORT
@@ -247,6 +318,10 @@ sound files (`s` item type) in `mpv` or an application of your choice
 using the `-m` command line flag. To test it out, visit a compatible
 Gopher server or check out the "gopher types" help page by lauching
 *phetch* and then pressing `ctrl-h` then `3`.
+
+By default *phetch* will prompt you when you try to open a media file,
+but you can change this behavior by starting it with `--autoplay`/`-a`
+or by setting `autoplayer true` in your config file.
 
 # ABOUT
 

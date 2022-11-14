@@ -131,6 +131,18 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
                 iter.next(); // skip arg
             }
             arg if arg.starts_with("--config=") || arg.starts_with("-config=") => {}
+            "-t" | "--theme" | "-theme" => {
+                if let Some(arg) = iter.next() {
+                    cfg.theme = config::load_file(arg.as_ref())
+                        .map_err(|e| ArgError::new(format!("error loading theme: {}", e)))?
+                        .theme;
+                } else {
+                    return Err(ArgError::new("need a theme file"));
+                }
+            }
+            "--print-theme" => {
+                cfg.mode = Mode::PrintTheme;
+            }
             "-s" | "--tls" | "-tls" => {
                 if set_notls {
                     return Err(ArgError::new("can't set both --tls and --no-tls"));
@@ -196,17 +208,17 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
             }
             "-a" | "--autoplay" | "-autoplay" => {
                 if set_nomedia {
-                    return Err(ArgError::new("can't set both --no-media and --autoplay"))
+                    return Err(ArgError::new("can't set both --no-media and --autoplay"));
                 }
                 if set_noautoplay {
-                    return Err(ArgError::new("can't set both --autoplay and --no-autoplay"))
+                    return Err(ArgError::new("can't set both --autoplay and --no-autoplay"));
                 }
                 set_autoplay = true;
                 cfg.autoplay = true;
             }
             "-A" | "--no-autoplay" | "-no-autoplay" => {
                 if set_autoplay {
-                    return Err(ArgError::new("can't set both --autoplay and --no-autoplay"))
+                    return Err(ArgError::new("can't set both --autoplay and --no-autoplay"));
                 }
                 cfg.autoplay = false;
                 set_noautoplay = true;
@@ -238,7 +250,9 @@ pub fn parse<T: AsRef<str>>(args: &[T]) -> Result<Config, ArgError> {
 
     #[cfg(not(test))]
     {
-        if !atty::is(atty::Stream::Stdout) && cfg.mode != Mode::Raw {
+        if !atty::is(atty::Stream::Stdout)
+            && !matches!(cfg.mode, Mode::Raw | Mode::Print | Mode::PrintTheme)
+        {
             cfg.mode = Mode::NoTTY;
         }
     }

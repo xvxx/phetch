@@ -39,7 +39,7 @@ extern crate lazy_static;
 #[macro_use]
 pub mod utils;
 #[macro_use]
-pub mod color;
+pub mod theme;
 pub mod args;
 pub mod bookmarks;
 pub mod config;

@@ -10,6 +10,7 @@ pub fn lookup(name: &str) -> Option<String> {
         "history" => history::as_raw_menu(),
         "bookmarks" => bookmarks::as_raw_menu(),
         "help/config" => format!("{}{}", HEADER, CONFIG),
+        "help/themes" => format!("{}{}", HEADER, THEMES),
         "help/keys" => format!("{}{}", HEADER, KEYS),
         "help/nav" => format!("{}{}", HEADER, NAV),
         "help/types" => format!("{}{}", HEADER, TYPES),
@@ -84,6 +85,7 @@ i
 1bookmarks	/help/bookmarks	phetch
 1history	/help/history	phetch
 1phetch.conf	/help/config	phetch
+1themes	/help/themes	phetch
 i
 i            ~ * ~
 i
@@ -122,7 +124,7 @@ ia          show history
 i
 ir          view raw source
 iw          toggle wide mode
-ie          toggle encoding (cp437 & utf8)
+ie          toggle encoding
 iq          quit phetch
 ih          show help
 i
@@ -238,6 +240,79 @@ iwide no
 i
 i# show emoji status indicators
 iemoji no
+i
+i# cp437 or utf8 encoding
+iencoding utf8
+i
+i# wrap text at N cols. 0 = off
+iwrap 0
+i
+i# page up/down by N lines.
+i# 0 = full screen
+iscroll 0
+i
+i# path to theme file, if any
+itheme ~/.config/phetch/fun.theme
+";
+
+const THEMES: &str = "
+i        ** themes **
+i
+iyou can change phetch's color
+ischeme by supplying your own
+itheme file with --theme/-t or
+iby setting `theme FILE` in
+iyour phetch.conf.
+i
+iyou can also view the current
+itheme with:
+i
+i$ phetch --print-theme
+i
+itheme files look like this:
+i
+iui.cursor white bold
+iui.number magenta
+iui.menu yellow
+iui.text white
+iitem.text cyan
+iitem.menu blue
+iitem.error red
+iitem.search white
+iitem.telnet grey
+iitem.external green
+iitem.download white underline
+iitem.media green underline
+iitem.unsupported whitebg red
+i
+ivalid colors:
+i
+ibold
+iunderline
+igrey
+ired
+igreen
+iyellow
+iblue
+imagenta
+icyan
+iwhite
+iblack
+idarkred
+idarkgreen
+idarkyellow
+idarkblue
+idarkmagenta
+idarkcyan
+idarkwhite
+iblackbg
+iredbg
+igreenbg
+iyellowbg
+ibluebg
+imagentabg
+icyanbg
+iwhitebg
 ";
 
 const TYPES: &str = "

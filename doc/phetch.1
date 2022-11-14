@@ -5,7 +5,7 @@
 .nh
 .ad l
 .\" Begin generated content:
-.TH "PHETCH" "1" "2022-11-13"
+.TH "PHETCH" "1" "2022-11-14"
 .P
 .SH NAME
 .P
@@ -108,6 +108,16 @@ Use \fIFILE\fR instead of \fI~/.\&config/phetch/phetch.\&conf\fR
 \fB-C\fR, \fB--no-config\fR
 .RS 4
 Do not use any config file.\&
+.P
+.RE
+\fB-t\fR, \fB--theme\fR \fIFILE\fR
+.RS 4
+Use \fIFILE\fR for color theme.\&
+.P
+.RE
+\fB--print-theme\fR
+.RS 4
+Print current theme.\&
 .P
 .RE
 \fB-e\fR, \fB--encoding\fR \fIENCODING\fR
@@ -335,6 +345,80 @@ encoding utf8
 
 # Wrap text at N columns\&. 0 = off (--wrap)
 wrap 0
+
+# How many lines to page up/down by? 0 = full screen
+scroll 0
+
+# Path to theme file, if you want to use one
+theme ~/\&.config/phetch/dark\&.theme
+.fi
+.RE
+.P
+.SH THEMES
+.P
+You can change phetch'\&s color scheme by supplying your own theme
+file with `--theme`/`-t` or by setting `theme FILE` in your
+phetch.\&conf.\&
+.P
+You can also view the current theme with:
+.P
+.RS 4
+$ phetch --print-theme
+.P
+.RE
+Theme files look like this:
+.P
+.nf
+.RS 4
+ui\&.cursor white bold
+ui\&.number magenta
+ui\&.menu yellow
+ui\&.text white
+item\&.text cyan
+item\&.menu blue
+item\&.error red
+item\&.search white
+item\&.telnet grey
+item\&.external green
+item\&.download white underline
+item\&.media green underline
+item\&.unsupported whitebg red
+.fi
+.RE
+.P
+Valid colors for use in phetch themes:
+.P
+.nf
+.RS 4
+bold
+underline
+
+grey
+red
+green
+yellow
+blue
+magenta
+cyan
+white
+black
+
+darkred
+darkgreen
+darkyellow
+darkblue
+darkmagenta
+darkcyan
+darkwhite
+
+blackbg
+redbg
+greenbg
+yellowbg
+bluebg
+magentabg
+cyanbg
+whitebg
 .fi
 .RE
 .P
@@ -345,6 +429,10 @@ sound files (`s` item type) in `mpv` or an application of your choice
 using the `-m` command line flag.\& To test it out, visit a compatible
 Gopher server or check out the "gopher types" help page by lauching
 \fBphetch\fR and then pressing `ctrl-h` then `3`.\&
+.P
+By default \fBphetch\fR will prompt you when you try to open a media file,
+but you can change this behavior by starting it with `--autoplay`/`-a`
+or by setting `autoplayer true` in your config file.\&
 .P
 .SH ABOUT
 .P

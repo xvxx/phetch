@@ -1,5 +1,7 @@
 use phetch::{
-    args, color, gopher, menu, terminal,
+    args,
+    config::{Config, SharedConfig},
+    gopher, menu, terminal, theme,
     ui::{Mode, UI},
 };
 use std::{
@@ -26,6 +28,7 @@ fn run() -> Result<(), Box<dyn Error>> {
         Mode::Raw => return print_raw(&cfg.start, cfg.tls, cfg.tor),
         Mode::Version => return print_version(),
         Mode::Help => return print_usage(),
+        Mode::PrintTheme => return print_theme(cfg),
         Mode::NoTTY => return print_plain(&cfg.start, cfg.tls, cfg.tor),
         Mode::Print => cfg.wide = true,
         Mode::Run => {}
@@ -91,6 +94,8 @@ Options:
 
     -c, --config FILE      Use instead of ~/.config/phetch/phetch.conf
     -C, --no-config        Don't use any config file
+    -t, --theme FILE       Use FILE for color theme or print current theme.
+    --print-theme          Print current theme.
 
     -h, --help             Show this screen
     -v, --version          Show phetch version
@@ -118,7 +123,7 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
     let response = gopher::response_to_string(&response);
     match typ {
         gopher::Type::Menu => {
-            let menu = menu::parse(url, response);
+            let menu = menu::parse(url, response, SharedConfig::default());
             for line in menu.lines() {
                 out.push_str(line.text());
                 out.push('\n');
@@ -133,6 +138,12 @@ fn print_plain(url: &str, tls: bool, tor: bool) -> Result<(), Box<dyn Error>> {
         }
     };
     print!("{}", out);
+    Ok(())
+}
+
+/// Print current theme as plaintext
+fn print_theme(cfg: Config) -> Result<(), Box<dyn Error>> {
+    println!("{}", cfg.theme.to_string());
     Ok(())
 }
 
@@ -156,7 +167,7 @@ fn cleanup_terminal() {
     write!(
         stdout,
         "{}{}{}{}{}",
-        color::Reset,
+        theme::color::Reset,
         terminal::ClearAll,
         terminal::Goto(1, 1),
         terminal::ShowCursor,

@@ -4,7 +4,12 @@
 //! An example default config is provided but unused by this module.
 
 use {
-    crate::{encoding::Encoding, phetchdir, ui},
+    crate::{
+        encoding::Encoding,
+        phetchdir,
+        theme::{to_color, Theme},
+        ui,
+    },
     std::{
         collections::HashMap,
         fs::OpenOptions,
@@ -58,6 +63,24 @@ wrap 0
 
 # How many lines to page up/down by? 0 = full screen
 scroll 0
+
+# Path to theme file, if any
+theme ~/.config/phetch/pink.theme
+
+# Inline Theme
+ui.cursor white bold
+ui.number magenta
+ui.menu yellow
+ui.text white
+item.text cyan
+item.menu blue
+item.error red
+item.search white
+item.telnet grey
+item.external green
+item.download white underline
+item.media green underline
+item.unsupported whitebg red
 ";
 
 /// Not all the config options are available in the phetch.conf. We
@@ -87,6 +110,8 @@ pub struct Config {
     pub wrap: usize,
     /// Scroll by how many lines? 0 = full screen
     pub scroll: usize,
+    /// Color Scheme
+    pub theme: Theme,
 }
 
 impl Default for Config {
@@ -103,6 +128,7 @@ impl Default for Config {
             mode: ui::Mode::default(),
             wrap: 0,
             scroll: 0,
+            theme: Theme::default(),
         }
     }
 }
@@ -200,6 +226,33 @@ fn parse(text: &str) -> Result<Config> {
                 cfg.encoding = Encoding::from_str(val)
                     .map_err(|e| error!("{} on line {}: {:?}", e, linenum, line))?;
             }
+
+            "theme" => {
+                let homevar = std::env::var("HOME");
+                if homevar.is_err() && val.contains('~') {
+                    return Err(error!("$HOME not set, can't decode `~`"));
+                }
+                cfg.theme = load_file(&val.replace('~', &homevar.unwrap()))
+                    .map_err(|e| error!("error loading theme: {}", e))?
+                    .theme
+            }
+
+            // color scheme
+            "ui.cursor" => cfg.theme.ui_cursor = to_color(val),
+            "ui.number" => cfg.theme.ui_number = to_color(val),
+            "ui.menu" => cfg.theme.ui_menu = to_color(val),
+            "ui.text" => cfg.theme.ui_text = to_color(val),
+
+            "item.text" => cfg.theme.item_text = to_color(val),
+            "item.menu" => cfg.theme.item_menu = to_color(val),
+            "item.error" => cfg.theme.item_error = to_color(val),
+            "item.search" => cfg.theme.item_search = to_color(val),
+            "item.telnet" => cfg.theme.item_telnet = to_color(val),
+            "item.external" => cfg.theme.item_external = to_color(val),
+            "item.download" => cfg.theme.item_download = to_color(val),
+            "item.media" => cfg.theme.item_media = to_color(val),
+            "item.unsupported" => cfg.theme.item_unsupported = to_color(val),
+
             _ => return Err(error!("Unknown key on line {}: {}", linenum, key)),
         }
         keys.insert(key, true);

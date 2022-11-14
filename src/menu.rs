@@ -52,6 +52,8 @@ pub struct Menu {
     wide: bool,
     /// Scroll by how many lines?
     scroll: usize,
+    /// Global config
+    config: Config,
 }
 
 /// Represents a line in a Gopher menu. Provides the actual text of
@@ -258,7 +260,7 @@ impl Menu {
             wide: config.read().unwrap().wide,
             scroll: config.read().unwrap().scroll,
             mode: config.read().unwrap().mode,
-            ..parse(url, response)
+            ..parse(url, response, config.clone())
         }
     }
 
@@ -369,26 +371,27 @@ impl Menu {
 
         for line in iter {
             out.push_str(&left_margin);
+            let config = self.config.read().unwrap();
 
             if line.typ == Type::Info {
                 out.push_str("      ");
             } else {
                 if line.link == self.link && self.show_cursor() {
-                    out.push_str(color!(Bold));
+                    out.push_str(&config.theme.ui_cursor);
                     out.push('*');
-                    out.push_str(color!(Reset));
+                    out.push_str(reset_color!());
                 } else {
                     out.push(' ');
                 }
                 out.push(' ');
-                out.push_str(color!(Magenta));
+                out.push_str(&config.theme.ui_number);
                 if line.link < 9 {
                     out.push(' ');
                 }
                 let num = (line.link + 1).to_string();
                 out.push_str(&num);
                 out.push_str(". ");
-                out.push_str(color!(Reset));
+                out.push_str(reset_color!());
             }
 
             // truncate long lines, instead of wrapping
@@ -396,28 +399,25 @@ impl Menu {
 
             // color the line
             if line.typ.is_media() {
-                out.push_str(color!(Underline));
-                out.push_str(color!(Green));
+                out.push_str(&config.theme.item_media);
             } else if line.typ.is_download() {
-                out.push_str(color!(Underline));
-                out.push_str(color!(White));
+                out.push_str(&config.theme.item_download);
             } else if !line.typ.is_supported() {
-                out.push_str(color!(WhiteBG));
-                out.push_str(color!(Red));
+                out.push_str(&self.config.read().unwrap().theme.item_unsupported);
             } else {
                 out.push_str(match line.typ {
-                    Type::Text => color!(Cyan),
-                    Type::Menu => color!(Blue),
-                    Type::Info => color!(Yellow),
-                    Type::HTML => color!(Green),
-                    Type::Error => color!(Red),
-                    Type::Telnet => color!(Grey),
-                    Type::Search => color!(White),
-                    _ => color!(Red),
+                    Type::Text => &config.theme.item_text,
+                    Type::Menu => &config.theme.item_menu,
+                    Type::Info => &config.theme.ui_menu,
+                    Type::HTML => &config.theme.item_external,
+                    Type::Error => &config.theme.item_error,
+                    Type::Telnet => &config.theme.item_telnet,
+                    Type::Search => &config.theme.item_search,
+                    _ => &config.theme.item_error,
                 });
             }
             out.push_str(&text);
-            out.push_str(color!(Reset));
+            out.push_str(reset_color!());
 
             // clear rest of line
             out.push_str(terminal::ClearUntilNewline.as_ref());
@@ -935,7 +935,7 @@ impl Menu {
 }
 
 /// Parse gopher response into a Menu object.
-pub fn parse(url: &str, raw: String) -> Menu {
+pub fn parse(url: &str, raw: String, config: Config) -> Menu {
     let mut spans = vec![];
     let mut links = vec![];
     let mut longest = 0;
@@ -982,6 +982,7 @@ pub fn parse(url: &str, raw: String) -> Menu {
         tor: false,
         wide: false,
         scroll: 0,
+        config: config,
     }
 }
 
@@ -1054,7 +1055,7 @@ mod tests {
 
     macro_rules! parse {
         ($s:expr) => {
-            parse("test", $s.to_string())
+            parse("test", $s.to_string(), Config::default())
         };
     }
 

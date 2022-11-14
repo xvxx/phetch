@@ -17,7 +17,7 @@ mod view;
 pub use self::{action::Action, mode::Mode, view::View};
 
 use crate::{
-    bookmarks, color,
+    bookmarks,
     config::{Config, SharedConfig},
     encoding::Encoding,
     gopher::{self, Type},
@@ -25,7 +25,7 @@ use crate::{
     menu::Menu,
     terminal,
     text::Text,
-    utils, BUG_URL,
+    theme, utils, BUG_URL,
 };
 use std::{
     io::{stdin, stdout, Result, Write},
@@ -153,7 +153,12 @@ impl UI {
             self.status.clear();
         }
         if let Err(e) = self.process_action(action) {
-            self.set_status(&format!("{}{}{}", color::Red, e, terminal::HideCursor));
+            self.set_status(&format!(
+                "{}{}{}",
+                &self.config.read().unwrap().theme.item_error,
+                e,
+                terminal::HideCursor
+            ));
         }
     }
 
@@ -203,7 +208,9 @@ impl UI {
 
         if typ.is_media() && self.config.read().unwrap().media.is_some() {
             self.dirty = true;
-            return if self.config.read().unwrap().autoplay || self.confirm(&format!("Open in media player? {}", url)) {
+            return if self.config.read().unwrap().autoplay
+                || self.confirm(&format!("Open in media player? {}", url))
+            {
                 utils::open_media(self.config.read().unwrap().media.as_ref().unwrap(), url)
             } else {
                 Ok(())
@@ -339,7 +346,7 @@ impl UI {
                     label,
                     ".".repeat(i),
                     terminal::ClearUntilNewline,
-                    color::Reset,
+                    theme::color::Reset,
                     terminal::ShowCursor,
                 );
                 stdout().flush().expect(ERR_STDOUT);
@@ -414,7 +421,7 @@ impl UI {
                 terminal::Goto(self.cols() - len as u16, self.rows()),
                 status
                     .iter()
-                    .map(|s| color_string!(s, Bold, White))
+                    .map(|s| theme::to_color("bold white") + s + reset_color!())
                     .collect::<Vec<_>>()
                     .join(" "),
             ))
@@ -430,7 +437,7 @@ impl UI {
             terminal::ClearCurrentLine,
             self.status,
             self.render_conn_status().unwrap_or_else(|| "".into()),
-            color::Reset,
+            theme::color::Reset,
         )
     }
 
@@ -454,7 +461,7 @@ impl UI {
         write!(
             out,
             "{}{}{}{} [Y/n]: {}",
-            color::Reset,
+            theme::color::Reset,
             terminal::Goto(1, rows),
             terminal::ClearCurrentLine,
             question,
@@ -479,7 +486,7 @@ impl UI {
         write!(
             out,
             "{}{}{}{}{}{}",
-            color::Reset,
+            theme::color::Reset,
             terminal::Goto(1, rows),
             terminal::ClearCurrentLine,
             prompt,

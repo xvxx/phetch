@@ -1,6 +1,43 @@
 ## v1.2.0 (dev)
 
-This release adds a few new config options, for your convenience:
+phetch is all about fun colors, but your options are limited. You
+can turn off colors with the `NO_COLOR` env variable or you can
+leave them on. That's it.
+
+Well, not anymore. As of `v1.2`, phetch now supports themes.
+
+### Themes
+
+Themes are simple files with the same format as `phetch.conf`:
+
+    $ cat ~/.config/phetch/default.theme
+    # Color Scheme
+    ## UI
+    ui.cursor white bold
+    ui.number magenta
+    ui.menu yellow
+    ui.text white
+
+    ## Items
+    item.text cyan
+    item.menu blue
+    item.error red
+    item.search white
+    item.telnet grey
+    item.external green
+    item.download white underline
+    item.media green underline
+    item.unsupported whitebg red
+
+Create your theme file and launch phetch with `-t FILE`, or set
+the `theme FILE` option in your `~/.config/phetch/phetch.conf`
+
+You can see available colors and learn more about themes by opening
+phetch's help - press `h` then `7` to get there quickly.
+
+### Config Options
+
+This release also adds a few new config options, for your convenience:
 
 - `scroll` controls how many lines to jump by when paging up/down.
   If set to 0 (the new default), you'll jump by an entire screen.
@@ -8,9 +45,10 @@ This release adds a few new config options, for your convenience:
   or not. By default it's false, but one might find it handy to set
   to `true` if hosting, say, a Gopher-powered music server.
 
-And a bonus:
+### Keyboard Shortcuts
 
-- `R` keyboard shortcut to refresh the current page.
+Last but not least, you can now reload the current URL by pressing `R`.
+Handy when developing your own Gopherhole!
 
 ## v1.1.0
 
