@@ -73,6 +73,11 @@ fn resize_handler(_: i32) {
 /// received in child processes (like `telnet`).
 fn sigint_handler(_: i32) {}
 
+/// Handler for when the application is resumed after ctrl-z.
+fn sigcont_handler(_: i32) {
+    terminal::enable_raw_mode().expect("Fatal Error entering Raw Mode.");
+}
+
 /// UI is mainly concerned with drawing to the screen, managing the
 /// active views, and responding to user input.
 pub struct UI {
@@ -585,6 +590,7 @@ impl UI {
         unsafe {
             libc::signal(libc::SIGWINCH, resize_handler as usize);
             libc::signal(libc::SIGINT, sigint_handler as usize);
+            libc::signal(libc::SIGCONT, sigcont_handler as usize);
         }
 
         thread::spawn(move || {
@@ -598,6 +604,7 @@ impl UI {
 
     /// Ctrl-Z: Suspend Unix process w/ SIGTSTP.
     fn suspend(&mut self) {
+        terminal::disable_raw_mode().expect("Fatal Error disabling Raw Mode");
         let mut out = stdout();
         write!(out, "{}", terminal::ToMainScreen).expect(ERR_SCREEN);
         out.flush().expect(ERR_STDOUT);
