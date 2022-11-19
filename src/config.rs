@@ -399,4 +399,16 @@ mod tests {
         assert_eq!(to_words(cfg.theme.item_text), "green");
         assert_eq!(to_words(cfg.theme.item_download), "red underline");
     }
+
+    #[test]
+    fn test_theme_bad_values() {
+        use crate::theme::to_words;
+
+        let cfg = parse("item.text skyblue\nitem.download green underline\nitem.error invisible\nitem.search red green blue")
+            .unwrap();
+        assert_eq!(to_words(cfg.theme.item_text), "white");
+        assert_eq!(to_words(cfg.theme.item_download), "green underline");
+        assert_eq!(to_words(cfg.theme.item_error), "white");
+        assert_eq!(to_words(cfg.theme.item_search), "red green blue");
+    }
 }
