@@ -13,7 +13,7 @@ use {
     std::{
         collections::HashMap,
         fs::OpenOptions,
-        io::{Read, Result},
+        io::{self, Read, Result},
         sync::{Arc, RwLock},
     },
 };
@@ -65,7 +65,7 @@ wrap 0
 scroll 0
 
 # Path to theme file, if any
-theme ~/.config/phetch/pink.theme
+# theme ~/.config/phetch/pink.theme
 
 # Inline Theme
 ui.cursor white bold
@@ -232,9 +232,19 @@ fn parse(text: &str) -> Result<Config> {
                 if homevar.is_err() && val.contains('~') {
                     return Err(error!("$HOME not set, can't decode `~`"));
                 }
-                cfg.theme = load_file(&val.replace('~', &homevar.unwrap()))
-                    .map_err(|e| error!("error loading theme: {}", e))?
-                    .theme
+                cfg.theme = match load_file(&val.replace('~', &homevar.unwrap())) {
+                    Ok(cfg) => cfg.theme,
+                    Err(e) => {
+                        if matches!(e.kind(), io::ErrorKind::NotFound) {
+                            return Err(error!(
+                                "error loading theme: File not found on line {}: {}",
+                                linenum, val
+                            ));
+                        } else {
+                            return Err(error!("error loading theme: {:?}", e));
+                        }
+                    }
+                };
             }
 
             // color scheme
@@ -358,5 +368,35 @@ mod tests {
 
         let res = parse("tls true\nencoding what\n");
         assert!(res.is_err());
+    }
+
+    #[test]
+    fn test_missing_theme() {
+        if let Err(e) = parse("theme /dont/exists.txt") {
+            assert_eq!(
+                format!("{}", e),
+                "error loading theme: File not found on line 1: /dont/exists.txt"
+            );
+        }
+    }
+
+    #[test]
+    fn test_theme_file() {
+        use crate::theme::to_words;
+
+        let cfg = parse("theme ./tests/pink.theme").unwrap();
+        assert_eq!(to_words(cfg.theme.item_text), "magenta");
+        assert_eq!(to_words(cfg.theme.item_menu), "magenta");
+        assert_eq!(to_words(cfg.theme.item_error), "red");
+        assert_eq!(to_words(cfg.theme.ui_menu), "cyan");
+    }
+
+    #[test]
+    fn test_theme() {
+        use crate::theme::to_words;
+
+        let cfg = parse("item.text green\nitem.download red underline").unwrap();
+        assert_eq!(to_words(cfg.theme.item_text), "green");
+        assert_eq!(to_words(cfg.theme.item_download), "red underline");
     }
 }

@@ -1,0 +1,15 @@
+# phetch theme
+ui.cursor red
+ui.number white
+ui.menu cyan
+ui.text white
+
+item.text magenta
+item.menu magenta
+item.error red
+item.search magenta
+item.telnet magenta
+item.external magenta
+item.download magenta underline
+item.media magenta underline
+item.unsupported magentabg white
