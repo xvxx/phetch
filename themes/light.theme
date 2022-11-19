@@ -1,0 +1,15 @@
+# phetch light theme
+ui.cursor black bold
+ui.number magenta
+ui.menu darkyellow
+ui.text black
+
+item.text darkcyan
+item.menu blue
+item.error red
+item.search black
+item.telnet grey
+item.external darkgreen
+item.download black underline
+item.media darkgreen underline
+item.unsupported redbg white

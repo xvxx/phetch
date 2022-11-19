@@ -1,0 +1,15 @@
+# phetch matrix theme
+ui.cursor yellow
+ui.number grey
+ui.menu green
+ui.text green
+
+item.text green
+item.menu green
+item.error red
+item.search green
+item.telnet green
+item.external green
+item.download green underline
+item.media green underline
+item.unsupported magentabg white

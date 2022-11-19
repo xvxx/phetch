@@ -1,0 +1,15 @@
+# phetch web theme
+ui.cursor white bold
+ui.number white
+ui.menu white
+ui.text white
+
+item.text blue underline
+item.menu blue underline
+item.error red
+item.search blue underline
+item.telnet blue underline
+item.external blue underline
+item.download blue underline
+item.media blue underline
+item.unsupported whitebg red

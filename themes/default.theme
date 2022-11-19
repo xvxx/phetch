@@ -1,0 +1,14 @@
+# phetch default theme
+ui.cursor white bold
+ui.number magenta
+ui.menu yellow
+ui.text white
+item.text cyan
+item.menu blue
+item.error red
+item.search white
+item.telnet grey
+item.external green
+item.download white underline
+item.media green underline
+item.unsupported whitebg red
