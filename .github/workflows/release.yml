@@ -50,6 +50,50 @@ jobs:
           name: phetch-linux-armv7
           path: target/armv7-unknown-linux-gnueabihf/release/phetch-${{ steps.get_version.outputs.VERSION }}-linux-armv7.tgz
 
+  build_aarch64:
+    name: Build for android aarch64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo index
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo build
+        uses: actions/cache@v3
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-linux-android
+          override: true
+      - name: Build release
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --locked --target aarch64-linux-android
+      - name: Get current version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Package Binary
+        run: cp doc/phetch.1 target/aarch64-linux-android/release && cd target/aarch64-linux-android/release && tar zcvf phetch-${{ steps.get_version.outputs.VERSION }}-android-aarch64.tgz phetch phetch.1
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: phetch-android-aarch64
+          path: target/aarch64-linux-android/release/phetch-${{ steps.get_version.outputs.VERSION }}-android-aarch64.tgz
+
   build_linux:
     name: Build for Linux x86_64
     runs-on: ubuntu-latest
@@ -128,7 +172,7 @@ jobs:
 
   create:
     name: Create Release
-    needs: [build_armv7, build_linux, build_macos]
+    needs: [build_armv7, build_aarch64, build_linux, build_macos]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -148,6 +192,10 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: phetch-linux-armv7
+      - name: Download Android (aarch64) artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: phetch-android-aarch64
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -157,6 +205,7 @@ jobs:
             phetch-macos/phetch-${{ steps.get_version.outputs.VERSION }}-macos.zip
             phetch-linux-x86_64/phetch-${{ steps.get_version.outputs.VERSION }}-linux-x86_64.tgz
             phetch-linux-armv7/phetch-${{ steps.get_version.outputs.VERSION }}-linux-armv7.tgz
+            phetch-android-aarch64/phetch-${{ steps.get_version.outputs.VERSION }}-android-aarch64.tgz
           body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
