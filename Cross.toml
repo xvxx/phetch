@@ -1,2 +1,4 @@
 [target.armv7-unknown-linux-gnueabihf]
 image = "rustembedded/cross:armv7-unknown-linux-gnueabihf-0.1.16"
+[target.aarch64-linux-android]
+image = "rustembedded/cross:aarch64-linux-android-0.1.16"

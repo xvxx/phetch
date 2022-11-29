@@ -98,7 +98,7 @@ On NetBSD, phetch is included in the main pkgsrc repo:
 
     pkgin install phetch
 
-Binaries for Linux, Raspberry Pi, and Mac are available at
+Binaries for Linux, Raspberry Pi, Mac and Android (termux) are available at
 https://github.com/xvxx/phetch/releases:
 
 - [phetch-v1.1.0-linux-x86_64.tgz][0]
@@ -113,6 +113,10 @@ You can also build and install from source if you have `cargo`,
     git clone https://github.com/xvxx/phetch
     cd phetch
     env PREFIX=/usr/local make install
+
+For Termux use:
+
+    env PREFIX=/data/data/com.termux/files/usr make install
 
 ## development
 
