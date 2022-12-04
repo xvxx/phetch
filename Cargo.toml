@@ -1,6 +1,6 @@
 [package]
 name = "phetch"
-version = "1.1.1-dev"
+version = "1.2.0-dev"
 authors = ["chris west <c@xvxx.io>"]
 license = "MIT"
 edition = "2018"
@@ -31,7 +31,6 @@ pre-release-replacements = [
   {file="README.md", search="/v\\d+\\.\\d+\\.\\d+/", replace="/v{{version}}/"},
   {file="CHANGELOG.md", search="\\d+\\.\\d+\\.\\d+-dev", replace="{{version}}"},
 ]
-dev-version-ext = "dev"
 
 [dependencies]
 termion = "1.5.5"

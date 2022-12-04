@@ -1,4 +1,4 @@
-## v1.2.0 (dev)
+## v1.2.0-dev
 
 phetch is all about fun colors, but your options are limited. You
 can turn off colors with the `NO_COLOR` env variable or you can
