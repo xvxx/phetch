@@ -1,14 +1,32 @@
 ## v1.2.0-dev
 
-phetch is all about fun colors, but your options are limited. You
-can turn off colors with the `NO_COLOR` env variable or you can
-leave them on. That's it.
+phetch is all about fun colors, but your options have always been
+limited. You could turn off colors via `NO_COLOR` env variable or
+you could leave them on. That's it.
 
-Well, not anymore. As of `v1.2`, phetch now supports themes.
+Well, not anymore. As of `v1.2`, phetch now supports themes, in
+addition to a few new config options.
+
+### Config Options
+
+The new config options in this release, for your convenience, are
+as follows:
+
+- `scroll` controls how many lines to jump by when paging up/down.
+  If set to 0 (the new default), you'll jump by an entire screen.
+- `autoplay` controls whether you'll be prompted to play media files
+  or not. By default it's false, but one might find it handy to set
+  to `true` if hosting, say, a Gopher-powered music server.
+
+### Keyboard Shortcuts
+
+Just one, but it's a doozy - you can now reload the current URL by
+pressing `R` (`shift+r`). Super handy when developing your own Gopherhole!
 
 ### Themes
 
-Themes are simple files with the same format as `phetch.conf`:
+As mentioned, themes are simple files with roughly the same format as
+`phetch.conf`:
 
     $ cat ~/.config/phetch/default.theme
     # Color Scheme
@@ -32,23 +50,16 @@ Themes are simple files with the same format as `phetch.conf`:
 Create your theme file and launch phetch with `-t FILE`, or set
 the `theme FILE` option in your `~/.config/phetch/phetch.conf`
 
-You can see available colors and learn more about themes by opening
-phetch's help - press `h` then `7` to get there quickly.
+You can also set theme colors directly in your `phetch.conf`.
 
-### Config Options
+Learn more about themes, including which colors are available,
+by opening phetch's on-line help: press `h` then `7` to get
+there quickly.
 
-This release also adds a few new config options, for your convenience:
+For reference, we've included a few fun themes in the repo itself
+that you can download and play with:
 
-- `scroll` controls how many lines to jump by when paging up/down.
-  If set to 0 (the new default), you'll jump by an entire screen.
-- `autoplay` controls whether you'll be prompted to play media files
-  or not. By default it's false, but one might find it handy to set
-  to `true` if hosting, say, a Gopher-powered music server.
-
-### Keyboard Shortcuts
-
-Last but not least, you can now reload the current URL by pressing `R`.
-Handy when developing your own Gopherhole!
+<https://github.com/xvxx/phetch/tree/master/themes>
 
 ## v1.1.0
 

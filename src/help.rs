@@ -264,12 +264,17 @@ itheme file with --theme/-t or
 iby setting `theme FILE` in
 iyour phetch.conf.
 i
-iyou can also view the current
-itheme with:
+iyou can also set colors directly
+iin your phetch.conf.
+i
+iview the current theme with:
 i
 i$ phetch --print-theme
 i
-itheme files look like this:
+i       ** examples **
+i
+itheme files are plain text files
+ithat look like this:
 i
 iui.cursor white bold
 iui.number magenta
@@ -285,7 +290,7 @@ iitem.download white underline
 iitem.media green underline
 iitem.unsupported whitebg red
 i
-ivalid colors:
+i     ** valid colors **
 i
 ibold
 iunderline
