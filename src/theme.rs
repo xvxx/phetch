@@ -116,6 +116,10 @@ item.unsupported {item_unsupported}",
 
 /// Convert a string like "blue underline" or "red" into a color code.
 pub fn to_color<S: AsRef<str>>(line: S) -> String {
+    if *crate::NO_COLOR {
+        return "".into();
+    }
+
     let parts = line.as_ref().split(' ').collect::<Vec<_>>();
 
     if parts.is_empty() {

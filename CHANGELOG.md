@@ -1,3 +1,7 @@
+## v1.2.1-dev
+
+- Fix `NO_COLOR` support.
+
 ## v1.2.0
 
 phetch is all about fun colors, but your options have always been
