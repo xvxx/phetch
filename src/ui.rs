@@ -236,6 +236,23 @@ impl UI {
         })
     }
 
+    /// Used to download the content of the current view
+    fn save_file(
+        &mut self,
+        file_name: &str,
+        content: &str,
+    )-> Result<()> {
+        let mut file = std::fs::OpenOptions::new()
+                .create_new(true)
+                .write(true)
+                .append(true)
+                .open(file_name)
+                .map_err(|e| error!("`open` error: {}", e))?;
+        file.write_all(content.as_bytes())?;
+        Ok(())
+    }
+
+
     /// Download a binary file. Used by `open()` internally.
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
@@ -659,6 +676,19 @@ impl UI {
             Action::Keypress(Key::Char(key)) | Action::Keypress(Key::Ctrl(key)) => match key {
                 'a' => self.open("History", "gopher://phetch/1/history")?,
                 'b' => self.open("Bookmarks", "gopher://phetch/1/bookmarks")?,
+                'c' => {
+                    if let Ok(content) = self.render(){
+                        if let Some(file_name) = self.prompt("Provide a filepath:", ""){
+                            match self.save_file(file_name.as_str(), &content.as_str()){
+                                Ok(()) => {
+                                    let msg = format!("Saved file: {}", file_name);
+                                    self.set_status(&msg);
+                                }
+                                Err(e) => return Err(error!("Save failed: {}", e)),
+                            }
+                        }
+                    }
+                }
                 'g' => {
                     if let Some(url) = self.prompt("Go to URL: ", "") {
                         self.open(&url, &url)?;

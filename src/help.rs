@@ -123,6 +123,7 @@ is          save bookmark
 ia          show history
 i
 ir          view raw source
+ic          save current page to file
 iw          toggle wide mode
 ie          toggle encoding
 iq          quit phetch
