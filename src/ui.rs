@@ -236,6 +236,31 @@ impl UI {
         })
     }
 
+    /// Used to download content of the current view with a provided filename
+    fn download_file_with_filename(&mut self, url: &str, filename: String) -> Result<()> {
+        let url = url.to_string();
+        let (tls, tor) = (
+            self.config.read().unwrap().tls,
+            self.config.read().unwrap().tor,
+        );
+        let chan = self.keys.clone();
+        self.spinner(&format!("Downloading {}", url), move || {
+            gopher::download_url_with_filename(&url, tls, tor, chan, &filename)
+        })
+        .and_then(|res| res)
+        .map(|(path, bytes)| {
+            self.set_status(
+                format!(
+                    "Download complete! {} saved to {}",
+                    utils::human_bytes(bytes),
+                    path
+                )
+                .as_ref(),
+            );
+        })
+    }
+
+
     /// Download a binary file. Used by `open()` internally.
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
@@ -659,6 +684,19 @@ impl UI {
             Action::Keypress(Key::Char(key)) | Action::Keypress(Key::Ctrl(key)) => match key {
                 'a' => self.open("History", "gopher://phetch/1/history")?,
                 'b' => self.open("Bookmarks", "gopher://phetch/1/bookmarks")?,
+                'c' => {
+                    let url = match self.views.get(self.focused) {
+                        Some(view)=> String::from(view.url()),
+                        None => {return Err(error!("Could not get url from view"));},
+                    };
+
+                    if let Some(filename) = self.prompt("Provide a filepath: ", ""){
+                        match self.download_file_with_filename(url.as_str(), String::from(filename)){
+                            Ok(()) => (),
+                            Err(e) => return Err(error!("Save failed: {}", e)),
+                        }
+                    }
+                }
                 'g' => {
                     if let Some(url) = self.prompt("Go to URL: ", "") {
                         self.open(&url, &url)?;

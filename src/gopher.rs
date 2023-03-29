@@ -112,6 +112,51 @@ fn clean_response(res: &mut String) {
     })
 }
 
+/// Downloads a binary to disk to a provided file name. 
+/// Allows canceling with Ctrl-c, but it's
+/// kind of hacky - needs the UI receiver passed in.
+/// Returns a tuple of:
+///   (path it was saved to, the size in bytes)
+pub fn download_url_with_filename(
+    url: &str,
+    tls: bool,
+    tor: bool,
+    chan: ui::KeyReceiver,
+    filename: &str,
+) -> Result<(String, usize)> {
+    let u = parse_url(url);
+    let mut path = std::path::PathBuf::from(".");
+    path.push(filename);
+
+    let mut stream = request(u.host, u.port, u.sel, tls, tor)?;
+    let mut file = fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .append(true)
+        .open(&path)
+        .map_err(|e| error!("`open` error: {}", e))?;
+
+    let mut buf = [0; 1024];
+    let mut bytes = 0;
+    while let Ok(count) = stream.read(&mut buf) {
+        if count == 0 {
+            break;
+        }
+        bytes += count;
+        file.write_all(&buf[..count])?;
+        if let Ok(chan) = chan.lock() {
+            if let Ok(Key::Ctrl('c')) = chan.try_recv() {
+                if path.exists() {
+                    fs::remove_file(path)?;
+                }
+                return Err(error!("Download cancelled"));
+            }
+        }
+    }
+
+    Ok((filename.to_string(), bytes))
+}
+
 /// Downloads a binary to disk. Allows canceling with Ctrl-c, but it's
 /// kind of hacky - needs the UI receiver passed in.
 /// Returns a tuple of:
