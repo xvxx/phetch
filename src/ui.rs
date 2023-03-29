@@ -690,7 +690,14 @@ impl UI {
                         None => {return Err(error!("Could not get url from view"));},
                     };
 
-                    if let Some(filename) = self.prompt("Provide a filepath: ", ""){
+                    let u = gopher::parse_url(&url);
+                    let default_filename = u
+                        .sel
+                        .split_terminator('/')
+                        .rev()
+                        .next()
+                        .unwrap_or("");
+                    if let Some(filename) = self.prompt("Provide a filepath: ", default_filename){
                         match self.download_file_with_filename(url.as_str(), String::from(filename)){
                             Ok(()) => (),
                             Err(e) => return Err(error!("Save failed: {}", e)),
