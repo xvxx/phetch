@@ -684,7 +684,7 @@ impl UI {
             Action::Keypress(Key::Char(key)) | Action::Keypress(Key::Ctrl(key)) => match key {
                 'a' => self.open("History", "gopher://phetch/1/history")?,
                 'b' => self.open("Bookmarks", "gopher://phetch/1/bookmarks")?,
-                'c' => {
+                'd' => {
                     let url = match self.views.get(self.focused) {
                         Some(view)=> String::from(view.url()),
                         None => {return Err(error!("Could not get url from view"));},
