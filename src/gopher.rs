@@ -112,7 +112,7 @@ fn clean_response(res: &mut String) {
     })
 }
 
-/// Downloads a binary to disk to a provided file name. 
+/// Downloads menu or text to disk as `filename`.
 /// Allows canceling with Ctrl-c, but it's
 /// kind of hacky - needs the UI receiver passed in.
 /// Returns a tuple of:
@@ -134,7 +134,7 @@ pub fn download_url_with_filename(
         .create_new(true)
         .append(true)
         .open(&path)
-        .map_err(|e| error!("`open` error: {}", e))?;
+        .map_err(|e| error!("{}", e))?;
 
     let mut buf = [0; 1024];
     let mut bytes = 0;

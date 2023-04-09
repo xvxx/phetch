@@ -260,7 +260,6 @@ impl UI {
         })
     }
 
-
     /// Download a binary file. Used by `open()` internally.
     fn download(&mut self, url: &str) -> Result<()> {
         let url = url.to_string();
@@ -686,21 +685,24 @@ impl UI {
                 'b' => self.open("Bookmarks", "gopher://phetch/1/bookmarks")?,
                 'd' => {
                     let url = match self.views.get(self.focused) {
-                        Some(view)=> String::from(view.url()),
-                        None => {return Err(error!("Could not get url from view"));},
+                        Some(view) => String::from(view.url()),
+                        None => return Err(error!("Could not get URL from view")),
                     };
 
+                    let url = url.as_str();
+                    if url.starts_with("gopher://phetch/") {
+                        return Err(error!("Can't download internal phetch pages."));
+                    }
+
                     let u = gopher::parse_url(&url);
-                    let default_filename = u
-                        .sel
-                        .split_terminator('/')
-                        .rev()
-                        .next()
-                        .unwrap_or("");
-                    if let Some(filename) = self.prompt("Provide a filepath: ", default_filename){
-                        match self.download_file_with_filename(url.as_str(), String::from(filename)){
+                    let default_filename = u.sel.split_terminator('/').rev().next().unwrap_or("");
+                    if let Some(filename) = self.prompt("Save to disk as: ", default_filename) {
+                        if filename.trim().is_empty() {
+                            return Err(error!("Please provide a filename."));
+                        }
+                        match self.download_file_with_filename(url, String::from(filename)) {
                             Ok(()) => (),
-                            Err(e) => return Err(error!("Save failed: {}", e)),
+                            Err(e) => return Err(error!("Download failed: {}", e)),
                         }
                     }
                 }
