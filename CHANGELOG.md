@@ -1,6 +1,7 @@
 ## v1.2.1-dev
 
 - Fix `NO_COLOR` support.
+- The `d` keyboard shortcut will now download the current page to disk.
 
 ## v1.2.0
 
